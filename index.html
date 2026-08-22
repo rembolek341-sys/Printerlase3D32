@@ -4,9 +4,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Printerlase3D — Sklep</title>
+
+<title>Printerlase3D — Druk 3D</title>
+
+<meta name="description"
+content="Printerlase3D — własne modele 3D, breloki, dodatki i druk 3D na zamówienie.">
 
 <style>
+:root{
+    --bg:#050914;
+    --bg2:#091224;
+    --card:#0b1629;
+    --card2:#0e1c32;
+    --border:#1b2d48;
+    --blue:#00c8ff;
+    --blue2:#0077ff;
+    --purple:#754cff;
+    --green:#39e69b;
+    --red:#ff4f70;
+    --text:#f5f8ff;
+    --muted:#8c9bb2;
+    --shadow:0 20px 70px rgba(0,0,0,.35);
+}
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -18,13 +38,19 @@ html{
 }
 
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    color:#fff;
-    background:#030712;
+    font-family:Inter,Arial,Helvetica,sans-serif;
+    color:var(--text);
+    background:
+        radial-gradient(circle at 10% 0%,rgba(0,200,255,.13),transparent 28%),
+        radial-gradient(circle at 90% 10%,rgba(117,76,255,.15),transparent 30%),
+        var(--bg);
+    min-height:100vh;
     overflow-x:hidden;
 }
 
-button,input{
+button,
+input,
+select{
     font:inherit;
 }
 
@@ -38,52 +64,19 @@ a{
 }
 
 /* =========================
-   TŁO
+   TOP INFO
 ========================= */
 
-.bg{
-    position:fixed;
-    inset:0;
-    z-index:-2;
-    overflow:hidden;
-    background:
-        radial-gradient(circle at 15% 10%,rgba(0,180,255,.16),transparent 30%),
-        radial-gradient(circle at 85% 20%,rgba(100,50,255,.15),transparent 30%),
-        #030712;
+.topInfo{
+    background:linear-gradient(90deg,#006cff,#733cff);
+    padding:9px 15px;
+    text-align:center;
+    font-size:12px;
+    font-weight:900;
 }
 
-.bg::before,
-.bg::after{
-    content:"";
-    position:absolute;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    filter:blur(80px);
-    opacity:.35;
-    animation:float 12s ease-in-out infinite alternate;
-}
-
-.bg::before{
-    left:-200px;
-    top:-150px;
-    background:#008cff;
-}
-
-.bg::after{
-    right:-200px;
-    bottom:-150px;
-    background:#713cff;
-    animation-delay:2s;
-}
-
-@keyframes float{
-    from{
-        transform:translate(0,0);
-    }
-    to{
-        transform:translate(180px,100px);
-    }
+.topInfo span{
+    margin:0 8px;
 }
 
 /* =========================
@@ -93,74 +86,88 @@ a{
 .nav{
     position:sticky;
     top:0;
-    z-index:1000;
+    z-index:100;
     height:74px;
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:0 5%;
-    background:rgba(3,7,18,.78);
+    background:rgba(5,9,20,.82);
     backdrop-filter:blur(18px);
-    border-bottom:1px solid rgba(255,255,255,.08);
+    border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .logo{
-    font-size:22px;
+    font-size:23px;
     font-weight:1000;
+    letter-spacing:-1px;
 }
 
 .logo span{
-    color:#00c8ff;
+    color:var(--blue);
 }
 
-.navlinks{
+.navLinks{
     display:flex;
-    gap:26px;
     align-items:center;
+    gap:26px;
 }
 
-.navlinks a{
-    color:#a9b5c7;
-    font-size:11px;
+.navLinks a{
+    color:#aebbd0;
+    font-size:12px;
     font-weight:900;
-    transition:.25s;
+    transition:.2s;
 }
 
-.navlinks a:hover{
-    color:#fff;
+.navLinks a:hover{
+    color:white;
 }
 
-.navbuttons{
+.navRight{
     display:flex;
-    gap:8px;
+    align-items:center;
+    gap:9px;
 }
 
-.navbtn{
-    border:1px solid #22344e;
-    background:#0a1424;
-    color:#fff;
-    padding:10px 13px;
-    border-radius:10px;
-    font-size:10px;
-    font-weight:900;
-    transition:.25s;
-}
-
-.navbtn:hover{
-    transform:translateY(-2px);
-    background:#102039;
-}
-
-.cartCount{
-    display:inline-flex;
-    min-width:18px;
-    height:18px;
+.iconBtn{
+    width:43px;
+    height:43px;
+    display:flex;
     align-items:center;
     justify-content:center;
-    margin-left:3px;
-    background:#008cff;
-    border-radius:50%;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#091426;
+    color:white;
+    transition:.2s;
+    position:relative;
+}
+
+.iconBtn:hover{
+    transform:translateY(-2px);
+    border-color:var(--blue);
+    box-shadow:0 8px 25px rgba(0,200,255,.15);
+}
+
+.badge{
+    position:absolute;
+    top:-6px;
+    right:-5px;
+    min-width:19px;
+    height:19px;
+    padding:0 5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--red);
+    border-radius:20px;
     font-size:9px;
+    font-weight:1000;
+}
+
+.menuBtn{
+    display:none;
 }
 
 /* =========================
@@ -168,170 +175,188 @@ a{
 ========================= */
 
 .hero{
-    width:min(1200px,92%);
-    min-height:600px;
+    width:min(1250px,92%);
+    min-height:610px;
     margin:auto;
     display:grid;
     grid-template-columns:1.1fr .9fr;
     align-items:center;
     gap:50px;
+    padding:70px 0;
 }
 
 .heroText{
-    animation:heroIn 1s cubic-bezier(.22,1,.36,1);
+    animation:heroIn .8s ease both;
 }
 
 @keyframes heroIn{
     from{
         opacity:0;
-        transform:translateY(50px);
+        transform:translateY(30px);
     }
     to{
         opacity:1;
-        transform:translateY(0);
+        transform:none;
     }
 }
 
-.badge{
-    display:inline-block;
-    padding:9px 13px;
-    margin-bottom:18px;
-    border:1px solid #16476b;
-    background:rgba(0,140,255,.1);
-    color:#00c8ff;
-    border-radius:999px;
-    font-size:9px;
+.kicker{
+    display:inline-flex;
+    padding:8px 12px;
+    border:1px solid rgba(0,200,255,.25);
+    border-radius:30px;
+    background:rgba(0,200,255,.06);
+    color:var(--blue);
+    font-size:10px;
     font-weight:1000;
+    letter-spacing:1px;
 }
 
 .hero h1{
-    font-size:clamp(45px,7vw,82px);
+    margin-top:20px;
+    font-size:clamp(45px,6vw,82px);
     line-height:.95;
-    letter-spacing:-4px;
+    letter-spacing:-5px;
 }
 
 .hero h1 span{
-    color:#00c8ff;
+    background:linear-gradient(90deg,var(--blue),#8c5cff);
+    -webkit-background-clip:text;
+    color:transparent;
 }
 
 .hero p{
-    max-width:600px;
+    max-width:650px;
     margin-top:25px;
-    color:#8795aa;
+    color:var(--muted);
+    font-size:16px;
     line-height:1.7;
 }
 
 .heroButtons{
     display:flex;
+    flex-wrap:wrap;
     gap:12px;
     margin-top:30px;
-    flex-wrap:wrap;
 }
 
 .primary{
     border:0;
-    padding:15px 22px;
-    border-radius:12px;
-    color:#fff;
+    padding:15px 21px;
+    border-radius:13px;
+    color:white;
     background:linear-gradient(100deg,#008cff,#713cff);
-    font-size:10px;
+    box-shadow:0 15px 35px rgba(0,119,255,.2);
+    font-size:11px;
     font-weight:1000;
-    box-shadow:0 12px 40px rgba(0,140,255,.2);
-    transition:.3s;
+    transition:.25s;
 }
 
 .primary:hover{
-    transform:translateY(-4px) scale(1.02);
-    box-shadow:0 18px 50px rgba(0,140,255,.35);
+    transform:translateY(-3px) scale(1.02);
 }
 
 .secondary{
-    padding:15px 22px;
-    border-radius:12px;
-    color:#fff;
-    background:#0a1424;
-    border:1px solid #22344e;
-    font-size:10px;
+    padding:14px 20px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    background:#091426;
+    color:white;
+    font-size:11px;
     font-weight:1000;
-    transition:.3s;
 }
 
-.secondary:hover{
-    transform:translateY(-4px);
-}
-
-/* =========================
-   HERO MODEL
-========================= */
-
-.heroModel{
-    height:420px;
+.heroVisual{
+    min-height:430px;
     display:flex;
     align-items:center;
     justify-content:center;
-    perspective:1000px;
+    position:relative;
 }
 
-.model{
-    width:280px;
-    height:280px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:35px;
+.glow{
+    position:absolute;
+    width:340px;
+    height:340px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(0,200,255,.22),transparent 65%);
+    filter:blur(15px);
+    animation:pulse 4s infinite alternate;
+}
+
+@keyframes pulse{
+    from{transform:scale(.9);}
+    to{transform:scale(1.1);}
+}
+
+.heroCube{
+    width:260px;
+    height:260px;
+    border:1px solid rgba(0,200,255,.35);
+    border-radius:45px;
+    transform:rotate(15deg);
     background:
-        radial-gradient(circle at 30% 20%,#1f5e87,#071426 55%);
-    border:1px solid #1e4465;
+        linear-gradient(135deg,rgba(0,200,255,.16),rgba(117,76,255,.12)),
+        #091426;
     box-shadow:
-        0 30px 100px rgba(0,140,255,.18),
-        inset 0 0 60px rgba(0,180,255,.08);
-    animation:modelFloat 4s ease-in-out infinite;
-    transform-style:preserve-3d;
-    transition:.5s;
+        0 0 100px rgba(0,200,255,.15),
+        inset 0 0 50px rgba(117,76,255,.08);
+    animation:float 4s ease-in-out infinite;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:100px;
 }
 
-.model:hover{
-    transform:rotateY(12deg) rotateX(-8deg) scale(1.05);
-}
-
-.modelIcon{
-    font-size:130px;
-    filter:drop-shadow(0 20px 30px rgba(0,200,255,.25));
-}
-
-@keyframes modelFloat{
-    0%,100%{
-        transform:translateY(0) rotateY(-5deg);
-    }
-    50%{
-        transform:translateY(-20px) rotateY(5deg);
-    }
+@keyframes float{
+    0%,100%{transform:rotate(15deg) translateY(0);}
+    50%{transform:rotate(20deg) translateY(-20px);}
 }
 
 /* =========================
-   PROMO
+   BENEFITS
 ========================= */
 
-.promo{
+.benefits{
     width:min(1200px,92%);
-    margin:20px auto 70px;
-    padding:20px;
-    border:1px solid #19314e;
-    border-radius:18px;
-    background:linear-gradient(
-        100deg,
-        rgba(0,140,255,.1),
-        rgba(113,60,255,.1)
-    );
-    text-align:center;
+    margin:10px auto 70px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
 }
 
-.promo strong{
-    color:#00c8ff;
+.benefit{
+    padding:22px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:rgba(10,20,37,.7);
+    transition:.25s;
+}
+
+.benefit:hover{
+    transform:translateY(-5px);
+    border-color:#2d4b72;
+}
+
+.benefitIcon{
+    font-size:25px;
+}
+
+.benefit strong{
+    display:block;
+    margin-top:12px;
+    font-size:13px;
+}
+
+.benefit p{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.5;
 }
 
 /* =========================
-   PRODUCTS
+   SECTION
 ========================= */
 
 .section{
@@ -339,185 +364,292 @@ a{
     margin:0 auto 100px;
 }
 
-.sectionTitle{
-    margin-bottom:30px;
+.sectionHead{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:20px;
+    margin-bottom:28px;
 }
 
-.sectionTitle h2{
-    font-size:35px;
+.sectionHead h2{
+    font-size:34px;
+    letter-spacing:-1px;
 }
 
-.sectionTitle p{
-    margin-top:8px;
-    color:#8190a6;
+.sectionHead p{
+    margin-top:7px;
+    color:var(--muted);
+    font-size:12px;
 }
 
-.filters{
+/* =========================
+   FILTER
+========================= */
+
+.shopTools{
     display:flex;
     gap:10px;
-    margin-bottom:30px;
     flex-wrap:wrap;
+    margin-bottom:22px;
 }
 
 .search{
     flex:1;
     min-width:220px;
-    padding:13px 16px;
-    border:1px solid #20324c;
-    border-radius:11px;
-    outline:0;
-    color:#fff;
-    background:#071120;
+    padding:14px 16px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    outline:none;
+    background:#081325;
+    color:white;
 }
 
-.filter{
-    padding:12px 15px;
-    border:1px solid #20324c;
-    border-radius:11px;
-    color:#fff;
-    background:#071120;
-    font-size:10px;
-    font-weight:900;
-}
-
-.products{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:18px;
-}
-
-.product{
-    opacity:0;
-    transform:translateX(-100px) scale(.96);
-    padding:15px;
-    border:1px solid #182b44;
-    border-radius:20px;
-    background:rgba(7,17,32,.86);
-    transition:
-        opacity .8s cubic-bezier(.22,1,.36,1),
-        transform .8s cubic-bezier(.22,1,.36,1),
-        border-color .3s,
-        box-shadow .3s;
-}
-
-.product:nth-child(even){
-    transform:translateX(100px) scale(.96);
-}
-
-.product.show{
-    opacity:1;
-    transform:translateX(0) scale(1);
-}
-
-.product:hover{
-    transform:translateY(-10px) scale(1.02);
-    border-color:#007fc4;
-    box-shadow:0 25px 60px rgba(0,140,255,.12);
-}
-
-.productImage{
-    height:220px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    border-radius:15px;
-    background:
-        radial-gradient(circle,#112c45,#050b15);
-}
-
-.productImage img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    transition:.6s cubic-bezier(.22,1,.36,1);
-}
-
-.product:hover .productImage img{
-    transform:scale(1.08) rotate(-2deg);
-}
-
-.product h3{
-    margin-top:17px;
-    font-size:16px;
-}
-
-.productDesc{
-    height:38px;
-    margin-top:8px;
-    color:#7f8ca0;
-    font-size:10px;
-    line-height:1.5;
-    overflow:hidden;
-}
-
-.productBottom{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-top:18px;
-}
-
-.price{
-    font-size:23px;
-    font-weight:1000;
-    color:#fff;
-}
-
-.view{
-    border:0;
-    padding:10px 12px;
-    border-radius:9px;
-    color:#fff;
-    background:#0d1d31;
-    border:1px solid #243b59;
-    font-size:9px;
-    font-weight:1000;
-    transition:.25s;
-}
-
-.view:hover{
-    background:#008cff;
-    border-color:#008cff;
+.category{
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#081325;
+    color:white;
+    outline:none;
 }
 
 /* =========================
-   INFO
+   PRODUCTS
 ========================= */
 
-.infoGrid{
+.products{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:18px;
 }
 
-.infoCard{
-    padding:30px;
-    border:1px solid #172940;
-    border-radius:20px;
-    background:#071120;
+.product{
+    overflow:hidden;
+    border:1px solid var(--border);
+    border-radius:22px;
+    background:
+        linear-gradient(145deg,rgba(255,255,255,.025),transparent),
+        var(--card);
+    transition:.3s;
+    position:relative;
+}
+
+.product:hover{
+    transform:translateY(-8px);
+    border-color:#2d4d76;
+    box-shadow:var(--shadow);
+}
+
+.productImage{
+    height:270px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 50% 40%,rgba(0,200,255,.12),transparent 45%),
+        #081224;
+}
+
+.productImage img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
     transition:.4s;
 }
 
-.infoCard:hover{
-    transform:translateY(-8px);
-    border-color:#007fc4;
+.product:hover .productImage img{
+    transform:scale(1.05);
 }
 
-.infoCard .icon{
-    font-size:35px;
+.productEmoji{
+    font-size:100px;
+    animation:productFloat 3s ease-in-out infinite;
 }
 
-.infoCard h3{
+@keyframes productFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+}
+
+.productTag{
+    position:absolute;
+    top:14px;
+    left:14px;
+    padding:7px 9px;
+    border-radius:8px;
+    background:#00c8ff;
+    color:#00101a;
+    font-size:8px;
+    font-weight:1000;
+}
+
+.productBody{
+    padding:20px;
+}
+
+.productBody h3{
+    font-size:17px;
+}
+
+.productBody p{
+    min-height:40px;
+    margin-top:8px;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.5;
+}
+
+.rating{
+    margin-top:12px;
+    font-size:11px;
+}
+
+.priceRow{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:10px;
     margin-top:18px;
 }
 
-.infoCard p{
-    margin-top:10px;
-    color:#8190a6;
-    font-size:11px;
+.price{
+    font-size:25px;
+    font-weight:1000;
+}
+
+.oldPrice{
+    color:#637188;
+    font-size:10px;
+    text-decoration:line-through;
+}
+
+.add{
+    border:0;
+    padding:11px 13px;
+    border-radius:10px;
+    background:linear-gradient(100deg,#008cff,#713cff);
+    color:white;
+    font-size:9px;
+    font-weight:1000;
+}
+
+/* =========================
+   CUSTOM 3D
+========================= */
+
+.custom3d{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+    padding:28px;
+    border:1px solid var(--border);
+    border-radius:25px;
+    background:
+        radial-gradient(circle at 20% 0%,rgba(0,200,255,.08),transparent 35%),
+        #081223;
+}
+
+.viewer{
+    height:480px;
+    overflow:hidden;
+    border:1px solid #203655;
+    border-radius:20px;
+    background:
+        radial-gradient(circle,rgba(0,200,255,.08),transparent 55%),
+        #030914;
+    position:relative;
+}
+
+#modelCanvas{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+.viewerHint{
+    position:absolute;
+    left:15px;
+    bottom:15px;
+    padding:9px 11px;
+    border-radius:9px;
+    background:rgba(3,9,20,.8);
+    color:#a8b6cb;
+    font-size:9px;
+}
+
+.uploadBox{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.uploadBox h3{
+    font-size:30px;
+}
+
+.uploadBox p{
+    margin-top:12px;
+    color:var(--muted);
     line-height:1.6;
+    font-size:12px;
+}
+
+.fileInput{
+    margin-top:25px;
+    padding:15px;
+    border:1px dashed #315078;
+    border-radius:14px;
+    background:#071120;
+    color:#aab7ca;
+}
+
+.modelInfo{
+    margin-top:15px;
+    padding:15px;
+    border-radius:13px;
+    background:#071120;
+    border:1px solid var(--border);
+    color:#aab7ca;
+    font-size:10px;
+}
+
+/* =========================
+   REVIEWS
+========================= */
+
+.reviews{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.review{
+    padding:24px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:#081324;
+}
+
+.reviewStars{
+    color:#ffc94a;
+    letter-spacing:2px;
+}
+
+.review p{
+    margin-top:14px;
+    color:#b6c1d1;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.reviewUser{
+    margin-top:18px;
+    color:white;
+    font-size:11px;
+    font-weight:1000;
 }
 
 /* =========================
@@ -525,277 +657,194 @@ a{
 ========================= */
 
 footer{
-    padding:50px 5%;
-    border-top:1px solid #17263a;
-    background:#040913;
-    color:#718096;
-    font-size:10px;
+    padding:55px 5%;
+    border-top:1px solid var(--border);
+    background:#030711;
 }
 
-.footerInner{
+.footerGrid{
     width:min(1200px,100%);
     margin:auto;
-    display:flex;
-    justify-content:space-between;
-    gap:20px;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:30px;
+}
+
+footer h3{
+    margin-bottom:14px;
+}
+
+footer p,
+footer a{
+    color:var(--muted);
+    font-size:11px;
+    line-height:2;
+}
+
+footer a:hover{
+    color:white;
 }
 
 /* =========================
-   MODAL
+   MODALS
 ========================= */
 
 .modal{
     position:fixed;
     inset:0;
-    z-index:3000;
-    display:flex;
+    z-index:500;
+    display:none;
     align-items:center;
     justify-content:center;
     padding:20px;
-    background:rgba(0,0,0,.78);
-    backdrop-filter:blur(12px);
-    opacity:0;
-    visibility:hidden;
-    transition:.3s;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(10px);
 }
 
-.modal.open{
-    opacity:1;
-    visibility:visible;
+.modal.show{
+    display:flex;
+    animation:fadeIn .2s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
 }
 
 .modalBox{
-    width:min(900px,100%);
+    width:min(600px,100%);
     max-height:90vh;
     overflow:auto;
-    padding:30px;
-    border:1px solid #223b59;
-    border-radius:25px;
-    background:#071120;
-    transform:translateY(40px) scale(.94);
-    transition:.45s cubic-bezier(.22,1,.36,1);
+    padding:28px;
+    border:1px solid var(--border);
+    border-radius:22px;
+    background:#081324;
+    box-shadow:0 30px 100px #000;
+    animation:modalIn .25s ease;
 }
 
-.modal.open .modalBox{
-    transform:translateY(0) scale(1);
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.97);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
 }
 
-.modalClose{
-    float:right;
-    border:0;
-    background:#ff3158;
-    color:#fff;
-    padding:8px 12px;
-    border-radius:9px;
-    font-weight:900;
-}
-
-.modalGrid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:30px;
-}
-
-.modalImage{
-    height:350px;
+.modalHead{
     display:flex;
+    justify-content:space-between;
     align-items:center;
-    justify-content:center;
-    border-radius:20px;
-    background:#030914;
-    overflow:hidden;
+    margin-bottom:20px;
 }
 
-.modalImage img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-}
-
-.modalInfo h2{
-    margin-top:20px;
-    font-size:32px;
-}
-
-.modalPrice{
-    margin-top:15px;
-    font-size:35px;
-    font-weight:1000;
-    color:#00c8ff;
-}
-
-.modalDescription{
-    margin-top:20px;
-    color:#8997ab;
-    line-height:1.7;
-}
-
-.model3dBox{
-    margin-top:20px;
-    padding:20px;
-    border:1px dashed #2b4768;
-    border-radius:15px;
-    text-align:center;
-    color:#728299;
-}
-
-.addCart{
-    width:100%;
-    margin-top:25px;
+.close{
+    width:35px;
+    height:35px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:#0d1a2d;
+    color:white;
 }
 
 /* =========================
    CART
 ========================= */
 
-.cart{
-    position:fixed;
-    top:0;
-    right:0;
-    z-index:4000;
-    width:min(430px,94vw);
-    height:100vh;
-    padding:25px;
-    background:#06101e;
-    border-left:1px solid #20344f;
-    transform:translateX(100%);
-    transition:.45s cubic-bezier(.22,1,.36,1);
-    overflow:auto;
-}
-
-.cart.open{
-    transform:translateX(0);
-}
-
-.cartHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding-bottom:20px;
-    border-bottom:1px solid #20344f;
-}
-
-.cartItems{
-    padding:20px 0;
-}
-
 .cartItem{
     display:flex;
+    align-items:center;
     justify-content:space-between;
     gap:15px;
     padding:15px 0;
-    border-bottom:1px solid #16283e;
+    border-bottom:1px solid var(--border);
 }
 
-.cartItem strong{
+.cartItem h4{
     font-size:12px;
 }
 
-.remove{
-    border:0;
-    color:#ff5577;
-    background:none;
-    font-size:10px;
+.cartItem small{
+    color:var(--muted);
 }
 
-.cartTotal{
+.qty{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.qty button{
+    width:27px;
+    height:27px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:#0c1a2d;
+    color:white;
+}
+
+.cartBottom{
     margin-top:20px;
-    font-size:25px;
+}
+
+.coupon{
+    display:flex;
+    gap:8px;
+}
+
+.coupon input{
+    flex:1;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:#050c18;
+    color:white;
+    outline:none;
+}
+
+.totalRow{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    color:#aab6c9;
+    font-size:12px;
+}
+
+.totalFinal{
+    margin-top:10px;
+    padding-top:15px;
+    border-top:1px solid var(--border);
+    color:white;
+    font-size:22px;
     font-weight:1000;
 }
 
-.discount{
-    display:flex;
-    gap:8px;
-    margin-top:15px;
-}
-
-.discount input{
-    flex:1;
-    padding:11px;
-    color:#fff;
-    background:#030812;
-    border:1px solid #22344e;
-    border-radius:9px;
-    outline:0;
-}
-
-.discount button{
-    border:0;
-    border-radius:9px;
-    padding:10px;
-    background:#008cff;
-    color:#fff;
-    font-size:9px;
-    font-weight:900;
-}
-
-.shipping{
-    margin-top:12px;
-    color:#42e6a4;
-    font-size:11px;
-}
-
 /* =========================
-   ACCOUNT / ADMIN
+   ACCOUNT
 ========================= */
 
-.panel{
-    position:fixed;
-    inset:0;
-    z-index:3500;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(0,0,0,.8);
-    backdrop-filter:blur(10px);
-    opacity:0;
-    visibility:hidden;
-    transition:.3s;
-}
-
-.panel.open{
-    opacity:1;
-    visibility:visible;
-}
-
-.panelBox{
-    width:min(500px,100%);
-    padding:30px;
-    border-radius:22px;
-    border:1px solid #223b59;
-    background:#071120;
-}
-
-.panelBox h2{
-    font-size:27px;
-}
-
-.panelBox p{
-    margin-top:10px;
-    color:#8492a7;
-    font-size:11px;
-    line-height:1.6;
-}
-
-.panelLinks{
+.accountForm{
     display:grid;
-    gap:10px;
-    margin-top:25px;
+    gap:12px;
 }
 
-.panelLink{
-    padding:15px;
-    border:1px solid #20344e;
-    border-radius:12px;
-    background:#0a1627;
-    transition:.25s;
+.accountForm input{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:#050c18;
+    color:white;
+    outline:none;
 }
 
-.panelLink:hover{
-    transform:translateX(5px);
-    border-color:#008cff;
+.accountSaved{
+    margin-top:12px;
+    color:var(--green);
+    font-size:10px;
 }
 
 /* =========================
@@ -806,17 +855,18 @@ footer{
     position:fixed;
     left:50%;
     bottom:25px;
-    z-index:9999;
-    padding:14px 20px;
-    border:1px solid #29405e;
+    z-index:1000;
+    padding:14px 18px;
+    border:1px solid #29415f;
     border-radius:12px;
-    background:#102038;
+    background:#0d1d32;
+    box-shadow:0 15px 50px #000;
+    font-size:10px;
+    font-weight:1000;
     transform:translate(-50%,30px);
     opacity:0;
     pointer-events:none;
-    transition:.3s;
-    font-size:10px;
-    font-weight:900;
+    transition:.25s;
 }
 
 .toast.show{
@@ -825,76 +875,119 @@ footer{
 }
 
 /* =========================
+   SCROLL ANIMATION
+========================= */
+
+.reveal{
+    opacity:0;
+    transform:translateY(35px);
+    transition:.7s ease;
+}
+
+.reveal.visible{
+    opacity:1;
+    transform:none;
+}
+
+/* =========================
    MOBILE
 ========================= */
 
-@media(max-width:950px){
+@media(max-width:900px){
 
-    .navlinks{
+    .navLinks{
         display:none;
+    }
+
+    .menuBtn{
+        display:flex;
     }
 
     .hero{
         grid-template-columns:1fr;
-        padding:70px 0;
-        text-align:center;
+        padding-top:50px;
     }
 
-    .hero p{
-        margin-left:auto;
-        margin-right:auto;
+    .heroVisual{
+        min-height:320px;
     }
 
-    .heroButtons{
-        justify-content:center;
+    .benefits{
+        grid-template-columns:repeat(2,1fr);
     }
 
     .products{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .infoGrid{
+    .custom3d{
         grid-template-columns:1fr;
     }
 
+    .reviews{
+        grid-template-columns:1fr;
+    }
+
+    .footerGrid{
+        grid-template-columns:1fr 1fr;
+    }
 }
 
 @media(max-width:600px){
+
+    .nav{
+        padding:0 4%;
+    }
+
+    .logo{
+        font-size:18px;
+    }
+
+    .navRight .iconBtn{
+        width:38px;
+        height:38px;
+    }
+
+    .hero h1{
+        letter-spacing:-3px;
+    }
+
+    .benefits{
+        grid-template-columns:1fr;
+    }
 
     .products{
         grid-template-columns:1fr;
     }
 
-    .hero h1{
-        letter-spacing:-2px;
+    .custom3d{
+        padding:15px;
     }
 
-    .heroModel{
-        height:320px;
+    .viewer{
+        height:350px;
     }
 
-    .model{
-        width:230px;
-        height:230px;
-    }
-
-    .modalGrid{
+    .footerGrid{
         grid-template-columns:1fr;
     }
-
-    .footerInner{
-        flex-direction:column;
-    }
-
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
+<!-- GÓRNA INFORMACJA -->
 
-<!-- NAVBAR -->
+<div class="topInfo">
+    🚚 DARMOWA DOSTAWA OD 50 zł
+    <span>•</span>
+    🎟️ KOD <b>START10</b> = -10%
+    <span>•</span>
+    ⭐ WŁASNY DRUK 3D
+</div>
+
+<!-- NAV -->
 
 <nav class="nav">
 
@@ -902,40 +995,52 @@ footer{
         Printerlase<span>3D</span>
     </a>
 
-    <div class="navlinks">
-        <a href="#home">GŁÓWNA</a>
-        <a href="#products">PRODUKTY</a>
-        <a href="#about">O NAS</a>
+    <div class="navLinks">
+        <a href="#produkty">Produkty</a>
+        <a href="#custom3d">Własny model 3D</a>
+        <a href="#opinie">Opinie</a>
+        <a href="#onas">O nas</a>
+        <a href="/admin.html">Panel admin</a>
     </div>
 
-    <div class="navbuttons">
+    <div class="navRight">
 
-        <button class="navbtn" onclick="openPanel('account')">
-            👤 KONTO
+        <button
+            class="iconBtn"
+            onclick="openAccount()"
+            title="Konto"
+        >
+            👤
         </button>
 
-        <button class="navbtn" onclick="openCart()">
-            🛒 KOSZYK
-            <span id="cartCount" class="cartCount">0</span>
+        <button
+            class="iconBtn"
+            onclick="openCart()"
+            title="Koszyk"
+        >
+            🛒
+            <span id="cartBadge" class="badge">0</span>
         </button>
 
-        <button class="navbtn" onclick="location.href='/admin.html'">
-            🔐 ADMIN
+        <button
+            class="iconBtn menuBtn"
+            onclick="toggleMobileMenu()"
+        >
+            ☰
         </button>
 
     </div>
 
 </nav>
 
-
 <!-- HERO -->
 
-<section id="home" class="hero">
+<section class="hero">
 
     <div class="heroText">
 
-        <div class="badge">
-            ⚡ DRUK 3D • WŁASNE PROJEKTY
+        <div class="kicker">
+            ⚡ DRUK 3D • PROJEKTY • PERSONALIZACJA
         </div>
 
         <h1>
@@ -944,36 +1049,258 @@ footer{
         </h1>
 
         <p>
-            Personalizowane breloki, dodatki i modele 3D
-            wykonane specjalnie dla Ciebie.
+            Breloki, dodatki, akcesoria i własne modele 3D.
+            Wybierz gotowy produkt albo wrzuć swój model
+            i zobacz go przed zamówieniem.
         </p>
 
         <div class="heroButtons">
 
-            <a href="#products" class="primary">
-                ZOBACZ PRODUKTY
+            <a
+                href="#produkty"
+                class="primary"
+            >
+                🔥 ZOBACZ PRODUKTY
             </a>
 
-            <button class="secondary" onclick="openPanel('custom')">
-                🧊 WŁASNY MODEL 3D
+            <a
+                href="#custom3d"
+                class="secondary"
+            >
+                🧊 WRZUĆ MODEL 3D
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="heroVisual">
+
+        <div class="glow"></div>
+
+        <div class="heroCube">
+            🧊
+        </div>
+
+    </div>
+
+</section>
+
+<!-- BENEFITS -->
+
+<section class="benefits reveal">
+
+    <div class="benefit">
+        <div class="benefitIcon">🚚</div>
+        <strong>Darmowa dostawa</strong>
+        <p>Od 50 zł wartości zamówienia.</p>
+    </div>
+
+    <div class="benefit">
+        <div class="benefitIcon">🎨</div>
+        <strong>Personalizacja</strong>
+        <p>Własne kolory, napisy i projekty.</p>
+    </div>
+
+    <div class="benefit">
+        <div class="benefitIcon">🧊</div>
+        <strong>Modele 3D</strong>
+        <p>Dodaj własny model i zobacz podgląd.</p>
+    </div>
+
+    <div class="benefit">
+        <div class="benefitIcon">⭐</div>
+        <strong>Jakość</strong>
+        <p>Starannie przygotowane wydruki 3D.</p>
+    </div>
+
+</section>
+
+<!-- PRODUKTY -->
+
+<section
+    id="produkty"
+    class="section reveal"
+>
+
+    <div class="sectionHead">
+
+        <div>
+            <h2>🔥 Produkty</h2>
+            <p>
+                Wybierz coś gotowego albo zamów własny projekt.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="shopTools">
+
+        <input
+            id="search"
+            class="search"
+            placeholder="🔍 Szukaj produktu..."
+            oninput="renderProducts()"
+        >
+
+        <select
+            id="category"
+            class="category"
+            onchange="renderProducts()"
+        >
+            <option value="all">Wszystkie</option>
+            <option value="breloki">Breloki</option>
+            <option value="gaming">Gaming</option>
+            <option value="dodatki">Dodatki</option>
+        </select>
+
+    </div>
+
+    <div
+        id="products"
+        class="products"
+    ></div>
+
+</section>
+
+<!-- WŁASNY MODEL 3D -->
+
+<section
+    id="custom3d"
+    class="section reveal"
+>
+
+    <div class="sectionHead">
+
+        <div>
+            <h2>🧊 Własny model 3D</h2>
+
+            <p>
+                Wrzuć swój model i zobacz go bezpośrednio
+                na stronie.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="custom3d">
+
+        <div class="viewer">
+
+            <canvas id="modelCanvas"></canvas>
+
+            <div class="viewerHint">
+                🖱️ Obracaj • Scroll = zoom
+            </div>
+
+        </div>
+
+        <div class="uploadBox">
+
+            <h3>
+                Twój własny model.
+            </h3>
+
+            <p>
+                Wybierz plik modelu 3D z komputera.
+                Podgląd zostanie pokazany od razu.
+            </p>
+
+            <input
+                id="modelFile"
+                class="fileInput"
+                type="file"
+                accept=".glb,.gltf,.obj,.stl,model/gltf-binary,model/gltf+json,application/octet-stream"
+            >
+
+            <div
+                id="modelInfo"
+                class="modelInfo"
+            >
+                Nie wybrano modelu.
+            </div>
+
+            <button
+                class="primary"
+                style="margin-top:15px"
+                onclick="addCustomModelToCart()"
+            >
+                🛒 DODAJ WŁASNY MODEL
             </button>
 
         </div>
 
     </div>
 
+</section>
 
-    <div class="heroModel">
+<!-- OPINIE -->
 
-        <div class="model">
+<section
+    id="opinie"
+    class="section reveal"
+>
 
-            <!--
-                TU MOŻESZ PÓŹNIEJ WSTAWIĆ
-                SWÓJ WŁASNY MODEL 3D
-            -->
+    <div class="sectionHead">
 
-            <div class="modelIcon">
-                🧊
+        <div>
+            <h2>⭐ Opinie</h2>
+            <p>
+                Co mówią klienci Printerlase3D.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="reviews">
+
+        <div class="review">
+
+            <div class="reviewStars">
+                ★★★★★
+            </div>
+
+            <p>
+                Mega jakość wydruku. Brelok wygląda dużo lepiej
+                niż się spodziewałem.
+            </p>
+
+            <div class="reviewUser">
+                — Kacper
+            </div>
+
+        </div>
+
+        <div class="review">
+
+            <div class="reviewStars">
+                ★★★★★
+            </div>
+
+            <p>
+                Zamówiłem własny projekt i wszystko wyszło
+                bardzo dobrze.
+            </p>
+
+            <div class="reviewUser">
+                — Bartek
+            </div>
+
+        </div>
+
+        <div class="review">
+
+            <div class="reviewStars">
+                ★★★★★
+            </div>
+
+            <p>
+                Fajny kontakt, szybka realizacja i bardzo
+                spoko wykonanie.
+            </p>
+
+            <div class="reviewUser">
+                — Michał
             </div>
 
         </div>
@@ -982,181 +1309,195 @@ footer{
 
 </section>
 
-
-<!-- PROMO -->
-
-<div class="promo">
-    🚚 <strong>DARMOWA DOSTAWA</strong>
-    dla zamówień od 50 zł
-    &nbsp; • &nbsp;
-    🏷️ kod <strong>START10</strong> = 10% rabatu
-</div>
-
-
-<!-- PRODUKTY -->
-
-<section id="products" class="section">
-
-    <div class="sectionTitle">
-
-        <h2>🔥 Nasze produkty</h2>
-
-        <p>
-            Wybierz coś gotowego albo zamów własny projekt.
-        </p>
-
-    </div>
-
-
-    <div class="filters">
-
-        <input
-            id="search"
-            class="search"
-            placeholder="🔎 Szukaj produktu..."
-            oninput="filterProducts()"
-        >
-
-        <button class="filter" onclick="filterCategory('all')">
-            WSZYSTKIE
-        </button>
-
-        <button class="filter" onclick="filterCategory('brelok')">
-            BRELOKI
-        </button>
-
-        <button class="filter" onclick="filterCategory('akcesoria')">
-            AKCESORIA
-        </button>
-
-        <button class="filter" onclick="filterCategory('inne')">
-            INNE
-        </button>
-
-    </div>
-
-
-    <div id="productsGrid" class="products"></div>
-
-</section>
-
-
 <!-- O NAS -->
 
-<section id="about" class="section">
+<section
+    id="onas"
+    class="section reveal"
+>
 
-    <div class="sectionTitle">
+    <div class="custom3d">
 
-        <h2>Dlaczego Printerlase3D?</h2>
+        <div>
+            <h2>
+                🚀 Printerlase3D
+            </h2>
 
-        <p>
-            Mały sklep, duże pomysły.
-        </p>
-
-    </div>
-
-
-    <div class="infoGrid">
-
-        <div class="infoCard">
-            <div class="icon">🖨️</div>
-            <h3>Druk 3D</h3>
-            <p>
-                Produkty tworzone przy użyciu druku 3D
-                i dopracowywane przed wysyłką.
+            <p style="
+                margin-top:15px;
+                color:var(--muted);
+                line-height:1.8;
+                font-size:13px;
+            ">
+                Tworzymy rzeczy, które można naprawdę
+                wykorzystać. Od małych breloków po
+                personalizowane modele 3D.
             </p>
+
+            <div style="margin-top:20px">
+                <span class="kicker">
+                    MADE WITH 3D PRINTING
+                </span>
+            </div>
         </div>
 
-        <div class="infoCard">
-            <div class="icon">🎨</div>
-            <h3>Personalizacja</h3>
-            <p>
-                Możesz zamówić własny napis, kształt
-                albo całkowicie własny model.
-            </p>
-        </div>
-
-        <div class="infoCard">
-            <div class="icon">⚡</div>
-            <h3>Szybka realizacja</h3>
-            <p>
-                Zamówienie trafia do realizacji
-                bez zbędnych kombinacji.
-            </p>
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:120px;
+        ">
+            🖨️
         </div>
 
     </div>
 
 </section>
 
+<!-- FOOTER -->
 
 <footer>
 
-    <div class="footerInner">
+    <div class="footerGrid">
 
         <div>
-            © 2026 Printerlase3D
+
+            <div class="logo">
+                Printerlase<span>3D</span>
+            </div>
+
+            <p style="margin-top:12px">
+                Druk 3D • własne modele • personalizacja
+            </p>
+
         </div>
 
         <div>
-            Druk 3D • Breloki • Projekty własne
+
+            <h3>Sklep</h3>
+
+            <p>
+                <a href="#produkty">Produkty</a>
+            </p>
+
+            <p>
+                <a href="#custom3d">Własny model 3D</a>
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>Informacje</h3>
+
+            <p>
+                <a href="#onas">O nas</a>
+            </p>
+
+            <p>
+                <a href="#opinie">Opinie</a>
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>Panel</h3>
+
+            <p>
+                <a href="/admin.html">
+                    🔐 Panel admin
+                </a>
+            </p>
+
         </div>
 
     </div>
 
 </footer>
 
+<!-- KOSZYK -->
 
-<!-- MODAL PRODUKTU -->
-
-<div id="productModal" class="modal">
+<div
+    id="cartModal"
+    class="modal"
+    onclick="closeModalOutside(event,'cartModal')"
+>
 
     <div class="modalBox">
 
-        <button class="modalClose" onclick="closeProduct()">
-            ✕
-        </button>
+        <div class="modalHead">
 
-        <div class="modalGrid">
+            <h2>🛒 Koszyk</h2>
 
-            <div class="modalImage">
+            <button
+                class="close"
+                onclick="closeModal('cartModal')"
+            >
+                ✕
+            </button>
 
-                <img id="modalImage" src="" alt="Produkt">
+        </div>
 
-            </div>
+        <div id="cartItems"></div>
 
-            <div class="modalInfo">
+        <div class="cartBottom">
 
-                <div class="badge" id="modalCategory">
-                    PRODUKT
-                </div>
+            <div class="coupon">
 
-                <h2 id="modalName">
-                    Produkt
-                </h2>
-
-                <div id="modalPrice" class="modalPrice">
-                    0 zł
-                </div>
-
-                <p id="modalDescription" class="modalDescription">
-                </p>
-
-                <div class="model3dBox">
-                    🧊 Miejsce na własny model 3D
-                    <br><br>
-                    Możesz tutaj podłączyć
-                    viewer GLB/STL/OBJ.
-                </div>
+                <input
+                    id="couponInput"
+                    placeholder="Kod rabatowy"
+                >
 
                 <button
-                    id="modalAdd"
-                    class="primary addCart"
+                    class="primary"
+                    onclick="applyCoupon()"
                 >
-                    🛒 DODAJ DO KOSZYKA
+                    UŻYJ
                 </button>
 
             </div>
+
+            <div
+                id="couponInfo"
+                style="
+                    margin-top:10px;
+                    font-size:10px;
+                "
+            ></div>
+
+            <div style="margin-top:20px">
+
+                <div class="totalRow">
+                    <span>Produkty</span>
+                    <strong id="subtotal">0,00 zł</strong>
+                </div>
+
+                <div class="totalRow">
+                    <span>Rabat</span>
+                    <strong id="discount">0,00 zł</strong>
+                </div>
+
+                <div class="totalRow">
+                    <span>Dostawa</span>
+                    <strong id="delivery">9,99 zł</strong>
+                </div>
+
+                <div class="totalRow totalFinal">
+                    <span>Razem</span>
+                    <strong id="cartTotal">0,00 zł</strong>
+                </div>
+
+            </div>
+
+            <button
+                class="primary"
+                style="width:100%;margin-top:20px"
+                onclick="checkout()"
+            >
+                💳 PRZEJDŹ DO ZAMÓWIENIA
+            </button>
 
         </div>
 
@@ -1164,93 +1505,99 @@ footer{
 
 </div>
 
+<!-- KONTO -->
 
-<!-- KOSZYK -->
+<div
+    id="accountModal"
+    class="modal"
+    onclick="closeModalOutside(event,'accountModal')"
+>
 
-<aside id="cart" class="cart">
+    <div class="modalBox">
 
-    <div class="cartHeader">
+        <div class="modalHead">
 
-        <h2>🛒 Koszyk</h2>
+            <h2>👤 Konto</h2>
 
-        <button
-            class="navbtn"
-            onclick="closeCart()"
-        >
-            ✕
-        </button>
+            <button
+                class="close"
+                onclick="closeModal('accountModal')"
+            >
+                ✕
+            </button>
 
-    </div>
+        </div>
 
-    <div id="cartItems" class="cartItems">
-        Koszyk jest pusty.
-    </div>
+        <div class="accountForm">
 
-    <div id="cartTotal" class="cartTotal">
-        0,00 zł
-    </div>
+            <input
+                id="accountName"
+                placeholder="Imię i nazwisko"
+            >
 
-    <div class="discount">
+            <input
+                id="accountEmail"
+                type="email"
+                placeholder="E-mail"
+            >
 
-        <input
-            id="discountCode"
-            placeholder="Kod rabatowy"
-        >
+            <input
+                id="accountPhone"
+                placeholder="Telefon"
+            >
 
-        <button onclick="applyDiscount()">
-            UŻYJ
-        </button>
+            <button
+                class="primary"
+                onclick="saveAccount()"
+            >
+                💾 ZAPISZ DANE
+            </button>
 
-    </div>
+        </div>
 
-    <div id="discountInfo"></div>
-
-    <div id="shippingInfo" class="shipping">
-        🚚 Darmowa dostawa od 50 zł
-    </div>
-
-    <button
-        class="primary addCart"
-        onclick="checkout()"
-    >
-        PRZEJDŹ DO ZAMÓWIENIA
-    </button>
-
-</aside>
-
-
-<!-- PANEL -->
-
-<div id="panel" class="panel">
-
-    <div class="panelBox">
-
-        <button
-            class="modalClose"
-            onclick="closePanel()"
-        >
-            ✕
-        </button>
-
-        <h2 id="panelTitle">
-            Konto
-        </h2>
-
-        <p id="panelDescription">
-            Panel klienta Printerlase3D.
-        </p>
-
-        <div id="panelLinks" class="panelLinks"></div>
+        <div
+            id="accountSaved"
+            class="accountSaved"
+        ></div>
 
     </div>
 
 </div>
 
+<!-- TOAST -->
 
-<div id="toast" class="toast"></div>
+<div
+    id="toast"
+    class="toast"
+></div>
 
+<!-- THREE.JS -->
 
-<script>
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+
+import * as THREE from "three";
+
+import { OrbitControls }
+from "three/addons/controls/OrbitControls.js";
+
+import { GLTFLoader }
+from "three/addons/loaders/GLTFLoader.js";
+
+import { OBJLoader }
+from "three/addons/loaders/OBJLoader.js";
+
+import { STLLoader }
+from "three/addons/loaders/STLLoader.js";
+
 
 /* =========================
    PRODUKTY
@@ -1259,548 +1606,139 @@ footer{
 const products = [
 
     {
-        id:1,
+        id:"brelok-friendz",
         name:"Brelok FRIENDZ",
+        category:"breloki",
         price:15,
-        category:"brelok",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=FRIENDZ",
-        description:"Personalizowany brelok FRIENDZ wykonany w technologii druku 3D."
+        oldPrice:20,
+        emoji:"🔑",
+        tag:"BESTSELLER",
+        rating:5,
+        description:"Personalizowany brelok 3D FRIENDZ."
     },
 
     {
-        id:2,
-        name:"Brelok Printerlase3D",
-        price:18,
-        category:"brelok",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=Printerlase3D",
-        description:"Brelok z logo Printerlase3D. Lekki i trwały."
-    },
-
-    {
-        id:3,
-        name:"Brelok Custom",
-        price:20,
-        category:"brelok",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=CUSTOM",
-        description:"Brelok z własnym napisem lub prostym projektem."
-    },
-
-    {
-        id:4,
-        name:"Podstawka na telefon",
+        id:"creeper",
+        name:"Minecraft Creeper",
+        category:"gaming",
         price:25,
-        category:"akcesoria",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=PHONE",
-        description:"Praktyczna podstawka pod telefon wykonana z tworzywa."
+        oldPrice:30,
+        emoji:"🟩",
+        tag:"GAMING",
+        rating:5,
+        description:"Creeper wykonany w technologii druku 3D."
     },
 
     {
-        id:5,
-        name:"Organizer na biurko",
-        price:30,
-        category:"akcesoria",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=ORGANIZER",
-        description:"Minimalistyczny organizer na biurko."
+        id:"gaming-holder",
+        name:"Gaming Holder",
+        category:"gaming",
+        price:29,
+        oldPrice:35,
+        emoji:"🎮",
+        tag:"NOWOŚĆ",
+        rating:5,
+        description:"Praktyczny stojak na kontroler lub telefon."
     },
 
     {
-        id:6,
-        name:"Uchwyt na kabel",
-        price:10,
-        category:"akcesoria",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=CABLE",
-        description:"Mały uchwyt pomagający uporządkować przewody."
+        id:"custom-key",
+        name:"Brelok z własnym napisem",
+        category:"breloki",
+        price:19,
+        oldPrice:25,
+        emoji:"✨",
+        tag:"CUSTOM",
+        rating:5,
+        description:"Podaj swój napis i wybierz kolor."
     },
 
     {
-        id:7,
-        name:"Dekoracja 3D",
+        id:"cable-holder",
+        name:"Organizer kabli",
+        category:"dodatki",
+        price:12,
+        oldPrice:15,
+        emoji:"🔌",
+        tag:"PROMO",
+        rating:4,
+        description:"Mały organizer do uporządkowania kabli."
+    },
+
+    {
+        id:"phone-stand",
+        name:"Stojak na telefon",
+        category:"dodatki",
         price:22,
-        category:"inne",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=3D",
-        description:"Ozdoba wykonana na drukarce 3D."
+        oldPrice:28,
+        emoji:"📱",
+        tag:"POPULARNE",
+        rating:5,
+        description:"Stabilny stojak na telefon z druku 3D."
     },
 
     {
-        id:8,
-        name:"Model na zamówienie",
-        price:50,
-        category:"inne",
-        image:"https://placehold.co/700x500/071120/00c8ff?text=MODEL+3D",
-        description:"Własny model 3D przygotowany specjalnie dla Ciebie."
+        id:"controller",
+        name:"Stojak Gaming",
+        category:"gaming",
+        price:39,
+        oldPrice:49,
+        emoji:"🕹️",
+        tag:"PREMIUM",
+        rating:5,
+        description:"Duży stojak gamingowy na biurko."
+    },
+
+    {
+        id:"mini-robot",
+        name:"Mini Robot 3D",
+        category:"dodatki",
+        price:30,
+        oldPrice:40,
+        emoji:"🤖",
+        tag:"NOWOŚĆ",
+        rating:5,
+        description:"Ozdobny model robota do wydruku 3D."
+    },
+
+    {
+        id:"name-tag",
+        name:"Personalizowana tabliczka",
+        category:"dodatki",
+        price:18,
+        oldPrice:25,
+        emoji:"🏷️",
+        tag:"CUSTOM",
+        rating:5,
+        description:"Tabliczka z własnym imieniem lub napisem."
     }
 
 ];
-
-
-let currentCategory = "all";
-let cart = [];
-let discount = 0;
-let selectedProduct = null;
-
-
-/* =========================
-   RENDER PRODUKTÓW
-========================= */
-
-function renderProducts(){
-
-    const grid =
-        document.getElementById("productsGrid");
-
-    const query =
-        document
-        .getElementById("search")
-        .value
-        .toLowerCase();
-
-    grid.innerHTML = "";
-
-    products
-    .filter(product => {
-
-        const categoryOK =
-            currentCategory === "all" ||
-            product.category === currentCategory;
-
-        const searchOK =
-            product.name
-            .toLowerCase()
-            .includes(query);
-
-        return categoryOK && searchOK;
-
-    })
-    .forEach((product,index) => {
-
-        const card =
-            document.createElement("article");
-
-        card.className = "product";
-
-        card.style.transitionDelay =
-            Math.min(index * .08,.5) + "s";
-
-        card.innerHTML = `
-
-            <div class="productImage">
-
-                <img
-                    src="${product.image}"
-                    alt="${escapeHTML(product.name)}"
-                    loading="lazy"
-                >
-
-            </div>
-
-            <h3>
-                ${escapeHTML(product.name)}
-            </h3>
-
-            <p class="productDesc">
-                ${escapeHTML(product.description)}
-            </p>
-
-            <div class="productBottom">
-
-                <div class="price">
-                    ${money(product.price)}
-                </div>
-
-                <button
-                    class="view"
-                    onclick="openProduct(${product.id})"
-                >
-                    ZOBACZ
-                </button>
-
-            </div>
-        `;
-
-        grid.appendChild(card);
-
-        setTimeout(() => {
-            card.classList.add("show");
-        },30);
-
-    });
-
-}
-
-
-/* =========================
-   PRODUKT
-========================= */
-
-function openProduct(id){
-
-    const product =
-        products.find(p => p.id === id);
-
-    if(!product) return;
-
-    selectedProduct = product;
-
-    document.getElementById("modalImage").src =
-        product.image;
-
-    document.getElementById("modalName").textContent =
-        product.name;
-
-    document.getElementById("modalPrice").textContent =
-        money(product.price);
-
-    document.getElementById("modalDescription").textContent =
-        product.description;
-
-    document.getElementById("modalCategory").textContent =
-        product.category.toUpperCase();
-
-    document.getElementById("productModal")
-        .classList.add("open");
-
-}
-
-
-function closeProduct(){
-
-    document.getElementById("productModal")
-        .classList.remove("open");
-
-}
-
-
-document.getElementById("modalAdd")
-.addEventListener("click",() => {
-
-    if(selectedProduct){
-
-        addToCart(selectedProduct.id);
-
-        closeProduct();
-
-    }
-
-});
 
 
 /* =========================
    KOSZYK
 ========================= */
 
-function addToCart(id){
-
-    const product =
-        products.find(p => p.id === id);
-
-    if(!product) return;
-
-    const existing =
-        cart.find(item => item.id === id);
-
-    if(existing){
-
-        existing.quantity++;
-
-    }else{
-
-        cart.push({
-            ...product,
-            quantity:1
-        });
-
-    }
-
-    renderCart();
-
-    showToast(
-        "✓ Dodano do koszyka"
+let cart =
+    JSON.parse(
+        localStorage.getItem("printerlase_cart") || "[]"
     );
 
-}
+let coupon = null;
 
-
-function removeFromCart(id){
-
-    cart =
-        cart.filter(item => item.id !== id);
-
-    renderCart();
-
-}
-
-
-function renderCart(){
-
-    const box =
-        document.getElementById("cartItems");
-
-    const count =
-        cart.reduce(
-            (sum,item) =>
-                sum + item.quantity,
-            0
-        );
-
-    document.getElementById("cartCount")
-        .textContent = count;
-
-    if(!cart.length){
-
-        box.innerHTML =
-            `<div style="color:#8190a6">
-                Koszyk jest pusty.
-            </div>`;
-
-    }else{
-
-        box.innerHTML =
-            cart.map(item => `
-
-                <div class="cartItem">
-
-                    <div>
-
-                        <strong>
-                            ${escapeHTML(item.name)}
-                        </strong>
-
-                        <div style="color:#8190a6;margin-top:5px;font-size:10px">
-                            ${item.quantity} ×
-                            ${money(item.price)}
-                        </div>
-
-                    </div>
-
-                    <button
-                        class="remove"
-                        onclick="removeFromCart(${item.id})"
-                    >
-                        USUŃ
-                    </button>
-
-                </div>
-
-            `).join("");
-
-    }
-
-    const subtotal =
-        cart.reduce(
-            (sum,item) =>
-                sum + item.price * item.quantity,
-            0
-        );
-
-    const final =
-        subtotal * (1 - discount);
-
-    document.getElementById("cartTotal")
-        .textContent =
-            money(final);
-
-    if(subtotal >= 50){
-
-        document.getElementById("shippingInfo")
-            .textContent =
-                "🚚 Darmowa dostawa ✓";
-
-    }else{
-
-        document.getElementById("shippingInfo")
-            .textContent =
-                "🚚 Darmowa dostawa od 50 zł";
-
-    }
-
-}
-
-
-function openCart(){
-
-    document.getElementById("cart")
-        .classList.add("open");
-
-}
-
-
-function closeCart(){
-
-    document.getElementById("cart")
-        .classList.remove("open");
-
-}
+let customModel = null;
 
 
 /* =========================
-   RABAT
+   FORMAT
 ========================= */
 
-function applyDiscount(){
+function money(value){
 
-    const input =
-        document
-        .getElementById("discountCode")
-        .value
-        .trim()
-        .toUpperCase();
-
-    if(input === "START10"){
-
-        discount = .10;
-
-        document.getElementById("discountInfo")
-            .innerHTML =
-            `<div style="margin-top:10px;color:#42e6a4;font-size:10px">
-                ✓ START10 — rabat 10%
-            </div>`;
-
-        renderCart();
-
-        showToast(
-            "🏷️ Kod START10 aktywowany"
-        );
-
-    }else{
-
-        discount = 0;
-
-        document.getElementById("discountInfo")
-            .innerHTML =
-            `<div style="margin-top:10px;color:#ff5577;font-size:10px">
-                ❌ Nieprawidłowy kod
-            </div>`;
-
-        renderCart();
-
-    }
-
-}
-
-
-/* =========================
-   KATEGORIE / SZUKANIE
-========================= */
-
-function filterCategory(category){
-
-    currentCategory = category;
-
-    renderProducts();
-
-}
-
-
-function filterProducts(){
-
-    renderProducts();
-
-}
-
-
-/* =========================
-   PANEL
-========================= */
-
-function openPanel(type){
-
-    const title =
-        document.getElementById("panelTitle");
-
-    const desc =
-        document.getElementById("panelDescription");
-
-    const links =
-        document.getElementById("panelLinks");
-
-    if(type === "account"){
-
-        title.textContent = "👤 Konto";
-
-        desc.textContent =
-            "Panel klienta Printerlase3D.";
-
-        links.innerHTML = `
-
-            <div class="panelLink">
-                👤 Zaloguj się
-            </div>
-
-            <div class="panelLink">
-                📦 Moje zamówienia
-            </div>
-
-            <div class="panelLink">
-                ❤️ Ulubione produkty
-            </div>
-
-        `;
-
-    }
-
-    if(type === "custom"){
-
-        title.textContent =
-            "🧊 Własny model 3D";
-
-        desc.textContent =
-            "Masz własny plik STL, OBJ albo inny model? Tutaj możesz przygotować zamówienie.";
-
-        links.innerHTML = `
-
-            <div class="panelLink">
-                📁 Wgraj własny model 3D
-            </div>
-
-            <div class="panelLink">
-                🖨️ Wybierz materiał
-            </div>
-
-            <div class="panelLink">
-                🎨 Wybierz kolor
-            </div>
-
-            <div class="panelLink">
-                💬 Ustal szczegóły projektu
-            </div>
-
-        `;
-
-    }
-
-    document.getElementById("panel")
-        .classList.add("open");
-
-}
-
-
-function closePanel(){
-
-    document.getElementById("panel")
-        .classList.remove("open");
-
-}
-
-
-/* =========================
-   ZAMÓWIENIE
-========================= */
-
-function checkout(){
-
-    if(!cart.length){
-
-        showToast(
-            "🛒 Koszyk jest pusty."
-        );
-
-        return;
-
-    }
-
-    showToast(
-        "✓ Koszyk przygotowany do zamówienia."
-    );
+    return Number(value)
+        .toFixed(2)
+        .replace(".",",") + " zł";
 
 }
 
@@ -1809,12 +1747,12 @@ function checkout(){
    TOAST
 ========================= */
 
-function showToast(text){
+window.showToast = function(message){
 
     const toast =
         document.getElementById("toast");
 
-    toast.textContent = text;
+    toast.textContent = message;
 
     toast.classList.add("show");
 
@@ -1827,12 +1765,131 @@ function showToast(text){
 
         },3000);
 
-}
+};
 
 
 /* =========================
-   ESCAPE HTML
+   PRODUKTY
 ========================= */
+
+window.renderProducts = function(){
+
+    const search =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase();
+
+    const category =
+        document
+        .getElementById("category")
+        .value;
+
+    const filtered =
+        products.filter(product => {
+
+            const matchesSearch =
+                product.name
+                .toLowerCase()
+                .includes(search) ||
+                product.description
+                .toLowerCase()
+                .includes(search);
+
+            const matchesCategory =
+                category === "all" ||
+                product.category === category;
+
+            return matchesSearch &&
+                   matchesCategory;
+
+        });
+
+    const box =
+        document.getElementById("products");
+
+    if(!filtered.length){
+
+        box.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                padding:50px;
+                text-align:center;
+                color:#8c9bb2;
+            ">
+                Nie znaleziono produktu.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    box.innerHTML =
+        filtered.map(product => `
+
+            <article class="product">
+
+                <div class="productImage">
+
+                    <div class="productTag">
+                        ${product.tag}
+                    </div>
+
+                    <div class="productEmoji">
+                        ${product.emoji}
+                    </div>
+
+                </div>
+
+                <div class="productBody">
+
+                    <h3>
+                        ${escapeHTML(product.name)}
+                    </h3>
+
+                    <p>
+                        ${escapeHTML(product.description)}
+                    </p>
+
+                    <div class="rating">
+                        ${"★".repeat(product.rating)}
+                        <span style="color:#637188">
+                            (${product.rating}.0)
+                        </span>
+                    </div>
+
+                    <div class="priceRow">
+
+                        <div>
+
+                            <div class="price">
+                                ${money(product.price)}
+                            </div>
+
+                            <div class="oldPrice">
+                                ${money(product.oldPrice)}
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="add"
+                            onclick="addToCart('${product.id}')"
+                        >
+                            🛒 DODAJ
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        `).join("");
+
+};
+
 
 function escapeHTML(value){
 
@@ -1847,17 +1904,1052 @@ function escapeHTML(value){
 
 
 /* =========================
-   PIENIĄDZE
+   ADD CART
 ========================= */
 
-function money(value){
+window.addToCart = function(id){
 
-    return Number(value || 0)
-        .toFixed(2)
-        .replace(".",",")
-        + " zł";
+    const product =
+        products.find(
+            item => item.id === id
+        );
+
+    if(!product) return;
+
+    const existing =
+        cart.find(
+            item => item.id === id
+        );
+
+    if(existing){
+
+        existing.qty++;
+
+    }else{
+
+        cart.push({
+            id:product.id,
+            name:product.name,
+            price:product.price,
+            qty:1
+        });
+
+    }
+
+    saveCart();
+
+    showToast(
+        "✓ Dodano do koszyka: " +
+        product.name
+    );
+
+};
+
+
+/* =========================
+   CUSTOM MODEL
+========================= */
+
+window.addCustomModelToCart = function(){
+
+    if(!customModel){
+
+        showToast(
+            "❌ Najpierw wybierz model 3D."
+        );
+
+        return;
+
+    }
+
+    const existing =
+        cart.find(
+            item => item.id === "custom-model"
+        );
+
+    if(existing){
+
+        existing.qty++;
+
+    }else{
+
+        cart.push({
+            id:"custom-model",
+            name:"Własny model 3D",
+            price:50,
+            qty:1,
+            fileName:customModel.name
+        });
+
+    }
+
+    saveCart();
+
+    showToast(
+        "✓ Dodano własny model 3D do koszyka."
+    );
+
+};
+
+
+/* =========================
+   SAVE CART
+========================= */
+
+function saveCart(){
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+    renderCartBadge();
 
 }
+
+
+/* =========================
+   BADGE
+========================= */
+
+function renderCartBadge(){
+
+    const count =
+        cart.reduce(
+            (sum,item) =>
+                sum + item.qty,
+            0
+        );
+
+    document
+    .getElementById("cartBadge")
+    .textContent =
+        count > 99 ? "99+" : count;
+
+}
+
+
+/* =========================
+   CART
+========================= */
+
+window.openCart = function(){
+
+    renderCart();
+
+    document
+    .getElementById("cartModal")
+    .classList.add("show");
+
+};
+
+
+window.renderCart = function(){
+
+    const box =
+        document.getElementById("cartItems");
+
+    if(!cart.length){
+
+        box.innerHTML = `
+            <div style="
+                padding:40px 10px;
+                text-align:center;
+                color:#8c9bb2;
+            ">
+                🛒 Koszyk jest pusty.
+            </div>
+        `;
+
+    }else{
+
+        box.innerHTML =
+            cart.map((item,index) => `
+
+                <div class="cartItem">
+
+                    <div>
+
+                        <h4>
+                            ${escapeHTML(item.name)}
+                        </h4>
+
+                        <small>
+                            ${money(item.price)}
+                        </small>
+
+                        ${
+                            item.fileName
+                            ? `
+                                <div style="
+                                    margin-top:5px;
+                                    color:#00c8ff;
+                                    font-size:9px;
+                                ">
+                                    🧊 ${escapeHTML(item.fileName)}
+                                </div>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+                    <div class="qty">
+
+                        <button
+                            onclick="changeQty(${index},-1)"
+                        >
+                            −
+                        </button>
+
+                        <strong>
+                            ${item.qty}
+                        </strong>
+
+                        <button
+                            onclick="changeQty(${index},1)"
+                        >
+                            +
+                        </button>
+
+                        <button
+                            onclick="removeItem(${index})"
+                            style="margin-left:5px"
+                        >
+                            🗑️
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `).join("");
+
+    }
+
+    updateTotals();
+
+};
+
+
+window.changeQty = function(index,direction){
+
+    cart[index].qty += direction;
+
+    if(cart[index].qty <= 0){
+
+        cart.splice(index,1);
+
+    }
+
+    saveCart();
+
+    renderCart();
+
+};
+
+
+window.removeItem = function(index){
+
+    cart.splice(index,1);
+
+    saveCart();
+
+    renderCart();
+
+};
+
+
+/* =========================
+   COUPON
+========================= */
+
+window.applyCoupon = function(){
+
+    const input =
+        document
+        .getElementById("couponInput");
+
+    const code =
+        input.value
+        .trim()
+        .toUpperCase();
+
+    if(code === "START10"){
+
+        coupon = "START10";
+
+        document
+        .getElementById("couponInfo")
+        .style.color =
+            "#39e69b";
+
+        document
+        .getElementById("couponInfo")
+        .textContent =
+            "✓ Kod START10 aktywny — rabat 10%.";
+
+        updateTotals();
+
+        return;
+
+    }
+
+    coupon = null;
+
+    document
+    .getElementById("couponInfo")
+    .style.color =
+        "#ff4f70";
+
+    document
+    .getElementById("couponInfo")
+    .textContent =
+        "❌ Nieprawidłowy kod.";
+
+    updateTotals();
+
+};
+
+
+/* =========================
+   TOTAL
+========================= */
+
+function updateTotals(){
+
+    const subtotal =
+        cart.reduce(
+            (sum,item) =>
+                sum + item.price * item.qty,
+            0
+        );
+
+    const discount =
+        coupon === "START10"
+            ? subtotal * .10
+            : 0;
+
+    const afterDiscount =
+        subtotal - discount;
+
+    const delivery =
+        afterDiscount >= 50
+            ? 0
+            : cart.length
+                ? 9.99
+                : 0;
+
+    const total =
+        afterDiscount + delivery;
+
+    document
+    .getElementById("subtotal")
+    .textContent =
+        money(subtotal);
+
+    document
+    .getElementById("discount")
+    .textContent =
+        "-" + money(discount);
+
+    document
+    .getElementById("delivery")
+    .textContent =
+        delivery === 0
+            ? "DARMOWA"
+            : money(delivery);
+
+    document
+    .getElementById("cartTotal")
+    .textContent =
+        money(total);
+
+}
+
+
+/* =========================
+   CHECKOUT
+========================= */
+
+window.checkout = async function(){
+
+    if(!cart.length){
+
+        showToast(
+            "❌ Koszyk jest pusty."
+        );
+
+        return;
+
+    }
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "printerlase_account"
+            ) || "{}"
+        );
+
+    if(!user.email){
+
+        closeModal("cartModal");
+
+        openAccount();
+
+        showToast(
+            "Najpierw uzupełnij dane konta."
+        );
+
+        return;
+
+    }
+
+    /*
+       Jeżeli Twój server.js ma endpoint
+       /api/orders, dane zostaną wysłane.
+       Jeżeli endpointu nie ma, pokazujemy
+       bezpieczny komunikat zamiast udawać
+       że zamówienie zostało zapisane.
+    */
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/orders",
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:JSON.stringify({
+
+                        customer:user,
+
+                        items:cart,
+
+                        coupon:coupon,
+
+                        source:"Printerlase3D"
+
+                    })
+                }
+            );
+
+        if(!response.ok){
+
+            throw new Error();
+
+        }
+
+        cart = [];
+
+        coupon = null;
+
+        saveCart();
+
+        closeModal("cartModal");
+
+        showToast(
+            "✓ Zamówienie zostało wysłane!"
+        );
+
+    }
+    catch{
+
+        showToast(
+            "⚠️ Sklep nie ma jeszcze podłączonego API zamówień."
+        );
+
+    }
+
+};
+
+
+/* =========================
+   ACCOUNT
+========================= */
+
+window.openAccount = function(){
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "printerlase_account"
+            ) || "{}"
+        );
+
+    document
+    .getElementById("accountName")
+    .value =
+        user.name || "";
+
+    document
+    .getElementById("accountEmail")
+    .value =
+        user.email || "";
+
+    document
+    .getElementById("accountPhone")
+    .value =
+        user.phone || "";
+
+    document
+    .getElementById("accountModal")
+    .classList.add("show");
+
+};
+
+
+window.saveAccount = function(){
+
+    const user = {
+
+        name:
+            document
+            .getElementById("accountName")
+            .value
+            .trim(),
+
+        email:
+            document
+            .getElementById("accountEmail")
+            .value
+            .trim(),
+
+        phone:
+            document
+            .getElementById("accountPhone")
+            .value
+            .trim()
+
+    };
+
+    if(!user.name || !user.email){
+
+        showToast(
+            "❌ Podaj imię i e-mail."
+        );
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "printerlase_account",
+        JSON.stringify(user)
+    );
+
+    document
+    .getElementById("accountSaved")
+    .textContent =
+        "✓ Dane zostały zapisane.";
+
+    showToast(
+        "✓ Konto zapisane."
+    );
+
+};
+
+
+/* =========================
+   MODALS
+========================= */
+
+window.closeModal = function(id){
+
+    document
+    .getElementById(id)
+    .classList.remove("show");
+
+};
+
+
+window.closeModalOutside = function(event,id){
+
+    if(event.target.id === id){
+
+        closeModal(id);
+
+    }
+
+};
+
+
+window.toggleMobileMenu = function(){
+
+    showToast(
+        "📱 Menu mobilne — przewiń stronę."
+    );
+
+};
+
+
+/* =========================
+   3D VIEWER
+========================= */
+
+const canvas =
+    document.getElementById("modelCanvas");
+
+const renderer =
+    new THREE.WebGLRenderer({
+        canvas,
+        antialias:true,
+        alpha:true
+    });
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
+
+renderer.setSize(
+    canvas.clientWidth,
+    canvas.clientHeight,
+    false
+);
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+const scene =
+    new THREE.Scene();
+
+scene.background =
+    new THREE.Color(0x030914);
+
+
+const camera =
+    new THREE.PerspectiveCamera(
+        45,
+        1,
+        .1,
+        1000
+    );
+
+camera.position.set(
+    3,
+    2.5,
+    5
+);
+
+
+const controls =
+    new OrbitControls(
+        camera,
+        renderer.domElement
+    );
+
+controls.enableDamping = true;
+
+controls.dampingFactor = .06;
+
+controls.minDistance = 1;
+
+controls.maxDistance = 15;
+
+
+const ambient =
+    new THREE.HemisphereLight(
+        0xffffff,
+        0x223355,
+        2
+    );
+
+scene.add(ambient);
+
+
+const light =
+    new THREE.DirectionalLight(
+        0xffffff,
+        3
+    );
+
+light.position.set(
+    4,
+    6,
+    5
+);
+
+scene.add(light);
+
+
+const grid =
+    new THREE.GridHelper(
+        10,
+        20,
+        0x174060,
+        0x0c2138
+    );
+
+scene.add(grid);
+
+
+let model = null;
+
+
+function animate(){
+
+    requestAnimationFrame(animate);
+
+    controls.update();
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+animate();
+
+
+function resizeViewer(){
+
+    const width =
+        canvas.clientWidth;
+
+    const height =
+        canvas.clientHeight;
+
+    camera.aspect =
+        width / height;
+
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+        width,
+        height,
+        false
+    );
+
+}
+
+window.addEventListener(
+    "resize",
+    resizeViewer
+);
+
+resizeViewer();
+
+
+function clearModel(){
+
+    if(!model) return;
+
+    scene.remove(model);
+
+    model.traverse(
+        object => {
+
+            if(object.geometry){
+
+                object.geometry.dispose();
+
+            }
+
+            if(object.material){
+
+                const materials =
+                    Array.isArray(
+                        object.material
+                    )
+                    ? object.material
+                    : [object.material];
+
+                materials.forEach(
+                    material => {
+
+                        if(material.map)
+                            material.map.dispose();
+
+                        material.dispose();
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
+    model = null;
+
+}
+
+
+function centerModel(object){
+
+    const box =
+        new THREE.Box3()
+        .setFromObject(object);
+
+    const center =
+        box.getCenter(
+            new THREE.Vector3()
+        );
+
+    object.position.sub(center);
+
+    const size =
+        box.getSize(
+            new THREE.Vector3()
+        );
+
+    const maxSize =
+        Math.max(
+            size.x,
+            size.y,
+            size.z
+        );
+
+    if(maxSize > 0){
+
+        const scale =
+            2.8 / maxSize;
+
+        object.scale.setScalar(
+            scale
+        );
+
+    }
+
+    const newBox =
+        new THREE.Box3()
+        .setFromObject(object);
+
+    const newCenter =
+        newBox.getCenter(
+            new THREE.Vector3()
+        );
+
+    object.position.y -=
+        newCenter.y;
+
+}
+
+
+document
+.getElementById("modelFile")
+.addEventListener(
+    "change",
+    async event => {
+
+        const file =
+            event.target.files[0];
+
+        if(!file){
+
+            return;
+
+        }
+
+        customModel = file;
+
+        document
+        .getElementById("modelInfo")
+        .textContent =
+            "📦 " +
+            file.name +
+            " • " +
+            (file.size / 1024 / 1024)
+            .toFixed(2) +
+            " MB";
+
+        clearModel();
+
+        const name =
+            file.name
+            .toLowerCase();
+
+        try{
+
+            if(name.endsWith(".glb") ||
+               name.endsWith(".gltf")){
+
+                const url =
+                    URL.createObjectURL(
+                        file
+                    );
+
+                const loader =
+                    new GLTFLoader();
+
+                loader.load(
+                    url,
+                    result => {
+
+                        model =
+                            result.scene;
+
+                        centerModel(
+                            model
+                        );
+
+                        scene.add(
+                            model
+                        );
+
+                        URL.revokeObjectURL(
+                            url
+                        );
+
+                        showToast(
+                            "✓ Model 3D załadowany."
+                        );
+
+                    },
+                    undefined,
+                    () => {
+
+                        URL.revokeObjectURL(
+                            url
+                        );
+
+                        showToast(
+                            "❌ Nie udało się odczytać modelu."
+                        );
+
+                    }
+                );
+
+            }
+            else if(name.endsWith(".obj")){
+
+                const text =
+                    await file.text();
+
+                const loader =
+                    new OBJLoader();
+
+                model =
+                    loader.parse(text);
+
+                model.traverse(
+                    object => {
+
+                        if(object.isMesh){
+
+                            object.material =
+                                new THREE.MeshStandardMaterial({
+                                    color:0x00aaff,
+                                    metalness:.15,
+                                    roughness:.55
+                                });
+
+                        }
+
+                    }
+                );
+
+                centerModel(model);
+
+                scene.add(model);
+
+                showToast(
+                    "✓ Model OBJ załadowany."
+                );
+
+            }
+            else if(name.endsWith(".stl")){
+
+                const buffer =
+                    await file.arrayBuffer();
+
+                const loader =
+                    new STLLoader();
+
+                const geometry =
+                    loader.parse(buffer);
+
+                geometry.computeVertexNormals();
+
+                const material =
+                    new THREE.MeshStandardMaterial({
+                        color:0x00aaff,
+                        metalness:.15,
+                        roughness:.45
+                    });
+
+                model =
+                    new THREE.Mesh(
+                        geometry,
+                        material
+                    );
+
+                centerModel(model);
+
+                scene.add(model);
+
+                showToast(
+                    "✓ Model STL załadowany."
+                );
+
+            }
+            else{
+
+                showToast(
+                    "❌ Obsługiwane: GLB, GLTF, OBJ, STL."
+                );
+
+            }
+
+        }
+        catch(error){
+
+            console.error(error);
+
+            showToast(
+                "❌ Błąd ładowania modelu."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   SCROLL ANIMATIONS
+========================= */
+
+const observer =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(
+                entry => {
+
+                    if(entry.isIntersecting){
+
+                        entry.target
+                        .classList
+                        .add("visible");
+
+                    }
+
+                }
+            );
+
+        },
+        {
+            threshold:.12
+        }
+    );
+
+
+document
+.querySelectorAll(".reveal")
+.forEach(
+    element =>
+        observer.observe(element)
+);
 
 
 /* =========================
@@ -1870,9 +2962,13 @@ document.addEventListener(
 
         if(event.key === "Escape"){
 
-            closeProduct();
-            closeCart();
-            closePanel();
+            document
+            .querySelectorAll(".modal")
+            .forEach(
+                modal =>
+                    modal.classList
+                    .remove("show")
+            );
 
         }
 
@@ -1885,6 +2981,9 @@ document.addEventListener(
 ========================= */
 
 renderProducts();
+
+renderCartBadge();
+
 renderCart();
 
 </script>
