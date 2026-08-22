@@ -6,10 +6,6 @@ const crypto = require("crypto");
 
 const app = express();
 
-/* =====================================================
-   KONFIGURACJA
-===================================================== */
-
 const PORT = process.env.PORT || 3000;
 
 const ADMIN_LOGIN = "admin";
@@ -19,52 +15,28 @@ const FREE_DELIVERY_FROM = 50;
 const DISCOUNT_CODE = "START10";
 const DISCOUNT_PERCENT = 10;
 
-/* =====================================================
-   PLIKI
-===================================================== */
-
 const DATA_DIR = path.join(__dirname, "data");
-
-const ORDERS_FILE =
-    path.join(DATA_DIR, "orders.json");
-
-const CUSTOM_MODELS_FILE =
-    path.join(DATA_DIR, "custom-models.json");
-
-const TOKENS_FILE =
-    path.join(DATA_DIR, "tokens.json");
-
-/* =====================================================
-   DATA
-===================================================== */
+const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
+const MODELS_FILE = path.join(DATA_DIR, "custom-models.json");
+const TOKENS_FILE = path.join(DATA_DIR, "tokens.json");
 
 if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, {
-        recursive: true
-    });
+    fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-function createFile(file, defaultData) {
+function createFile(file, data) {
     if (!fs.existsSync(file)) {
         fs.writeFileSync(
             file,
-            JSON.stringify(
-                defaultData,
-                null,
-                2
-            ),
+            JSON.stringify(data, null, 2),
             "utf8"
         );
     }
 }
 
 createFile(ORDERS_FILE, []);
-createFile(CUSTOM_MODELS_FILE, []);
+createFile(MODELS_FILE, []);
 createFile(TOKENS_FILE, []);
-
-/* =====================================================
-   JSON
-===================================================== */
 
 function readJSON(file, fallback) {
     try {
@@ -72,22 +44,16 @@ function readJSON(file, fallback) {
             return fallback;
         }
 
-        const text =
-            fs.readFileSync(
-                file,
-                "utf8"
-            );
+        const data = fs.readFileSync(file, "utf8");
 
-        if (!text.trim()) {
+        if (!data.trim()) {
             return fallback;
         }
 
-        return JSON.parse(text);
-
+        return JSON.parse(data);
     } catch (error) {
-
         console.error(
-            "Błąd odczytu pliku:",
+            "JSON ERROR:",
             file,
             error.message
         );
@@ -99,18 +65,10 @@ function readJSON(file, fallback) {
 function writeJSON(file, data) {
     fs.writeFileSync(
         file,
-        JSON.stringify(
-            data,
-            null,
-            2
-        ),
+        JSON.stringify(data, null, 2),
         "utf8"
     );
 }
-
-/* =====================================================
-   MIDDLEWARE
-===================================================== */
 
 app.use(
     express.json({
@@ -125,13 +83,7 @@ app.use(
     })
 );
 
-app.use(
-    express.static(__dirname)
-);
-
-/* =====================================================
-   ID
-===================================================== */
+app.use(express.static(__dirname));
 
 function generateId(prefix) {
     return (
@@ -139,61 +91,39 @@ function generateId(prefix) {
         "-" +
         Date.now().toString(36) +
         "-" +
-        crypto
-            .randomBytes(4)
-            .toString("hex")
+        crypto.randomBytes(4).toString("hex")
     ).toUpperCase();
 }
 
-/* =====================================================
-   TOKENY
-===================================================== */
-
 function generateToken() {
-    return crypto
-        .randomBytes(32)
-        .toString("hex");
+    return crypto.randomBytes(32).toString("hex");
 }
 
 function getToken(req) {
-    const authorization =
-        req.headers.authorization || "";
+    const auth = req.headers.authorization || "";
 
-    if (
-        !authorization.startsWith(
-            "Bearer "
-        )
-    ) {
+    if (!auth.startsWith("Bearer ")) {
         return null;
     }
 
-    return authorization.substring(7);
+    return auth.substring(7);
 }
 
 function requireAdmin(req, res, next) {
-
-    const token =
-        getToken(req);
+    const token = getToken(req);
 
     if (!token) {
         return res.status(401).json({
             success: false,
-            error: "Brak tokenu."
+            error: "Brak autoryzacji."
         });
     }
 
-    const tokens =
-        readJSON(
-            TOKENS_FILE,
-            []
-        );
+    const tokens = readJSON(TOKENS_FILE, []);
 
-    const session =
-        tokens.find(
-            function (item) {
-                return item.token === token;
-            }
-        );
+    const session = tokens.find(function (item) {
+        return item.token === token;
+    });
 
     if (!session) {
         return res.status(401).json({
@@ -205,23 +135,20 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-/* =====================================================
+/* =========================
    LOGIN
-===================================================== */
+========================= */
 
 app.post(
     "/api/admin/login",
     function (req, res) {
+        const login = String(
+            req.body.login || ""
+        ).trim();
 
-        const login =
-            String(
-                req.body.login || ""
-            ).trim();
-
-        const password =
-            String(
-                req.body.password || ""
-            );
+        const password = String(
+            req.body.password || ""
+        );
 
         if (
             login !== ADMIN_LOGIN ||
@@ -229,45 +156,21 @@ app.post(
         ) {
             return res.status(401).json({
                 success: false,
-                error:
-                    "Nieprawidłowy login lub hasło."
+                error: "Nieprawidłowy login lub hasło."
             });
         }
 
-        const token =
-            generateToken();
+        const token = generateToken();
 
-        let tokens =
-            readJSON(
-                TOKENS_FILE,
-                []
-            );
+        const tokens = readJSON(
+            TOKENS_FILE,
+            []
+        );
 
         tokens.push({
             token: token,
-            createdAt:
-                new Date().toISOString()
+            createdAt: new Date().toISOString()
         });
-
-        const weekAgo =
-            Date.now() -
-            7 * 24 * 60 * 60 * 1000;
-
-        tokens =
-            tokens.filter(
-                function (item) {
-
-                    const time =
-                        new Date(
-                            item.createdAt
-                        ).getTime();
-
-                    return (
-                        !Number.isNaN(time) &&
-                        time > weekAgo
-                    );
-                }
-            );
 
         writeJSON(
             TOKENS_FILE,
@@ -275,7 +178,7 @@ app.post(
         );
 
         console.log(
-            "[ADMIN] Logowanie OK"
+            "[ADMIN] Zalogowano"
         );
 
         res.json({
@@ -285,30 +188,24 @@ app.post(
     }
 );
 
-/* =====================================================
+/* =========================
    LOGOUT
-===================================================== */
+========================= */
 
 app.post(
     "/api/admin/logout",
     requireAdmin,
     function (req, res) {
+        const token = getToken(req);
 
-        const token =
-            getToken(req);
+        let tokens = readJSON(
+            TOKENS_FILE,
+            []
+        );
 
-        let tokens =
-            readJSON(
-                TOKENS_FILE,
-                []
-            );
-
-        tokens =
-            tokens.filter(
-                function (item) {
-                    return item.token !== token;
-                }
-            );
+        tokens = tokens.filter(function (item) {
+            return item.token !== token;
+        });
 
         writeJSON(
             TOKENS_FILE,
@@ -321,176 +218,118 @@ app.post(
     }
 );
 
-/* =====================================================
-   HEALTH CHECK
-===================================================== */
+/* =========================
+   HEALTH
+========================= */
 
 app.get(
     "/api/health",
     function (req, res) {
-
         res.json({
             success: true,
             online: true,
             service: "Printerlase3D",
-            node: process.version,
-            time:
-                new Date().toISOString()
+            node: process.version
         });
     }
 );
 
-/* =====================================================
+/* =========================
    ADMIN DATA
-===================================================== */
+========================= */
 
 app.get(
     "/api/admin/data",
     requireAdmin,
     function (req, res) {
-
-        let orders =
-            readJSON(
-                ORDERS_FILE,
-                []
-            );
-
-        let customModels =
-            readJSON(
-                CUSTOM_MODELS_FILE,
-                []
-            );
-
-        orders.sort(
-            function (a, b) {
-                return (
-                    new Date(
-                        b.createdAt
-                    ) -
-                    new Date(
-                        a.createdAt
-                    )
-                );
-            }
+        const orders = readJSON(
+            ORDERS_FILE,
+            []
         );
 
-        customModels.sort(
-            function (a, b) {
-                return (
-                    new Date(
-                        b.createdAt
-                    ) -
-                    new Date(
-                        a.createdAt
-                    )
-                );
-            }
+        const models = readJSON(
+            MODELS_FILE,
+            []
         );
 
         let revenue = 0;
 
-        orders.forEach(
-            function (order) {
-                revenue += Number(
-                    order.total || 0
-                );
-            }
-        );
+        orders.forEach(function (order) {
+            revenue += Number(
+                order.total || 0
+            );
+        });
 
         res.json({
             success: true,
-
             orders: orders,
-
-            customOrders:
-                customModels,
-
+            customOrders: models,
             stats: {
-                orders:
-                    orders.length,
-
-                customModels:
-                    customModels.length,
-
-                revenue:
-                    Number(
-                        revenue.toFixed(2)
-                    )
+                orders: orders.length,
+                models: models.length,
+                revenue: Number(
+                    revenue.toFixed(2)
+                )
             }
         });
     }
 );
 
-/* =====================================================
-   KALKULATOR CENY
-===================================================== */
+/* =========================
+   CALCULATOR
+========================= */
 
 function calculateOrder(
     items,
     discountCode,
     delivery
 ) {
-
     if (!Array.isArray(items)) {
         items = [];
     }
 
     let subtotal = 0;
 
-    const normalizedItems =
-        items.map(
-            function (item) {
+    const normalized = items.map(
+        function (item) {
+            const price = Math.max(
+                0,
+                Number(item.price || 0)
+            );
 
-                const price =
-                    Math.max(
-                        0,
-                        Number(
-                            item.price || 0
-                        )
-                    );
+            const quantity = Math.max(
+                1,
+                Number(
+                    item.quantity ||
+                    item.qty ||
+                    1
+                )
+            );
 
-                const quantity =
-                    Math.max(
-                        1,
-                        Number(
-                            item.quantity ||
-                            item.qty ||
-                            1
-                        )
-                    );
+            const total =
+                price * quantity;
 
-                const total =
-                    price * quantity;
+            subtotal += total;
 
-                subtotal += total;
+            return {
+                name: String(
+                    item.name ||
+                    "Produkt"
+                ),
+                price: Number(
+                    price.toFixed(2)
+                ),
+                quantity: quantity,
+                total: Number(
+                    total.toFixed(2)
+                )
+            };
+        }
+    );
 
-                return {
-                    name:
-                        String(
-                            item.name ||
-                            "Produkt"
-                        ),
-
-                    price:
-                        Number(
-                            price.toFixed(2)
-                        ),
-
-                    quantity:
-                        quantity,
-
-                    total:
-                        Number(
-                            total.toFixed(2)
-                        )
-                };
-            }
-        );
-
-    const code =
-        String(
-            discountCode || ""
-        )
+    const code = String(
+        discountCode || ""
+    )
         .trim()
         .toUpperCase();
 
@@ -505,31 +344,22 @@ function calculateOrder(
             100;
     }
 
-    const afterDiscount =
-        Math.max(
-            0,
-            subtotal - discount
-        );
+    const afterDiscount = Math.max(
+        0,
+        subtotal - discount
+    );
 
-    let deliveryPrice = 0;
+    let deliveryPrice = 9.99;
 
     if (
         delivery === "pickup"
     ) {
-
         deliveryPrice = 0;
-
     } else if (
         afterDiscount >=
         FREE_DELIVERY_FROM
     ) {
-
         deliveryPrice = 0;
-
-    } else {
-
-        deliveryPrice = 9.99;
-
     }
 
     const total =
@@ -537,43 +367,25 @@ function calculateOrder(
         deliveryPrice;
 
     return {
-
-        items:
-            normalizedItems,
-
-        subtotal:
-            Number(
-                subtotal.toFixed(2)
-            ),
-
-        discount:
-            Number(
-                discount.toFixed(2)
-            ),
-
-        deliveryPrice:
-            Number(
-                deliveryPrice.toFixed(2)
-            ),
-
-        total:
-            Number(
-                total.toFixed(2)
-            ),
-
-        freeDelivery:
-            deliveryPrice === 0
+        items: normalized,
+        subtotal: Number(
+            subtotal.toFixed(2)
+        ),
+        discount: Number(
+            discount.toFixed(2)
+        ),
+        deliveryPrice: Number(
+            deliveryPrice.toFixed(2)
+        ),
+        total: Number(
+            total.toFixed(2)
+        )
     };
 }
-
-/* =====================================================
-   API KALKULATORA
-===================================================== */
 
 app.post(
     "/api/calculate",
     function (req, res) {
-
         const result =
             calculateOrder(
                 req.body.items,
@@ -588,16 +400,14 @@ app.post(
     }
 );
 
-/* =====================================================
-   NOWE ZAMÓWIENIE
-===================================================== */
+/* =========================
+   ZAMÓWIENIA
+========================= */
 
 app.post(
     "/api/orders",
     function (req, res) {
-
-        const body =
-            req.body || {};
+        const body = req.body || {};
 
         if (
             !body.name ||
@@ -606,7 +416,7 @@ app.post(
             return res.status(400).json({
                 success: false,
                 error:
-                    "Podaj imię i e-mail."
+                    "Imię i e-mail są wymagane."
             });
         }
 
@@ -618,33 +428,26 @@ app.post(
             );
 
         const order = {
+            id: generateId("ORD"),
 
-            id:
-                generateId("ORD"),
+            name: String(
+                body.name
+            ).trim(),
 
-            name:
-                String(
-                    body.name
-                ).trim(),
+            email: String(
+                body.email
+            ).trim(),
 
-            email:
-                String(
-                    body.email
-                ).trim(),
+            phone: String(
+                body.phone || ""
+            ).trim(),
 
-            phone:
-                String(
-                    body.phone || ""
-                ).trim(),
-
-            address:
-                String(
-                    body.address || ""
-                ).trim(),
+            address: String(
+                body.address || ""
+            ).trim(),
 
             delivery:
-                body.delivery ===
-                "pickup"
+                body.delivery === "pickup"
                     ? "Odbiór osobisty"
                     : "Dostawa",
 
@@ -661,8 +464,8 @@ app.post(
                 String(
                     body.discountCode || ""
                 )
-                .trim()
-                .toUpperCase(),
+                    .trim()
+                    .toUpperCase(),
 
             deliveryPrice:
                 calculated.deliveryPrice,
@@ -670,13 +473,11 @@ app.post(
             total:
                 calculated.total,
 
-            status:
-                "NEW",
+            status: "NEW",
 
-            note:
-                String(
-                    body.note || ""
-                ).trim(),
+            note: String(
+                body.note || ""
+            ).trim(),
 
             createdAt:
                 new Date().toISOString()
@@ -710,16 +511,14 @@ app.post(
     }
 );
 
-/* =====================================================
+/* =========================
    WŁASNY MODEL 3D
-===================================================== */
+========================= */
 
 app.post(
     "/api/custom-model",
     function (req, res) {
-
-        const body =
-            req.body || {};
+        const body = req.body || {};
 
         if (
             !body.name ||
@@ -728,88 +527,74 @@ app.post(
             return res.status(400).json({
                 success: false,
                 error:
-                    "Podaj imię i e-mail."
+                    "Imię i e-mail są wymagane."
             });
         }
 
         const model = {
+            id: generateId("MODEL"),
 
-            id:
-                generateId("MODEL"),
+            name: String(
+                body.name
+            ).trim(),
 
-            name:
-                String(
-                    body.name
-                ).trim(),
+            email: String(
+                body.email
+            ).trim(),
 
-            email:
-                String(
-                    body.email
-                ).trim(),
+            phone: String(
+                body.phone || ""
+            ).trim(),
 
-            phone:
-                String(
-                    body.phone || ""
-                ).trim(),
+            fileName: String(
+                body.fileName ||
+                body.filename ||
+                ""
+            ).trim(),
 
-            fileName:
-                String(
-                    body.fileName ||
-                    body.filename ||
-                    ""
-                ).trim(),
+            fileUrl: String(
+                body.fileUrl ||
+                body.url ||
+                ""
+            ).trim(),
 
-            fileUrl:
-                String(
-                    body.fileUrl ||
-                    body.url ||
-                    ""
-                ).trim(),
+            material: String(
+                body.material ||
+                "PLA"
+            ).trim(),
 
-            material:
-                String(
-                    body.material ||
-                    "PLA"
-                ).trim(),
+            color: String(
+                body.color ||
+                ""
+            ).trim(),
 
-            color:
-                String(
-                    body.color ||
-                    ""
-                ).trim(),
+            quantity: Math.max(
+                1,
+                Number(
+                    body.quantity ||
+                    1
+                )
+            ),
 
-            quantity:
-                Math.max(
-                    1,
-                    Number(
-                        body.quantity ||
-                        1
-                    )
-                ),
+            dimensions: String(
+                body.dimensions ||
+                ""
+            ).trim(),
 
-            dimensions:
-                String(
-                    body.dimensions ||
-                    ""
-                ).trim(),
+            description: String(
+                body.description ||
+                ""
+            ).trim(),
 
-            description:
-                String(
-                    body.description ||
-                    ""
-                ).trim(),
+            estimatedPrice: Math.max(
+                0,
+                Number(
+                    body.estimatedPrice ||
+                    0
+                )
+            ),
 
-            estimatedPrice:
-                Math.max(
-                    0,
-                    Number(
-                        body.estimatedPrice ||
-                        0
-                    )
-                ),
-
-            status:
-                "NEW",
+            status: "NEW",
 
             createdAt:
                 new Date().toISOString()
@@ -817,25 +602,20 @@ app.post(
 
         const models =
             readJSON(
-                CUSTOM_MODELS_FILE,
+                MODELS_FILE,
                 []
             );
 
         models.unshift(model);
 
         writeJSON(
-            CUSTOM_MODELS_FILE,
+            MODELS_FILE,
             models
         );
 
         console.log(
             "[MODEL] " +
-            model.id +
-            " | " +
-            (
-                model.fileName ||
-                "brak pliku"
-            )
+            model.id
         );
 
         res.status(201).json({
@@ -845,19 +625,17 @@ app.post(
     }
 );
 
-/* =====================================================
+/* =========================
    STATUS ZAMÓWIENIA
-===================================================== */
+========================= */
 
 app.patch(
     "/api/admin/orders/:id/status",
     requireAdmin,
     function (req, res) {
-
-        const status =
-            String(
-                req.body.status || ""
-            )
+        const status = String(
+            req.body.status || ""
+        )
             .trim()
             .toUpperCase();
 
@@ -903,8 +681,7 @@ app.patch(
             });
         }
 
-        order.status =
-            status;
+        order.status = status;
 
         order.updatedAt =
             new Date().toISOString();
@@ -921,19 +698,17 @@ app.patch(
     }
 );
 
-/* =====================================================
-   STATUS WŁASNEGO MODELU
-===================================================== */
+/* =========================
+   STATUS MODELU
+========================= */
 
 app.patch(
     "/api/admin/custom/:id/status",
     requireAdmin,
     function (req, res) {
-
-        const status =
-            String(
-                req.body.status || ""
-            )
+        const status = String(
+            req.body.status || ""
+        )
             .trim()
             .toUpperCase();
 
@@ -957,7 +732,7 @@ app.patch(
 
         const models =
             readJSON(
-                CUSTOM_MODELS_FILE,
+                MODELS_FILE,
                 []
             );
 
@@ -979,14 +754,13 @@ app.patch(
             });
         }
 
-        model.status =
-            status;
+        model.status = status;
 
         model.updatedAt =
             new Date().toISOString();
 
         writeJSON(
-            CUSTOM_MODELS_FILE,
+            MODELS_FILE,
             models
         );
 
@@ -997,15 +771,14 @@ app.patch(
     }
 );
 
-/* =====================================================
-   USUWANIE ZAMÓWIENIA
-===================================================== */
+/* =========================
+   USUWANIE
+========================= */
 
 app.delete(
     "/api/admin/orders/:id",
     requireAdmin,
     function (req, res) {
-
         const orders =
             readJSON(
                 ORDERS_FILE,
@@ -1044,18 +817,13 @@ app.delete(
     }
 );
 
-/* =====================================================
-   USUWANIE MODELU
-===================================================== */
-
 app.delete(
     "/api/admin/custom/:id",
     requireAdmin,
     function (req, res) {
-
         const models =
             readJSON(
-                CUSTOM_MODELS_FILE,
+                MODELS_FILE,
                 []
             );
 
@@ -1081,7 +849,7 @@ app.delete(
         }
 
         writeJSON(
-            CUSTOM_MODELS_FILE,
+            MODELS_FILE,
             filtered
         );
 
@@ -1091,14 +859,13 @@ app.delete(
     }
 );
 
-/* =====================================================
-   ADMIN.HTML
-===================================================== */
+/* =========================
+   STRONY
+========================= */
 
 app.get(
     "/admin",
     function (req, res) {
-
         res.sendFile(
             path.join(
                 __dirname,
@@ -1108,14 +875,9 @@ app.get(
     }
 );
 
-/* =====================================================
-   INDEX.HTML
-===================================================== */
-
 app.get(
     "/",
     function (req, res) {
-
         res.sendFile(
             path.join(
                 __dirname,
@@ -1125,29 +887,27 @@ app.get(
     }
 );
 
-/* =====================================================
+/* =========================
    API 404
-===================================================== */
+========================= */
 
 app.use(
     "/api",
     function (req, res) {
-
         res.status(404).json({
             success: false,
             error:
-                "Nie znaleziono endpointu API."
+                "Nie znaleziono API."
         });
     }
 );
 
-/* =====================================================
-   BŁĘDY
-===================================================== */
+/* =========================
+   ERROR
+========================= */
 
 app.use(
     function (error, req, res, next) {
-
         console.error(
             "SERVER ERROR:",
             error
@@ -1161,47 +921,50 @@ app.use(
     }
 );
 
-/* =====================================================
+/* =========================
    START
-===================================================== */
+========================= */
 
 app.listen(
     PORT,
     "0.0.0.0",
     function () {
+        console.log(
+            "================================"
+        );
 
-        console.log("");
         console.log(
-            "========================================"
+            "      PRINTERLASE3D ONLINE"
         );
+
         console.log(
-            "        PRINTERLASE3D ONLINE"
+            "================================"
         );
-        console.log(
-            "========================================"
-        );
+
         console.log(
             "PORT: " + PORT
         );
-        console.log(
-            "DARMOWA DOSTAWA OD: " +
-            FREE_DELIVERY_FROM +
-            " PLN"
-        );
-        console.log(
-            "KOD: " +
-            DISCOUNT_CODE
-        );
-        console.log(
-            "RABAT: " +
-            DISCOUNT_PERCENT +
-            "%"
-        );
+
         console.log(
             "ADMIN: /admin"
         );
+
         console.log(
-            "========================================"
+            "DISCOUNT: " +
+            DISCOUNT_CODE +
+            " -" +
+            DISCOUNT_PERCENT +
+            "%"
+        );
+
+        console.log(
+            "FREE DELIVERY: " +
+            FREE_DELIVERY_FROM +
+            " PLN"
+        );
+
+        console.log(
+            "================================"
         );
     }
 );
