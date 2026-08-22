@@ -4,13 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Printerlase3D | Druk 3D</title>
+<title>Printerlase3D — Druk 3D</title>
 
 <style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
 html{
@@ -18,133 +23,593 @@ html{
 }
 
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    color:#fff;
-    background:#030712;
     min-height:100vh;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color:white;
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(0,160,255,.12),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 25%,
+            rgba(120,50,255,.12),
+            transparent 28%
+        ),
+        #020611;
+
+    overflow-x:hidden;
 }
 
-/* TOP */
 
-.topbar{
-    background:linear-gradient(90deg,#0077ff,#713cff,#00cfff);
-    padding:10px;
+/* =====================================================
+   ANIMOWANE TŁO
+===================================================== */
+
+body::before{
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        45px 45px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 80%
+        );
+
+    z-index:-2;
+}
+
+
+body::after{
+    content:"";
+
+    position:fixed;
+
+    width:500px;
+    height:500px;
+
+    left:-250px;
+    top:300px;
+
+    border-radius:50%;
+
+    background:
+        rgba(0,170,255,.08);
+
+    filter:blur(100px);
+
+    animation:
+        backgroundFloat 12s
+        ease-in-out
+        infinite;
+
+    pointer-events:none;
+
+    z-index:-1;
+}
+
+
+@keyframes backgroundFloat{
+
+    0%,100%{
+        transform:
+            translate(0,0);
+    }
+
+    50%{
+        transform:
+            translate(
+                300px,
+                -100px
+            );
+    }
+
+}
+
+
+/* =====================================================
+   🔥 GÓRNY PASEK PROMOCYJNY
+===================================================== */
+
+.promo{
+
+    position:relative;
+
+    width:100%;
+
+    min-height:58px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    background:
+
+        linear-gradient(
+            110deg,
+            #004cff,
+            #7438ff,
+            #008cff,
+            #00d9ff,
+            #7438ff,
+            #004cff
+        );
+
+    background-size:
+        400% 400%;
+
+    animation:
+        promoGradient
+        8s
+        ease
+        infinite;
+
+    box-shadow:
+        0 5px 35px
+        rgba(0,130,255,.18);
+
+    z-index:2000;
+}
+
+
+@keyframes promoGradient{
+
+    0%{
+        background-position:
+            0% 50%;
+    }
+
+    50%{
+        background-position:
+            100% 50%;
+    }
+
+    100%{
+        background-position:
+            0% 50%;
+    }
+
+}
+
+
+/* światło przejeżdżające przez pasek */
+
+.promo::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-30%;
+
+    width:25%;
+
+    height:100%;
+
+    transform:
+        skewX(-25deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.3),
+            transparent
+        );
+
+    animation:
+        promoShine
+        4s
+        linear
+        infinite;
+
+}
+
+
+@keyframes promoShine{
+
+    0%{
+        left:-30%;
+    }
+
+    100%{
+        left:130%;
+    }
+
+}
+
+
+.promoContent{
+
+    position:relative;
+
+    z-index:2;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    padding:9px 15px;
+
     text-align:center;
-    font-size:13px;
+
+}
+
+
+/* badge */
+
+.promoBadge{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:7px 11px;
+
+    border-radius:999px;
+
+    background:
+        rgba(0,0,0,.20);
+
+    border:
+        1px solid
+        rgba(255,255,255,.25);
+
+    backdrop-filter:
+        blur(10px);
+
+    font-size:11px;
+
     font-weight:900;
+
+    white-space:nowrap;
+
 }
 
-.topbar b{
-    color:#fff;
+
+/* kod */
+
+.promoCode{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:7px 12px;
+
+    border-radius:10px;
+
+    background:
+        rgba(0,0,0,.25);
+
+    border:
+        1px solid
+        rgba(255,255,255,.3);
+
+    box-shadow:
+        inset 0 0 20px
+        rgba(255,255,255,.04);
+
+    font-size:11px;
+
+    font-weight:900;
+
 }
 
-/* HEADER */
+
+.promoCode strong{
+
+    padding:4px 8px;
+
+    border-radius:6px;
+
+    color:#07101d;
+
+    background:white;
+
+    letter-spacing:1px;
+
+    box-shadow:
+        0 0 20px
+        rgba(255,255,255,.5);
+
+    animation:
+        codePulse
+        2s
+        ease-in-out
+        infinite;
+
+}
+
+
+@keyframes codePulse{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.06);
+    }
+
+}
+
+
+/* darmowa dostawa */
+
+.freeShipping{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:7px 12px;
+
+    border-radius:999px;
+
+    background:
+        rgba(0,255,170,.13);
+
+    border:
+        1px solid
+        rgba(80,255,190,.3);
+
+    color:#baffdf;
+
+    font-size:11px;
+
+    font-weight:1000;
+
+    box-shadow:
+        0 0 25px
+        rgba(0,255,170,.12);
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 header{
+
     position:sticky;
+
     top:0;
+
     z-index:1000;
 
-    height:72px;
+    height:76px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:0 5%;
+    padding:
+        0
+        5%;
 
-    background:rgba(3,7,18,.88);
-    backdrop-filter:blur(18px);
+    background:
+        rgba(2,7,18,.82);
 
-    border-bottom:1px solid rgba(255,255,255,.08);
+    backdrop-filter:
+        blur(20px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
 }
 
+
 .logo{
+
     display:flex;
+
     align-items:center;
+
     gap:10px;
 
     font-size:18px;
+
     font-weight:1000;
+
 }
+
 
 .logoIcon{
-    width:42px;
-    height:42px;
+
+    width:44px;
+
+    height:44px;
 
     display:grid;
+
     place-items:center;
 
-    border-radius:12px;
+    border-radius:13px;
 
-    background:linear-gradient(
-        135deg,
-        #00d9ff,
-        #087cff,
-        #783cff
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #00e5ff,
+            #087dff,
+            #803cff
+        );
 
     box-shadow:
-        0 0 30px
-        rgba(0,180,255,.25);
+        0 0 35px
+        rgba(0,180,255,.3);
+
+    animation:
+        logoGlow
+        3s
+        ease-in-out
+        infinite;
+
 }
+
+
+@keyframes logoGlow{
+
+    0%,100%{
+        box-shadow:
+            0 0 25px
+            rgba(0,180,255,.25);
+    }
+
+    50%{
+        box-shadow:
+            0 0 45px
+            rgba(0,180,255,.55);
+    }
+
+}
+
 
 .logo span{
-    color:#31d9ff;
+    color:#32d9ff;
 }
+
 
 nav{
+
     display:flex;
-    gap:25px;
+
+    gap:28px;
+
 }
 
+
 nav a{
-    color:#9ca9ba;
+
+    color:#8998ab;
+
     text-decoration:none;
 
     font-size:12px;
+
     font-weight:900;
 
     transition:.2s;
+
 }
+
 
 nav a:hover{
-    color:#fff;
+
+    color:white;
+
+    text-shadow:
+        0 0 15px
+        rgba(0,200,255,.6);
+
 }
+
 
 .headerButtons{
+
     display:flex;
+
     gap:8px;
+
 }
 
+
 .button{
-    border:1px solid rgba(255,255,255,.08);
 
-    background:rgba(255,255,255,.04);
+    border:
+        1px solid
+        rgba(255,255,255,.08);
 
-    color:#fff;
+    background:
+        rgba(255,255,255,.04);
 
-    padding:10px 13px;
+    color:white;
+
+    padding:
+        10px
+        13px;
 
     border-radius:10px;
 
     text-decoration:none;
 
     font-size:11px;
+
     font-weight:900;
 
     cursor:pointer;
 
     transition:.2s;
+
 }
+
 
 .button:hover{
-    transform:translateY(-2px);
-    background:rgba(255,255,255,.1);
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(255,255,255,.1);
+
 }
 
+
 .cartButton{
+
     position:relative;
+
+    border:0;
 
     background:
         linear-gradient(
@@ -153,77 +618,122 @@ nav a:hover{
             #783cff
         );
 
-    border:0;
 }
 
+
 .cartCount{
+
     position:absolute;
 
     top:-7px;
+
     right:-7px;
 
     min-width:19px;
+
     height:19px;
 
     display:grid;
-    place-items:center;
 
-    background:#ff3d69;
+    place-items:center;
 
     border-radius:50%;
 
+    background:#ff3d69;
+
     font-size:9px;
+
 }
 
-/* HERO */
+
+/* =====================================================
+   HERO
+===================================================== */
 
 .hero{
-    width:min(1150px,90%);
+
+    width:min(
+        1180px,
+        90%
+    );
+
+    min-height:650px;
+
     margin:auto;
 
-    min-height:600px;
-
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1.05fr
+        .95fr;
 
     align-items:center;
 
-    gap:50px;
+    gap:60px;
+
 }
 
+
 .badge{
+
     display:inline-block;
 
-    padding:8px 12px;
+    padding:
+        8px
+        12px;
 
     border-radius:30px;
 
     color:#35d9ff;
 
-    background:rgba(0,190,255,.08);
+    background:
+        rgba(0,190,255,.07);
 
-    border:1px solid rgba(0,190,255,.15);
+    border:
+        1px solid
+        rgba(0,190,255,.18);
 
     font-size:10px;
+
     font-weight:1000;
+
+    letter-spacing:1px;
+
 }
+
 
 .hero h1{
+
     margin-top:20px;
 
-    font-size:clamp(45px,6vw,75px);
+    font-size:
+        clamp(
+            45px,
+            6vw,
+            78px
+        );
 
-    line-height:.95;
+    line-height:.94;
 
     letter-spacing:-4px;
+
 }
+
 
 .hero h1 span{
-    color:#31d9ff;
+
+    color:#35d9ff;
+
+    text-shadow:
+        0 0 40px
+        rgba(0,210,255,.25);
+
 }
 
-.hero p{
-    max-width:580px;
+
+.heroText{
+
+    max-width:600px;
 
     margin-top:25px;
 
@@ -232,21 +742,30 @@ nav a:hover{
     font-size:16px;
 
     line-height:1.7;
+
 }
 
+
 .heroButtons{
+
     display:flex;
+
     gap:12px;
 
     margin-top:30px;
+
 }
 
+
 .primary{
-    padding:15px 20px;
+
+    padding:
+        15px
+        20px;
 
     border-radius:12px;
 
-    color:#fff;
+    color:white;
 
     text-decoration:none;
 
@@ -258,109 +777,150 @@ nav a:hover{
         );
 
     font-size:12px;
+
     font-weight:1000;
 
-    transition:.2s;
+    transition:.25s;
+
 }
+
 
 .primary:hover{
-    transform:translateY(-3px);
+
+    transform:
+        translateY(-4px);
 
     box-shadow:
-        0 15px 40px
-        rgba(0,140,255,.3);
+        0 15px 50px
+        rgba(0,140,255,.35);
+
 }
 
+
 .secondary{
-    padding:15px 20px;
+
+    padding:
+        15px
+        20px;
 
     border-radius:12px;
 
-    color:#fff;
+    color:white;
 
     text-decoration:none;
 
-    border:1px solid rgba(255,255,255,.1);
+    background:
+        rgba(255,255,255,.04);
 
-    background:rgba(255,255,255,.04);
+    border:
+        1px solid
+        rgba(255,255,255,.1);
 
     font-size:12px;
+
     font-weight:1000;
+
 }
 
-/* HERO GRAPHIC */
+
+/* =====================================================
+   HERO 3D
+===================================================== */
 
 .visual{
-    min-height:400px;
 
-    display:grid;
-    place-items:center;
+    min-height:430px;
 
     position:relative;
+
+    display:grid;
+
+    place-items:center;
+
 }
 
-.glow{
+
+.orb{
+
     position:absolute;
 
-    width:320px;
-    height:320px;
+    width:340px;
+
+    height:340px;
 
     border-radius:50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(0,210,255,.35),
+            rgba(0,220,255,.35),
+            rgba(80,60,255,.08) 50%,
             transparent 70%
         );
 
-    animation:glow 4s infinite ease-in-out;
+    animation:
+        orbPulse
+        5s
+        ease-in-out
+        infinite;
+
 }
 
-@keyframes glow{
+
+@keyframes orbPulse{
 
     0%,100%{
         transform:scale(1);
     }
 
     50%{
-        transform:scale(1.1);
+        transform:scale(1.12);
     }
 
 }
 
-.model{
-    position:relative;
-    z-index:2;
 
-    width:190px;
-    height:190px;
+.model{
+
+    position:relative;
+
+    width:195px;
+
+    height:195px;
 
     display:grid;
+
     place-items:center;
 
-    border-radius:35px;
+    border-radius:38px;
 
     font-size:75px;
 
     background:
         linear-gradient(
             135deg,
-            #00cfff,
-            #126cff,
-            #703cff
+            #00d9ff,
+            #087dff,
+            #743cff
         );
 
-    transform:rotate(-10deg);
-
-    animation:float 4s infinite ease-in-out;
-
     box-shadow:
-        0 30px 100px
-        rgba(0,130,255,.35);
+        0 35px 100px
+        rgba(0,140,255,.35);
+
+    transform:
+        rotate(-10deg);
+
+    animation:
+        modelFloat
+        5s
+        ease-in-out
+        infinite;
+
 }
 
-@keyframes float{
+
+@keyframes modelFloat{
 
     0%,100%{
         transform:
@@ -370,99 +930,153 @@ nav a:hover{
 
     50%{
         transform:
-            rotate(-4deg)
-            translateY(-20px);
+            rotate(-3deg)
+            translateY(-22px);
     }
 
 }
 
-/* SECTIONS */
+
+/* =====================================================
+   SEKCJE
+===================================================== */
 
 .section{
-    width:min(1150px,90%);
-    margin:100px auto;
+
+    width:min(
+        1180px,
+        90%
+    );
+
+    margin:
+        100px
+        auto;
+
 }
+
 
 .title{
+
     text-align:center;
+
     margin-bottom:40px;
+
 }
 
+
 .title small{
+
     color:#35d9ff;
 
     font-size:10px;
+
     font-weight:1000;
 
     letter-spacing:3px;
+
 }
 
+
 .title h2{
+
     margin-top:10px;
 
     font-size:38px;
+
 }
 
+
 .title p{
+
     margin-top:10px;
 
     color:#718096;
+
 }
 
-/* PRODUCTS */
+
+/* =====================================================
+   PRODUKTY
+===================================================== */
 
 .products{
+
     display:grid;
 
     grid-template-columns:
         repeat(3,1fr);
 
     gap:18px;
+
 }
 
+
 .product{
+
     padding:20px;
 
     border-radius:20px;
 
-    background:#071120;
+    background:
+        rgba(7,17,32,.9);
 
-    border:1px solid rgba(255,255,255,.07);
+    border:
+        1px solid
+        rgba(255,255,255,.07);
 
-    transition:.25s;
+    transition:.3s;
+
 }
 
+
 .product:hover{
-    transform:translateY(-7px);
+
+    transform:
+        translateY(-8px);
 
     border-color:
         rgba(0,200,255,.3);
 
     box-shadow:
-        0 25px 60px
-        rgba(0,0,0,.3);
+        0 25px 70px
+        rgba(0,0,0,.35);
+
 }
 
+
 .productImage{
+
     height:210px;
 
     display:grid;
+
     place-items:center;
 
     border-radius:15px;
 
-    background:#09182a;
+    background:
+        linear-gradient(
+            135deg,
+            #07182b,
+            #091020
+        );
 
     font-size:75px;
 
     margin-bottom:20px;
+
 }
+
 
 .product h3{
+
     font-size:17px;
+
 }
 
+
 .product p{
+
     min-height:40px;
 
     margin-top:8px;
@@ -472,30 +1086,43 @@ nav a:hover{
     font-size:11px;
 
     line-height:1.5;
+
 }
+
 
 .productBottom{
+
     display:flex;
 
-    justify-content:space-between;
     align-items:center;
 
+    justify-content:space-between;
+
     margin-top:20px;
+
 }
+
 
 .price{
+
     font-size:20px;
+
     font-weight:1000;
+
 }
 
+
 .add{
+
     border:0;
 
-    padding:11px 14px;
+    padding:
+        11px
+        14px;
 
     border-radius:10px;
 
-    color:#fff;
+    color:white;
 
     background:
         linear-gradient(
@@ -507,42 +1134,72 @@ nav a:hover{
     cursor:pointer;
 
     font-weight:1000;
+
 }
 
-/* FEATURES */
+
+/* =====================================================
+   FEATURES
+===================================================== */
 
 .features{
+
     display:grid;
 
     grid-template-columns:
         repeat(4,1fr);
 
     gap:15px;
+
 }
 
+
 .feature{
+
     padding:25px;
 
     text-align:center;
 
     border-radius:18px;
 
-    background:#071120;
+    background:
+        rgba(7,17,32,.75);
 
-    border:1px solid rgba(255,255,255,.07);
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    transition:.25s;
+
 }
+
+
+.feature:hover{
+
+    transform:
+        translateY(-5px);
+
+}
+
 
 .featureIcon{
+
     font-size:32px;
+
 }
 
+
 .feature h3{
+
     margin-top:12px;
 
     font-size:14px;
+
 }
 
+
 .feature p{
+
     margin-top:7px;
 
     color:#718096;
@@ -550,11 +1207,20 @@ nav a:hover{
     font-size:10px;
 
     line-height:1.5;
+
 }
 
-/* DELIVERY */
+
+/* =====================================================
+   DOSTAWA
+===================================================== */
 
 .delivery{
+
+    position:relative;
+
+    overflow:hidden;
+
     padding:45px;
 
     text-align:center;
@@ -564,55 +1230,152 @@ nav a:hover{
     background:
         linear-gradient(
             135deg,
-            rgba(0,130,255,.12),
-            rgba(110,50,255,.12)
+            rgba(0,130,255,.13),
+            rgba(110,50,255,.13)
         );
 
-    border:1px solid rgba(0,200,255,.12);
+    border:
+        1px solid
+        rgba(0,200,255,.14);
+
 }
+
+
+.delivery::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+
+    height:250px;
+
+    border-radius:50%;
+
+    background:
+        rgba(0,220,255,.12);
+
+    filter:blur(70px);
+
+    top:-150px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+}
+
 
 .delivery h2{
+
+    position:relative;
+
     font-size:30px;
+
 }
 
+
 .delivery p{
+
+    position:relative;
+
     margin-top:10px;
 
     color:#8190a5;
+
 }
 
+
 .free{
+
+    position:relative;
+
     margin-top:20px;
 
     color:#42e6a4;
 
-    font-size:26px;
+    font-size:28px;
+
     font-weight:1000;
+
+    text-shadow:
+        0 0 25px
+        rgba(66,230,164,.3);
+
 }
 
-/* CART */
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+
+    margin-top:100px;
+
+    padding:45px 5%;
+
+    text-align:center;
+
+    color:#718096;
+
+    font-size:11px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.07);
+
+}
+
+
+footer b{
+
+    color:#35d9ff;
+
+}
+
+
+/* =====================================================
+   KOSZYK
+===================================================== */
 
 .overlay{
+
     position:fixed;
+
     inset:0;
 
-    z-index:3000;
+    z-index:5000;
 
     display:none;
 
     justify-content:flex-end;
 
-    background:rgba(0,0,0,.65);
+    background:
+        rgba(0,0,0,.65);
 
-    backdrop-filter:blur(5px);
+    backdrop-filter:
+        blur(5px);
+
 }
+
 
 .overlay.active{
+
     display:flex;
+
 }
 
+
 .cart{
-    width:min(430px,100%);
+
+    width:min(
+        430px,
+        100%
+    );
+
     height:100%;
 
     padding:25px;
@@ -621,33 +1384,67 @@ nav a:hover{
 
     background:#050c18;
 
-    border-left:1px solid rgba(255,255,255,.08);
+    border-left:
+        1px solid
+        rgba(255,255,255,.08);
+
+    animation:
+        cartIn
+        .25s
+        ease;
+
 }
+
+
+@keyframes cartIn{
+
+    from{
+        transform:
+            translateX(100%);
+    }
+
+    to{
+        transform:
+            translateX(0);
+    }
+
+}
+
 
 .cartHeader{
+
     display:flex;
-    justify-content:space-between;
+
     align-items:center;
 
+    justify-content:space-between;
+
     margin-bottom:20px;
+
 }
 
+
 .close{
+
     width:35px;
+
     height:35px;
 
     border:0;
 
     border-radius:10px;
 
-    color:#fff;
+    color:white;
 
-    background:#101c2c;
+    background:#102039;
 
     cursor:pointer;
+
 }
 
+
 .cartItem{
+
     display:flex;
 
     align-items:center;
@@ -656,14 +1453,21 @@ nav a:hover{
 
     padding:15px 0;
 
-    border-bottom:1px solid rgba(255,255,255,.06);
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+
 }
 
+
 .cartEmoji{
+
     width:50px;
+
     height:50px;
 
     display:grid;
+
     place-items:center;
 
     border-radius:12px;
@@ -671,48 +1475,67 @@ nav a:hover{
     background:#09182a;
 
     font-size:25px;
+
 }
+
 
 .cartInfo{
+
     flex:1;
+
 }
+
 
 .cartInfo h4{
+
     font-size:12px;
+
 }
 
+
 .cartInfo p{
+
     margin-top:5px;
 
     color:#718096;
 
     font-size:10px;
+
 }
 
+
 .quantity{
+
     display:flex;
 
     gap:5px;
 
     margin-top:7px;
+
 }
 
+
 .quantity button{
-    border:0;
 
     width:25px;
+
     height:25px;
+
+    border:0;
 
     border-radius:6px;
 
-    color:#fff;
+    color:white;
 
     background:#102039;
 
     cursor:pointer;
+
 }
 
+
 .remove{
+
     border:0;
 
     background:none;
@@ -722,17 +1545,25 @@ nav a:hover{
     cursor:pointer;
 
     font-size:10px;
+
 }
 
+
 .cartSummary{
+
     margin-top:25px;
 
     padding-top:20px;
 
-    border-top:1px solid rgba(255,255,255,.08);
+    border-top:
+        1px solid
+        rgba(255,255,255,.08);
+
 }
 
+
 .line{
+
     display:flex;
 
     justify-content:space-between;
@@ -742,16 +1573,23 @@ nav a:hover{
     color:#9ba8b9;
 
     font-size:13px;
+
 }
+
 
 .total{
-    color:#fff;
+
+    color:white;
 
     font-size:22px;
+
     font-weight:1000;
+
 }
 
+
 .checkout{
+
     display:block;
 
     width:100%;
@@ -764,7 +1602,7 @@ nav a:hover{
 
     border-radius:12px;
 
-    color:#fff;
+    color:white;
 
     text-decoration:none;
 
@@ -776,56 +1614,49 @@ nav a:hover{
         );
 
     font-size:12px;
+
     font-weight:1000;
+
 }
 
+
 .empty{
+
     padding:50px 10px;
 
     text-align:center;
 
     color:#718096;
+
 }
 
-/* FOOTER */
 
-footer{
-    margin-top:100px;
-
-    padding:45px 5%;
-
-    text-align:center;
-
-    color:#718096;
-
-    font-size:11px;
-
-    border-top:1px solid rgba(255,255,255,.07);
-}
-
-footer b{
-    color:#35d9ff;
-}
-
-/* TOAST */
+/* =====================================================
+   TOAST
+===================================================== */
 
 .toast{
+
     position:fixed;
 
     left:50%;
+
     bottom:25px;
 
-    z-index:5000;
+    z-index:6000;
 
-    padding:13px 18px;
+    padding:
+        13px
+        18px;
 
     border-radius:12px;
 
-    color:#fff;
+    color:white;
 
     background:#102039;
 
     font-size:11px;
+
     font-weight:900;
 
     transform:
@@ -834,16 +1665,23 @@ footer b{
     opacity:0;
 
     transition:.25s;
+
 }
 
+
 .toast.show{
+
     opacity:1;
 
     transform:
         translate(-50%,0);
+
 }
 
-/* MOBILE */
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:900px){
 
@@ -852,79 +1690,190 @@ footer b{
     }
 
     .hero{
+
         grid-template-columns:1fr;
 
         text-align:center;
 
-        padding:70px 0;
+        padding:
+            70px 0;
+
     }
 
-    .hero p{
+    .heroText{
+
         margin-left:auto;
+
         margin-right:auto;
+
     }
 
     .heroButtons{
+
         justify-content:center;
+
     }
 
     .products{
-        grid-template-columns:repeat(2,1fr);
+
+        grid-template-columns:
+            repeat(2,1fr);
+
     }
 
     .features{
-        grid-template-columns:repeat(2,1fr);
+
+        grid-template-columns:
+            repeat(2,1fr);
+
     }
 
 }
+
 
 @media(max-width:600px){
 
-    .headerButtons .admin{
-        display:none;
+    .promoContent{
+
+        gap:6px;
+
     }
 
+    .promo{
+
+        min-height:70px;
+
+    }
+
+    .promoBadge,
+    .promoCode,
+    .freeShipping{
+
+        font-size:9px;
+
+        padding:
+            6px
+            8px;
+
+    }
+
+    .headerButtons .admin,
     .headerButtons .account{
+
         display:none;
+
     }
 
     .products{
+
         grid-template-columns:1fr;
+
     }
 
     .features{
+
         grid-template-columns:1fr;
+
     }
 
     .hero h1{
+
         letter-spacing:-2px;
+
     }
 
 }
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        scroll-behavior:
+            auto !important;
+
+    }
+
+}
+
 </style>
 </head>
 
+
 <body>
 
-<!-- =========================
-     PROMOCJA
-========================= -->
 
-<div class="topbar">
+<!-- =====================================================
+     🔥 PROMOCJA NA SAMEJ GÓRZE
+===================================================== -->
 
-    🔥 KOD:
-    <b>START10</b>
-    — 10% RABATU
-    • 🚚 DARMOWA DOSTAWA OD 50 ZŁ
+<div class="promo">
+
+    <div class="promoContent">
+
+
+        <div class="promoBadge">
+
+            🔥
+
+            <span>
+                PROMOCJA
+            </span>
+
+        </div>
+
+
+        <div class="promoCode">
+
+            🎁
+
+            <span>
+                Kod rabatowy:
+            </span>
+
+            <strong>
+                START10
+            </strong>
+
+            <span>
+                -10%
+            </span>
+
+        </div>
+
+
+        <div class="freeShipping">
+
+            🚚
+
+            DARMOWA DOSTAWA OD 50 ZŁ
+
+        </div>
+
+
+    </div>
 
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      HEADER
-========================= -->
+===================================================== -->
 
 <header>
+
 
     <div class="logo">
 
@@ -960,6 +1909,7 @@ footer b{
 
     <div class="headerButtons">
 
+
         <a
             href="./konto.html"
             class="button account"
@@ -992,33 +1942,40 @@ footer b{
 
         </button>
 
+
     </div>
 
 </header>
 
 
-<!-- =========================
+<!-- =====================================================
      HERO
-========================= -->
+===================================================== -->
 
 <section
     id="home"
     class="hero"
 >
 
+
     <div>
 
+
         <div class="badge">
+
             ⚡ DRUK 3D • CUSTOM • POLSKA
+
         </div>
 
 
         <h1>
 
             Twój pomysł.
+
             <br>
 
             Nasz
+
             <span>
                 druk 3D.
             </span>
@@ -1026,22 +1983,26 @@ footer b{
         </h1>
 
 
-        <p>
+        <p class="heroText">
 
-            Breloki, dodatki i własne modele
-            drukowane 3D. Wybierz gotowy
-            produkt albo zamów własny projekt.
+            Breloki, dodatki, uchwyty i własne
+            modele drukowane 3D.
+            Zamów gotowy produkt albo
+            przygotuj swój własny projekt.
 
         </p>
 
 
         <div class="heroButtons">
 
+
             <a
                 href="#produkty"
                 class="primary"
             >
+
                 🛍️ Zobacz produkty
+
             </a>
 
 
@@ -1049,17 +2010,21 @@ footer b{
                 href="#dostawa"
                 class="secondary"
             >
-                🚚 Dostawa
+
+                🚚 Darmowa dostawa
+
             </a>
 
+
         </div>
+
 
     </div>
 
 
     <div class="visual">
 
-        <div class="glow"></div>
+        <div class="orb"></div>
 
         <div class="model">
             🧊
@@ -1067,17 +2032,19 @@ footer b{
 
     </div>
 
+
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      PRODUKTY
-========================= -->
+===================================================== -->
 
 <section
     id="produkty"
     class="section"
 >
+
 
     <div class="title">
 
@@ -1086,11 +2053,11 @@ footer b{
         </small>
 
         <h2>
-            Nasze produkty
+            Najpopularniejsze produkty
         </h2>
 
         <p>
-            Wybierz produkt i dodaj go do koszyka.
+            Dodaj produkt do koszyka.
         </p>
 
     </div>
@@ -1101,17 +2068,19 @@ footer b{
         class="products"
     ></div>
 
+
 </section>
 
 
-<!-- =========================
-     FEATURES
-========================= -->
+<!-- =====================================================
+     DLACZEGO
+===================================================== -->
 
 <section
     id="dlaczego"
     class="section"
 >
+
 
     <div class="title">
 
@@ -1128,6 +2097,7 @@ footer b{
 
     <div class="features">
 
+
         <div class="feature">
 
             <div class="featureIcon">
@@ -1139,8 +2109,7 @@ footer b{
             </h3>
 
             <p>
-                Dokładne modele drukowane
-                na drukarce 3D.
+                Dokładne modele drukowane 3D.
             </p>
 
         </div>
@@ -1153,11 +2122,11 @@ footer b{
             </div>
 
             <h3>
-                Szybko
+                Szybka realizacja
             </h3>
 
             <p>
-                Szybka realizacja zamówień.
+                Sprawna realizacja zamówień.
             </p>
 
         </div>
@@ -1174,8 +2143,7 @@ footer b{
             </h3>
 
             <p>
-                Możesz przygotować własny
-                model 3D.
+                Własne projekty 3D.
             </p>
 
         </div>
@@ -1192,51 +2160,60 @@ footer b{
             </h3>
 
             <p>
-                Dbamy o wygląd każdego wydruku.
+                Dbamy o każdy wydruk.
             </p>
 
         </div>
 
+
     </div>
+
 
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      DOSTAWA
-========================= -->
+===================================================== -->
 
 <section
     id="dostawa"
     class="section"
 >
 
+
     <div class="delivery">
+
 
         <h2>
             🚚 Darmowa dostawa od 50 zł
         </h2>
 
+
         <p>
             InPost • ORLEN Paczka • DPD
         </p>
+
 
         <div class="free">
             0,00 zł
         </div>
 
+
     </div>
+
 
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      FOOTER
-========================= -->
+===================================================== -->
 
 <footer>
 
     © 2026
+
     <b>
         Printerlase3D
     </b>
@@ -1246,9 +2223,9 @@ footer b{
 </footer>
 
 
-<!-- =========================
+<!-- =====================================================
      KOSZYK
-========================= -->
+===================================================== -->
 
 <div
     id="overlay"
@@ -1256,13 +2233,16 @@ footer b{
     onclick="outsideCart(event)"
 >
 
+
     <div class="cart">
+
 
         <div class="cartHeader">
 
             <h2>
                 🛒 Koszyk
             </h2>
+
 
             <button
                 class="close"
@@ -1280,6 +2260,7 @@ footer b{
 
 
         <div class="cartSummary">
+
 
             <div class="line">
 
@@ -1324,17 +2305,24 @@ footer b{
                 href="./checkout.html"
                 class="checkout"
             >
+
                 Przejdź do kasy →
+
             </a>
+
 
         </div>
 
+
     </div>
+
 
 </div>
 
 
-<!-- TOAST -->
+<!-- =====================================================
+     TOAST
+===================================================== -->
 
 <div
     id="toast"
@@ -1344,9 +2332,9 @@ footer b{
 
 <script>
 
-/* =========================
+/* =====================================================
    PRODUKTY
-========================= */
+===================================================== */
 
 const products = [
 
@@ -1387,7 +2375,7 @@ const products = [
         name:"Custom Model 3D",
         price:25,
         emoji:"🧩",
-        description:"Własny projekt do druku 3D."
+        description:"Własny projekt do druku."
     },
 
     {
@@ -1395,37 +2383,41 @@ const products = [
         name:"Uchwyt Custom",
         price:22,
         emoji:"🛠️",
-        description:"Praktyczny uchwyt drukowany 3D."
+        description:"Praktyczny uchwyt 3D."
     }
 
 ];
 
 
-/* =========================
+/* =====================================================
    KOSZYK
-========================= */
+===================================================== */
 
-let cart = [];
+let cart=[];
 
 
 function loadCart(){
 
     try{
 
-        const data =
+        const saved=
             JSON.parse(
                 localStorage.getItem(
                     "printerlase_cart"
                 )
             );
 
-        if(Array.isArray(data)){
-            cart = data;
+        if(
+            Array.isArray(saved)
+        ){
+
+            cart=saved;
+
         }
 
-    }catch(e){
+    }catch(error){
 
-        cart = [];
+        cart=[];
 
     }
 
@@ -1442,87 +2434,82 @@ function saveCart(){
 }
 
 
-/* =========================
-   FORMAT CENY
-========================= */
+/* =====================================================
+   CENA
+===================================================== */
 
 function money(value){
 
     return Number(value)
         .toFixed(2)
         .replace(".",",")
-        + " zł";
+        +" zł";
 
 }
 
 
-/* =========================
+/* =====================================================
    PRODUKTY
-========================= */
+===================================================== */
 
 function renderProducts(){
 
-    const box =
+    const box=
         document.getElementById(
             "products"
         );
 
-
-    box.innerHTML = "";
+    box.innerHTML="";
 
 
     products.forEach(product=>{
 
-        box.innerHTML += `
+        box.innerHTML+=`
 
-            <article class="product">
+        <article class="product">
 
-                <div class="productImage">
+            <div class="productImage">
 
-                    ${product.emoji}
+                ${product.emoji}
 
-                </div>
+            </div>
 
-                <h3>
+            <h3>
 
-                    ${safe(
-                        product.name
-                    )}
+                ${safe(product.name)}
 
-                </h3>
+            </h3>
 
-                <p>
+            <p>
 
-                    ${safe(
-                        product.description
-                    )}
+                ${safe(product.description)}
 
-                </p>
+            </p>
 
-                <div class="productBottom">
+            <div class="productBottom">
 
-                    <div class="price">
+                <div class="price">
 
-                        ${money(
-                            product.price
-                        )}
-
-                    </div>
-
-                    <button
-                        class="add"
-                        onclick="
-                            addToCart(
-                                ${product.id}
-                            )
-                        "
-                    >
-                        + Dodaj
-                    </button>
+                    ${money(product.price)}
 
                 </div>
 
-            </article>
+                <button
+                    class="add"
+                    onclick="
+                        addToCart(
+                            ${product.id}
+                        )
+                    "
+                >
+
+                    + Dodaj
+
+                </button>
+
+            </div>
+
+        </article>
 
         `;
 
@@ -1531,35 +2518,32 @@ function renderProducts(){
 }
 
 
-/* =========================
-   DODAWANIE
-========================= */
+/* =====================================================
+   ADD
+===================================================== */
 
 function addToCart(id){
 
-    const product =
+    const product=
         products.find(
-            p=>p.id === id
+            p=>p.id===id
         );
 
-
-    if(!product){
-        return;
-    }
+    if(!product)return;
 
 
-    const existing =
+    const existing=
         cart.find(
-            p=>p.id === id
+            p=>p.id===id
         );
 
 
     if(existing){
 
-        existing.quantity =
+        existing.quantity=
             Number(
-                existing.quantity || 1
-            ) + 1;
+                existing.quantity||1
+            )+1;
 
     }else{
 
@@ -1591,37 +2575,36 @@ function addToCart(id){
 }
 
 
-/* =========================
-   ILOŚĆ
-========================= */
+/* =====================================================
+   QUANTITY
+===================================================== */
 
 function changeQuantity(
     id,
     amount
 ){
 
-    const item =
+    const item=
         cart.find(
-            p=>p.id === id
+            p=>p.id===id
         );
 
-
-    if(!item){
-        return;
-    }
+    if(!item)return;
 
 
-    item.quantity =
+    item.quantity=
         Number(
-            item.quantity || 1
-        ) + amount;
+            item.quantity||1
+        )+amount;
 
 
-    if(item.quantity <= 0){
+    if(
+        item.quantity<=0
+    ){
 
-        cart =
+        cart=
             cart.filter(
-                p=>p.id !== id
+                p=>p.id!==id
             );
 
     }
@@ -1634,17 +2617,16 @@ function changeQuantity(
 }
 
 
-/* =========================
-   USUWANIE
-========================= */
+/* =====================================================
+   REMOVE
+===================================================== */
 
 function removeItem(id){
 
-    cart =
+    cart=
         cart.filter(
-            p=>p.id !== id
+            p=>p.id!==id
         );
-
 
     saveCart();
 
@@ -1653,38 +2635,36 @@ function removeItem(id){
 }
 
 
-/* =========================
-   RENDER KOSZYKA
-========================= */
+/* =====================================================
+   CART
+===================================================== */
 
 function renderCart(){
 
-    const box =
+    const box=
         document.getElementById(
             "cartItems"
         );
 
 
-    let count = 0;
+    let count=0;
 
-    let total = 0;
+    let total=0;
 
 
     cart.forEach(item=>{
 
-        const quantity =
+        const quantity=
             Number(
-                item.quantity || 1
+                item.quantity||1
             );
 
+        count+=quantity;
 
-        count += quantity;
-
-
-        total +=
+        total+=
             Number(
-                item.price || 0
-            ) *
+                item.price||0
+            )*
             quantity;
 
     });
@@ -1692,25 +2672,24 @@ function renderCart(){
 
     document.getElementById(
         "cartCount"
-    ).textContent =
-        count;
+    ).textContent=count;
 
 
     document.getElementById(
         "subtotal"
-    ).textContent =
+    ).textContent=
         money(total);
 
 
     document.getElementById(
         "total"
-    ).textContent =
+    ).textContent=
         money(total);
 
 
-    if(cart.length === 0){
+    if(cart.length===0){
 
-        box.innerHTML = `
+        box.innerHTML=`
 
             <div class="empty">
 
@@ -1729,24 +2708,24 @@ function renderCart(){
     }
 
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
 
     cart.forEach(item=>{
 
-        const quantity =
+        const quantity=
             Number(
-                item.quantity || 1
+                item.quantity||1
             );
 
 
-        box.innerHTML += `
+        box.innerHTML+=`
 
             <div class="cartItem">
 
                 <div class="cartEmoji">
 
-                    ${item.emoji || "📦"}
+                    ${item.emoji||"📦"}
 
                 </div>
 
@@ -1755,17 +2734,13 @@ function renderCart(){
 
                     <h4>
 
-                        ${safe(
-                            item.name
-                        )}
+                        ${safe(item.name)}
 
                     </h4>
 
                     <p>
 
-                        ${money(
-                            item.price
-                        )}
+                        ${money(item.price)}
                         ×
                         ${quantity}
 
@@ -1784,6 +2759,7 @@ function renderCart(){
                         >
                             −
                         </button>
+
 
                         <button
                             onclick="
@@ -1806,15 +2782,13 @@ function renderCart(){
                     <strong>
 
                         ${money(
-                            item.price *
+                            item.price*
                             quantity
                         )}
 
                     </strong>
 
-
                     <br><br>
-
 
                     <button
                         class="remove"
@@ -1838,15 +2812,19 @@ function renderCart(){
 }
 
 
-/* =========================
-   KOSZYK
-========================= */
+/* =====================================================
+   OPEN / CLOSE CART
+===================================================== */
 
 function openCart(){
 
     document
-        .getElementById("overlay")
-        .classList.add("active");
+        .getElementById(
+            "overlay"
+        )
+        .classList.add(
+            "active"
+        );
 
 }
 
@@ -1854,8 +2832,12 @@ function openCart(){
 function closeCart(){
 
     document
-        .getElementById("overlay")
-        .classList.remove("active");
+        .getElementById(
+            "overlay"
+        )
+        .classList.remove(
+            "active"
+        );
 
 }
 
@@ -1863,7 +2845,7 @@ function closeCart(){
 function outsideCart(event){
 
     if(
-        event.target.id ===
+        event.target.id===
         "overlay"
     ){
 
@@ -1874,24 +2856,22 @@ function outsideCart(event){
 }
 
 
-/* =========================
+/* =====================================================
    TOAST
-========================= */
+===================================================== */
 
 let toastTimer;
 
 
 function showToast(text){
 
-    const toast =
+    const toast=
         document.getElementById(
             "toast"
         );
 
 
-    toast.textContent =
-        text;
-
+    toast.textContent=text;
 
     toast.classList.add(
         "show"
@@ -1903,7 +2883,7 @@ function showToast(text){
     );
 
 
-    toastTimer =
+    toastTimer=
         setTimeout(
             ()=>{
                 toast.classList.remove(
@@ -1916,25 +2896,40 @@ function showToast(text){
 }
 
 
-/* =========================
-   BEZPIECZNY TEKST
-========================= */
+/* =====================================================
+   SAFE
+===================================================== */
 
 function safe(text){
 
     return String(text)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
-/* =========================
+/* =====================================================
    START
-========================= */
+===================================================== */
 
 loadCart();
 
@@ -1943,16 +2938,14 @@ renderProducts();
 renderCart();
 
 
-/* =========================
-   ESC
-========================= */
+/* ESC */
 
 document.addEventListener(
     "keydown",
-    function(event){
+    event=>{
 
         if(
-            event.key ===
+            event.key===
             "Escape"
         ){
 
