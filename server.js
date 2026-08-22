@@ -1,515 +1,622 @@
 const express = require("express");
-const multer = require("multer");
-const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 10000;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+// ===============================
+// KONFIGURACJA
+// ===============================
 
-const DATA_DIR = path.join(__dirname, "data");
-const UPLOAD_DIR = path.join(__dirname, "uploads");
-const MODEL_DIR = path.join(UPLOAD_DIR, "models");
-const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
+// Możesz zmienić hasło tutaj.
+// Na Renderze lepiej ustawić ADMIN_PASSWORD
+// w Environment Variables.
+const ADMIN_PASSWORD =
+    process.env.ADMIN_PASSWORD || "admin123";
 
-for (const dir of [DATA_DIR, UPLOAD_DIR, MODEL_DIR]) {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
-}
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({
+    extended: true,
+    limit: "10mb"
+}));
 
-if (!fs.existsSync(ORDERS_FILE)) {
-    fs.writeFileSync(ORDERS_FILE, "[]", "utf8");
-}
-
-function readOrders() {
-    try {
-        return JSON.parse(
-            fs.readFileSync(ORDERS_FILE, "utf8")
-        );
-    } catch {
-        return [];
-    }
-}
-
-function saveOrders(orders) {
-    fs.writeFileSync(
-        ORDERS_FILE,
-        JSON.stringify(orders, null, 2),
-        "utf8"
-    );
-}
-
-let orders = readOrders();
-
-app.use(express.json({ limit: "2mb" }));
-app.use(express.urlencoded({ extended: true }));
-
+// Pliki strony
 app.use(express.static(__dirname));
 
-app.use(
-    "/uploads",
-    express.static(UPLOAD_DIR)
-);
+// ===============================
+// DANE
+// ===============================
 
-/* =========================
-   MULTER
-========================= */
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, MODEL_DIR);
-    },
-
-    filename: (req, file, cb) => {
-        const ext = path
-            .extname(file.originalname)
-            .toLowerCase();
-
-        const safeName =
-            Date.now() +
-            "-" +
-            Math.random()
-                .toString(36)
-                .slice(2, 10) +
-            ext;
-
-        cb(null, safeName);
+let orders = [
+    {
+        id: "PL3D-DEMO001",
+        name: "Klient testowy",
+        email: "test@example.com",
+        phone: "600000000",
+        address: "ul. Testowa 1",
+        postalCode: "40-001",
+        city: "Katowice",
+        country: "Polska",
+        total: 59.99,
+        discount: 0,
+        status: "NEW",
+        type: "NORMAL",
+        items: [
+            {
+                name: "Brelok 3D",
+                quantity: 1,
+                price: 59.99
+            }
+        ],
+        createdAt: new Date().toISOString()
     }
-});
+];
 
-const upload = multer({
-    storage,
+// ===============================
+// FUNKCJE
+// ===============================
 
-    limits: {
-        fileSize: 50 * 1024 * 1024
-    },
+function checkAdmin(req, res, next) {
 
-    fileFilter: (req, file, cb) => {
-        const ext = path
-            .extname(file.originalname)
-            .toLowerCase();
-
-        const allowed = [
-            ".stl",
-            ".obj",
-            ".3mf"
-        ];
-
-        if (!allowed.includes(ext)) {
-            return cb(
-                new Error(
-                    "Dozwolone formaty: STL, OBJ, 3MF."
-                )
-            );
-        }
-
-        cb(null, true);
-    }
-});
-
-/* =========================
-   ADMIN AUTH
-========================= */
-
-function adminAuth(req, res, next) {
     const password =
         req.headers["x-admin-password"];
 
-    if (!password || password !== ADMIN_PASSWORD) {
+    if (!password) {
         return res.status(401).json({
-            error: "Brak autoryzacji."
+            error: "Brak hasła administratora."
+        });
+    }
+
+    if (password !== ADMIN_PASSWORD) {
+        return res.status(401).json({
+            error: "Nieprawidłowe hasło."
         });
     }
 
     next();
 }
 
-/* =========================
-   PRODUCTS
-========================= */
+function calculateStats() {
 
-const products = [
-    {
-        id: "brelok3d",
-        name: "Brelok 3D",
-        price: 15,
-        category: "Breloki",
-        description:
-            "Personalizowany brelok drukowany w 3D.",
-        time: "1–2 godz.",
-        icon: "🔑"
-    },
-    {
-        id: "figurki",
-        name: "Figurka 3D",
-        price: 35,
-        category: "Figurki",
-        description:
-            "Mała figurka wykonana na zamówienie.",
-        time: "3–5 godz.",
-        icon: "🗿"
-    },
-    {
-        id: "napis",
-        name: "Napis 3D",
-        price: 25,
-        category: "Dekoracje",
-        description:
-            "Dekoracyjny napis 3D do pokoju.",
-        time: "2–4 godz.",
-        icon: "✨"
-    },
-    {
-        id: "uchwyt",
-        name: "Uchwyt 3D",
-        price: 30,
-        category: "Dodatki",
-        description:
-            "Praktyczny uchwyt drukowany 3D.",
-        time: "2–4 godz.",
-        icon: "🛠️"
-    }
-];
-
-app.get("/api/products", (req, res) => {
-    res.json(products);
-});
-
-/* =========================
-   CUSTOM MODEL
-========================= */
-
-app.post(
-    "/api/custom-model",
-    upload.single("model"),
-    (req, res) => {
-        try {
-            if (!req.file) {
-                return res.status(400).json({
-                    error: "Nie przesłano modelu 3D."
-                });
-            }
-
-            const id =
-                "CUSTOM-" +
-                Date.now()
-                    .toString()
-                    .slice(-8);
-
-            const order = {
-                id,
-                type: "CUSTOM_MODEL",
-
-                name:
-                    String(req.body.name || "")
-                    .trim(),
-
-                email:
-                    String(req.body.email || "")
-                    .trim(),
-
-                phone:
-                    String(req.body.phone || "")
-                    .trim(),
-
-                description:
-                    String(
-                        req.body.description || ""
-                    ).trim(),
-
-                originalFileName:
-                    req.file.originalname,
-
-                fileName:
-                    req.file.filename,
-
-                fileUrl:
-                    "/uploads/models/" +
-                    req.file.filename,
-
-                total: 0,
-
-                status: "NEW",
-
-                createdAt:
-                    new Date().toISOString()
-            };
-
-            orders.push(order);
-            saveOrders(orders);
-
-            console.log(
-                "Nowy model 3D:",
-                order.id,
-                order.originalFileName
-            );
-
-            res.json({
-                success: true,
-                orderId: order.id
-            });
-
-        } catch (error) {
-            console.error(error);
-
-            res.status(500).json({
-                error:
-                    error.message ||
-                    "Błąd serwera."
-            });
-        }
-    }
-);
-
-/* =========================
-   NORMAL ORDER
-========================= */
-
-app.post("/api/orders", (req, res) => {
-    try {
-        const {
-            name,
-            email,
-            phone,
-            address,
-            city,
-            postalCode,
-            items,
-            total,
-            discount
-        } = req.body;
-
-        if (!name || !email) {
-            return res.status(400).json({
-                error:
-                    "Podaj imię i e-mail."
-            });
-        }
-
-        const order = {
-            id:
-                "ORD-" +
-                Date.now()
-                    .toString()
-                    .slice(-8),
-
-            type: "ORDER",
-
-            name,
-            email,
-            phone: phone || "",
-            address: address || "",
-            city: city || "",
-            postalCode: postalCode || "",
-
-            items:
-                Array.isArray(items)
-                    ? items
-                    : [],
-
-            total:
-                Number(total || 0),
-
-            discount:
-                Number(discount || 0),
-
-            status: "NEW",
-
-            createdAt:
-                new Date().toISOString()
-        };
-
-        orders.push(order);
-        saveOrders(orders);
-
-        res.json({
-            success: true,
-            orderId: order.id
-        });
-
-    } catch (error) {
-        console.error(error);
-
-        res.status(500).json({
-            error: "Błąd składania zamówienia."
-        });
-    }
-});
-
-/* =========================
-   ADMIN DASHBOARD
-========================= */
-
-app.get(
-    "/api/admin/dashboard",
-    adminAuth,
-    (req, res) => {
-        const currentOrders = readOrders();
-
-        orders = currentOrders;
-
-        const earned =
-            currentOrders
-                .filter(
-                    o => o.status === "PAID"
-                )
-                .reduce(
-                    (sum, o) =>
-                        sum + Number(o.total || 0),
-                    0
-                );
-
-        const balance =
-            currentOrders
-                .filter(
-                    o =>
-                        o.status !==
-                        "CANCELLED"
-                )
-                .reduce(
-                    (sum, o) =>
-                        sum + Number(o.total || 0),
-                    0
-                );
-
-        res.json({
-            balance,
-            earned,
-            withdrawn: 0,
-            orders: currentOrders
-        });
-    }
-);
-
-/* =========================
-   STATUS ORDER
-========================= */
-
-app.post(
-    "/api/admin/order-status",
-    adminAuth,
-    (req, res) => {
-        const {
-            id,
-            status
-        } = req.body;
-
-        const order =
-            orders.find(
-                o => o.id === id
-            );
-
-        if (!order) {
-            return res.status(404).json({
-                error:
-                    "Nie znaleziono zamówienia."
-            });
-        }
-
-        const allowed = [
-            "NEW",
-            "PAID",
-            "CANCELLED",
-            "PROCESSING",
-            "SHIPPED",
-            "COMPLETED"
-        ];
-
-        if (!allowed.includes(status)) {
-            return res.status(400).json({
-                error:
-                    "Nieprawidłowy status."
-            });
-        }
-
-        order.status = status;
-
-        saveOrders(orders);
-
-        res.json({
-            success: true,
-            order
-        });
-    }
-);
-
-/* =========================
-   ADMIN FILE DOWNLOAD
-========================= */
-
-app.get(
-    "/api/admin/model/:id",
-    adminAuth,
-    (req, res) => {
-        const order =
-            orders.find(
-                o =>
-                    o.id ===
-                    req.params.id
-            );
-
-        if (
-            !order ||
-            order.type !==
-                "CUSTOM_MODEL"
-        ) {
-            return res.status(404).send(
-                "Nie znaleziono modelu."
-            );
-        }
-
-        const file =
-            path.join(
-                MODEL_DIR,
-                order.fileName
-            );
-
-        if (!fs.existsSync(file)) {
-            return res.status(404).send(
-                "Plik już nie istnieje."
-            );
-        }
-
-        res.download(
-            file,
-            order.originalFileName
+    const balance =
+        orders.reduce(
+            (sum, order) =>
+                sum + Number(order.total || 0),
+            0
         );
-    }
-);
 
-/* =========================
-   ADMIN PAGE
-========================= */
+    const earned =
+        orders
+            .filter(
+                order =>
+                    order.status === "PAID" ||
+                    order.status === "PROCESSING" ||
+                    order.status === "SHIPPED" ||
+                    order.status === "COMPLETED"
+            )
+            .reduce(
+                (sum, order) =>
+                    sum + Number(order.total || 0),
+                0
+            );
+
+    const customModels =
+        orders.filter(
+            order =>
+                order.type === "CUSTOM_MODEL"
+        ).length;
+
+    return {
+        balance,
+        earned,
+        withdrawn: 0,
+        customModels
+    };
+}
+
+// ===============================
+// STRONA GŁÓWNA
+// ===============================
+
+app.get("/", (req, res) => {
+
+    res.sendFile(
+        path.join(
+            __dirname,
+            "index.html"
+        )
+    );
+
+});
+
+// ===============================
+// PANEL ADMINA
+// ===============================
 
 app.get("/admin", (req, res) => {
+
     res.sendFile(
         path.join(
             __dirname,
             "admin.html"
         )
     );
+
 });
 
-/* =========================
-   ERRORS
-========================= */
+// ===============================
+// TEST LOGOWANIA
+// ===============================
 
-app.use(
-    (error, req, res, next) => {
-        console.error(error);
+app.post("/api/admin/login", (req, res) => {
 
-        res.status(400).json({
-            error:
-                error.message ||
-                "Nieprawidłowe żądanie."
+    const password =
+        String(
+            req.body?.password || ""
+        );
+
+    if (password !== ADMIN_PASSWORD) {
+
+        return res.status(401).json({
+            success: false,
+            error: "Błędne hasło."
         });
+
+    }
+
+    res.json({
+        success: true,
+        message: "Zalogowano."
+    });
+
+});
+
+// ===============================
+// DASHBOARD
+// ===============================
+
+app.get(
+    "/api/admin/dashboard",
+    checkAdmin,
+    (req, res) => {
+
+        const stats =
+            calculateStats();
+
+        res.json({
+            balance: stats.balance,
+            earned: stats.earned,
+            withdrawn: stats.withdrawn,
+            customModels:
+                stats.customModels,
+            orders
+        });
+
     }
 );
 
-app.listen(PORT, () => {
-    console.log(
-        `Printerlase3D działa na porcie ${PORT}`
-    );
-});
+// ===============================
+// ZMIANA STATUSU
+// ===============================
+
+app.post(
+    "/api/admin/order-status",
+    checkAdmin,
+    (req, res) => {
+
+        const {
+            id,
+            status
+        } = req.body;
+
+        if (!id || !status) {
+
+            return res.status(400).json({
+                error:
+                    "Brak ID zamówienia lub statusu."
+            });
+
+        }
+
+        const order =
+            orders.find(
+                item =>
+                    item.id === id
+            );
+
+        if (!order) {
+
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono zamówienia."
+            });
+
+        }
+
+        const allowedStatuses = [
+            "NEW",
+            "PAID",
+            "PROCESSING",
+            "SHIPPED",
+            "COMPLETED",
+            "CANCELLED"
+        ];
+
+        if (
+            !allowedStatuses.includes(
+                status
+            )
+        ) {
+
+            return res.status(400).json({
+                error:
+                    "Nieprawidłowy status."
+            });
+
+        }
+
+        order.status = status;
+
+        res.json({
+            success: true,
+            order
+        });
+
+    }
+);
+
+// ===============================
+// UTWORZENIE ZAMÓWIENIA
+// ===============================
+
+app.post(
+    "/api/orders",
+    (req, res) => {
+
+        const body = req.body || {};
+
+        const id =
+            "PL3D-" +
+            crypto
+                .randomBytes(5)
+                .toString("hex")
+                .toUpperCase();
+
+        const order = {
+
+            id,
+
+            name:
+                String(
+                    body.name || ""
+                ),
+
+            email:
+                String(
+                    body.email || ""
+                ),
+
+            phone:
+                String(
+                    body.phone || ""
+                ),
+
+            address:
+                String(
+                    body.address || ""
+                ),
+
+            postalCode:
+                String(
+                    body.postalCode || ""
+                ),
+
+            city:
+                String(
+                    body.city || ""
+                ),
+
+            country:
+                String(
+                    body.country ||
+                    "Polska"
+                ),
+
+            total:
+                Number(
+                    body.total || 0
+                ),
+
+            discount:
+                Number(
+                    body.discount || 0
+                ),
+
+            status: "NEW",
+
+            type:
+                body.type ===
+                "CUSTOM_MODEL"
+                    ? "CUSTOM_MODEL"
+                    : "NORMAL",
+
+            description:
+                String(
+                    body.description || ""
+                ),
+
+            originalFileName:
+                String(
+                    body.originalFileName ||
+                    ""
+                ),
+
+            items:
+                Array.isArray(
+                    body.items
+                )
+                    ? body.items
+                    : [],
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+        orders.push(order);
+
+        console.log(
+            "NOWE ZAMÓWIENIE:",
+            order.id
+        );
+
+        res.status(201).json({
+            success: true,
+            order
+        });
+
+    }
+);
+
+// ===============================
+// WŁASNY MODEL 3D
+// ===============================
+
+app.post(
+    "/api/custom-model",
+    (req, res) => {
+
+        const body = req.body || {};
+
+        const id =
+            "MODEL-" +
+            crypto
+                .randomBytes(5)
+                .toString("hex")
+                .toUpperCase();
+
+        const order = {
+
+            id,
+
+            name:
+                String(
+                    body.name || ""
+                ),
+
+            email:
+                String(
+                    body.email || ""
+                ),
+
+            phone:
+                String(
+                    body.phone || ""
+                ),
+
+            address:
+                String(
+                    body.address || ""
+                ),
+
+            postalCode:
+                String(
+                    body.postalCode || ""
+                ),
+
+            city:
+                String(
+                    body.city || ""
+                ),
+
+            country:
+                String(
+                    body.country ||
+                    "Polska"
+                ),
+
+            total:
+                Number(
+                    body.total || 0
+                ),
+
+            discount:
+                Number(
+                    body.discount || 0
+                ),
+
+            status: "NEW",
+
+            type: "CUSTOM_MODEL",
+
+            description:
+                String(
+                    body.description || ""
+                ),
+
+            originalFileName:
+                String(
+                    body.originalFileName ||
+                    ""
+                ),
+
+            modelData:
+                body.modelData || null,
+
+            items: [],
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+        orders.push(order);
+
+        console.log(
+            "NOWY WŁASNY MODEL:",
+            order.id
+        );
+
+        res.status(201).json({
+            success: true,
+            orderId: id
+        });
+
+    }
+);
+
+// ===============================
+// POBIERANIE MODELU
+// ===============================
+
+app.get(
+    "/api/admin/model/:id",
+    checkAdmin,
+    (req, res) => {
+
+        const order =
+            orders.find(
+                item =>
+                    item.id ===
+                    req.params.id
+            );
+
+        if (!order) {
+
+            return res.status(404).send(
+                "Nie znaleziono modelu."
+            );
+
+        }
+
+        if (
+            order.type !==
+            "CUSTOM_MODEL"
+        ) {
+
+            return res.status(400).send(
+                "To nie jest własny model."
+            );
+
+        }
+
+        if (!order.modelData) {
+
+            return res.status(404).send(
+                "Model nie zawiera pliku."
+            );
+
+        }
+
+        try {
+
+            const match =
+                String(
+                    order.modelData
+                ).match(
+                    /^data:([^;]+);base64,(.+)$/
+                );
+
+            if (!match) {
+
+                return res.status(400).send(
+                    "Nieprawidłowy plik."
+                );
+
+            }
+
+            const mime =
+                match[1];
+
+            const data =
+                Buffer.from(
+                    match[2],
+                    "base64"
+                );
+
+            res.setHeader(
+                "Content-Type",
+                mime
+            );
+
+            res.setHeader(
+                "Content-Disposition",
+                `attachment; filename="${(
+                    order.originalFileName ||
+                    "model-3d"
+                ).replace(
+                    /[^a-zA-Z0-9._-]/g,
+                    "_"
+                )}"`
+            );
+
+            res.send(data);
+
+        }
+        catch {
+
+            res.status(500).send(
+                "Nie udało się pobrać modelu."
+            );
+
+        }
+
+    }
+);
+
+// ===============================
+// START
+// ===============================
+
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
+
+        console.log("");
+        console.log(
+            "================================"
+        );
+        console.log(
+            "   Printerlase3D SERVER"
+        );
+        console.log(
+            "================================"
+        );
+        console.log(
+            `Serwer działa na porcie ${PORT}`
+        );
+        console.log(
+            "Panel admina: /admin"
+        );
+        console.log(
+            "Domyślne hasło: admin123"
+        );
+        console.log(
+            "================================"
+        );
+        console.log("");
+
+    }
+);
