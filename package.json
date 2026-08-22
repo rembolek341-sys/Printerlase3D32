@@ -1,17 +1,15 @@
-
+```json
 {
   "name": "printerlase3d",
   "version": "1.0.0",
-  "description": "Printerlase3D online shop",
+  "description": "Printerlase3D",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.21.2"
-  },
-  "engines": {
-    "node": ">=18"
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
   }
 }
-
+```
