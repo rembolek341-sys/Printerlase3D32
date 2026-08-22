@@ -5,18 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Printerlase3D — Wydruki 3D</title>
-<meta name="description" content="Printerlase3D — personalizowane wydruki 3D, breloki, figurki, dodatki i projekty custom.">
+<meta name="description" content="Printerlase3D — breloki, figurki, dodatki i własne projekty 3D.">
 
 <style>
-
-/* =========================================================
-   RESET
-========================================================= */
-
 *{
     box-sizing:border-box;
-    margin:0;
-    padding:0;
 }
 
 html{
@@ -24,184 +17,197 @@ html{
 }
 
 body{
-    background:#020611;
-    color:#fff;
-    font-family:Inter,Arial,Helvetica,sans-serif;
+    margin:0;
+    background:#030712;
+    color:white;
+    font-family:Inter,Arial,sans-serif;
     overflow-x:hidden;
 }
 
-button,
-input{
-    font-family:inherit;
-}
-
-a{
-    color:inherit;
-}
-
-
-/* =========================================================
+/* =========================
    TŁO
-========================================================= */
+========================= */
 
 .bg{
     position:fixed;
     inset:0;
+    pointer-events:none;
     overflow:hidden;
-    pointer-events:none;
-    z-index:-20;
-    background:
-        radial-gradient(circle at 50% -20%,#102b55 0%,transparent 40%),
-        #020611;
-}
-
-.grid{
-    position:fixed;
-    inset:0;
-    z-index:-19;
-    pointer-events:none;
-    opacity:.13;
-
-    background-image:
-        linear-gradient(#169cff22 1px,transparent 1px),
-        linear-gradient(90deg,#169cff22 1px,transparent 1px);
-
-    background-size:55px 55px;
-
-    mask-image:linear-gradient(
-        to bottom,
-        black 0%,
-        rgba(0,0,0,.7) 50%,
-        transparent 100%
-    );
+    z-index:-10;
 }
 
 .orb{
     position:absolute;
     border-radius:50%;
     filter:blur(100px);
-    opacity:.3;
-    animation:orbFloat 12s ease-in-out infinite alternate;
+    opacity:.28;
+    animation:floatOrb 12s infinite alternate ease-in-out;
 }
 
-.orb1{
-    width:430px;
-    height:430px;
-    background:#0077ff;
+.orb.one{
+    width:450px;
+    height:450px;
+    background:#008cff;
     top:-200px;
-    left:-130px;
+    left:-150px;
 }
 
-.orb2{
+.orb.two{
     width:400px;
     height:400px;
-    background:#743cff;
-    top:35%;
-    right:-180px;
+    background:#7c3cff;
+    right:-150px;
+    top:350px;
     animation-delay:2s;
 }
 
-.orb3{
+.orb.three{
     width:350px;
     height:350px;
     background:#00d9ff;
+    left:40%;
     bottom:-200px;
-    left:35%;
     animation-delay:4s;
 }
 
-@keyframes orbFloat{
+@keyframes floatOrb{
     from{
         transform:translate(0,0) scale(1);
     }
     to{
-        transform:translate(80px,60px) scale(1.15);
+        transform:translate(70px,50px) scale(1.15);
     }
 }
 
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
-
-::-webkit-scrollbar{
-    width:8px;
+.grid{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-9;
+    opacity:.13;
+    background-image:
+        linear-gradient(#1b9cff18 1px,transparent 1px),
+        linear-gradient(90deg,#1b9cff18 1px,transparent 1px);
+    background-size:55px 55px;
+    mask-image:linear-gradient(to bottom,black,transparent);
 }
 
-::-webkit-scrollbar-track{
-    background:#020611;
-}
+/* =========================
+   PROMO
+========================= */
 
-::-webkit-scrollbar-thumb{
-    background:linear-gradient(#008cff,#743cff);
-    border-radius:20px;
-}
-
-
-/* =========================================================
-   NAVBAR
-========================================================= */
-
-.navbar{
+.promo-bar{
     position:fixed;
     top:0;
     left:0;
     width:100%;
-    height:78px;
+    height:43px;
+    z-index:10000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:11px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #006eff,
+            #743cff,
+            #00cfff,
+            #006eff
+        );
+
+    background-size:300% 100%;
+    animation:promoGradient 7s linear infinite;
+
+    color:white;
+    font-size:11px;
+    font-weight:900;
+    box-shadow:0 5px 30px #008cff35;
+}
+
+.promo-code{
+    padding:5px 9px;
+    border-radius:7px;
+    background:#00000035;
+    border:1px solid #ffffff35;
+    letter-spacing:1px;
+}
+
+.promo-copy{
+    border:1px solid #ffffff45;
+    background:#ffffff18;
+    color:white;
+    padding:6px 10px;
+    border-radius:7px;
+    font-size:9px;
+    font-weight:900;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.promo-copy:hover{
+    background:white;
+    color:#087cff;
+    transform:scale(1.05);
+}
+
+@keyframes promoGradient{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:fixed;
+    top:43px;
+    left:0;
+    width:100%;
+    height:76px;
 
     display:flex;
     align-items:center;
     justify-content:space-between;
 
     padding:0 5%;
+    z-index:999;
 
-    z-index:1000;
+    background:#030712c7;
+    backdrop-filter:blur(20px);
 
-    background:rgba(2,6,17,.72);
-    backdrop-filter:blur(22px);
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-    transition:.3s;
-}
-
-.navbar.scrolled{
-    background:rgba(2,6,17,.92);
-    box-shadow:0 15px 50px rgba(0,0,0,.3);
+    border-bottom:1px solid #ffffff0d;
 }
 
 .brand{
     display:flex;
     align-items:center;
     gap:11px;
+    color:white;
     text-decoration:none;
-    font-weight:1000;
-    font-size:18px;
+    font-weight:900;
+    font-size:19px;
 }
 
 .brand-logo{
     width:43px;
     height:43px;
-
     display:grid;
     place-items:center;
-
     border-radius:13px;
 
     background:
-        linear-gradient(135deg,#00d9ff,#147cff,#873cff);
+        linear-gradient(135deg,#00d9ff,#187cff,#873cff);
 
     box-shadow:
-        0 0 25px #008cff55,
-        inset 0 0 20px #ffffff20;
+        0 0 20px #008cff55,
+        inset 0 0 15px #ffffff22;
 
     transform:rotate(-4deg);
-
-    transition:.3s;
-}
-
-.brand:hover .brand-logo{
-    transform:rotate(5deg) scale(1.08);
 }
 
 .brand-logo span{
@@ -224,20 +230,19 @@ a{
 
 .nav-links{
     display:flex;
-    gap:25px;
+    gap:22px;
 }
 
 .nav-links a{
-    color:#8794a8;
+    color:#8996aa;
     text-decoration:none;
     font-size:12px;
-    font-weight:900;
+    font-weight:800;
     transition:.25s;
 }
 
 .nav-links a:hover{
-    color:#fff;
-    text-shadow:0 0 15px #00cfff;
+    color:white;
 }
 
 .nav-right{
@@ -247,25 +252,21 @@ a{
 }
 
 .nav-btn{
+    color:white;
+    background:#ffffff08;
+    border:1px solid #ffffff12;
     padding:10px 13px;
     border-radius:11px;
-
-    background:#ffffff06;
-    border:1px solid #ffffff12;
-
-    color:#fff;
     text-decoration:none;
-
     font-size:12px;
-    font-weight:900;
-
+    font-weight:800;
     transition:.25s;
 }
 
 .nav-btn:hover{
+    background:#008cff18;
+    border-color:#00bfff66;
     transform:translateY(-2px);
-    border-color:#00bfff55;
-    background:#008cff15;
 }
 
 .cart{
@@ -274,56 +275,36 @@ a{
 
 .cart-count{
     position:absolute;
-
     right:-7px;
     top:-8px;
 
-    min-width:20px;
-    height:20px;
+    min-width:19px;
+    height:19px;
 
     display:grid;
     place-items:center;
 
     border-radius:50%;
 
-    background:linear-gradient(
-        135deg,
-        #00cfff,
-        #783cff
-    );
-
-    border:2px solid #020611;
+    background:linear-gradient(135deg,#00bfff,#7c3cff);
 
     font-size:10px;
+    border:2px solid #030712;
 }
 
-.mobile-menu{
-    display:none;
-    border:0;
-    background:#ffffff08;
-    color:#fff;
-    font-size:23px;
-    padding:8px 11px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-
-/* =========================================================
+/* =========================
    HERO
-========================================================= */
+========================= */
 
 .hero{
     max-width:1400px;
     min-height:100vh;
-
     margin:auto;
 
-    padding:145px 6% 80px;
+    padding:165px 6% 80px;
 
     display:grid;
     grid-template-columns:1.05fr .95fr;
-
     gap:50px;
 
     align-items:center;
@@ -335,7 +316,6 @@ a{
     gap:9px;
 
     padding:9px 14px;
-
     border-radius:30px;
 
     border:1px solid #00cfff38;
@@ -344,32 +324,19 @@ a{
     color:#42dfff;
 
     font-size:10px;
-    font-weight:1000;
+    font-weight:900;
     letter-spacing:2px;
 
-    animation:badgeGlow 2s infinite alternate;
-}
-
-@keyframes badgeGlow{
-    from{
-        box-shadow:0 0 0 #00cfff00;
-    }
-    to{
-        box-shadow:0 0 25px #00cfff20;
-    }
+    margin-bottom:24px;
 }
 
 .badge-dot{
     width:7px;
     height:7px;
-
     border-radius:50%;
-
     background:#00d9ff;
-
     box-shadow:0 0 15px #00d9ff;
-
-    animation:pulse 1.4s infinite;
+    animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
@@ -380,12 +347,9 @@ a{
 }
 
 .hero h1{
-    margin-top:25px;
-
-    font-size:clamp(50px,7vw,92px);
-
-    line-height:.95;
-
+    margin:0;
+    font-size:clamp(52px,7vw,92px);
+    line-height:.94;
     letter-spacing:-5px;
 }
 
@@ -407,13 +371,12 @@ a{
 .hero-description{
     max-width:620px;
 
-    margin:30px 0;
-
     color:#8794a7;
 
     font-size:16px;
-
     line-height:1.8;
+
+    margin:30px 0;
 }
 
 .hero-buttons{
@@ -423,6 +386,11 @@ a{
 }
 
 .btn{
+    border:0;
+    cursor:pointer;
+
+    text-decoration:none;
+
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -432,20 +400,14 @@ a{
 
     border-radius:13px;
 
-    border:0;
-
-    text-decoration:none;
-
-    cursor:pointer;
-
+    font-weight:900;
     font-size:13px;
-    font-weight:1000;
 
     transition:.3s;
 }
 
 .btn-primary{
-    color:#fff;
+    color:white;
 
     background:
         linear-gradient(
@@ -463,29 +425,25 @@ a{
 }
 
 .btn-secondary{
-    color:#fff;
-
-    background:#ffffff06;
-
+    color:white;
     border:1px solid #ffffff12;
+    background:#ffffff06;
 }
 
 .btn-secondary:hover{
-    transform:translateY(-4px);
     border-color:#00cfff55;
+    background:#ffffff0d;
+    transform:translateY(-4px);
 }
 
-
-/* =========================================================
+/* =========================
    HERO LOGO
-========================================================= */
+========================= */
 
 .hero-visual{
     min-height:500px;
-
     display:grid;
     place-items:center;
-
     position:relative;
 }
 
@@ -493,34 +451,30 @@ a{
     width:310px;
     height:310px;
 
+    border-radius:75px;
+
     display:grid;
     place-items:center;
 
     position:relative;
-
-    border-radius:75px;
+    z-index:2;
 
     background:
-        linear-gradient(
-            145deg,
-            #071a31,
-            #080b20
-        );
+        linear-gradient(145deg,#071a31,#090b20);
 
     border:1px solid #20cfff35;
 
     box-shadow:
-        0 0 80px #008cff35,
+        0 0 70px #008cff35,
         inset 0 0 60px #008cff0c;
 
     animation:logoFloat 4s ease-in-out infinite;
 }
 
-.hero-logo::before{
+.hero-logo:before{
     content:"";
 
     position:absolute;
-
     inset:-18px;
 
     border-radius:90px;
@@ -530,11 +484,10 @@ a{
     animation:rotateRing 8s linear infinite;
 }
 
-.hero-logo::after{
+.hero-logo:after{
     content:"";
 
     position:absolute;
-
     inset:-45px;
 
     border-radius:110px;
@@ -568,7 +521,6 @@ a{
 
     font-size:17px;
     font-weight:1000;
-
     letter-spacing:3px;
 }
 
@@ -584,237 +536,59 @@ a{
     }
 }
 
-
-/* =========================================================
-   STATS
-========================================================= */
-
-.stats{
-    max-width:1200px;
-
-    margin:-25px auto 70px;
-
-    padding:0 30px;
-
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-
-    gap:15px;
-}
-
-.stat{
-    padding:25px;
-
-    text-align:center;
-
-    border:1px solid #ffffff0b;
-
-    border-radius:18px;
-
-    background:#07101d;
-
-    transition:.3s;
-}
-
-.stat:hover{
-    transform:translateY(-5px);
-    border-color:#00bfff35;
-}
-
-.stat strong{
-    display:block;
-
-    font-size:30px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #00d9ff,
-            #754cff
-        );
-
-    -webkit-background-clip:text;
-    color:transparent;
-}
-
-.stat span{
-    color:#718095;
-    font-size:11px;
-}
-
-
-/* =========================================================
+/* =========================
    SEKCJE
-========================================================= */
+========================= */
 
 .section{
     max-width:1320px;
-
     margin:auto;
-
     padding:100px 30px;
+}
+
+.section-label{
+    color:#35d8ff;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:3px;
 }
 
 .section-title{
     margin-bottom:42px;
 }
 
-.section-label{
-    color:#35d8ff;
-
-    font-size:10px;
-
-    font-weight:1000;
-
-    letter-spacing:3px;
-}
-
 .section-title h2{
-    margin-top:10px;
-
+    margin:10px 0 0;
     font-size:43px;
-
     letter-spacing:-2px;
 }
 
-
-/* =========================================================
-   PROMOCJA
-========================================================= */
-
-.promo{
-    max-width:1260px;
-
-    margin:30px auto 0;
-
-    padding:25px 30px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:20px;
-
-    border-radius:20px;
-
-    border:1px solid #00cfff25;
-
-    background:
-        linear-gradient(
-            100deg,
-            #071d36,
-            #15103b
-        );
-
-    box-shadow:0 20px 70px #0005;
-}
-
-.promo-left{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
-
-.promo-icon{
-    width:50px;
-    height:50px;
-
-    display:grid;
-    place-items:center;
-
-    border-radius:14px;
-
-    background:linear-gradient(
-        135deg,
-        #008cff,
-        #753cff
-    );
-
-    font-size:23px;
-}
-
-.promo h3{
-    margin-bottom:4px;
-}
-
-.promo p{
-    color:#7d8a9d;
-    font-size:12px;
-}
-
-.promo-code{
-    padding:12px 16px;
-
-    border-radius:11px;
-
-    border:1px dashed #00cfff55;
-
-    background:#00cfff0b;
-
-    color:#42dfff;
-
-    font-weight:1000;
-
-    letter-spacing:2px;
-}
-
-
-/* =========================================================
+/* =========================
    KATEGORIE
-========================================================= */
+========================= */
 
 .categories{
     display:grid;
-
     grid-template-columns:repeat(4,1fr);
-
     gap:18px;
 }
 
 .category{
-    min-height:240px;
-
-    padding:27px;
-
-    position:relative;
-    overflow:hidden;
-
     text-decoration:none;
+    color:white;
+
+    min-height:240px;
+    padding:27px;
 
     border-radius:22px;
 
     border:1px solid #ffffff0c;
 
     background:
-        linear-gradient(
-            145deg,
-            #0a192d,
-            #050b16
-        );
+        linear-gradient(145deg,#0a192d,#050b16);
 
-    transition:.4s;
-}
-
-.category::after{
-    content:"";
-
-    position:absolute;
-
-    width:130px;
-    height:130px;
-
-    right:-60px;
-    bottom:-60px;
-
-    border-radius:50%;
-
-    background:#008cff;
-
-    filter:blur(55px);
-
-    opacity:.18;
+    position:relative;
+    overflow:hidden;
 
     transition:.4s;
 }
@@ -827,15 +601,9 @@ a{
     box-shadow:0 25px 70px #0009;
 }
 
-.category:hover::after{
-    transform:scale(1.5);
-}
-
 .category-icon{
     font-size:48px;
-
     margin-bottom:30px;
-
     transition:.4s;
 }
 
@@ -844,81 +612,24 @@ a{
 }
 
 .category h3{
-    margin-bottom:9px;
-
+    margin:0 0 9px;
     font-size:19px;
 }
 
 .category p{
+    margin:0;
     color:#738095;
-
     line-height:1.6;
-
     font-size:13px;
 }
 
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.shop-tools{
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:15px;
-
-    margin-bottom:25px;
-}
-
-.search{
-    width:100%;
-    max-width:400px;
-
-    position:relative;
-}
-
-.search input{
-    width:100%;
-
-    padding:14px 18px;
-
-    border-radius:13px;
-
-    border:1px solid #ffffff12;
-
-    background:#07101d;
-
-    color:#fff;
-
-    outline:none;
-
-    transition:.25s;
-}
-
-.search input:focus{
-    border-color:#008cff66;
-
-    box-shadow:0 0 30px #008cff15;
-}
-
-.search input::placeholder{
-    color:#5f6d81;
-}
-
-
-/* =========================================================
+/* =========================
    PRODUKTY
-========================================================= */
+========================= */
 
 .products{
     display:grid;
-
     grid-template-columns:repeat(4,1fr);
-
     gap:18px;
 }
 
@@ -949,8 +660,6 @@ a{
     display:grid;
     place-items:center;
 
-    position:relative;
-
     background:
         radial-gradient(
             circle,
@@ -973,76 +682,38 @@ a{
     transform:scale(1.12) rotate(-4deg);
 }
 
-.sale{
-    position:absolute;
-
-    top:13px;
-    left:13px;
-
-    padding:6px 9px;
-
-    border-radius:8px;
-
-    background:linear-gradient(
-        100deg,
-        #ff3d7f,
-        #ff7a18
-    );
-
-    font-size:9px;
-    font-weight:1000;
-
-    box-shadow:0 5px 20px #ff3d7f33;
-}
-
 .product-body{
     padding:20px;
 }
 
 .product-category{
     color:#39d9ff;
-
     font-size:9px;
-
     font-weight:1000;
-
     letter-spacing:2px;
 }
 
 .product-body h3{
     margin:7px 0;
-
     font-size:17px;
 }
 
 .product-body p{
-    margin-bottom:16px;
-
+    margin:0 0 16px;
     color:#69778b;
-
     font-size:12px;
-
     line-height:1.6;
 }
 
 .product-meta{
     display:flex;
-
-    align-items:center;
-
     justify-content:space-between;
+    align-items:center;
 }
 
 .price{
     font-size:18px;
     font-weight:1000;
-}
-
-.old-price{
-    color:#657184;
-    text-decoration:line-through;
-    font-size:12px;
-    margin-left:5px;
 }
 
 .time{
@@ -1052,9 +723,7 @@ a{
 
 .product-actions{
     display:flex;
-
     gap:8px;
-
     margin-top:15px;
 }
 
@@ -1062,33 +731,30 @@ a{
 .product-actions a{
     flex:1;
 
-    padding:10px;
+    border:0;
 
     border-radius:10px;
 
-    text-align:center;
+    padding:10px;
 
+    text-align:center;
     text-decoration:none;
 
     cursor:pointer;
 
+    font-weight:900;
     font-size:11px;
-
-    font-weight:1000;
 }
 
 .details{
     background:#ffffff08;
+    color:white;
 
-    color:#fff;
-
-    border:1px solid #ffffff10;
+    border:1px solid #ffffff10 !important;
 }
 
 .add-cart{
-    color:#fff;
-
-    border:0;
+    color:white;
 
     background:
         linear-gradient(
@@ -1096,28 +762,21 @@ a{
             #008cff,
             #744cff
         );
-
-    transition:.25s;
 }
 
-.add-cart:hover{
-    transform:scale(1.03);
-}
+/* =========================
+   WŁASNY MODEL 3D
+========================= */
 
-
-/* =========================================================
-   CUSTOM
-========================================================= */
-
-.custom{
-    padding:65px;
-
+.custom-model{
     position:relative;
     overflow:hidden;
 
+    padding:55px;
+
     border-radius:30px;
 
-    border:1px solid #00bfff22;
+    border:1px solid #00bfff25;
 
     background:
         linear-gradient(
@@ -1126,10 +785,11 @@ a{
             #11103a
         );
 
-    box-shadow:0 25px 80px #0005;
+    box-shadow:
+        0 30px 100px #0008;
 }
 
-.custom::before{
+.custom-model:before{
     content:"";
 
     position:absolute;
@@ -1138,43 +798,70 @@ a{
     height:300px;
 
     right:-100px;
-    top:-120px;
+    top:-100px;
 
     border-radius:50%;
 
-    background:#008cff;
+    background:#008cff25;
 
-    filter:blur(90px);
-
-    opacity:.18;
+    filter:blur(70px);
 }
 
-.custom h2{
+.custom-model-content{
+    position:relative;
+    z-index:2;
+}
+
+.custom-model h2{
+    font-size:44px;
     margin:10px 0 15px;
-
-    font-size:42px;
 }
 
-.custom p{
-    max-width:650px;
-
-    margin-bottom:27px;
+.custom-model p{
+    max-width:700px;
 
     color:#8290a4;
 
     line-height:1.8;
+
+    margin-bottom:27px;
 }
 
+.model-features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
 
-/* =========================================================
+    margin:30px 0;
+}
+
+.model-feature{
+    padding:16px;
+
+    border-radius:15px;
+
+    background:#ffffff06;
+
+    border:1px solid #ffffff0b;
+}
+
+.model-feature b{
+    display:block;
+    margin-bottom:5px;
+}
+
+.model-feature span{
+    color:#748297;
+    font-size:11px;
+}
+
+/* =========================
    STEPS
-========================================================= */
+========================= */
 
 .steps{
     display:grid;
-
     grid-template-columns:repeat(4,1fr);
-
     gap:18px;
 }
 
@@ -1192,7 +879,6 @@ a{
 
 .step:hover{
     transform:translateY(-7px);
-
     border-color:#00bfff40;
 }
 
@@ -1202,8 +888,6 @@ a{
 
     display:grid;
     place-items:center;
-
-    margin-bottom:20px;
 
     border-radius:12px;
 
@@ -1215,30 +899,30 @@ a{
         );
 
     font-weight:1000;
+
+    margin-bottom:20px;
 }
 
 .step h3{
-    margin-bottom:9px;
+    margin:0 0 9px;
 }
 
 .step p{
+    margin:0;
+
     color:#758398;
 
     font-size:13px;
-
     line-height:1.7;
 }
 
-
-/* =========================================================
-   OPINIE
-========================================================= */
+/* =========================
+   REVIEWS
+========================= */
 
 .reviews{
     display:grid;
-
     grid-template-columns:repeat(3,1fr);
-
     gap:18px;
 }
 
@@ -1261,34 +945,27 @@ a{
 
 .review:hover{
     transform:translateY(-6px);
-
     border-color:#00bfff35;
 }
 
 .stars{
     color:#ffd34d;
-
     letter-spacing:2px;
-
     margin-bottom:17px;
 }
 
 .review p{
     color:#9aa6b7;
-
     line-height:1.7;
-
     font-size:13px;
 }
 
 .review-user{
-    display:flex;
-
-    align-items:center;
-
-    gap:11px;
-
     margin-top:18px;
+
+    display:flex;
+    align-items:center;
+    gap:11px;
 }
 
 .avatar{
@@ -1314,174 +991,27 @@ a{
     color:#69778b;
 }
 
-
-/* =========================================================
-   FAQ
-========================================================= */
-
-.faq{
-    max-width:900px;
-    margin:auto;
-}
-
-.faq-item{
-    margin-bottom:10px;
-
-    border:1px solid #ffffff0c;
-
-    border-radius:15px;
-
-    background:#07101d;
-
-    overflow:hidden;
-}
-
-.faq-question{
-    width:100%;
-
-    padding:20px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    border:0;
-
-    background:none;
-
-    color:#fff;
-
-    cursor:pointer;
-
-    font-weight:900;
-
-    text-align:left;
-}
-
-.faq-question span{
-    color:#35d8ff;
-    font-size:20px;
-}
-
-.faq-answer{
-    max-height:0;
-
-    overflow:hidden;
-
-    transition:.35s;
-}
-
-.faq-answer p{
-    padding:0 20px 20px;
-
-    color:#78869a;
-
-    font-size:13px;
-
-    line-height:1.7;
-}
-
-.faq-item.open .faq-answer{
-    max-height:200px;
-}
-
-
-/* =========================================================
-   NEWSLETTER
-========================================================= */
-
-.newsletter{
-    text-align:center;
-
-    padding:80px 30px;
-}
-
-.newsletter-box{
-    max-width:850px;
-
-    margin:auto;
-
-    padding:55px 30px;
-
-    border-radius:28px;
-
-    border:1px solid #00bfff20;
-
-    background:
-        linear-gradient(
-            120deg,
-            #071b32,
-            #120d30
-        );
-}
-
-.newsletter h2{
-    font-size:38px;
-
-    margin-bottom:12px;
-}
-
-.newsletter p{
-    color:#7d8a9d;
-
-    margin-bottom:25px;
-}
-
-.newsletter-form{
-    display:flex;
-
-    max-width:550px;
-
-    margin:auto;
-
-    gap:8px;
-}
-
-.newsletter-form input{
-    flex:1;
-
-    padding:14px 16px;
-
-    border-radius:12px;
-
-    border:1px solid #ffffff12;
-
-    background:#ffffff07;
-
-    color:#fff;
-
-    outline:none;
-}
-
-
-/* =========================================================
+/* =========================
    FOOTER
-========================================================= */
+========================= */
 
 footer{
-    padding:50px 6%;
+    padding:45px 6%;
+
+    border-top:1px solid #ffffff09;
 
     display:flex;
-
-    align-items:center;
-
     justify-content:space-between;
-
-    gap:20px;
+    align-items:center;
 
     color:#647186;
 
     font-size:12px;
-
-    border-top:1px solid #ffffff09;
 }
 
-
-/* =========================================================
-   TOAST
-========================================================= */
+/* =========================
+   NOTIFICATION
+========================= */
 
 .toast{
     position:fixed;
@@ -1489,9 +1019,9 @@ footer{
     right:25px;
     bottom:25px;
 
-    z-index:9999;
+    z-index:99999;
 
-    padding:16px 20px;
+    padding:15px 20px;
 
     border-radius:14px;
 
@@ -1502,9 +1032,9 @@ footer{
             #754cff
         );
 
-    color:#fff;
+    color:white;
 
-    font-weight:1000;
+    font-weight:900;
 
     box-shadow:0 15px 50px #0009;
 
@@ -1514,48 +1044,22 @@ footer{
 @keyframes toastIn{
     from{
         opacity:0;
-        transform:translateY(20px) scale(.95);
+        transform:translateY(20px);
     }
     to{
         opacity:1;
-        transform:translateY(0) scale(1);
+        transform:translateY(0);
     }
 }
 
-
-/* =========================================================
-   SCROLL REVEAL
-========================================================= */
-
-.reveal{
-    opacity:0;
-
-    transform:translateY(35px);
-
-    transition:
-        opacity .7s ease,
-        transform .7s ease;
-}
-
-.reveal.visible{
-    opacity:1;
-
-    transform:translateY(0);
-}
-
-
-/* =========================================================
+/* =========================
    MOBILE
-========================================================= */
+========================= */
 
-@media(max-width:1100px){
+@media(max-width:1050px){
 
     .nav-links{
         display:none;
-    }
-
-    .mobile-menu{
-        display:block;
     }
 
     .hero{
@@ -1578,12 +1082,21 @@ footer{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .stats{
-        grid-template-columns:repeat(2,1fr);
+    .hero-visual{
+        min-height:420px;
     }
 }
 
 @media(max-width:700px){
+
+    .promo-bar{
+        font-size:9px;
+        gap:6px;
+    }
+
+    .promo-bar span{
+        display:none;
+    }
 
     .navbar{
         padding:0 18px;
@@ -1594,30 +1107,21 @@ footer{
     }
 
     .hero{
-        padding:125px 20px 70px;
+        padding:140px 20px 70px;
     }
 
     .hero h1{
-        font-size:50px;
+        font-size:52px;
         letter-spacing:-3px;
     }
 
-    .hero-visual{
-        min-height:370px;
-    }
-
     .hero-logo{
-        width:240px;
-        height:240px;
+        width:250px;
+        height:250px;
     }
 
     .logo-symbol{
-        font-size:85px;
-    }
-
-    .logo-small{
-        font-size:13px;
-        bottom:32px;
+        font-size:90px;
     }
 
     .section{
@@ -1632,74 +1136,75 @@ footer{
     .products,
     .steps,
     .reviews,
-    .stats{
+    .model-features{
         grid-template-columns:1fr;
     }
 
-    .promo{
-        margin:20px;
-        flex-direction:column;
-        align-items:flex-start;
+    .custom-model{
+        padding:35px 25px;
     }
 
-    .shop-tools{
-        flex-direction:column;
-        align-items:stretch;
-    }
-
-    .search{
-        max-width:none;
-    }
-
-    .custom{
-        padding:40px 25px;
-    }
-
-    .custom h2{
+    .custom-model h2{
         font-size:32px;
-    }
-
-    .newsletter h2{
-        font-size:30px;
-    }
-
-    .newsletter-form{
-        flex-direction:column;
     }
 
     footer{
         flex-direction:column;
+        gap:15px;
         text-align:center;
     }
 }
-
 </style>
 </head>
 
-
 <body>
 
+<!-- =========================
+     PROMO BAR
+========================= -->
 
-<!-- =====================================================
-     TŁO
-===================================================== -->
+<div class="promo-bar">
+
+    🎁
+
+    <span>
+        Kod rabatowy:
+    </span>
+
+    <strong class="promo-code">
+        START10
+    </strong>
+
+    <span>
+        → 10% RABATU NA PIERWSZE ZAMÓWIENIE
+    </span>
+
+    <button
+        class="promo-copy"
+        onclick="copyPromoCode()"
+    >
+        KOPIUJ KOD
+    </button>
+
+</div>
+
+
+<!-- TŁO -->
 
 <div class="bg">
-
-    <div class="orb orb1"></div>
-    <div class="orb orb2"></div>
-    <div class="orb orb3"></div>
-
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
 </div>
 
 <div class="grid"></div>
 
 
-<!-- =====================================================
+<!-- =========================
      NAVBAR
-===================================================== -->
+========================= -->
 
-<header class="navbar" id="navbar">
+<header class="navbar">
 
     <a href="index.html" class="brand">
 
@@ -1713,18 +1218,33 @@ footer{
 
     </a>
 
-
     <nav class="nav-links">
 
-        <a href="#produkty">Produkty</a>
-        <a href="#breloki">Breloki</a>
-        <a href="#dodatki">Dodatki</a>
-        <a href="#figurki">Figurki</a>
-        <a href="#custom">Custom</a>
-        <a href="#faq">FAQ</a>
+        <a href="index.html">
+            Strona główna
+        </a>
+
+        <a href="#produkty">
+            Produkty
+        </a>
+
+        <a href="#breloki">
+            Breloki
+        </a>
+
+        <a href="#dodatki">
+            Dodatki
+        </a>
+
+        <a href="#figurki">
+            Figurki
+        </a>
+
+        <a href="#wlasny-model">
+            Własny model
+        </a>
 
     </nav>
-
 
     <div class="nav-right">
 
@@ -1734,37 +1254,28 @@ footer{
 
         <a href="koszyk.html" class="nav-btn cart">
             🛒 Koszyk
-
             <span
                 class="cart-count"
                 id="cartCount"
             >
                 0
             </span>
-
         </a>
-
-        <button
-            class="mobile-menu"
-            onclick="mobileMenu()"
-        >
-            ☰
-        </button>
 
     </div>
 
 </header>
 
 
-<!-- =====================================================
+<!-- =========================
      HERO
-===================================================== -->
+========================= -->
 
 <main>
 
 <section class="hero">
 
-    <div class="reveal">
+    <div>
 
         <div class="badge">
 
@@ -1773,7 +1284,6 @@ footer{
             DRUKUJEMY TWOJE POMYSŁY
 
         </div>
-
 
         <h1>
 
@@ -1787,15 +1297,13 @@ footer{
 
         </h1>
 
-
         <p class="hero-description">
 
             Breloki, figurki, dodatki gamingowe,
-            dekoracje i projekty wykonywane
-            specjalnie dla Ciebie.
+            dekoracje oraz własne projekty
+            wykonywane specjalnie dla Ciebie.
 
         </p>
-
 
         <div class="hero-buttons">
 
@@ -1806,12 +1314,11 @@ footer{
                 🛍️ Zobacz produkty
             </a>
 
-
             <a
-                href="#custom"
+                href="#wlasny-model"
                 class="btn btn-secondary"
             >
-                🖨️ Zamów własny projekt
+                🖨️ Własny model 3D
             </a>
 
         </div>
@@ -1819,7 +1326,7 @@ footer{
     </div>
 
 
-    <div class="hero-visual reveal">
+    <div class="hero-visual">
 
         <div class="hero-logo">
 
@@ -1838,110 +1345,16 @@ footer{
 </section>
 
 
-<!-- =====================================================
-     STATYSTYKI
-===================================================== -->
-
-<section class="stats">
-
-    <div class="stat reveal">
-
-        <strong>
-            100+
-        </strong>
-
-        <span>
-            wykonanych wydruków
-        </span>
-
-    </div>
-
-
-    <div class="stat reveal">
-
-        <strong>
-            4.9★
-        </strong>
-
-        <span>
-            średnia ocena
-        </span>
-
-    </div>
-
-
-    <div class="stat reveal">
-
-        <strong>
-            3D
-        </strong>
-
-        <span>
-            drukujemy z pasją
-        </span>
-
-    </div>
-
-
-    <div class="stat reveal">
-
-        <strong>
-            100%
-        </strong>
-
-        <span>
-            personalizacji
-        </span>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     PROMOCJA
-===================================================== -->
-
-<section class="promo reveal">
-
-    <div class="promo-left">
-
-        <div class="promo-icon">
-            🎁
-        </div>
-
-        <div>
-
-            <h3>
-                -10% na pierwsze zamówienie
-            </h3>
-
-            <p>
-                Użyj kodu przy zakupie.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="promo-code">
-        START10
-    </div>
-
-</section>
-
-
-<!-- =====================================================
+<!-- =========================
      KATEGORIE
-===================================================== -->
+========================= -->
 
 <section
     class="section"
     id="produkty"
 >
 
-    <div class="section-title reveal">
+    <div class="section-title">
 
         <span class="section-label">
             SKLEP
@@ -1953,12 +1366,11 @@ footer{
 
     </div>
 
-
     <div class="categories">
 
         <a
             href="#breloki"
-            class="category reveal"
+            class="category"
         >
 
             <div class="category-icon">
@@ -1980,7 +1392,7 @@ footer{
 
         <a
             href="#dodatki"
-            class="category reveal"
+            class="category"
         >
 
             <div class="category-icon">
@@ -2002,7 +1414,7 @@ footer{
 
         <a
             href="#figurki"
-            class="category reveal"
+            class="category"
         >
 
             <div class="category-icon">
@@ -2022,22 +1434,22 @@ footer{
 
 
         <a
-            href="#custom"
-            class="category reveal"
+            href="#wlasny-model"
+            class="category"
         >
 
             <div class="category-icon">
-                ✨
+                🖨️
             </div>
 
             <h3>
-                Custom
+                Własny model
             </h3>
 
             <p>
-                Własne projekty,
-                napisy, loga
-                i nietypowe pomysły.
+                Masz własny model STL?
+                Podeślij go i wydrukujemy
+                go dla Ciebie.
             </p>
 
         </a>
@@ -2047,65 +1459,35 @@ footer{
 </section>
 
 
-<!-- =====================================================
-     PRODUKTY
-===================================================== -->
+<!-- =========================
+     BRELOKI
+========================= -->
 
 <section
     class="section"
     id="breloki"
 >
 
-    <div class="section-title reveal">
+    <div class="section-title">
 
         <span class="section-label">
-            PRODUKTY
+            BRELOKI
         </span>
 
         <h2>
-            Najpopularniejsze
+            Najlepsze breloki
         </h2>
 
     </div>
 
 
-    <div class="shop-tools">
+    <div class="products">
 
-        <div class="search">
-
-            <input
-                id="productSearch"
-                type="text"
-                placeholder="🔎 Szukaj produktu..."
-                oninput="searchProducts()"
-            >
-
-        </div>
-
-    </div>
-
-
-    <div
-        class="products"
-        id="productGrid"
-    >
-
-
-        <!-- FRIENDZ -->
-
-        <article
-            class="product reveal"
-            data-name="friendz brelok"
-        >
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    🔑
-                </span>
-
+                <span>🔑</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2122,7 +1504,6 @@ footer{
                     z napisem FRIENDZ.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2135,7 +1516,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2147,11 +1527,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'friendz',
-                            'Brelok FRIENDZ',
-                            12
-                        )"
+                        onclick="addProduct('friendz','Brelok FRIENDZ',12)"
                     >
                         + Koszyk
                     </button>
@@ -2163,21 +1539,11 @@ footer{
         </article>
 
 
-        <!-- NEON -->
-
-        <article
-            class="product reveal"
-            data-name="neon logo brelok"
-        >
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    ⚡
-                </span>
-
+                <span>⚡</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2194,7 +1560,6 @@ footer{
                     symbolem Printerlase3D.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2207,7 +1572,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2219,11 +1583,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'neon',
-                            'Neon Logo',
-                            14
-                        )"
+                        onclick="addProduct('neon','Neon Logo',14)"
                     >
                         + Koszyk
                     </button>
@@ -2235,25 +1595,11 @@ footer{
         </article>
 
 
-        <!-- CREEPER -->
-
-        <article
-            class="product reveal"
-            data-name="creeper minecraft brelok"
-        >
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    👾
-                </span>
-
-                <div class="sale">
-                    HIT
-                </div>
-
+                <span>👾</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2270,7 +1616,6 @@ footer{
                     do plecaka lub kluczy.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2283,7 +1628,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2295,11 +1639,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'creeper',
-                            'Brelok Creeper',
-                            10
-                        )"
+                        onclick="addProduct('creeper','Brelok Creeper',10)"
                     >
                         + Koszyk
                     </button>
@@ -2311,21 +1651,11 @@ footer{
         </article>
 
 
-        <!-- CUSTOM -->
-
-        <article
-            class="product reveal"
-            data-name="custom napis brelok"
-        >
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    ⭐
-                </span>
-
+                <span>★</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2342,7 +1672,6 @@ footer{
                     nazwa lub pseudonim.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2355,7 +1684,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2367,11 +1695,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'custom',
-                            'Brelok Custom',
-                            12
-                        )"
+                        onclick="addProduct('custom','Brelok Custom',12)"
                     >
                         + Koszyk
                     </button>
@@ -2382,23 +1706,40 @@ footer{
 
         </article>
 
+    </div>
 
-        <!-- PAD -->
+</section>
 
-        <article
-            class="product reveal"
-            id="dodatki"
-            data-name="uchwyt pad gaming"
-        >
+
+<!-- =========================
+     DODATKI
+========================= -->
+
+<section
+    class="section"
+    id="dodatki"
+>
+
+    <div class="section-title">
+
+        <span class="section-label">
+            DODATKI
+        </span>
+
+        <h2>
+            Gadżety 3D
+        </h2>
+
+    </div>
+
+
+    <div class="products">
+
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    🎮
-                </span>
-
+                <span>🎮</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2415,7 +1756,6 @@ footer{
                     gamingowy.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2428,7 +1768,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2440,11 +1779,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'pad',
-                            'Uchwyt na pada',
-                            25
-                        )"
+                        onclick="addProduct('pad','Uchwyt na pada',25)"
                     >
                         + Koszyk
                     </button>
@@ -2456,21 +1791,11 @@ footer{
         </article>
 
 
-        <!-- TELEFON -->
-
-        <article
-            class="product reveal"
-            data-name="stojak telefon"
-        >
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    📱
-                </span>
-
+                <span>📱</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2487,7 +1812,6 @@ footer{
                     wykonany z PLA.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2500,7 +1824,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2512,11 +1835,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'telefon',
-                            'Stojak na telefon',
-                            18
-                        )"
+                        onclick="addProduct('telefon','Stojak na telefon',18)"
                     >
                         + Koszyk
                     </button>
@@ -2528,21 +1847,11 @@ footer{
         </article>
 
 
-        <!-- ORGANIZER -->
-
-        <article
-            class="product reveal"
-            data-name="organizer biurkowy kable"
-        >
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    🧩
-                </span>
-
+                <span>🧩</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2559,7 +1868,6 @@ footer{
                     i małe rzeczy.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2572,7 +1880,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2584,11 +1891,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'organizer',
-                            'Organizer biurkowy',
-                            22
-                        )"
+                        onclick="addProduct('organizer','Organizer biurkowy',22)"
                     >
                         + Koszyk
                     </button>
@@ -2600,22 +1903,95 @@ footer{
         </article>
 
 
-        <!-- ROBOT -->
-
-        <article
-            class="product reveal"
-            id="figurki"
-            data-name="robot figurka 3d"
-        >
+        <article class="product">
 
             <div class="product-image">
+                <span>🔧</span>
+            </div>
 
-                <span>
-                    🤖
-                </span>
+            <div class="product-body">
+
+                <div class="product-category">
+                    PRAKTYCZNE
+                </div>
+
+                <h3>
+                    Uchwyt Custom
+                </h3>
+
+                <p>
+                    Uchwyt dopasowany
+                    do Twojego projektu.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        od 20 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 2–4 h
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=uchwyt"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('uchwyt','Uchwyt Custom',20)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
 
             </div>
 
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FIGURKI
+========================= -->
+
+<section
+    class="section"
+    id="figurki"
+>
+
+    <div class="section-title">
+
+        <span class="section-label">
+            FIGURKI
+        </span>
+
+        <h2>
+            Modele 3D
+        </h2>
+
+    </div>
+
+
+    <div class="products">
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>🤖</span>
+            </div>
 
             <div class="product-body">
 
@@ -2631,7 +2007,6 @@ footer{
                     Mała figurka dekoracyjna.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2644,7 +2019,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2656,11 +2030,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'robot',
-                            'Robot Mini',
-                            25
-                        )"
+                        onclick="addProduct('robot','Robot Mini',25)"
                     >
                         + Koszyk
                     </button>
@@ -2672,25 +2042,11 @@ footer{
         </article>
 
 
-        <!-- SMOK -->
-
-        <article
-            class="product reveal"
-            data-name="smok figurka 3d"
-        >
+        <article class="product">
 
             <div class="product-image">
-
-                <span>
-                    🐉
-                </span>
-
-                <div class="sale">
-                    NOWOŚĆ
-                </div>
-
+                <span>🐉</span>
             </div>
-
 
             <div class="product-body">
 
@@ -2706,7 +2062,6 @@ footer{
                     Ozdobna figurka smoka.
                 </p>
 
-
                 <div class="product-meta">
 
                     <span class="price">
@@ -2719,7 +2074,6 @@ footer{
 
                 </div>
 
-
                 <div class="product-actions">
 
                     <a
@@ -2731,11 +2085,7 @@ footer{
 
                     <button
                         class="add-cart"
-                        onclick="addProduct(
-                            'smok',
-                            'Smok 3D',
-                            35
-                        )"
+                        onclick="addProduct('smok','Smok 3D',35)"
                     >
                         + Koszyk
                     </button>
@@ -2751,58 +2101,84 @@ footer{
 </section>
 
 
-<!-- =====================================================
-     CUSTOM
-===================================================== -->
+<!-- =========================
+     WŁASNY MODEL
+========================= -->
 
 <section
     class="section"
-    id="custom"
+    id="wlasny-model"
 >
 
-    <div class="custom reveal">
+    <div class="custom-model">
 
-        <span class="section-label">
-            CUSTOM 3D
-        </span>
+        <div class="custom-model-content">
 
-        <h2>
-            Masz własny pomysł?
-        </h2>
+            <span class="section-label">
+                CUSTOM 3D
+            </span>
 
-        <p>
+            <h2>
+                Masz własny model?
+            </h2>
 
-            Możemy przygotować dla Ciebie
-            własny napis, logo, figurkę,
-            uchwyt albo praktyczny element.
-
-            Podeślij model lub opisz swój pomysł.
-
-        </p>
+            <p>
+                Masz plik STL, 3MF albo pomysł na
+                własny wydruk? Podeślij model,
+                a przygotujemy go do druku 3D.
+            </p>
 
 
-        <a
-            href="checkout.html"
-            class="btn btn-primary"
-        >
-            🖨️ Zamów własny projekt
-        </a>
+            <div class="model-features">
+
+                <div class="model-feature">
+                    <b>📁 STL / 3MF</b>
+                    <span>
+                        Możesz przesłać swój model.
+                    </span>
+                </div>
+
+                <div class="model-feature">
+                    <b>🎨 Kolor</b>
+                    <span>
+                        Wybierz dostępny kolor filamentu.
+                    </span>
+                </div>
+
+                <div class="model-feature">
+                    <b>🖨️ Druk 3D</b>
+                    <span>
+                        Przygotujemy model do wydruku.
+                    </span>
+                </div>
+
+            </div>
+
+
+            <a
+                href="wlasny-model.html"
+                class="btn btn-primary"
+            >
+                🖨️ Zamów własny model
+            </a>
+
+        </div>
 
     </div>
 
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      JAK TO DZIAŁA
-===================================================== -->
+========================= -->
 
 <section
     class="section"
     id="jak-dziala"
 >
 
-    <div class="section-title reveal">
+    <div class="section-title">
 
         <span class="section-label">
             PROCES
@@ -2817,61 +2193,61 @@ footer{
 
     <div class="steps">
 
-        <div class="step reveal">
+        <div class="step">
 
             <div class="step-number">
                 1
             </div>
 
             <h3>
-                Wybierasz
+                Wybierasz produkt
             </h3>
 
             <p>
-                Wybierz produkt,
-                który Cię interesuje.
+                Wybierz interesujący Cię
+                model z naszej oferty.
             </p>
 
         </div>
 
 
-        <div class="step reveal">
+        <div class="step">
 
             <div class="step-number">
                 2
             </div>
 
             <h3>
-                Dodajesz
+                Dodajesz do koszyka
             </h3>
 
             <p>
-                Dodaj produkt
-                do koszyka.
+                Dodaj produkt i przejdź
+                do podsumowania.
             </p>
 
         </div>
 
 
-        <div class="step reveal">
+        <div class="step">
 
             <div class="step-number">
                 3
             </div>
 
             <h3>
-                Zamawiasz
+                Używasz kodu START10
             </h3>
 
             <p>
-                Uzupełnij dane
-                i wybierz płatność.
+                Przy pierwszym zamówieniu
+                możesz wykorzystać 10% rabatu.
             </p>
 
         </div>
 
 
-        <div class="step reveal">
+        <div class="step">
 
             <div class="step-number">
                 4
@@ -2882,8 +2258,8 @@ footer{
             </h3>
 
             <p>
-                Przygotowujemy
-                Twój wydruk.
+                Przygotowujemy Twój wydruk
+                i realizujemy zamówienie.
             </p>
 
         </div>
@@ -2893,13 +2269,13 @@ footer{
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      OPINIE
-===================================================== -->
+========================= -->
 
 <section class="section">
 
-    <div class="section-title reveal">
+    <div class="section-title">
 
         <span class="section-label">
             OPINIE
@@ -2914,7 +2290,7 @@ footer{
 
     <div class="reviews">
 
-        <div class="review reveal">
+        <div class="review">
 
             <div class="stars">
                 ★★★★★
@@ -2923,7 +2299,7 @@ footer{
             <p>
                 „Brelok wyszedł mega dobrze,
                 napis jest wyraźny i wygląda
-                dużo lepiej niż się spodziewałem.”
+                naprawdę super.”
             </p>
 
             <div class="review-user">
@@ -2933,8 +2309,7 @@ footer{
                 </div>
 
                 <div>
-                    <b>Kacper</b>
-                    <br>
+                    <b>Kacper</b><br>
                     <small>
                         Zweryfikowany zakup
                     </small>
@@ -2945,7 +2320,7 @@ footer{
         </div>
 
 
-        <div class="review reveal">
+        <div class="review">
 
             <div class="stars">
                 ★★★★★
@@ -2953,8 +2328,7 @@ footer{
 
             <p>
                 „Bardzo fajna jakość wydruku.
-                Kolor dokładnie taki jak chciałem.
-                Na pewno zamówię jeszcze raz.”
+                Kolor dokładnie taki jak chciałem.”
             </p>
 
             <div class="review-user">
@@ -2964,8 +2338,7 @@ footer{
                 </div>
 
                 <div>
-                    <b>Michał</b>
-                    <br>
+                    <b>Michał</b><br>
                     <small>
                         Zweryfikowany zakup
                     </small>
@@ -2976,7 +2349,7 @@ footer{
         </div>
 
 
-        <div class="review reveal">
+        <div class="review">
 
             <div class="stars">
                 ★★★★★
@@ -2984,8 +2357,7 @@ footer{
 
             <p>
                 „Zamówiłem własny projekt.
-                Wszystko wyglądało super,
-                a produkt jest bardzo solidny.”
+                Wszystko wyglądało super.”
             </p>
 
             <div class="review-user">
@@ -2995,8 +2367,7 @@ footer{
                 </div>
 
                 <div>
-                    <b>Olek</b>
-                    <br>
+                    <b>Olek</b><br>
                     <small>
                         Zweryfikowany zakup
                     </small>
@@ -3010,198 +2381,12 @@ footer{
 
 </section>
 
-
-<!-- =====================================================
-     FAQ
-===================================================== -->
-
-<section
-    class="section"
-    id="faq"
->
-
-    <div class="section-title reveal">
-
-        <span class="section-label">
-            FAQ
-        </span>
-
-        <h2>
-            Najczęstsze pytania
-        </h2>
-
-    </div>
-
-
-    <div class="faq">
-
-
-        <div class="faq-item reveal">
-
-            <button
-                class="faq-question"
-                onclick="toggleFAQ(this)"
-            >
-
-                Ile trwa wydruk?
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                <p>
-                    Czas zależy od modelu.
-                    Małe breloki mogą być gotowe
-                    nawet w około 30–60 minut.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="faq-item reveal">
-
-            <button
-                class="faq-question"
-                onclick="toggleFAQ(this)"
-            >
-
-                Czy mogę zamówić własny projekt?
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                <p>
-                    Tak. Możesz wysłać model 3D
-                    albo opisać swój pomysł,
-                    a my przygotujemy wycenę.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="faq-item reveal">
-
-            <button
-                class="faq-question"
-                onclick="toggleFAQ(this)"
-            >
-
-                Jaki jest kod rabatowy?
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                <p>
-                    Na pierwsze zamówienie możesz
-                    użyć kodu START10,
-                    który daje 10% rabatu.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="faq-item reveal">
-
-            <button
-                class="faq-question"
-                onclick="toggleFAQ(this)"
-            >
-
-                Z czego drukujecie?
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                <p>
-                    Standardowe produkty mogą być
-                    drukowane z PLA. Materiał możemy
-                    dobrać również do konkretnego projektu.
-                </p>
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     NEWSLETTER
-===================================================== -->
-
-<section class="newsletter">
-
-    <div class="newsletter-box reveal">
-
-        <h2>
-            🔥 Nie przegap promocji
-        </h2>
-
-        <p>
-            Zapisz się i otrzymuj informacje
-            o nowych wydrukach.
-        </p>
-
-
-        <form
-            class="newsletter-form"
-            onsubmit="subscribe(event)"
-        >
-
-            <input
-                id="email"
-                type="email"
-                placeholder="Twój e-mail"
-                required
-            >
-
-            <button
-                class="btn btn-primary"
-                type="submit"
-            >
-                Zapisz mnie
-            </button>
-
-        </form>
-
-    </div>
-
-</section>
-
 </main>
 
 
-<!-- =====================================================
+<!-- =========================
      FOOTER
-===================================================== -->
+========================= -->
 
 <footer>
 
@@ -3217,11 +2402,9 @@ footer{
 
     </div>
 
-
     <div>
         © 2026 Printerlase3D
     </div>
-
 
     <div>
         Wydruki 3D • Polska
@@ -3232,9 +2415,9 @@ footer{
 
 <script>
 
-/* =========================================================
+/* =====================================
    KOSZYK
-========================================================= */
+===================================== */
 
 function getCart(){
 
@@ -3246,7 +2429,7 @@ function getCart(){
             )
         ) || [];
 
-    }catch{
+    }catch(error){
 
         return [];
 
@@ -3270,10 +2453,8 @@ function updateCartCount(){
     const cart = getCart();
 
     const count = cart.reduce(
-        (sum,item)=>{
-            return sum +
-            (Number(item.quantity)||1);
-        },
+        (sum,item) =>
+            sum + Number(item.quantity || 1),
         0
     );
 
@@ -3281,9 +2462,7 @@ function updateCartCount(){
         document.getElementById("cartCount");
 
     if(element){
-
-        element.textContent=count;
-
+        element.textContent = count;
     }
 
 }
@@ -3291,18 +2470,15 @@ function updateCartCount(){
 
 function addProduct(id,name,price){
 
-    const cart=getCart();
+    const cart = getCart();
 
     const existing =
-        cart.find(
-            item=>item.id===id
-        );
-
+        cart.find(item => item.id === id);
 
     if(existing){
 
         existing.quantity =
-            (existing.quantity||1)+1;
+            Number(existing.quantity || 1) + 1;
 
     }else{
 
@@ -3320,21 +2496,20 @@ function addProduct(id,name,price){
 
     }
 
-
     saveCart(cart);
 
     updateCartCount();
 
     showToast(
-        "✓ Dodano do koszyka"
+        "✓ Produkt dodany do koszyka"
     );
 
 }
 
 
-/* =========================================================
+/* =====================================
    TOAST
-========================================================= */
+===================================== */
 
 function showToast(message){
 
@@ -3345,260 +2520,100 @@ function showToast(message){
         old.remove();
     }
 
-
     const toast =
         document.createElement("div");
 
-    toast.className="toast";
+    toast.className = "toast";
 
-    toast.textContent=message;
+    toast.textContent = message;
 
     document.body.appendChild(toast);
 
+    setTimeout(() => {
 
-    setTimeout(()=>{
-
-        toast.style.opacity="0";
-        toast.style.transform=
+        toast.style.opacity = "0";
+        toast.style.transform =
             "translateY(20px)";
-
-        toast.style.transition=".3s";
+        toast.style.transition = ".3s";
 
         setTimeout(
-            ()=>toast.remove(),
+            () => toast.remove(),
             300
         );
 
-    },1800);
+    },1500);
 
 }
 
 
-/* =========================================================
-   RABAT
-========================================================= */
+/* =====================================
+   KOPIOWANIE START10
+===================================== */
 
-function applyDiscount(code,total){
+function copyPromoCode(){
 
-    const clean =
-        code.trim().toUpperCase();
+    const code = "START10";
 
-    if(clean==="START10"){
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
 
-        return total*0.90;
+        navigator.clipboard.writeText(code);
+
+    }else{
+
+        const input =
+            document.createElement("input");
+
+        input.value = code;
+
+        document.body.appendChild(input);
+
+        input.select();
+
+        document.execCommand("copy");
+
+        input.remove();
 
     }
-
-    return total;
-
-}
-
-
-/* =========================================================
-   WYSZUKIWARKA
-========================================================= */
-
-function searchProducts(){
-
-    const input =
-        document
-        .getElementById("productSearch")
-        .value
-        .toLowerCase()
-        .trim();
-
-
-    const products =
-        document.querySelectorAll(
-            "#productGrid .product"
-        );
-
-
-    products.forEach(product=>{
-
-        const name =
-            product
-            .dataset
-            .name
-            .toLowerCase();
-
-
-        if(name.includes(input)){
-
-            product.style.display="block";
-
-        }else{
-
-            product.style.display="none";
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   FAQ
-========================================================= */
-
-function toggleFAQ(button){
-
-    const item =
-        button.parentElement;
-
-    const wasOpen =
-        item.classList.contains("open");
-
-
-    document
-        .querySelectorAll(".faq-item")
-        .forEach(el=>{
-            el.classList.remove("open");
-        });
-
-
-    if(!wasOpen){
-
-        item.classList.add("open");
-
-        button
-            .querySelector("span")
-            .textContent="−";
-
-    }
-
-
-    document
-        .querySelectorAll(
-            ".faq-item:not(.open) .faq-question span"
-        )
-        .forEach(el=>{
-            el.textContent="+";
-        });
-
-}
-
-
-/* =========================================================
-   NEWSLETTER
-========================================================= */
-
-function subscribe(event){
-
-    event.preventDefault();
-
-    const email =
-        document
-        .getElementById("email")
-        .value;
-
-
-    localStorage.setItem(
-        "printerlase_newsletter",
-        email
-    );
-
 
     showToast(
-        "✓ Zapisano do newslettera!"
+        "✓ Kod START10 skopiowany!"
     );
 
-
-    event.target.reset();
-
 }
 
 
-/* =========================================================
-   MOBILE MENU
-========================================================= */
+/* =====================================
+   START
+===================================== */
 
-function mobileMenu(){
-
-    const nav =
-        document.querySelector(".nav-links");
+updateCartCount();
 
 
-    if(nav.style.display==="flex"){
+/* =====================================
+   ANIMACJE SCROLL
+===================================== */
 
-        nav.style.display="none";
+const animated =
+    document.querySelectorAll(
+        ".category, .product, .step, .review, .custom-model"
+    );
 
-        return;
-
-    }
-
-
-    nav.style.display="flex";
-
-    nav.style.position="absolute";
-
-    nav.style.top="78px";
-
-    nav.style.left="0";
-
-    nav.style.width="100%";
-
-    nav.style.padding="20px";
-
-    nav.style.flexDirection="column";
-
-    nav.style.background=
-        "rgba(2,6,17,.97)";
-
-    nav.style.borderBottom=
-        "1px solid #ffffff10";
-
-}
-
-
-/* =========================================================
-   NAVBAR SCROLL
-========================================================= */
-
-window.addEventListener(
-    "scroll",
-    ()=>{
-
-        const navbar =
-            document.getElementById(
-                "navbar"
-            );
-
-
-        if(window.scrollY>30){
-
-            navbar.classList.add(
-                "scrolled"
-            );
-
-        }else{
-
-            navbar.classList.remove(
-                "scrolled"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SCROLL REVEAL
-========================================================= */
 
 const observer =
     new IntersectionObserver(
-        entries=>{
+        entries => {
 
-            entries.forEach(entry=>{
+            entries.forEach(entry => {
 
                 if(entry.isIntersecting){
 
-                    entry.target
-                        .classList
-                        .add("visible");
+                    entry.target.style.opacity = "1";
+
+                    entry.target.style.transform =
+                        "translateY(0)";
 
                     observer.unobserve(
                         entry.target
@@ -3615,50 +2630,20 @@ const observer =
     );
 
 
-document
-    .querySelectorAll(".reveal")
-    .forEach(el=>{
-        observer.observe(el);
-    });
+animated.forEach((element,index) => {
 
+    element.style.opacity = "0";
 
-/* =========================================================
-   START
-========================================================= */
+    element.style.transform =
+        "translateY(30px)";
 
-updateCartCount();
+    element.style.transition =
+        `opacity .6s ease ${index * .04}s,
+         transform .6s ease ${index * .04}s`;
 
+    observer.observe(element);
 
-/* =========================================================
-   KLAWIATURA
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event=>{
-
-        if(
-            event.key==="/" &&
-            document.activeElement.tagName!=="INPUT"
-        ){
-
-            event.preventDefault();
-
-            const search =
-                document.getElementById(
-                    "productSearch"
-                );
-
-            if(search){
-
-                search.focus();
-
-            }
-
-        }
-
-    }
-);
+});
 
 </script>
 
