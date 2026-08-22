@@ -6,24 +6,106 @@
 
 <title>Checkout — Printerlase3D</title>
 
-<link rel="stylesheet" href="style.css">
-
 <style>
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
 body{
     margin:0;
     min-height:100vh;
     background:
-        radial-gradient(circle at 20% 10%, rgba(0,170,255,.18), transparent 35%),
-        radial-gradient(circle at 80% 80%, rgba(130,70,255,.18), transparent 35%),
+        radial-gradient(circle at 10% 10%,rgba(0,180,255,.18),transparent 30%),
+        radial-gradient(circle at 90% 80%,rgba(125,60,255,.20),transparent 32%),
         #030712;
-    color:white;
-    font-family:Arial,sans-serif;
+    color:#fff;
+    font-family:Inter,Arial,sans-serif;
 }
 
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.14;
+    background-image:
+        linear-gradient(#18aaff18 1px,transparent 1px),
+        linear-gradient(90deg,#18aaff18 1px,transparent 1px);
+    background-size:55px 55px;
+    mask-image:linear-gradient(to bottom,#000,transparent);
+}
+
+/* NAV */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:74px;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 5%;
+    background:rgba(3,7,18,.78);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    color:white;
+    font-weight:900;
+    font-size:18px;
+}
+
+.brand-logo{
+    width:40px;
+    height:40px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:linear-gradient(135deg,#00d9ff,#187cff,#873cff);
+    box-shadow:0 0 25px #008cff55;
+}
+
+.brand-logo span{
+    font-size:21px;
+    font-weight:1000;
+}
+
+.brand-name span{
+    background:linear-gradient(90deg,#fff,#29d9ff,#9161ff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.back{
+    color:#9ba8ba;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:800;
+    transition:.25s;
+}
+
+.back:hover{
+    color:#fff;
+}
+
+/* PAGE */
+
 .checkout-page{
-    max-width:1100px;
+    width:min(1150px,92%);
     margin:auto;
-    padding:120px 25px 60px;
+    padding:125px 0 70px;
 }
 
 .checkout-title{
@@ -33,39 +115,50 @@ body{
 
 .checkout-title .small{
     color:#35d8ff;
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:3px;
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:4px;
 }
 
 .checkout-title h1{
-    font-size:48px;
     margin:12px 0;
+    font-size:clamp(36px,6vw,58px);
+    letter-spacing:-2px;
+}
+
+.gradient{
+    background:linear-gradient(90deg,#00e5ff,#238cff,#974cff);
+    -webkit-background-clip:text;
+    color:transparent;
 }
 
 .checkout-title p{
     color:#8190a5;
 }
 
+/* GRID */
+
 .checkout-grid{
     display:grid;
-    grid-template-columns:1fr 380px;
-    gap:25px;
+    grid-template-columns:1fr 390px;
+    gap:22px;
 }
 
 .box{
-    background:rgba(8,18,35,.82);
+    background:linear-gradient(145deg,rgba(9,23,43,.92),rgba(4,10,20,.92));
     border:1px solid rgba(255,255,255,.08);
     border-radius:24px;
     padding:28px;
     box-shadow:0 25px 80px rgba(0,0,0,.35);
-    backdrop-filter:blur(15px);
+    backdrop-filter:blur(20px);
 }
 
 .box h2{
-    margin-top:0;
-    margin-bottom:25px;
+    margin:0 0 25px;
+    font-size:21px;
 }
+
+/* INPUTS */
 
 .field{
     margin-bottom:17px;
@@ -73,31 +166,38 @@ body{
 
 .field label{
     display:block;
+    margin-bottom:7px;
     color:#aeb9c9;
     font-size:12px;
-    font-weight:bold;
-    margin-bottom:7px;
+    font-weight:800;
 }
 
 .field input{
     width:100%;
     padding:14px;
-    box-sizing:border-box;
     border-radius:12px;
-    border:1px solid rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.10);
+    outline:none;
     background:#050c18;
     color:white;
-    outline:none;
+    font-size:14px;
+    transition:.25s;
+}
+
+.field input::placeholder{
+    color:#536174;
 }
 
 .field input:focus{
     border-color:#00bfff;
-    box-shadow:0 0 20px rgba(0,191,255,.12);
+    box-shadow:0 0 25px rgba(0,191,255,.13);
 }
+
+/* PAYMENT */
 
 .payment-options{
     display:grid;
-    gap:12px;
+    gap:11px;
 }
 
 .payment-option{
@@ -113,23 +213,23 @@ body{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:17px;
+    padding:16px;
     border-radius:14px;
-    border:1px solid rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.08);
     background:#050c18;
     cursor:pointer;
     transition:.25s;
 }
 
 .payment-option label:hover{
-    border-color:#00bfff66;
     transform:translateY(-2px);
+    border-color:#00bfff55;
 }
 
 .payment-option input:checked + label{
     border-color:#00cfff;
     background:rgba(0,180,255,.09);
-    box-shadow:0 0 25px rgba(0,180,255,.1);
+    box-shadow:0 0 25px rgba(0,180,255,.12);
 }
 
 .payment-name{
@@ -146,80 +246,235 @@ body{
     font-size:25px;
 }
 
+/* CART */
+
+#orderItems{
+    max-height:370px;
+    overflow:auto;
+    padding-right:4px;
+}
+
 .order-item{
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    padding:13px 0;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+    padding:15px 0;
     border-bottom:1px solid rgba(255,255,255,.07);
 }
 
 .order-item-name{
-    font-weight:bold;
-}
-
-.order-item-qty{
-    color:#718096;
-    font-size:12px;
-    margin-top:4px;
+    font-weight:900;
+    font-size:14px;
 }
 
 .order-item-price{
     font-weight:900;
 }
 
+.order-item-controls{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:9px;
+}
+
+.qty-btn,
+.remove-btn{
+    border:1px solid rgba(255,255,255,.10);
+    background:#ffffff08;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.qty-btn{
+    width:29px;
+    height:29px;
+    font-weight:900;
+}
+
+.qty-btn:hover{
+    background:#008cff22;
+    border-color:#00bfff55;
+}
+
+.quantity{
+    min-width:22px;
+    text-align:center;
+    color:#b7c2d1;
+    font-size:12px;
+    font-weight:900;
+}
+
+.remove-btn{
+    padding:7px 9px;
+    color:#ff8d9a;
+    font-size:11px;
+}
+
+.remove-btn:hover{
+    background:#ff3d5520;
+    border-color:#ff526666;
+}
+
+.empty{
+    padding:25px 0;
+    color:#718096;
+    text-align:center;
+}
+
+/* DISCOUNT */
+
+.discount-box{
+    margin-top:24px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.discount-title{
+    font-size:12px;
+    color:#aeb9c9;
+    font-weight:900;
+    margin-bottom:9px;
+}
+
+.discount-row{
+    display:flex;
+    gap:8px;
+}
+
+.discount-row input{
+    flex:1;
+    min-width:0;
+    padding:13px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,.10);
+    background:#050c18;
+    color:white;
+    outline:none;
+}
+
+.discount-row button{
+    padding:0 16px;
+    border:0;
+    border-radius:11px;
+    background:linear-gradient(100deg,#008cff,#754cff);
+    color:white;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.discount-message{
+    min-height:18px;
+    margin-top:9px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.discount-success{
+    color:#38e7a5;
+}
+
+.discount-error{
+    color:#ff7180;
+}
+
+/* SUMMARY */
+
+.summary{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin:10px 0;
+    color:#8795a8;
+    font-size:13px;
+}
+
+.summary-row.discount{
+    color:#38e7a5;
+}
+
 .total{
     display:flex;
     justify-content:space-between;
-    margin-top:22px;
-    font-size:21px;
-    font-weight:900;
+    align-items:center;
+    margin-top:17px;
+    padding-top:17px;
+    border-top:1px solid rgba(255,255,255,.10);
+    font-size:22px;
+    font-weight:1000;
 }
 
 .pay-button{
     width:100%;
-    margin-top:25px;
+    margin-top:23px;
     padding:17px;
     border:0;
     border-radius:14px;
     color:white;
-    font-weight:900;
+    font-weight:1000;
     font-size:15px;
     cursor:pointer;
     background:linear-gradient(100deg,#008cff,#7b4cff);
-    box-shadow:0 15px 40px rgba(0,140,255,.25);
+    box-shadow:0 15px 45px rgba(0,140,255,.25);
     transition:.25s;
 }
 
 .pay-button:hover{
     transform:translateY(-3px);
-    box-shadow:0 20px 50px rgba(0,140,255,.4);
+    box-shadow:0 20px 55px rgba(0,140,255,.42);
+}
+
+.pay-button:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
 }
 
 .secure{
     text-align:center;
     color:#66758a;
     font-size:11px;
-    margin-top:14px;
+    margin-top:13px;
 }
+
+/* SUCCESS */
 
 .success{
     display:none;
     text-align:center;
-    padding:80px 20px;
+    padding:70px 25px;
 }
 
 .success-icon{
     width:90px;
     height:90px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:grid;
+    place-items:center;
     margin:0 auto 25px;
     border-radius:50%;
     background:rgba(0,220,150,.12);
     border:1px solid rgba(0,220,150,.4);
+    color:#35e8a4;
     font-size:45px;
+    animation:successPop .5s ease;
+}
+
+@keyframes successPop{
+    from{
+        transform:scale(.5);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
 }
 
 .success h1{
@@ -250,15 +505,67 @@ body{
     text-decoration:none;
     background:#ffffff0c;
     border:1px solid #ffffff12;
+    transition:.25s;
 }
 
+.back-button:hover{
+    background:#ffffff14;
+    transform:translateY(-2px);
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    z-index:9999;
+    padding:15px 20px;
+    border-radius:14px;
+    background:linear-gradient(100deg,#008cff,#754cff);
+    box-shadow:0 15px 50px #0009;
+    font-weight:900;
+    animation:toastIn .3s ease;
+}
+
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* MOBILE */
+
 @media(max-width:800px){
+
+    .navbar{
+        padding:0 18px;
+    }
+
+    .checkout-page{
+        width:92%;
+        padding-top:110px;
+    }
+
     .checkout-grid{
         grid-template-columns:1fr;
     }
 
     .checkout-title h1{
-        font-size:36px;
+        font-size:38px;
+    }
+
+    .box{
+        padding:21px;
+    }
+
+    .back{
+        display:none;
     }
 }
 </style>
@@ -266,111 +573,301 @@ body{
 
 <body>
 
-<div class="checkout-page">
+<header class="navbar">
+
+    <a href="index.html" class="brand">
+
+        <div class="brand-logo">
+            <span>P</span>
+        </div>
+
+        <div class="brand-name">
+            Printerlase<span>3D</span>
+        </div>
+
+    </a>
+
+    <a href="index.html" class="back">
+        ← Wróć do sklepu
+    </a>
+
+</header>
+
+
+<main class="checkout-page">
 
     <div class="checkout-title">
-        <div class="small">PRINTERLASE3D</div>
-        <h1>Finalizacja zamówienia</h1>
-        <p>Uzupełnij dane i wybierz sposób płatności.</p>
+
+        <div class="small">
+            PRINTERLASE3D
+        </div>
+
+        <h1>
+            Finalizacja <span class="gradient">zamówienia</span>
+        </h1>
+
+        <p>
+            Uzupełnij dane, zastosuj kod rabatowy i zamów swój wydruk.
+        </p>
+
     </div>
+
 
     <div id="checkoutContent">
 
         <div class="checkout-grid">
 
+            <!-- DANE -->
+
             <div class="box">
 
-                <h2>Dane zamawiającego</h2>
+                <h2>📦 Dane zamawiającego</h2>
 
                 <div class="field">
                     <label>Imię i nazwisko</label>
-                    <input id="name" type="text" placeholder="Jan Kowalski">
+                    <input
+                        id="name"
+                        type="text"
+                        placeholder="Jan Kowalski"
+                    >
                 </div>
 
                 <div class="field">
                     <label>E-mail</label>
-                    <input id="email" type="email" placeholder="jan@example.com">
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="jan@example.com"
+                    >
                 </div>
 
                 <div class="field">
                     <label>Telefon</label>
-                    <input id="phone" type="tel" placeholder="123 456 789">
+                    <input
+                        id="phone"
+                        type="tel"
+                        placeholder="123 456 789"
+                    >
                 </div>
 
                 <div class="field">
                     <label>Adres dostawy</label>
-                    <input id="address" type="text" placeholder="ul. Przykładowa 10, 41-000 Miasto">
+                    <input
+                        id="address"
+                        type="text"
+                        placeholder="ul. Przykładowa 10, 41-000 Miasto"
+                    >
                 </div>
 
+
                 <h2 style="margin-top:35px;">
-                    Metoda płatności
+                    💳 Metoda płatności
                 </h2>
 
                 <div class="payment-options">
 
                     <div class="payment-option">
-                        <input type="radio" name="payment" id="blik" value="BLIK" checked>
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            id="blik"
+                            value="BLIK"
+                            checked
+                        >
+
                         <label for="blik">
+
                             <div>
-                                <div class="payment-name">BLIK</div>
+                                <div class="payment-name">
+                                    BLIK
+                                </div>
+
                                 <div class="payment-desc">
                                     Płatność kodem BLIK
                                 </div>
                             </div>
-                            <div class="payment-icon">📱</div>
+
+                            <div class="payment-icon">
+                                📱
+                            </div>
+
                         </label>
+
                     </div>
 
+
                     <div class="payment-option">
-                        <input type="radio" name="payment" id="card" value="Karta">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            id="card"
+                            value="Karta"
+                        >
+
                         <label for="card">
+
                             <div>
-                                <div class="payment-name">Karta płatnicza</div>
+                                <div class="payment-name">
+                                    Karta płatnicza
+                                </div>
+
                                 <div class="payment-desc">
                                     Visa / Mastercard
                                 </div>
                             </div>
-                            <div class="payment-icon">💳</div>
+
+                            <div class="payment-icon">
+                                💳
+                            </div>
+
                         </label>
+
                     </div>
 
+
                     <div class="payment-option">
-                        <input type="radio" name="payment" id="transfer" value="Przelew">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            id="transfer"
+                            value="Przelew"
+                        >
+
                         <label for="transfer">
+
                             <div>
-                                <div class="payment-name">Przelew online</div>
+                                <div class="payment-name">
+                                    Przelew online
+                                </div>
+
                                 <div class="payment-desc">
                                     Szybki przelew bankowy
                                 </div>
                             </div>
-                            <div class="payment-icon">🏦</div>
+
+                            <div class="payment-icon">
+                                🏦
+                            </div>
+
                         </label>
+
                     </div>
 
                 </div>
 
             </div>
 
+
+            <!-- ZAMÓWIENIE -->
+
             <div class="box">
 
-                <h2>Twoje zamówienie</h2>
+                <h2>🛒 Twoje zamówienie</h2>
 
                 <div id="orderItems"></div>
 
-                <div class="total">
-                    <span>Razem</span>
-                    <span id="total">0,00 zł</span>
+
+                <!-- RABAT -->
+
+                <div class="discount-box">
+
+                    <div class="discount-title">
+                        🎟️ Masz kod rabatowy?
+                    </div>
+
+                    <div class="discount-row">
+
+                        <input
+                            id="discountCode"
+                            type="text"
+                            placeholder="Wpisz kod..."
+                            autocomplete="off"
+                        >
+
+                        <button onclick="applyDiscount()">
+                            Użyj
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="discountMessage"
+                        class="discount-message"
+                    ></div>
+
                 </div>
 
+
+                <!-- PODSUMOWANIE -->
+
+                <div class="summary">
+
+                    <div class="summary-row">
+
+                        <span>Produkty</span>
+
+                        <span id="subtotal">
+                            0,00 zł
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="summary-row discount"
+                        id="discountRow"
+                        style="display:none;"
+                    >
+
+                        <span>
+                            Rabat
+                            <span id="discountLabel"></span>
+                        </span>
+
+                        <span id="discountAmount">
+                            -0,00 zł
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Dostawa</span>
+
+                        <span id="shipping">
+                            0,00 zł
+                        </span>
+
+                    </div>
+
+
+                    <div class="total">
+
+                        <span>Razem</span>
+
+                        <span id="total">
+                            0,00 zł
+                        </span>
+
+                    </div>
+
+                </div>
+
+
                 <button
+                    id="payButton"
                     class="pay-button"
                     onclick="finishOrder()"
                 >
-                    Zapłać i zamów
+                    🔒 Zapłać i zamów
                 </button>
 
                 <div class="secure">
-                    🔒 Bezpieczna realizacja zamówienia
+                    🔒 Twoje dane są przechowywane lokalnie.
                 </div>
 
             </div>
@@ -380,7 +877,7 @@ body{
     </div>
 
 
-    <!-- EKRAN PO ZAMÓWIENIU -->
+    <!-- SUKCES -->
 
     <div class="box success" id="success">
 
@@ -388,150 +885,817 @@ body{
             ✓
         </div>
 
-        <h1>Zamówienie przyjęte!</h1>
+        <h1>
+            Zamówienie przyjęte!
+        </h1>
 
         <p>
             Dzięki za zamówienie w Printerlase3D.
             <br>
-            Potwierdzenie zostanie wysłane na podany adres e-mail.
+            Twoje zamówienie zostało zapisane.
         </p>
 
-        <div class="success-code" id="orderNumber"></div>
+        <div
+            class="success-code"
+            id="orderNumber"
+        ></div>
 
         <br>
 
-        <a href="index.html" class="back-button">
+        <a
+            href="index.html"
+            class="back-button"
+        >
             ← Wróć do sklepu
         </a>
 
     </div>
 
-</div>
+</main>
 
 
 <script>
 
-const cart =
-JSON.parse(localStorage.getItem("printerlase_cart") || "[]");
-
-const itemsContainer =
-document.getElementById("orderItems");
-
-const totalElement =
-document.getElementById("total");
-
-let total = 0;
+/* =====================================================
+   PRINTERLASE3D CHECKOUT
+===================================================== */
 
 
-/* WYŚWIETLANIE KOSZYKA */
+/* -----------------------------
+   KOSZYK
+----------------------------- */
 
-if(cart.length === 0){
+function getCart(){
 
-    itemsContainer.innerHTML = `
-        <p style="color:#718096;">
-            Twój koszyk jest pusty.
-        </p>
-    `;
+    try{
 
-}else{
+        return JSON.parse(
+            localStorage.getItem("printerlase_cart")
+        ) || [];
 
-    cart.forEach(item => {
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+function saveCart(cart){
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* -----------------------------
+   RABATY
+----------------------------- */
+
+const discountCodes = {
+
+    START10:{
+        type:"percent",
+        value:10,
+        label:"-10%"
+    },
+
+    PRINTER20:{
+        type:"percent",
+        value:20,
+        label:"-20%"
+    },
+
+    WELCOME:{
+        type:"percent",
+        value:15,
+        label:"-15%"
+    },
+
+    "3D5":{
+        type:"fixed",
+        value:5,
+        label:"-5 zł"
+    }
+
+};
+
+
+let appliedDiscount = null;
+
+
+/* -----------------------------
+   ODCZYT RABATU
+----------------------------- */
+
+function loadDiscount(){
+
+    try{
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_discount"
+                )
+            );
+
+        if(
+            saved &&
+            discountCodes[saved.code]
+        ){
+
+            appliedDiscount = saved;
+
+            document.getElementById(
+                "discountCode"
+            ).value = saved.code;
+
+        }
+
+    }catch(error){
+
+        appliedDiscount = null;
+
+    }
+
+}
+
+
+/* -----------------------------
+   ZAPIS RABATU
+----------------------------- */
+
+function saveDiscount(){
+
+    if(appliedDiscount){
+
+        localStorage.setItem(
+            "printerlase_discount",
+            JSON.stringify(appliedDiscount)
+        );
+
+    }else{
+
+        localStorage.removeItem(
+            "printerlase_discount"
+        );
+
+    }
+
+}
+
+
+/* -----------------------------
+   KOD RABATOWY
+----------------------------- */
+
+function applyDiscount(){
+
+    const input =
+        document.getElementById("discountCode");
+
+    const message =
+        document.getElementById("discountMessage");
+
+    const code =
+        input.value
+            .trim()
+            .toUpperCase();
+
+    if(!code){
+
+        message.textContent =
+            "Wpisz kod rabatowy.";
+
+        message.className =
+            "discount-message discount-error";
+
+        return;
+
+    }
+
+
+    if(!discountCodes[code]){
+
+        appliedDiscount = null;
+
+        saveDiscount();
+
+        message.textContent =
+            "❌ Ten kod rabatowy nie istnieje.";
+
+        message.className =
+            "discount-message discount-error";
+
+        renderOrder();
+
+        return;
+
+    }
+
+
+    appliedDiscount = {
+
+        code:code
+
+    };
+
+
+    saveDiscount();
+
+
+    const discount =
+        discountCodes[code];
+
+
+    message.textContent =
+        "✓ Kod " +
+        code +
+        " został zastosowany!";
+
+
+    message.className =
+        "discount-message discount-success";
+
+
+    renderOrder();
+
+}
+
+
+/* -----------------------------
+   USUWANIE RABATU
+----------------------------- */
+
+function removeDiscount(){
+
+    appliedDiscount = null;
+
+    saveDiscount();
+
+    document.getElementById(
+        "discountCode"
+    ).value = "";
+
+    document.getElementById(
+        "discountMessage"
+    ).textContent =
+        "Kod rabatowy usunięty.";
+
+    document.getElementById(
+        "discountMessage"
+    ).className =
+        "discount-message discount-error";
+
+    renderOrder();
+
+}
+
+
+/* -----------------------------
+   CENA
+----------------------------- */
+
+function calculateDiscount(subtotal){
+
+    if(!appliedDiscount){
+        return 0;
+    }
+
+
+    const discount =
+        discountCodes[appliedDiscount.code];
+
+
+    if(!discount){
+        return 0;
+    }
+
+
+    let amount = 0;
+
+
+    if(discount.type === "percent"){
+
+        amount =
+            subtotal *
+            (discount.value / 100);
+
+    }
+
+
+    if(discount.type === "fixed"){
+
+        amount =
+            discount.value;
+
+    }
+
+
+    return Math.min(
+        amount,
+        subtotal
+    );
+
+}
+
+
+/* -----------------------------
+   RYSOWANIE KOSZYKA
+----------------------------- */
+
+function renderOrder(){
+
+    const cart = getCart();
+
+    const container =
+        document.getElementById("orderItems");
+
+    const subtotalElement =
+        document.getElementById("subtotal");
+
+    const discountRow =
+        document.getElementById("discountRow");
+
+    const discountAmountElement =
+        document.getElementById("discountAmount");
+
+    const discountLabel =
+        document.getElementById("discountLabel");
+
+    const totalElement =
+        document.getElementById("total");
+
+    const payButton =
+        document.getElementById("payButton");
+
+
+    container.innerHTML = "";
+
+
+    if(cart.length === 0){
+
+        container.innerHTML = `
+            <div class="empty">
+                🛒 Twój koszyk jest pusty.<br><br>
+                <a
+                    href="index.html"
+                    style="color:#35d8ff;text-decoration:none;font-weight:900;"
+                >
+                    Wróć do sklepu →
+                </a>
+            </div>
+        `;
+
+        subtotalElement.textContent =
+            "0,00 zł";
+
+        totalElement.textContent =
+            "0,00 zł";
+
+        payButton.disabled = true;
+
+        return;
+
+    }
+
+
+    payButton.disabled = false;
+
+
+    let subtotal = 0;
+
+
+    cart.forEach((item,index) => {
 
         const quantity =
-            Number(item.quantity || item.qty || 1);
+            Math.max(
+                1,
+                Number(item.quantity || item.qty || 1)
+            );
 
         const price =
-            Number(item.price || 0);
+            Math.max(
+                0,
+                Number(item.price || 0)
+            );
 
-        total += price * quantity;
 
-        itemsContainer.innerHTML += `
+        const itemTotal =
+            price * quantity;
 
-            <div class="order-item">
 
-                <div>
+        subtotal += itemTotal;
 
-                    <div class="order-item-name">
-                        ${item.name || "Produkt"}
-                    </div>
 
-                    <div class="order-item-qty">
-                        Ilość: ${quantity}
-                    </div>
+        const div =
+            document.createElement("div");
 
+        div.className =
+            "order-item";
+
+
+        div.innerHTML = `
+
+            <div>
+
+                <div class="order-item-name">
+                    ${escapeHTML(
+                        item.name || "Produkt"
+                    )}
                 </div>
 
-                <div class="order-item-price">
-                    ${(price * quantity)
-                        .toFixed(2)
-                        .replace(".", ",")} zł
+                <div class="order-item-controls">
+
+                    <button
+                        class="qty-btn"
+                        onclick="changeQuantity(${index},-1)"
+                    >
+                        −
+                    </button>
+
+                    <span class="quantity">
+                        ${quantity}
+                    </span>
+
+                    <button
+                        class="qty-btn"
+                        onclick="changeQuantity(${index},1)"
+                    >
+                        +
+                    </button>
+
+                    <button
+                        class="remove-btn"
+                        onclick="removeItem(${index})"
+                    >
+                        Usuń
+                    </button>
+
                 </div>
 
             </div>
 
+            <div class="order-item-price">
+                ${formatPrice(itemTotal)}
+            </div>
+
         `;
+
+
+        container.appendChild(div);
 
     });
 
+
+    const discountAmount =
+        calculateDiscount(subtotal);
+
+
+    const shipping =
+        subtotal > 0 ? 8.99 : 0;
+
+
+    const finalTotal =
+        Math.max(
+            0,
+            subtotal -
+            discountAmount +
+            shipping
+        );
+
+
+    subtotalElement.textContent =
+        formatPrice(subtotal);
+
+
+    if(appliedDiscount && discountAmount > 0){
+
+        const discount =
+            discountCodes[
+                appliedDiscount.code
+            ];
+
+
+        discountRow.style.display =
+            "flex";
+
+
+        discountLabel.textContent =
+            " (" +
+            appliedDiscount.code +
+            ")";
+
+
+        discountAmountElement.textContent =
+            "-" +
+            formatPrice(discountAmount);
+
+    }else{
+
+        discountRow.style.display =
+            "none";
+
+    }
+
+
+    document.getElementById(
+        "shipping"
+    ).textContent =
+        formatPrice(shipping);
+
+
+    totalElement.textContent =
+        formatPrice(finalTotal);
+
 }
 
-totalElement.textContent =
-total.toFixed(2).replace(".", ",") + " zł";
+
+/* -----------------------------
+   ZMIANA ILOŚCI
+----------------------------- */
+
+function changeQuantity(index,change){
+
+    const cart = getCart();
+
+    if(!cart[index]){
+        return;
+    }
 
 
-/* ZŁOŻENIE ZAMÓWIENIA */
+    const current =
+        Number(
+            cart[index].quantity ||
+            cart[index].qty ||
+            1
+        );
+
+
+    const newQuantity =
+        current + change;
+
+
+    if(newQuantity <= 0){
+
+        cart.splice(index,1);
+
+    }else{
+
+        cart[index].quantity =
+            newQuantity;
+
+    }
+
+
+    saveCart(cart);
+
+    renderOrder();
+
+}
+
+
+/* -----------------------------
+   USUWANIE PRODUKTU
+----------------------------- */
+
+function removeItem(index){
+
+    const cart = getCart();
+
+    if(!cart[index]){
+        return;
+    }
+
+
+    cart.splice(index,1);
+
+    saveCart(cart);
+
+    renderOrder();
+
+    showToast(
+        "Produkt usunięty z koszyka"
+    );
+
+}
+
+
+/* -----------------------------
+   FORMAT CENY
+----------------------------- */
+
+function formatPrice(price){
+
+    return Number(price)
+        .toFixed(2)
+        .replace(".",",") +
+        " zł";
+
+}
+
+
+/* -----------------------------
+   ZABEZPIECZENIE TEKSTU
+----------------------------- */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* -----------------------------
+   TOAST
+----------------------------- */
+
+function showToast(text){
+
+    const old =
+        document.querySelector(".toast");
+
+    if(old){
+        old.remove();
+    }
+
+
+    const toast =
+        document.createElement("div");
+
+    toast.className =
+        "toast";
+
+    toast.textContent =
+        text;
+
+
+    document.body.appendChild(toast);
+
+
+    setTimeout(() => {
+
+        toast.style.opacity = "0";
+        toast.style.transform =
+            "translateY(15px)";
+        toast.style.transition =
+            ".3s";
+
+
+        setTimeout(
+            () => toast.remove(),
+            300
+        );
+
+    },1600);
+
+}
+
+
+/* -----------------------------
+   FINALIZACJA
+----------------------------- */
 
 function finishOrder(){
 
+    const cart = getCart();
+
+
+    if(cart.length === 0){
+
+        showToast(
+            "Koszyk jest pusty!"
+        );
+
+        return;
+
+    }
+
+
     const name =
-        document.getElementById("name").value.trim();
+        document.getElementById(
+            "name"
+        ).value.trim();
+
 
     const email =
-        document.getElementById("email").value.trim();
+        document.getElementById(
+            "email"
+        ).value.trim();
+
 
     const phone =
-        document.getElementById("phone").value.trim();
+        document.getElementById(
+            "phone"
+        ).value.trim();
+
 
     const address =
-        document.getElementById("address").value.trim();
+        document.getElementById(
+            "address"
+        ).value.trim();
 
-    const payment =
+
+    const paymentElement =
         document.querySelector(
             'input[name="payment"]:checked'
-        ).value;
+        );
 
 
-    if(!name || !email || !phone || !address){
+    if(
+        !name ||
+        !email ||
+        !phone ||
+        !address
+    ){
 
         alert(
             "Uzupełnij wszystkie dane zamówienia."
         );
 
         return;
+
     }
 
 
-    if(cart.length === 0){
+    if(
+        !email.includes("@") ||
+        !email.includes(".")
+    ){
 
         alert(
-            "Koszyk jest pusty."
+            "Podaj poprawny adres e-mail."
         );
 
         return;
+
     }
 
 
-    /*
-      TUTAJ PÓŹNIEJ PODŁĄCZYMY PRAWDZIWE
-      PRZELEWY24 / BLIK / KARTĘ.
+    const payment =
+        paymentElement
+            ? paymentElement.value
+            : "BLIK";
 
-      Teraz nie pobieramy żadnych pieniędzy.
-    */
+
+    let subtotal = 0;
+
+
+    cart.forEach(item => {
+
+        const quantity =
+            Number(
+                item.quantity ||
+                item.qty ||
+                1
+            );
+
+        const price =
+            Number(item.price || 0);
+
+
+        subtotal +=
+            price * quantity;
+
+    });
+
+
+    const discountAmount =
+        calculateDiscount(subtotal);
+
+
+    const shipping =
+        subtotal > 0 ? 8.99 : 0;
+
+
+    const finalTotal =
+        Math.max(
+            0,
+            subtotal -
+            discountAmount +
+            shipping
+        );
 
 
     const orderNumber =
         "PL3D-" +
-        Date.now().toString().slice(-8);
+        Math.random()
+            .toString(36)
+            .substring(2,7)
+            .toUpperCase() +
+        "-" +
+        Date.now()
+            .toString()
+            .slice(-4);
 
 
     const order = {
@@ -539,19 +1703,41 @@ function finishOrder(){
         number:orderNumber,
 
         customer:{
-            name,
-            email,
-            phone,
-            address
+
+            name:name,
+
+            email:email,
+
+            phone:phone,
+
+            address:address
+
         },
 
-        payment,
+        payment:payment,
 
         products:cart,
 
-        total,
+        subtotal:subtotal,
 
-        date:new Date().toISOString()
+        discount:{
+
+            code:
+                appliedDiscount
+                    ? appliedDiscount.code
+                    : null,
+
+            amount:
+                discountAmount
+
+        },
+
+        shipping:shipping,
+
+        total:finalTotal,
+
+        date:
+            new Date().toISOString()
 
     };
 
@@ -562,31 +1748,81 @@ function finishOrder(){
     );
 
 
-    /* Czyścimy koszyk */
+    /*
+        WAŻNE:
+
+        To jeszcze NIE jest prawdziwa
+        płatność BLIK/kartą.
+
+        Tutaj później podłączymy
+        operatora płatności.
+    */
+
 
     localStorage.removeItem(
         "printerlase_cart"
     );
 
 
-    /* Pokazujemy normalny ekran sukcesu */
+    localStorage.removeItem(
+        "printerlase_discount"
+    );
+
 
     document.getElementById(
         "checkoutContent"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 
     document.getElementById(
         "success"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     document.getElementById(
         "orderNumber"
     ).textContent =
-        "Numer zamówienia: " + orderNumber;
+        "Numer zamówienia: " +
+        orderNumber;
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 }
+
+
+/* -----------------------------
+   START
+----------------------------- */
+
+loadDiscount();
+
+renderOrder();
+
+
+/* ENTER = KOD RABATOWY */
+
+document.getElementById(
+    "discountCode"
+).addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            event.preventDefault();
+
+            applyDiscount();
+
+        }
+
+    }
+);
 
 </script>
 
