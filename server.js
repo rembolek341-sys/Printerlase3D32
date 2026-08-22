@@ -1,250 +1,671 @@
+```js
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const crypto = require("crypto");
 
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
 // ===============================
-// KONFIGURACJA
+// USTAWIENIA ADMINA
 // ===============================
 
-// Możesz zmienić hasło tutaj.
-// Na Renderze lepiej ustawić ADMIN_PASSWORD
-// w Environment Variables.
-const ADMIN_PASSWORD =
-    process.env.ADMIN_PASSWORD || "admin123";
-
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({
-    extended: true,
-    limit: "10mb"
-}));
-
-// Pliki strony
-app.use(express.static(__dirname));
+const ADMIN_LOGIN = "admin";
+const ADMIN_PASSWORD = "Admin2137!";
 
 // ===============================
-// DANE
+// PLIKI DANYCH
 // ===============================
 
-let orders = [
-    {
-        id: "PL3D-DEMO001",
-        name: "Klient testowy",
-        email: "test@example.com",
-        phone: "600000000",
-        address: "ul. Testowa 1",
-        postalCode: "40-001",
-        city: "Katowice",
-        country: "Polska",
-        total: 59.99,
-        discount: 0,
-        status: "NEW",
-        type: "NORMAL",
-        items: [
-            {
-                name: "Brelok 3D",
-                quantity: 1,
-                price: 59.99
-            }
-        ],
-        createdAt: new Date().toISOString()
-    }
-];
+const DATA_DIR = path.join(__dirname, "data");
 
-// ===============================
-// FUNKCJE
-// ===============================
+const ORDERS_FILE = path.join(
+    DATA_DIR,
+    "orders.json"
+);
 
-function checkAdmin(req, res, next) {
+const CUSTOM_FILE = path.join(
+    DATA_DIR,
+    "custom-models.json"
+);
 
-    const password =
-        req.headers["x-admin-password"];
+const TOKENS_FILE = path.join(
+    DATA_DIR,
+    "tokens.json"
+);
 
-    if (!password) {
-        return res.status(401).json({
-            error: "Brak hasła administratora."
-        });
-    }
-
-    if (password !== ADMIN_PASSWORD) {
-        return res.status(401).json({
-            error: "Nieprawidłowe hasło."
-        });
-    }
-
-    next();
+// Tworzymy folder data
+if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, {
+        recursive: true
+    });
 }
 
-function calculateStats() {
 
-    const balance =
-        orders.reduce(
-            (sum, order) =>
-                sum + Number(order.total || 0),
-            0
+// ===============================
+// FUNKCJE PLIKÓW
+// ===============================
+
+function ensureFile(file, defaultValue) {
+
+    if (!fs.existsSync(file)) {
+
+        fs.writeFileSync(
+            file,
+            JSON.stringify(
+                defaultValue,
+                null,
+                2
+            ),
+            "utf8"
         );
 
-    const earned =
-        orders
-            .filter(
-                order =>
-                    order.status === "PAID" ||
-                    order.status === "PROCESSING" ||
-                    order.status === "SHIPPED" ||
-                    order.status === "COMPLETED"
-            )
-            .reduce(
-                (sum, order) =>
-                    sum + Number(order.total || 0),
-                0
+    }
+
+}
+
+
+function readJSON(file, fallback) {
+
+    try {
+
+        ensureFile(
+            file,
+            fallback
+        );
+
+        const content =
+            fs.readFileSync(
+                file,
+                "utf8"
             );
 
-    const customModels =
-        orders.filter(
-            order =>
-                order.type === "CUSTOM_MODEL"
-        ).length;
+        return JSON.parse(content);
 
-    return {
-        balance,
-        earned,
-        withdrawn: 0,
-        customModels
-    };
-}
+    } catch (error) {
 
-// ===============================
-// STRONA GŁÓWNA
-// ===============================
-
-app.get("/", (req, res) => {
-
-    res.sendFile(
-        path.join(
-            __dirname,
-            "index.html"
-        )
-    );
-
-});
-
-// ===============================
-// PANEL ADMINA
-// ===============================
-
-app.get("/admin", (req, res) => {
-
-    res.sendFile(
-        path.join(
-            __dirname,
-            "admin.html"
-        )
-    );
-
-});
-
-// ===============================
-// TEST LOGOWANIA
-// ===============================
-
-app.post("/api/admin/login", (req, res) => {
-
-    const password =
-        String(
-            req.body?.password || ""
+        console.error(
+            "Błąd odczytu:",
+            file,
+            error
         );
 
-    if (password !== ADMIN_PASSWORD) {
+        return fallback;
+
+    }
+
+}
+
+
+function writeJSON(file, data) {
+
+    fs.writeFileSync(
+        file,
+        JSON.stringify(
+            data,
+            null,
+            2
+        ),
+        "utf8"
+    );
+
+}
+
+
+ensureFile(
+    ORDERS_FILE,
+    []
+);
+
+ensureFile(
+    CUSTOM_FILE,
+    []
+);
+
+ensureFile(
+    TOKENS_FILE,
+    []
+);
+
+
+// ===============================
+// MIDDLEWARE
+// ===============================
+
+app.use(
+    express.json({
+        limit: "20mb"
+    })
+);
+
+app.use(
+    express.urlencoded({
+        extended: true,
+        limit: "20mb"
+    })
+);
+
+
+// ===============================
+// FRONTEND
+// ===============================
+
+app.use(
+    express.static(__dirname)
+);
+
+
+// ===============================
+// GENEROWANIE ID
+// ===============================
+
+function generateId(prefix) {
+
+    return (
+        prefix +
+        "-" +
+        Date.now().toString(36) +
+        "-" +
+        crypto
+            .randomBytes(3)
+            .toString("hex")
+    ).toUpperCase();
+
+}
+
+
+// ===============================
+// TOKEN
+// ===============================
+
+function createToken() {
+
+    return crypto
+        .randomBytes(32)
+        .toString("hex");
+
+}
+
+
+function requireAdmin(
+    req,
+    res,
+    next
+) {
+
+    const header =
+        req.headers.authorization || "";
+
+    if (
+        !header.startsWith(
+            "Bearer "
+        )
+    ) {
 
         return res.status(401).json({
-            success: false,
-            error: "Błędne hasło."
+            error: "Brak autoryzacji."
         });
 
     }
 
-    res.json({
-        success: true,
-        message: "Zalogowano."
-    });
 
-});
+    const token =
+        header.substring(7);
+
+    const tokens =
+        readJSON(
+            TOKENS_FILE,
+            []
+        );
+
+
+    const exists =
+        tokens.find(
+            item =>
+                item.token === token
+        );
+
+
+    if (!exists) {
+
+        return res.status(401).json({
+            error: "Nieprawidłowa sesja."
+        });
+
+    }
+
+
+    next();
+
+}
+
 
 // ===============================
-// DASHBOARD
+// LOGIN ADMINA
 // ===============================
 
-app.get(
-    "/api/admin/dashboard",
-    checkAdmin,
+app.post(
+    "/api/admin/login",
     (req, res) => {
 
-        const stats =
-            calculateStats();
+        const {
+            login,
+            password
+        } = req.body || {};
+
+
+        if (
+            login !== ADMIN_LOGIN ||
+            password !== ADMIN_PASSWORD
+        ) {
+
+            return res.status(401).json({
+                error:
+                    "Nieprawidłowy login lub hasło."
+            });
+
+        }
+
+
+        const token =
+            createToken();
+
+
+        const tokens =
+            readJSON(
+                TOKENS_FILE,
+                []
+            );
+
+
+        tokens.push({
+            token,
+            createdAt:
+                new Date().toISOString()
+        });
+
+
+        // Czyścimy bardzo stare tokeny
+        const day =
+            1000 *
+            60 *
+            60 *
+            24;
+
+
+        const now =
+            Date.now();
+
+
+        const freshTokens =
+            tokens.filter(
+                item => {
+
+                    const time =
+                        new Date(
+                            item.createdAt
+                        ).getTime();
+
+                    return (
+                        now - time
+                        < day * 7
+                    );
+
+                }
+            );
+
+
+        writeJSON(
+            TOKENS_FILE,
+            freshTokens
+        );
+
 
         res.json({
-            balance: stats.balance,
-            earned: stats.earned,
-            withdrawn: stats.withdrawn,
-            customModels:
-                stats.customModels,
-            orders
+            success: true,
+            token
         });
 
     }
 );
 
+
 // ===============================
-// ZMIANA STATUSU
+// WYLOGOWANIE
 // ===============================
 
 app.post(
-    "/api/admin/order-status",
-    checkAdmin,
+    "/api/admin/logout",
+    requireAdmin,
+    (req, res) => {
+
+        const header =
+            req.headers.authorization || "";
+
+        const token =
+            header.substring(7);
+
+        let tokens =
+            readJSON(
+                TOKENS_FILE,
+                []
+            );
+
+
+        tokens =
+            tokens.filter(
+                item =>
+                    item.token !== token
+            );
+
+
+        writeJSON(
+            TOKENS_FILE,
+            tokens
+        );
+
+
+        res.json({
+            success: true
+        });
+
+    }
+);
+
+
+// ===============================
+// DANE PANELU ADMINA
+// ===============================
+
+app.get(
+    "/api/admin/data",
+    requireAdmin,
+    (req, res) => {
+
+        const orders =
+            readJSON(
+                ORDERS_FILE,
+                []
+            );
+
+        const customOrders =
+            readJSON(
+                CUSTOM_FILE,
+                []
+            );
+
+
+        orders.sort(
+            (a, b) =>
+                new Date(
+                    b.createdAt
+                ) -
+                new Date(
+                    a.createdAt
+                )
+        );
+
+
+        customOrders.sort(
+            (a, b) =>
+                new Date(
+                    b.createdAt
+                ) -
+                new Date(
+                    a.createdAt
+                )
+        );
+
+
+        res.json({
+            success: true,
+            orders,
+            customOrders
+        });
+
+    }
+);
+
+
+// ===============================
+// NOWE ZAMÓWIENIE
+// ===============================
+
+app.post(
+    "/api/orders",
+    (req, res) => {
+
+        const body =
+            req.body || {};
+
+
+        const orders =
+            readJSON(
+                ORDERS_FILE,
+                []
+            );
+
+
+        const order = {
+
+            id:
+                generateId("ORD"),
+
+            name:
+                body.name ||
+                body.customerName ||
+                "",
+
+            email:
+                body.email ||
+                "",
+
+            phone:
+                body.phone ||
+                "",
+
+            address:
+                body.address ||
+                "",
+
+            items:
+                Array.isArray(body.items)
+                    ? body.items
+                    : [],
+
+            total:
+                Number(
+                    body.total || 0
+                ),
+
+            delivery:
+                body.delivery ||
+                "",
+
+            discountCode:
+                body.discountCode ||
+                "",
+
+            discount:
+                Number(
+                    body.discount || 0
+                ),
+
+            status:
+                "NEW",
+
+            note:
+                body.note ||
+                "",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        orders.unshift(
+            order
+        );
+
+
+        writeJSON(
+            ORDERS_FILE,
+            orders
+        );
+
+
+        console.log(
+            "Nowe zamówienie:",
+            order.id
+        );
+
+
+        res.status(201).json({
+            success: true,
+            order
+        });
+
+    }
+);
+
+
+// ===============================
+// WŁASNY MODEL 3D
+// ===============================
+
+app.post(
+    "/api/custom-model",
+    (req, res) => {
+
+        const body =
+            req.body || {};
+
+
+        const customModels =
+            readJSON(
+                CUSTOM_FILE,
+                []
+            );
+
+
+        const model = {
+
+            id:
+                generateId("MODEL"),
+
+            name:
+                body.name ||
+                body.customerName ||
+                "",
+
+            email:
+                body.email ||
+                "",
+
+            phone:
+                body.phone ||
+                "",
+
+            fileName:
+                body.fileName ||
+                body.filename ||
+                "",
+
+            fileUrl:
+                body.fileUrl ||
+                body.url ||
+                "",
+
+            material:
+                body.material ||
+                "PLA",
+
+            color:
+                body.color ||
+                "",
+
+            quantity:
+                Number(
+                    body.quantity || 1
+                ),
+
+            dimensions:
+                body.dimensions ||
+                "",
+
+            description:
+                body.description ||
+                "",
+
+            estimatedPrice:
+                Number(
+                    body.estimatedPrice ||
+                    0
+                ),
+
+            status:
+                "NEW",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        customModels.unshift(
+            model
+        );
+
+
+        writeJSON(
+            CUSTOM_FILE,
+            customModels
+        );
+
+
+        console.log(
+            "Nowy własny model:",
+            model.id
+        );
+
+
+        res.status(201).json({
+            success: true,
+            model
+        });
+
+    }
+);
+
+
+// ===============================
+// ZMIANA STATUSU ZAMÓWIENIA
+// ===============================
+
+app.patch(
+    "/api/admin/orders/:id/status",
+    requireAdmin,
     (req, res) => {
 
         const {
-            id,
             status
-        } = req.body;
+        } = req.body || {};
 
-        if (!id || !status) {
 
-            return res.status(400).json({
-                error:
-                    "Brak ID zamówienia lub statusu."
-            });
-
-        }
-
-        const order =
-            orders.find(
-                item =>
-                    item.id === id
-            );
-
-        if (!order) {
-
-            return res.status(404).json({
-                error:
-                    "Nie znaleziono zamówienia."
-            });
-
-        }
-
-        const allowedStatuses = [
+        const allowed = [
             "NEW",
-            "PAID",
-            "PROCESSING",
-            "SHIPPED",
+            "IN_PROGRESS",
+            "READY",
             "COMPLETED",
             "CANCELLED"
         ];
 
+
         if (
-            !allowedStatuses.includes(
+            !allowed.includes(
                 status
             )
         ) {
@@ -256,7 +677,44 @@ app.post(
 
         }
 
-        order.status = status;
+
+        const orders =
+            readJSON(
+                ORDERS_FILE,
+                []
+            );
+
+
+        const order =
+            orders.find(
+                item =>
+                    String(item.id) ===
+                    String(req.params.id)
+            );
+
+
+        if (!order) {
+
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono zamówienia."
+            });
+
+        }
+
+
+        order.status =
+            status;
+
+        order.updatedAt =
+            new Date().toISOString();
+
+
+        writeJSON(
+            ORDERS_FILE,
+            orders
+        );
+
 
         res.json({
             success: true,
@@ -266,324 +724,184 @@ app.post(
     }
 );
 
+
 // ===============================
-// UTWORZENIE ZAMÓWIENIA
+// ZMIANA STATUSU MODELU
 // ===============================
 
-app.post(
-    "/api/orders",
+app.patch(
+    "/api/admin/custom/:id/status",
+    requireAdmin,
     (req, res) => {
 
-        const body = req.body || {};
+        const {
+            status
+        } = req.body || {};
 
-        const id =
-            "PL3D-" +
-            crypto
-                .randomBytes(5)
-                .toString("hex")
-                .toUpperCase();
 
-        const order = {
+        const allowed = [
+            "NEW",
+            "IN_PROGRESS",
+            "READY",
+            "COMPLETED",
+            "CANCELLED"
+        ];
 
-            id,
 
-            name:
-                String(
-                    body.name || ""
-                ),
+        if (
+            !allowed.includes(
+                status
+            )
+        ) {
 
-            email:
-                String(
-                    body.email || ""
-                ),
+            return res.status(400).json({
+                error:
+                    "Nieprawidłowy status."
+            });
 
-            phone:
-                String(
-                    body.phone || ""
-                ),
+        }
 
-            address:
-                String(
-                    body.address || ""
-                ),
 
-            postalCode:
-                String(
-                    body.postalCode || ""
-                ),
+        const models =
+            readJSON(
+                CUSTOM_FILE,
+                []
+            );
 
-            city:
-                String(
-                    body.city || ""
-                ),
 
-            country:
-                String(
-                    body.country ||
-                    "Polska"
-                ),
+        const model =
+            models.find(
+                item =>
+                    String(item.id) ===
+                    String(req.params.id)
+            );
 
-            total:
-                Number(
-                    body.total || 0
-                ),
 
-            discount:
-                Number(
-                    body.discount || 0
-                ),
+        if (!model) {
 
-            status: "NEW",
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono modelu."
+            });
 
-            type:
-                body.type ===
-                "CUSTOM_MODEL"
-                    ? "CUSTOM_MODEL"
-                    : "NORMAL",
+        }
 
-            description:
-                String(
-                    body.description || ""
-                ),
 
-            originalFileName:
-                String(
-                    body.originalFileName ||
-                    ""
-                ),
+        model.status =
+            status;
 
-            items:
-                Array.isArray(
-                    body.items
-                )
-                    ? body.items
-                    : [],
+        model.updatedAt =
+            new Date().toISOString();
 
-            createdAt:
-                new Date().toISOString()
 
-        };
-
-        orders.push(order);
-
-        console.log(
-            "NOWE ZAMÓWIENIE:",
-            order.id
+        writeJSON(
+            CUSTOM_FILE,
+            models
         );
 
-        res.status(201).json({
+
+        res.json({
             success: true,
-            order
+            model
         });
 
     }
 );
 
+
 // ===============================
-// WŁASNY MODEL 3D
+// USUWANIE WŁASNEGO MODELU
 // ===============================
 
-app.post(
-    "/api/custom-model",
+app.delete(
+    "/api/admin/custom/:id",
+    requireAdmin,
     (req, res) => {
 
-        const body = req.body || {};
+        const models =
+            readJSON(
+                CUSTOM_FILE,
+                []
+            );
 
-        const id =
-            "MODEL-" +
-            crypto
-                .randomBytes(5)
-                .toString("hex")
-                .toUpperCase();
 
-        const order = {
+        const before =
+            models.length;
 
-            id,
 
-            name:
-                String(
-                    body.name || ""
-                ),
+        const filtered =
+            models.filter(
+                item =>
+                    String(item.id) !==
+                    String(req.params.id)
+            );
 
-            email:
-                String(
-                    body.email || ""
-                ),
 
-            phone:
-                String(
-                    body.phone || ""
-                ),
+        if (
+            filtered.length ===
+            before
+        ) {
 
-            address:
-                String(
-                    body.address || ""
-                ),
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono modelu."
+            });
 
-            postalCode:
-                String(
-                    body.postalCode || ""
-                ),
+        }
 
-            city:
-                String(
-                    body.city || ""
-                ),
 
-            country:
-                String(
-                    body.country ||
-                    "Polska"
-                ),
-
-            total:
-                Number(
-                    body.total || 0
-                ),
-
-            discount:
-                Number(
-                    body.discount || 0
-                ),
-
-            status: "NEW",
-
-            type: "CUSTOM_MODEL",
-
-            description:
-                String(
-                    body.description || ""
-                ),
-
-            originalFileName:
-                String(
-                    body.originalFileName ||
-                    ""
-                ),
-
-            modelData:
-                body.modelData || null,
-
-            items: [],
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-        orders.push(order);
-
-        console.log(
-            "NOWY WŁASNY MODEL:",
-            order.id
+        writeJSON(
+            CUSTOM_FILE,
+            filtered
         );
 
-        res.status(201).json({
-            success: true,
-            orderId: id
+
+        res.json({
+            success: true
         });
 
     }
 );
 
+
 // ===============================
-// POBIERANIE MODELU
+// HEALTH CHECK
 // ===============================
 
 app.get(
-    "/api/admin/model/:id",
-    checkAdmin,
+    "/api/health",
     (req, res) => {
 
-        const order =
-            orders.find(
-                item =>
-                    item.id ===
-                    req.params.id
-            );
-
-        if (!order) {
-
-            return res.status(404).send(
-                "Nie znaleziono modelu."
-            );
-
-        }
-
-        if (
-            order.type !==
-            "CUSTOM_MODEL"
-        ) {
-
-            return res.status(400).send(
-                "To nie jest własny model."
-            );
-
-        }
-
-        if (!order.modelData) {
-
-            return res.status(404).send(
-                "Model nie zawiera pliku."
-            );
-
-        }
-
-        try {
-
-            const match =
-                String(
-                    order.modelData
-                ).match(
-                    /^data:([^;]+);base64,(.+)$/
-                );
-
-            if (!match) {
-
-                return res.status(400).send(
-                    "Nieprawidłowy plik."
-                );
-
-            }
-
-            const mime =
-                match[1];
-
-            const data =
-                Buffer.from(
-                    match[2],
-                    "base64"
-                );
-
-            res.setHeader(
-                "Content-Type",
-                mime
-            );
-
-            res.setHeader(
-                "Content-Disposition",
-                `attachment; filename="${(
-                    order.originalFileName ||
-                    "model-3d"
-                ).replace(
-                    /[^a-zA-Z0-9._-]/g,
-                    "_"
-                )}"`
-            );
-
-            res.send(data);
-
-        }
-        catch {
-
-            res.status(500).send(
-                "Nie udało się pobrać modelu."
-            );
-
-        }
+        res.json({
+            online: true,
+            service:
+                "Printerlase3D",
+            time:
+                new Date().toISOString()
+        });
 
     }
 );
+
+
+// ===============================
+// STRONA ADMINA
+// ===============================
+
+app.get(
+    "/admin",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "admin.html"
+            )
+        );
+
+    }
+);
+
 
 // ===============================
 // START
@@ -591,32 +909,43 @@ app.get(
 
 app.listen(
     PORT,
-    "0.0.0.0",
     () => {
 
         console.log("");
         console.log(
             "================================"
         );
+
         console.log(
-            "   Printerlase3D SERVER"
+            "   Printerlase3D ONLINE"
         );
-        console.log(
-            "================================"
-        );
-        console.log(
-            `Serwer działa na porcie ${PORT}`
-        );
-        console.log(
-            "Panel admina: /admin"
-        );
-        console.log(
-            "Domyślne hasło: admin123"
-        );
+
         console.log(
             "================================"
         );
+
+        console.log(
+            `Sklep: http://localhost:${PORT}`
+        );
+
+        console.log(
+            `Admin: http://localhost:${PORT}/admin`
+        );
+
+        console.log(
+            "Login: admin"
+        );
+
+        console.log(
+            "Hasło: Admin2137!"
+        );
+
+        console.log(
+            "================================"
+        );
+
         console.log("");
 
     }
 );
+```
