@@ -7,6 +7,7 @@
 <title>Printerlase3D — Panel Admin</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -15,163 +16,759 @@
 
 body{
     min-height:100vh;
-    font-family:Arial, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     color:white;
-    background:#030712;
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(0,150,255,.16),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(120,50,255,.15),
+            transparent 30%
+        ),
+        #020611;
 }
 
-.top{
-    min-height:70px;
+/* ================================
+   LOGIN
+================================ */
+
+.loginScreen{
+    min-height:100vh;
+
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    padding:0 6%;
-    background:rgba(5,10,20,.95);
-    border-bottom:1px solid rgba(255,255,255,.08);
+    justify-content:center;
+
+    padding:20px;
 }
 
-.logo{
-    font-size:20px;
+.loginBox{
+    width:100%;
+    max-width:420px;
+
+    padding:35px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+    background:
+        rgba(7,17,32,.94);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.55);
+
+    animation:
+        appear .5s ease;
+}
+
+@keyframes appear{
+
+    from{
+        opacity:0;
+        transform:
+            translateY(20px)
+            scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+.loginLogo{
+    width:70px;
+    height:70px;
+
+    display:grid;
+    place-items:center;
+
+    margin:0 auto 20px;
+
+    border-radius:20px;
+
+    font-size:27px;
+    font-weight:1000;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00d9ff,
+            #087dff,
+            #783cff
+        );
+
+    box-shadow:
+        0 0 45px
+        rgba(0,180,255,.35);
+}
+
+.loginBox h1{
+    font-size:28px;
+}
+
+.loginSubtitle{
+    margin-top:8px;
+
+    color:#718096;
+
+    font-size:12px;
+}
+
+.loginInput{
+    width:100%;
+
+    margin-top:25px;
+
+    padding:15px;
+
+    outline:none;
+
+    border-radius:12px;
+
+    color:white;
+
+    background:#091426;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    font-size:14px;
+}
+
+.loginInput:focus{
+    border-color:#159fff;
+
+    box-shadow:
+        0 0 20px
+        rgba(0,150,255,.15);
+}
+
+.loginButton{
+    width:100%;
+
+    margin-top:12px;
+
+    padding:15px;
+
+    border:0;
+
+    border-radius:12px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #783cff
+        );
+
+    cursor:pointer;
+
+    font-size:13px;
+    font-weight:1000;
+
+    transition:.2s;
+}
+
+.loginButton:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,140,255,.25);
+}
+
+.error{
+    display:none;
+
+    margin-top:12px;
+
+    color:#ff7184;
+
+    font-size:11px;
     font-weight:900;
 }
 
-.logo span{
-    color:#29d8ff;
+.back{
+    display:inline-block;
+
+    margin-top:20px;
+
+    color:#718096;
+
+    text-decoration:none;
+
+    font-size:11px;
 }
 
-.back{
-    color:white;
-    text-decoration:none;
-    padding:10px 15px;
+/* ================================
+   ADMIN
+================================ */
+
+.adminScreen{
+    display:none;
+
+    min-height:100vh;
+}
+
+header{
+    height:75px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 5%;
+
+    background:
+        rgba(3,8,18,.9);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
+    backdrop-filter:
+        blur(15px);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:10;
+}
+
+.brand{
+    font-size:19px;
+    font-weight:1000;
+}
+
+.brand span{
+    color:#31d9ff;
+}
+
+.headerButtons{
+    display:flex;
+
+    gap:10px;
+}
+
+.headerButton{
+    padding:10px 14px;
+
+    border:0;
+
     border-radius:10px;
-    background:#111c2e;
+
+    color:white;
+
+    background:#101d31;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-size:11px;
+    font-weight:900;
+}
+
+.logout{
+    background:#8b2036;
 }
 
 .container{
-    width:min(1100px,90%);
-    margin:50px auto;
+    width:min(1150px,90%);
+
+    margin:45px auto 80px;
 }
 
-h1{
+.container h1{
     font-size:40px;
 }
 
 .subtitle{
-    color:#718096;
     margin-top:8px;
+
+    color:#718096;
+
+    font-size:13px;
 }
+
+/* ================================
+   CARDS
+================================ */
 
 .cards{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:18px;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
     margin-top:30px;
 }
 
 .card{
-    padding:25px;
+    padding:22px;
+
     border-radius:18px;
+
     background:#071120;
-    border:1px solid rgba(255,255,255,.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    transition:.2s;
 }
 
-.card .icon{
-    font-size:30px;
+.card:hover{
+    transform:translateY(-4px);
+
+    border-color:
+        rgba(0,180,255,.25);
 }
 
-.card h3{
+.icon{
+    font-size:28px;
+}
+
+.cardTitle{
     margin-top:15px;
-    font-size:13px;
-    color:#8fa0b5;
-}
 
-.number{
-    margin-top:8px;
-    font-size:32px;
+    color:#718096;
+
+    font-size:10px;
+
     font-weight:900;
 }
 
+.number{
+    margin-top:7px;
+
+    font-size:27px;
+
+    font-weight:1000;
+}
+
+/* ================================
+   PANEL
+================================ */
+
 .panel{
     margin-top:25px;
+
     padding:25px;
+
     border-radius:18px;
+
     background:#071120;
-    border:1px solid rgba(255,255,255,.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
 }
 
 .panel h2{
     margin-bottom:20px;
+
+    font-size:18px;
 }
 
+/* ================================
+   ORDERS
+================================ */
+
 .order{
-    display:flex;
-    justify-content:space-between;
+    display:grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        120px
+        100px;
+
     align-items:center;
+
     gap:15px;
-    padding:15px 0;
-    border-bottom:1px solid rgba(255,255,255,.06);
+
+    padding:18px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
 }
 
 .order:last-child{
     border-bottom:0;
 }
 
-.status{
-    padding:7px 10px;
-    border-radius:8px;
-    background:rgba(0,200,140,.12);
-    color:#4ff0b0;
-    font-size:11px;
-    font-weight:900;
+.order strong{
+    font-size:12px;
 }
 
-.button{
+.order small{
+    color:#718096;
+
+    font-size:10px;
+}
+
+.status{
+    display:inline-block;
+
+    padding:7px 10px;
+
+    border-radius:8px;
+
+    color:#49e6a5;
+
+    background:
+        rgba(0,255,170,.1);
+
+    font-size:9px;
+
+    font-weight:1000;
+}
+
+.delete{
+    margin-top:7px;
+
+    padding:7px 9px;
+
     border:0;
-    padding:10px 14px;
-    border-radius:9px;
+
+    border-radius:7px;
+
     color:white;
-    background:linear-gradient(100deg,#008cff,#783cff);
+
+    background:#7e2033;
+
     cursor:pointer;
+
+    font-size:9px;
+
     font-weight:900;
 }
 
 .empty{
-    padding:30px;
+    padding:40px;
+
     text-align:center;
+
     color:#718096;
 }
 
-@media(max-width:700px){
+/* ================================
+   WITHDRAW
+================================ */
+
+.withdrawCards{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+    margin-bottom:25px;
+}
+
+.withdrawBox{
+    padding:20px;
+
+    border-radius:15px;
+
+    background:#091426;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+}
+
+.withdrawBox .smallTitle{
+    color:#718096;
+
+    font-size:10px;
+
+    font-weight:900;
+}
+
+.withdrawBox .amount{
+    margin-top:8px;
+
+    font-size:25px;
+
+    font-weight:1000;
+}
+
+.withdrawForm{
+    padding:20px;
+
+    border-radius:15px;
+
+    background:#091426;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+}
+
+.withdrawForm h3{
+    font-size:14px;
+
+    margin-bottom:15px;
+}
+
+.withdrawInput{
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid
+        rgba(255,255,255,.1);
+
+    border-radius:10px;
+
+    outline:none;
+
+    color:white;
+
+    background:#050c18;
+
+    font-size:14px;
+}
+
+.withdrawInput:focus{
+    border-color:#159fff;
+}
+
+.withdrawButton{
+    width:100%;
+
+    margin-top:10px;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:10px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            100deg,
+            #00a879,
+            #008cff
+        );
+
+    cursor:pointer;
+
+    font-weight:1000;
+}
+
+.withdrawMessage{
+    display:none;
+
+    margin-top:12px;
+
+    font-size:11px;
+
+    font-weight:900;
+}
+
+/* ================================
+   DELETE ALL
+================================ */
+
+.dangerButton{
+    padding:12px 15px;
+
+    border:0;
+
+    border-radius:10px;
+
+    color:white;
+
+    background:#7e2033;
+
+    cursor:pointer;
+
+    font-weight:900;
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:850px){
+
+    .cards{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .order{
+        grid-template-columns:1fr;
+    }
+
+    .withdrawCards{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:500px){
+
     .cards{
         grid-template-columns:1fr;
     }
 
-    .order{
-        align-items:flex-start;
-        flex-direction:column;
+    .container h1{
+        font-size:30px;
     }
+
+    header{
+        padding:0 20px;
+    }
+
+    .brand{
+        font-size:15px;
+    }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<header class="top">
 
-    <div class="logo">
-        Printerlase<span>3D</span>
+<!-- =================================================
+     LOGIN
+================================================= -->
+
+<div
+    id="loginScreen"
+    class="loginScreen"
+>
+
+    <div class="loginBox">
+
+        <div class="loginLogo">
+            P
+        </div>
+
+        <h1>
+            Panel Admin
+        </h1>
+
+        <div class="loginSubtitle">
+            Printerlase3D
+        </div>
+
+
+        <input
+            id="password"
+            class="loginInput"
+            type="password"
+            placeholder="Hasło administratora"
+            autocomplete="off"
+        >
+
+
+        <button
+            class="loginButton"
+            onclick="login()"
+        >
+            🔐 Zaloguj się
+        </button>
+
+
+        <div
+            id="error"
+            class="error"
+        >
+            ❌ Nieprawidłowe hasło
+        </div>
+
+
+        <a
+            href="./index.html"
+            class="back"
+        >
+            ← Wróć do sklepu
+        </a>
+
     </div>
 
-    <a href="./index.html" class="back">
-        ← Sklep
-    </a>
+</div>
+
+
+<!-- =================================================
+     ADMIN SCREEN
+================================================= -->
+
+<div
+    id="adminScreen"
+    class="adminScreen"
+>
+
+
+<header>
+
+    <div class="brand">
+
+        Printerlase<span>3D</span>
+
+    </div>
+
+
+    <div class="headerButtons">
+
+        <a
+            href="./index.html"
+            class="headerButton"
+        >
+            🏠 Sklep
+        </a>
+
+
+        <button
+            class="headerButton logout"
+            onclick="logout()"
+        >
+            Wyloguj
+        </button>
+
+    </div>
 
 </header>
+
 
 <main class="container">
 
     <h1>
-        🔐 Panel Admin
+        Dashboard
     </h1>
 
     <p class="subtitle">
@@ -179,19 +776,26 @@ h1{
     </p>
 
 
+    <!-- =================================================
+         STATYSTYKI
+    ================================================= -->
+
     <section class="cards">
+
 
         <div class="card">
 
-            <div class="icon">📦</div>
+            <div class="icon">
+                📦
+            </div>
 
-            <h3>
+            <div class="cardTitle">
                 ZAMÓWIENIA
-            </h3>
+            </div>
 
             <div
+                id="ordersCount"
                 class="number"
-                id="orders"
             >
                 0
             </div>
@@ -201,17 +805,19 @@ h1{
 
         <div class="card">
 
-            <div class="icon">💰</div>
+            <div class="icon">
+                💰
+            </div>
 
-            <h3>
-                SPRZEDAŻ
-            </h3>
+            <div class="cardTitle">
+                PRZYCHÓD
+            </div>
 
             <div
-                class="number"
                 id="sales"
+                class="number"
             >
-                0 zł
+                0,00 zł
             </div>
 
         </div>
@@ -219,28 +825,54 @@ h1{
 
         <div class="card">
 
-            <div class="icon">🛒</div>
+            <div class="icon">
+                🛒
+            </div>
 
-            <h3>
+            <div class="cardTitle">
                 PRODUKTY
-            </h3>
+            </div>
 
-            <div
-                class="number"
-            >
+            <div class="number">
                 6
             </div>
 
         </div>
 
+
+        <div class="card">
+
+            <div class="icon">
+                🎟️
+            </div>
+
+            <div class="cardTitle">
+                KOD RABATOWY
+            </div>
+
+            <div
+                class="number"
+                style="font-size:18px"
+            >
+                START10
+            </div>
+
+        </div>
+
+
     </section>
 
+
+    <!-- =================================================
+         ZAMÓWIENIA
+    ================================================= -->
 
     <section class="panel">
 
         <h2>
-            📋 Zamówienia
+            📦 Zamówienia
         </h2>
+
 
         <div id="ordersList">
 
@@ -253,71 +885,384 @@ h1{
     </section>
 
 
+    <!-- =================================================
+         WYPŁATY
+    ================================================= -->
+
     <section class="panel">
 
         <h2>
-            ⚙️ Sklep
+            💸 Wypłaty
         </h2>
 
+
+        <div class="withdrawCards">
+
+
+            <div class="withdrawBox">
+
+                <div class="smallTitle">
+                    DOSTĘPNE SALDO
+                </div>
+
+                <div
+                    id="withdrawBalance"
+                    class="amount"
+                >
+                    0,00 zł
+                </div>
+
+            </div>
+
+
+            <div class="withdrawBox">
+
+                <div class="smallTitle">
+                    ŁĄCZNY PRZYCHÓD
+                </div>
+
+                <div
+                    id="withdrawRevenue"
+                    class="amount"
+                >
+                    0,00 zł
+                </div>
+
+            </div>
+
+
+            <div class="withdrawBox">
+
+                <div class="smallTitle">
+                    WYPŁACONO
+                </div>
+
+                <div
+                    id="withdrawn"
+                    class="amount"
+                >
+                    0,00 zł
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="withdrawForm">
+
+            <h3>
+                💳 Zleć wypłatę
+            </h3>
+
+
+            <input
+                id="withdrawAmount"
+                class="withdrawInput"
+                type="number"
+                min="1"
+                step="0.01"
+                placeholder="Kwota, np. 50"
+            >
+
+
+            <button
+                class="withdrawButton"
+                onclick="withdrawMoney()"
+            >
+                💸 Wypłać środki
+            </button>
+
+
+            <div
+                id="withdrawMessage"
+                class="withdrawMessage"
+            ></div>
+
+        </div>
+
+
+        <div style="margin-top:25px">
+
+            <h3
+                style="
+                    font-size:14px;
+                    margin-bottom:15px;
+                "
+            >
+                📋 Historia wypłat
+            </h3>
+
+
+            <div id="withdrawHistory">
+
+                <div class="empty">
+                    Brak wypłat.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ZARZĄDZANIE
+    ================================================= -->
+
+    <section class="panel">
+
+        <h2>
+            ⚙️ Zarządzanie
+        </h2>
+
+
         <button
-            class="button"
+            class="dangerButton"
             onclick="clearOrders()"
         >
-            🗑️ Wyczyść zamówienia
+            🗑️ Usuń wszystkie zamówienia
         </button>
 
     </section>
 
+
 </main>
+
+</div>
 
 
 <script>
 
-function loadOrders(){
+/* =================================================
+   HASŁO ADMINA
+================================================= */
 
-    let orders = [];
+const ADMIN_PASSWORD = "Admin2137";
 
-    try{
 
-        orders =
-            JSON.parse(
-                localStorage.getItem(
-                    "printerlase_orders"
-                )
-            ) || [];
+/* =================================================
+   LOGIN
+================================================= */
 
-    }catch(e){
+function login(){
 
-        orders=[];
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+    const error =
+        document.getElementById(
+            "error"
+        );
+
+
+    if(
+        password ===
+        ADMIN_PASSWORD
+    ){
+
+        sessionStorage.setItem(
+            "printerlase_admin",
+            "true"
+        );
+
+
+        document.getElementById(
+            "loginScreen"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "adminScreen"
+        ).style.display = "block";
+
+
+        loadEverything();
+
+    }else{
+
+        error.style.display = "block";
+
+        document.getElementById(
+            "password"
+        ).value = "";
+
+        document.getElementById(
+            "password"
+        ).focus();
 
     }
 
+}
+
+
+/* =================================================
+   ENTER
+================================================= */
+
+document
+.getElementById("password")
+.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter"
+        ){
+
+            login();
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   LOGOUT
+================================================= */
+
+function logout(){
+
+    sessionStorage.removeItem(
+        "printerlase_admin"
+    );
+
+    location.reload();
+
+}
+
+
+/* =================================================
+   POBIERANIE ZAMÓWIEŃ
+================================================= */
+
+function getOrders(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                "printerlase_orders"
+            )
+        ) || [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =================================================
+   PRZYCHÓD
+================================================= */
+
+function calculateRevenue(){
+
+    const orders =
+        getOrders();
+
+    let total = 0;
+
+
+    orders.forEach(
+        order => {
+
+            total += Number(
+                order.total || 0
+            );
+
+        }
+    );
+
+
+    return total;
+
+}
+
+
+/* =================================================
+   WYPŁACONO
+================================================= */
+
+function getWithdrawn(){
+
+    return Number(
+        localStorage.getItem(
+            "printerlase_withdrawn"
+        )
+    ) || 0;
+
+}
+
+
+/* =================================================
+   HISTORIA WYPŁAT
+================================================= */
+
+function getWithdrawHistory(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                "printerlase_withdraw_history"
+            )
+        ) || [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =================================================
+   ŁADOWANIE WSZYSTKIEGO
+================================================= */
+
+function loadEverything(){
+
+    loadOrders();
+
+    loadWithdrawals();
+
+}
+
+
+/* =================================================
+   ZAMÓWIENIA
+================================================= */
+
+function loadOrders(){
+
+    const orders =
+        getOrders();
+
 
     document.getElementById(
-        "orders"
+        "ordersCount"
     ).textContent =
         orders.length;
 
 
-    let sales=0;
-
-
-    orders.forEach(order=>{
-
-        sales +=
-            Number(
-                order.total || 0
-            );
-
-    });
+    const revenue =
+        calculateRevenue();
 
 
     document.getElementById(
         "sales"
     ).textContent =
-        sales.toFixed(2)
-        .replace(".",",")
-        + " zł";
+        money(revenue);
 
 
     const list =
@@ -326,12 +1271,20 @@ function loadOrders(){
         );
 
 
-    if(!orders.length){
+    if(
+        orders.length === 0
+    ){
 
-        list.innerHTML=`
+        list.innerHTML = `
 
             <div class="empty">
-                📦 Brak zamówień.
+
+                📦
+
+                <br><br>
+
+                Nie ma jeszcze żadnych zamówień.
+
             </div>
 
         `;
@@ -341,16 +1294,11 @@ function loadOrders(){
     }
 
 
-    list.innerHTML="";
+    list.innerHTML = "";
 
 
     orders.forEach(
-        (order,index)=>{
-
-            const date =
-                order.date ||
-                "Brak daty";
-
+        (order,index) => {
 
             list.innerHTML += `
 
@@ -359,19 +1307,16 @@ function loadOrders(){
                     <div>
 
                         <strong>
-                            Zamówienie #${index+1}
+                            Zamówienie #${index + 1}
                         </strong>
 
                         <br>
 
                         <small>
-                            ${date}
-                        </small>
-
-                        <br>
-
-                        <small>
-                            ${order.name || "Klient"}
+                            ${escapeHTML(
+                                order.date ||
+                                "Brak daty"
+                            )}
                         </small>
 
                     </div>
@@ -380,17 +1325,56 @@ function loadOrders(){
                     <div>
 
                         <strong>
-                            ${Number(
-                                order.total || 0
-                            ).toFixed(2)
-                            .replace(".",",")} zł
+                            ${escapeHTML(
+                                order.name ||
+                                "Klient"
+                            )}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            ${escapeHTML(
+                                order.email ||
+                                "Brak e-maila"
+                            )}
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            ${money(
+                                Number(
+                                    order.total || 0
+                                )
+                            )}
                         </strong>
 
                     </div>
 
 
-                    <div class="status">
-                        NOWE
+                    <div>
+
+                        <span class="status">
+                            NOWE
+                        </span>
+
+                        <br>
+
+                        <button
+                            class="delete"
+                            onclick="
+                                deleteOrder(
+                                    ${index}
+                                )
+                            "
+                        >
+                            Usuń
+                        </button>
+
                     </div>
 
                 </div>
@@ -403,11 +1387,55 @@ function loadOrders(){
 }
 
 
+/* =================================================
+   USUWANIE JEDNEGO ZAMÓWIENIA
+================================================= */
+
+function deleteOrder(index){
+
+    if(
+        !confirm(
+            "Usunąć to zamówienie?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const orders =
+        getOrders();
+
+
+    orders.splice(
+        index,
+        1
+    );
+
+
+    localStorage.setItem(
+        "printerlase_orders",
+        JSON.stringify(
+            orders
+        )
+    );
+
+
+    loadEverything();
+
+}
+
+
+/* =================================================
+   USUWANIE WSZYSTKICH
+================================================= */
+
 function clearOrders(){
 
     if(
         !confirm(
-            "Na pewno usunąć wszystkie zamówienia?"
+            "Na pewno usunąć WSZYSTKIE zamówienia?"
         )
     ){
 
@@ -421,12 +1449,379 @@ function clearOrders(){
     );
 
 
-    loadOrders();
+    loadEverything();
 
 }
 
 
-loadOrders();
+/* =================================================
+   WYPŁATY
+================================================= */
+
+function loadWithdrawals(){
+
+    const revenue =
+        calculateRevenue();
+
+
+    const withdrawn =
+        getWithdrawn();
+
+
+    const balance =
+        Math.max(
+            0,
+            revenue - withdrawn
+        );
+
+
+    document.getElementById(
+        "withdrawBalance"
+    ).textContent =
+        money(balance);
+
+
+    document.getElementById(
+        "withdrawRevenue"
+    ).textContent =
+        money(revenue);
+
+
+    document.getElementById(
+        "withdrawn"
+    ).textContent =
+        money(withdrawn);
+
+
+    renderWithdrawHistory();
+
+}
+
+
+/* =================================================
+   ZLECENIE WYPŁATY
+================================================= */
+
+function withdrawMoney(){
+
+    const input =
+        document.getElementById(
+            "withdrawAmount"
+        );
+
+
+    const message =
+        document.getElementById(
+            "withdrawMessage"
+        );
+
+
+    const amount =
+        Number(
+            input.value
+        );
+
+
+    const revenue =
+        calculateRevenue();
+
+
+    const withdrawn =
+        getWithdrawn();
+
+
+    const balance =
+        Math.max(
+            0,
+            revenue - withdrawn
+        );
+
+
+    if(
+        !amount ||
+        amount <= 0
+    ){
+
+        showWithdrawMessage(
+            "❌ Wpisz prawidłową kwotę.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    if(
+        amount > balance
+    ){
+
+        showWithdrawMessage(
+            "❌ Nie masz tylu środków.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    const newWithdrawn =
+        withdrawn + amount;
+
+
+    localStorage.setItem(
+        "printerlase_withdrawn",
+        String(
+            newWithdrawn
+        )
+    );
+
+
+    const history =
+        getWithdrawHistory();
+
+
+    history.unshift({
+
+        amount:amount,
+
+        date:
+            new Date()
+            .toLocaleString(
+                "pl-PL"
+            ),
+
+        status:
+            "ZLECONO"
+
+    });
+
+
+    localStorage.setItem(
+        "printerlase_withdraw_history",
+        JSON.stringify(
+            history
+        )
+    );
+
+
+    input.value = "";
+
+
+    showWithdrawMessage(
+        "✓ Wypłata została dodana do historii.",
+        true
+    );
+
+
+    loadWithdrawals();
+
+}
+
+
+/* =================================================
+   KOMUNIKAT WYPŁATY
+================================================= */
+
+function showWithdrawMessage(
+    text,
+    success
+){
+
+    const message =
+        document.getElementById(
+            "withdrawMessage"
+        );
+
+
+    message.style.display =
+        "block";
+
+
+    message.style.color =
+        success
+        ? "#49e6a5"
+        : "#ff7184";
+
+
+    message.textContent =
+        text;
+
+}
+
+
+/* =================================================
+   HISTORIA WYPŁAT
+================================================= */
+
+function renderWithdrawHistory(){
+
+    const box =
+        document.getElementById(
+            "withdrawHistory"
+        );
+
+
+    const history =
+        getWithdrawHistory();
+
+
+    if(
+        history.length === 0
+    ){
+
+        box.innerHTML = `
+
+            <div class="empty">
+                Brak wypłat.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML = "";
+
+
+    history.forEach(
+        item => {
+
+            box.innerHTML += `
+
+                <div class="order">
+
+                    <div>
+
+                        <strong>
+                            💸 Wypłata
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            ${escapeHTML(
+                                item.date
+                            )}
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            ${money(
+                                Number(
+                                    item.amount || 0
+                                )
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="status">
+                            ${escapeHTML(
+                                item.status ||
+                                "ZLECONO"
+                            )}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =================================================
+   MONEY
+================================================= */
+
+function money(value){
+
+    return Number(
+        value || 0
+    )
+    .toFixed(2)
+    .replace(".",",")
+    + " zł";
+
+}
+
+
+/* =================================================
+   ESCAPE HTML
+================================================= */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =================================================
+   SPRAWDZENIE SESJI
+================================================= */
+
+if(
+    sessionStorage.getItem(
+        "printerlase_admin"
+    ) === "true"
+){
+
+    document.getElementById(
+        "loginScreen"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "adminScreen"
+    ).style.display = "block";
+
+
+    loadEverything();
+
+}
 
 </script>
 
