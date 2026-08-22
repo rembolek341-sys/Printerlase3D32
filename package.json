@@ -1,4 +1,4 @@
-```json
+
 {
   "name": "printerlase3d",
   "version": "1.0.0",
@@ -14,4 +14,4 @@
     "node": ">=18"
   }
 }
-```
+
