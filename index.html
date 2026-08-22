@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Printerlase3D — Wydruki 3D</title>
-<meta name="description" content="Printerlase3D — breloki, figurki, dodatki i własne projekty 3D.">
 
 <style>
 *{
@@ -19,9 +18,13 @@ html{
 body{
     margin:0;
     background:#030712;
-    color:white;
+    color:#fff;
     font-family:Inter,Arial,sans-serif;
     overflow-x:hidden;
+}
+
+a{
+    color:inherit;
 }
 
 /* =========================
@@ -31,28 +34,28 @@ body{
 .bg{
     position:fixed;
     inset:0;
-    pointer-events:none;
     overflow:hidden;
-    z-index:-10;
+    pointer-events:none;
+    z-index:-5;
 }
 
 .orb{
     position:absolute;
     border-radius:50%;
     filter:blur(100px);
-    opacity:.28;
-    animation:floatOrb 12s infinite alternate ease-in-out;
+    opacity:.3;
+    animation:float 10s infinite alternate ease-in-out;
 }
 
-.orb.one{
-    width:450px;
-    height:450px;
+.orb1{
+    width:420px;
+    height:420px;
     background:#008cff;
-    top:-200px;
-    left:-150px;
+    left:-160px;
+    top:-150px;
 }
 
-.orb.two{
+.orb2{
     width:400px;
     height:400px;
     background:#7c3cff;
@@ -61,21 +64,21 @@ body{
     animation-delay:2s;
 }
 
-.orb.three{
-    width:350px;
-    height:350px;
+.orb3{
+    width:320px;
+    height:320px;
     background:#00d9ff;
     left:40%;
-    bottom:-200px;
+    bottom:-180px;
     animation-delay:4s;
 }
 
-@keyframes floatOrb{
+@keyframes float{
     from{
         transform:translate(0,0) scale(1);
     }
     to{
-        transform:translate(70px,50px) scale(1.15);
+        transform:translate(80px,60px) scale(1.15);
     }
 }
 
@@ -83,80 +86,62 @@ body{
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:-9;
-    opacity:.13;
+    z-index:-4;
+    opacity:.15;
     background-image:
         linear-gradient(#1b9cff18 1px,transparent 1px),
         linear-gradient(90deg,#1b9cff18 1px,transparent 1px);
     background-size:55px 55px;
-    mask-image:linear-gradient(to bottom,black,transparent);
 }
 
 /* =========================
-   PROMO
+   KOD RABATOWY TOP
 ========================= */
 
-.promo-bar{
-    position:fixed;
-    top:0;
-    left:0;
+.discount-bar{
+    position:relative;
+    z-index:1001;
     width:100%;
-    height:43px;
-    z-index:10000;
-
+    min-height:43px;
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:11px;
-
+    gap:10px;
+    padding:9px 15px;
     background:
         linear-gradient(
             90deg,
-            #006eff,
-            #743cff,
-            #00cfff,
-            #006eff
+            #006cff,
+            #00bfff,
+            #754cff
         );
-
-    background-size:300% 100%;
-    animation:promoGradient 7s linear infinite;
-
     color:white;
-    font-size:11px;
+    font-size:13px;
     font-weight:900;
-    box-shadow:0 5px 30px #008cff35;
+    box-shadow:0 5px 30px #008cff30;
 }
 
-.promo-code{
-    padding:5px 9px;
-    border-radius:7px;
-    background:#00000035;
-    border:1px solid #ffffff35;
+.discount-code{
+    padding:5px 10px;
+    border-radius:8px;
+    background:#ffffff20;
+    border:1px solid #ffffff55;
     letter-spacing:1px;
 }
 
-.promo-copy{
-    border:1px solid #ffffff45;
-    background:#ffffff18;
-    color:white;
+.copy-code{
+    border:0;
     padding:6px 10px;
-    border-radius:7px;
-    font-size:9px;
+    border-radius:8px;
+    background:white;
+    color:#0879d9;
     font-weight:900;
     cursor:pointer;
-    transition:.25s;
+    transition:.2s;
 }
 
-.promo-copy:hover{
-    background:white;
-    color:#087cff;
+.copy-code:hover{
     transform:scale(1.05);
-}
-
-@keyframes promoGradient{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
 }
 
 /* =========================
@@ -164,22 +149,16 @@ body{
 ========================= */
 
 .navbar{
-    position:fixed;
-    top:43px;
-    left:0;
-    width:100%;
+    position:sticky;
+    top:0;
+    z-index:1000;
     height:76px;
-
     display:flex;
     align-items:center;
     justify-content:space-between;
-
     padding:0 5%;
-    z-index:999;
-
-    background:#030712c7;
+    background:#030712dd;
     backdrop-filter:blur(20px);
-
     border-bottom:1px solid #ffffff0d;
 }
 
@@ -187,7 +166,6 @@ body{
     display:flex;
     align-items:center;
     gap:11px;
-    color:white;
     text-decoration:none;
     font-weight:900;
     font-size:19px;
@@ -199,14 +177,10 @@ body{
     display:grid;
     place-items:center;
     border-radius:13px;
-
-    background:
-        linear-gradient(135deg,#00d9ff,#187cff,#873cff);
-
+    background:linear-gradient(135deg,#00d9ff,#187cff,#873cff);
     box-shadow:
-        0 0 20px #008cff55,
+        0 0 25px #008cff55,
         inset 0 0 15px #ffffff22;
-
     transform:rotate(-4deg);
 }
 
@@ -223,26 +197,25 @@ body{
         #28d9ff,
         #9161ff
     );
-
     -webkit-background-clip:text;
     color:transparent;
 }
 
 .nav-links{
     display:flex;
-    gap:22px;
+    gap:23px;
 }
 
 .nav-links a{
-    color:#8996aa;
+    color:#8b98aa;
     text-decoration:none;
-    font-size:12px;
+    font-size:13px;
     font-weight:800;
     transition:.25s;
 }
 
 .nav-links a:hover{
-    color:white;
+    color:#fff;
 }
 
 .nav-right{
@@ -252,20 +225,19 @@ body{
 }
 
 .nav-btn{
-    color:white;
-    background:#ffffff08;
-    border:1px solid #ffffff12;
+    text-decoration:none;
     padding:10px 13px;
     border-radius:11px;
-    text-decoration:none;
-    font-size:12px;
-    font-weight:800;
+    background:#ffffff08;
+    border:1px solid #ffffff12;
+    font-size:13px;
+    font-weight:900;
     transition:.25s;
 }
 
 .nav-btn:hover{
     background:#008cff18;
-    border-color:#00bfff66;
+    border-color:#00bfff55;
     transform:translateY(-2px);
 }
 
@@ -275,21 +247,16 @@ body{
 
 .cart-count{
     position:absolute;
-    right:-7px;
     top:-8px;
-
+    right:-7px;
     min-width:19px;
     height:19px;
-
     display:grid;
     place-items:center;
-
     border-radius:50%;
-
     background:linear-gradient(135deg,#00bfff,#7c3cff);
-
-    font-size:10px;
     border:2px solid #030712;
+    font-size:10px;
 }
 
 /* =========================
@@ -298,15 +265,12 @@ body{
 
 .hero{
     max-width:1400px;
-    min-height:100vh;
+    min-height:calc(100vh - 119px);
     margin:auto;
-
-    padding:165px 6% 80px;
-
+    padding:110px 6%;
     display:grid;
     grid-template-columns:1.05fr .95fr;
     gap:50px;
-
     align-items:center;
 }
 
@@ -314,20 +278,14 @@ body{
     display:inline-flex;
     align-items:center;
     gap:9px;
-
     padding:9px 14px;
     border-radius:30px;
-
     border:1px solid #00cfff38;
     background:#00cfff0b;
-
     color:#42dfff;
-
     font-size:10px;
     font-weight:900;
     letter-spacing:2px;
-
-    margin-bottom:24px;
 }
 
 .badge-dot{
@@ -341,81 +299,61 @@ body{
 
 @keyframes pulse{
     50%{
-        transform:scale(1.5);
+        transform:scale(1.6);
         opacity:.5;
     }
 }
 
 .hero h1{
-    margin:0;
+    margin:24px 0 0;
     font-size:clamp(52px,7vw,92px);
     line-height:.94;
     letter-spacing:-5px;
 }
 
 .gradient-text{
-    background:
-        linear-gradient(
-            90deg,
-            #00e5ff,
-            #238cff,
-            #974cff
-        );
-
+    background:linear-gradient(
+        90deg,
+        #00e5ff,
+        #238cff,
+        #974cff
+    );
     -webkit-background-clip:text;
     color:transparent;
-
     filter:drop-shadow(0 0 25px #008cff44);
 }
 
 .hero-description{
     max-width:620px;
-
     color:#8794a7;
-
     font-size:16px;
     line-height:1.8;
-
     margin:30px 0;
 }
 
 .hero-buttons{
     display:flex;
-    flex-wrap:wrap;
     gap:12px;
+    flex-wrap:wrap;
 }
 
 .btn{
     border:0;
     cursor:pointer;
-
     text-decoration:none;
-
     display:inline-flex;
     align-items:center;
     justify-content:center;
     gap:9px;
-
     padding:14px 20px;
-
     border-radius:13px;
-
     font-weight:900;
     font-size:13px;
-
     transition:.3s;
 }
 
 .btn-primary{
-    color:white;
-
-    background:
-        linear-gradient(
-            100deg,
-            #008cff,
-            #754cff
-        );
-
+    background:linear-gradient(100deg,#008cff,#754cff);
     box-shadow:0 12px 40px #008cff38;
 }
 
@@ -425,14 +363,13 @@ body{
 }
 
 .btn-secondary{
-    color:white;
-    border:1px solid #ffffff12;
     background:#ffffff06;
+    border:1px solid #ffffff12;
 }
 
 .btn-secondary:hover{
-    border-color:#00cfff55;
     background:#ffffff0d;
+    border-color:#00cfff55;
     transform:translateY(-4px);
 }
 
@@ -444,81 +381,53 @@ body{
     min-height:500px;
     display:grid;
     place-items:center;
-    position:relative;
 }
 
 .hero-logo{
     width:310px;
     height:310px;
-
     border-radius:75px;
-
     display:grid;
     place-items:center;
-
     position:relative;
-    z-index:2;
-
-    background:
-        linear-gradient(145deg,#071a31,#090b20);
-
+    background:linear-gradient(145deg,#071a31,#090b20);
     border:1px solid #20cfff35;
-
     box-shadow:
         0 0 70px #008cff35,
         inset 0 0 60px #008cff0c;
-
     animation:logoFloat 4s ease-in-out infinite;
 }
 
 .hero-logo:before{
     content:"";
-
     position:absolute;
     inset:-18px;
-
     border-radius:90px;
-
     border:1px solid #00cfff28;
-
-    animation:rotateRing 8s linear infinite;
+    animation:rotate 8s linear infinite;
 }
 
 .hero-logo:after{
     content:"";
-
     position:absolute;
     inset:-45px;
-
     border-radius:110px;
-
     border:1px dashed #7c3cff22;
-
-    animation:rotateRing 14s linear infinite reverse;
+    animation:rotate 14s linear infinite reverse;
 }
 
 .logo-symbol{
     font-size:110px;
     font-weight:1000;
-
-    background:
-        linear-gradient(
-            135deg,
-            #00e5ff,
-            #147dff,
-            #9b4cff
-        );
-
+    background:linear-gradient(135deg,#00e5ff,#147dff,#9b4cff);
     -webkit-background-clip:text;
     color:transparent;
-
     filter:drop-shadow(0 0 30px #008cff88);
 }
 
 .logo-small{
     position:absolute;
     bottom:45px;
-
     font-size:17px;
     font-weight:1000;
     letter-spacing:3px;
@@ -530,7 +439,7 @@ body{
     }
 }
 
-@keyframes rotateRing{
+@keyframes rotate{
     to{
         transform:rotate(360deg);
     }
@@ -575,29 +484,17 @@ body{
 
 .category{
     text-decoration:none;
-    color:white;
-
     min-height:240px;
     padding:27px;
-
     border-radius:22px;
-
     border:1px solid #ffffff0c;
-
-    background:
-        linear-gradient(145deg,#0a192d,#050b16);
-
-    position:relative;
-    overflow:hidden;
-
+    background:linear-gradient(145deg,#0a192d,#050b16);
     transition:.4s;
 }
 
 .category:hover{
     transform:translateY(-10px);
-
     border-color:#00bfff4d;
-
     box-shadow:0 25px 70px #0009;
 }
 
@@ -634,47 +531,29 @@ body{
 }
 
 .product{
-    position:relative;
     overflow:hidden;
-
     border-radius:21px;
-
     border:1px solid #ffffff0c;
-
     background:#07101e;
-
     transition:.35s;
 }
 
 .product:hover{
     transform:translateY(-9px);
-
     border-color:#00cfff45;
-
     box-shadow:0 25px 70px #0009;
 }
 
 .product-image{
     height:220px;
-
     display:grid;
     place-items:center;
-
-    background:
-        radial-gradient(
-            circle,
-            #008cff24,
-            transparent 65%
-        );
+    background:radial-gradient(circle,#008cff24,transparent 65%);
 }
 
 .product-image span{
     font-size:85px;
-
-    filter:drop-shadow(
-        0 0 20px #008cff44
-    );
-
+    filter:drop-shadow(0 0 20px #008cff44);
     transition:.4s;
 }
 
@@ -730,133 +609,51 @@ body{
 .product-actions button,
 .product-actions a{
     flex:1;
-
-    border:0;
-
     border-radius:10px;
-
     padding:10px;
-
     text-align:center;
     text-decoration:none;
-
     cursor:pointer;
-
     font-weight:900;
     font-size:11px;
 }
 
 .details{
     background:#ffffff08;
-    color:white;
-
-    border:1px solid #ffffff10 !important;
+    color:#fff;
+    border:1px solid #ffffff10;
 }
 
 .add-cart{
-    color:white;
-
-    background:
-        linear-gradient(
-            100deg,
-            #008cff,
-            #744cff
-        );
+    color:#fff;
+    border:0;
+    background:linear-gradient(100deg,#008cff,#744cff);
 }
 
 /* =========================
-   WŁASNY MODEL 3D
+   CUSTOM
 ========================= */
 
-.custom-model{
-    position:relative;
-    overflow:hidden;
-
-    padding:55px;
-
+.custom{
+    padding:65px;
     border-radius:30px;
-
-    border:1px solid #00bfff25;
-
-    background:
-        linear-gradient(
-            120deg,
-            #061a31,
-            #11103a
-        );
-
-    box-shadow:
-        0 30px 100px #0008;
+    border:1px solid #00bfff22;
+    background:linear-gradient(120deg,#061a31,#11103a);
 }
 
-.custom-model:before{
-    content:"";
-
-    position:absolute;
-
-    width:300px;
-    height:300px;
-
-    right:-100px;
-    top:-100px;
-
-    border-radius:50%;
-
-    background:#008cff25;
-
-    filter:blur(70px);
-}
-
-.custom-model-content{
-    position:relative;
-    z-index:2;
-}
-
-.custom-model h2{
-    font-size:44px;
+.custom h2{
+    font-size:42px;
     margin:10px 0 15px;
 }
 
-.custom-model p{
-    max-width:700px;
-
+.custom p{
     color:#8290a4;
-
+    max-width:650px;
     line-height:1.8;
-
-    margin-bottom:27px;
-}
-
-.model-features{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-
-    margin:30px 0;
-}
-
-.model-feature{
-    padding:16px;
-
-    border-radius:15px;
-
-    background:#ffffff06;
-
-    border:1px solid #ffffff0b;
-}
-
-.model-feature b{
-    display:block;
-    margin-bottom:5px;
-}
-
-.model-feature span{
-    color:#748297;
-    font-size:11px;
 }
 
 /* =========================
-   STEPS
+   KROKI
 ========================= */
 
 .steps{
@@ -867,13 +664,9 @@ body{
 
 .step{
     padding:28px;
-
     border:1px solid #ffffff0b;
-
     background:#07111f;
-
     border-radius:20px;
-
     transition:.3s;
 }
 
@@ -885,39 +678,22 @@ body{
 .step-number{
     width:42px;
     height:42px;
-
     display:grid;
     place-items:center;
-
     border-radius:12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #008cff,
-            #7d43ff
-        );
-
+    background:linear-gradient(135deg,#008cff,#7d43ff);
     font-weight:1000;
-
     margin-bottom:20px;
 }
 
-.step h3{
-    margin:0 0 9px;
-}
-
 .step p{
-    margin:0;
-
     color:#758398;
-
     font-size:13px;
     line-height:1.7;
 }
 
 /* =========================
-   REVIEWS
+   OPINIE
 ========================= */
 
 .reviews{
@@ -928,30 +704,14 @@ body{
 
 .review{
     padding:26px;
-
     border:1px solid #ffffff0b;
-
     border-radius:20px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #091526,
-            #050a13
-        );
-
-    transition:.3s;
-}
-
-.review:hover{
-    transform:translateY(-6px);
-    border-color:#00bfff35;
+    background:linear-gradient(145deg,#091526,#050a13);
 }
 
 .stars{
     color:#ffd34d;
     letter-spacing:2px;
-    margin-bottom:17px;
 }
 
 .review p{
@@ -962,7 +722,6 @@ body{
 
 .review-user{
     margin-top:18px;
-
     display:flex;
     align-items:center;
     gap:11px;
@@ -971,24 +730,11 @@ body{
 .avatar{
     width:37px;
     height:37px;
-
     display:grid;
     place-items:center;
-
     border-radius:50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #008cff,
-            #743cff
-        );
-
+    background:linear-gradient(135deg,#008cff,#743cff);
     font-weight:1000;
-}
-
-.review-user small{
-    color:#69778b;
 }
 
 /* =========================
@@ -997,47 +743,28 @@ body{
 
 footer{
     padding:45px 6%;
-
     border-top:1px solid #ffffff09;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     color:#647186;
-
     font-size:12px;
 }
 
 /* =========================
-   NOTIFICATION
+   POWIADOMIENIE
 ========================= */
 
 .toast{
     position:fixed;
-
     right:25px;
     bottom:25px;
-
-    z-index:99999;
-
+    z-index:9999;
     padding:15px 20px;
-
     border-radius:14px;
-
-    background:
-        linear-gradient(
-            100deg,
-            #008cff,
-            #754cff
-        );
-
-    color:white;
-
-    font-weight:900;
-
+    background:linear-gradient(100deg,#008cff,#754cff);
     box-shadow:0 15px 50px #0009;
-
+    font-weight:900;
     animation:toastIn .3s ease;
 }
 
@@ -1081,25 +808,17 @@ footer{
     .steps{
         grid-template-columns:repeat(2,1fr);
     }
-
-    .hero-visual{
-        min-height:420px;
-    }
 }
 
 @media(max-width:700px){
 
-    .promo-bar{
-        font-size:9px;
-        gap:6px;
-    }
-
-    .promo-bar span{
-        display:none;
+    .discount-bar{
+        font-size:11px;
+        flex-wrap:wrap;
     }
 
     .navbar{
-        padding:0 18px;
+        padding:0 15px;
     }
 
     .account{
@@ -1107,7 +826,7 @@ footer{
     }
 
     .hero{
-        padding:140px 20px 70px;
+        padding:80px 20px;
     }
 
     .hero h1{
@@ -1121,30 +840,25 @@ footer{
     }
 
     .logo-symbol{
-        font-size:90px;
+        font-size:85px;
     }
 
     .section{
         padding:75px 20px;
     }
 
-    .section-title h2{
-        font-size:34px;
-    }
-
     .categories,
     .products,
     .steps,
-    .reviews,
-    .model-features{
+    .reviews{
         grid-template-columns:1fr;
     }
 
-    .custom-model{
-        padding:35px 25px;
+    .custom{
+        padding:40px 25px;
     }
 
-    .custom-model h2{
+    .custom h2{
         font-size:32px;
     }
 
@@ -1159,50 +873,22 @@ footer{
 
 <body>
 
-<!-- =========================
-     PROMO BAR
-========================= -->
-
-<div class="promo-bar">
-
-    🎁
-
-    <span>
-        Kod rabatowy:
-    </span>
-
-    <strong class="promo-code">
-        START10
-    </strong>
-
-    <span>
-        → 10% RABATU NA PIERWSZE ZAMÓWIENIE
-    </span>
-
-    <button
-        class="promo-copy"
-        onclick="copyPromoCode()"
-    >
-        KOPIUJ KOD
+<div class="discount-bar">
+    🎉 <span>10% RABATU NA START</span>
+    <span class="discount-code">START10</span>
+    <button class="copy-code" onclick="copyDiscountCode()">
+        KOPIUJ
     </button>
-
+    <span>• Darmowa dostawa od 50 zł 🚚</span>
 </div>
 
-
-<!-- TŁO -->
-
 <div class="bg">
-    <div class="orb one"></div>
-    <div class="orb two"></div>
-    <div class="orb three"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
 </div>
 
 <div class="grid"></div>
-
-
-<!-- =========================
-     NAVBAR
-========================= -->
 
 <header class="navbar">
 
@@ -1219,31 +905,12 @@ footer{
     </a>
 
     <nav class="nav-links">
-
-        <a href="index.html">
-            Strona główna
-        </a>
-
-        <a href="#produkty">
-            Produkty
-        </a>
-
-        <a href="#breloki">
-            Breloki
-        </a>
-
-        <a href="#dodatki">
-            Dodatki
-        </a>
-
-        <a href="#figurki">
-            Figurki
-        </a>
-
-        <a href="#wlasny-model">
-            Własny model
-        </a>
-
+        <a href="index.html">Strona główna</a>
+        <a href="#produkty">Produkty</a>
+        <a href="#breloki">Breloki</a>
+        <a href="#dodatki">Dodatki</a>
+        <a href="#figurki">Figurki</a>
+        <a href="#custom">Własny model</a>
     </nav>
 
     <div class="nav-right">
@@ -1254,77 +921,54 @@ footer{
 
         <a href="koszyk.html" class="nav-btn cart">
             🛒 Koszyk
-            <span
-                class="cart-count"
-                id="cartCount"
-            >
-                0
-            </span>
+            <span class="cart-count" id="cartCount">0</span>
         </a>
 
     </div>
 
 </header>
 
-
-<!-- =========================
-     HERO
-========================= -->
-
 <main>
+
+<!-- HERO -->
 
 <section class="hero">
 
     <div>
 
         <div class="badge">
-
             <span class="badge-dot"></span>
-
             DRUKUJEMY TWOJE POMYSŁY
-
         </div>
 
         <h1>
-
             Twój pomysł.
-
             <br>
-
             <span class="gradient-text">
                 Nasza drukarka.
             </span>
-
         </h1>
 
         <p class="hero-description">
-
             Breloki, figurki, dodatki gamingowe,
-            dekoracje oraz własne projekty
-            wykonywane specjalnie dla Ciebie.
-
+            dekoracje oraz własne modele 3D.
+            Zamów gotowy produkt albo stwórz coś
+            specjalnie dla siebie.
         </p>
 
         <div class="hero-buttons">
 
-            <a
-                href="#produkty"
-                class="btn btn-primary"
-            >
+            <a href="#produkty" class="btn btn-primary">
                 🛍️ Zobacz produkty
             </a>
 
-            <a
-                href="#wlasny-model"
-                class="btn btn-secondary"
-            >
+            <a href="#custom" class="btn btn-secondary">
                 🖨️ Własny model 3D
             </a>
 
         </div>
 
     </div>
-
 
     <div class="hero-visual">
 
@@ -1344,15 +988,9 @@ footer{
 
 </section>
 
+<!-- KATEGORIE -->
 
-<!-- =========================
-     KATEGORIE
-========================= -->
-
-<section
-    class="section"
-    id="produkty"
->
+<section class="section" id="produkty">
 
     <div class="section-title">
 
@@ -1368,105 +1006,49 @@ footer{
 
     <div class="categories">
 
-        <a
-            href="#breloki"
-            class="category"
-        >
-
-            <div class="category-icon">
-                🔑
-            </div>
-
-            <h3>
-                Breloki
-            </h3>
-
+        <a href="#breloki" class="category">
+            <div class="category-icon">🔑</div>
+            <h3>Breloki</h3>
             <p>
-                Personalizowane breloki
-                z własnym napisem,
-                nazwą lub grafiką.
+                Personalizowane breloki z własnym
+                napisem, nazwą lub grafiką.
             </p>
-
         </a>
 
-
-        <a
-            href="#dodatki"
-            class="category"
-        >
-
-            <div class="category-icon">
-                🎮
-            </div>
-
-            <h3>
-                Dodatki
-            </h3>
-
+        <a href="#dodatki" class="category">
+            <div class="category-icon">🎮</div>
+            <h3>Dodatki</h3>
             <p>
-                Akcesoria gamingowe,
-                uchwyty i praktyczne
-                gadżety 3D.
+                Gamingowe akcesoria, uchwyty
+                i praktyczne gadżety 3D.
             </p>
-
         </a>
 
-
-        <a
-            href="#figurki"
-            class="category"
-        >
-
-            <div class="category-icon">
-                🗿
-            </div>
-
-            <h3>
-                Figurki
-            </h3>
-
+        <a href="#figurki" class="category">
+            <div class="category-icon">🗿</div>
+            <h3>Figurki</h3>
             <p>
-                Figurki kolekcjonerskie,
-                postacie i modele 3D.
+                Modele kolekcjonerskie,
+                postacie i dekoracje.
             </p>
-
         </a>
 
-
-        <a
-            href="#wlasny-model"
-            class="category"
-        >
-
-            <div class="category-icon">
-                🖨️
-            </div>
-
-            <h3>
-                Własny model
-            </h3>
-
+        <a href="#custom" class="category">
+            <div class="category-icon">🖨️</div>
+            <h3>Własny model</h3>
             <p>
-                Masz własny model STL?
-                Podeślij go i wydrukujemy
-                go dla Ciebie.
+                Masz swój plik STL albo pomysł?
+                Zrobimy dla Ciebie wydruk.
             </p>
-
         </a>
 
     </div>
 
 </section>
 
+<!-- BRELOKI -->
 
-<!-- =========================
-     BRELOKI
-========================= -->
-
-<section
-    class="section"
-    id="breloki"
->
+<section class="section" id="breloki">
 
     <div class="section-title">
 
@@ -1479,7 +1061,6 @@ footer{
         </h2>
 
     </div>
-
 
     <div class="products">
 
@@ -1495,9 +1076,7 @@ footer{
                     BRELOK 3D
                 </div>
 
-                <h3>
-                    FRIENDZ
-                </h3>
+                <h3>FRIENDZ</h3>
 
                 <p>
                     Personalizowany brelok
@@ -1505,30 +1084,19 @@ footer{
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        12,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 35 min
-                    </span>
-
+                    <span class="price">12,00 zł</span>
+                    <span class="time">⏱ 35 min</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=friendz"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=friendz"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('friendz','Brelok FRIENDZ',12)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('friendz','Brelok FRIENDZ',12)">
                         + Koszyk
                     </button>
 
@@ -1537,7 +1105,6 @@ footer{
             </div>
 
         </article>
-
 
         <article class="product">
 
@@ -1551,40 +1118,27 @@ footer{
                     BRELOK
                 </div>
 
-                <h3>
-                    Neon Logo
-                </h3>
+                <h3>Neon Logo</h3>
 
                 <p>
-                    Mały brelok z neonowym
-                    symbolem Printerlase3D.
+                    Brelok z symbolem
+                    Printerlase3D.
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        14,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 40 min
-                    </span>
-
+                    <span class="price">14,00 zł</span>
+                    <span class="time">⏱ 40 min</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=neon"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=neon"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('neon','Neon Logo',14)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('neon','Neon Logo',14)">
                         + Koszyk
                     </button>
 
@@ -1593,7 +1147,6 @@ footer{
             </div>
 
         </article>
-
 
         <article class="product">
 
@@ -1607,9 +1160,7 @@ footer{
                     GAMING
                 </div>
 
-                <h3>
-                    Creeper
-                </h3>
+                <h3>Creeper</h3>
 
                 <p>
                     Minecraftowy brelok
@@ -1617,30 +1168,19 @@ footer{
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        10,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 30 min
-                    </span>
-
+                    <span class="price">10,00 zł</span>
+                    <span class="time">⏱ 30 min</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=creeper"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=creeper"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('creeper','Brelok Creeper',10)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('creeper','Brelok Creeper',10)">
                         + Koszyk
                     </button>
 
@@ -1649,7 +1189,6 @@ footer{
             </div>
 
         </article>
-
 
         <article class="product">
 
@@ -1663,40 +1202,27 @@ footer{
                     CUSTOM
                 </div>
 
-                <h3>
-                    Twój napis
-                </h3>
+                <h3>Twój napis</h3>
 
                 <p>
-                    Własny napis,
-                    nazwa lub pseudonim.
+                    Własny napis, pseudonim
+                    albo nazwa.
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        od 12 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 30–60 min
-                    </span>
-
+                    <span class="price">od 12 zł</span>
+                    <span class="time">⏱ 30–60 min</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=custom"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=custom"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('custom','Brelok Custom',12)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('custom','Brelok Custom',12)">
                         + Koszyk
                     </button>
 
@@ -1710,15 +1236,9 @@ footer{
 
 </section>
 
+<!-- DODATKI -->
 
-<!-- =========================
-     DODATKI
-========================= -->
-
-<section
-    class="section"
-    id="dodatki"
->
+<section class="section" id="dodatki">
 
     <div class="section-title">
 
@@ -1731,7 +1251,6 @@ footer{
         </h2>
 
     </div>
-
 
     <div class="products">
 
@@ -1747,9 +1266,7 @@ footer{
                     GAMING
                 </div>
 
-                <h3>
-                    Uchwyt na pada
-                </h3>
+                <h3>Uchwyt na pada</h3>
 
                 <p>
                     Stojak na kontroler
@@ -1757,30 +1274,19 @@ footer{
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        25,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 2 h
-                    </span>
-
+                    <span class="price">25,00 zł</span>
+                    <span class="time">⏱ 2 h</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=pad"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=pad"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('pad','Uchwyt na pada',25)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('pad','Uchwyt na pada',25)">
                         + Koszyk
                     </button>
 
@@ -1789,7 +1295,6 @@ footer{
             </div>
 
         </article>
-
 
         <article class="product">
 
@@ -1803,9 +1308,7 @@ footer{
                     AKCESORIA
                 </div>
 
-                <h3>
-                    Stojak na telefon
-                </h3>
+                <h3>Stojak na telefon</h3>
 
                 <p>
                     Mały stojak na biurko
@@ -1813,30 +1316,19 @@ footer{
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        18,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 90 min
-                    </span>
-
+                    <span class="price">18,00 zł</span>
+                    <span class="time">⏱ 90 min</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=telefon"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=telefon"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('telefon','Stojak na telefon',18)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('telefon','Stojak na telefon',18)">
                         + Koszyk
                     </button>
 
@@ -1845,7 +1337,6 @@ footer{
             </div>
 
         </article>
-
 
         <article class="product">
 
@@ -1859,9 +1350,7 @@ footer{
                     ORGANIZER
                 </div>
 
-                <h3>
-                    Organizer biurkowy
-                </h3>
+                <h3>Organizer biurkowy</h3>
 
                 <p>
                     Na kable, długopisy
@@ -1869,30 +1358,19 @@ footer{
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        22,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 2 h
-                    </span>
-
+                    <span class="price">22,00 zł</span>
+                    <span class="time">⏱ 2 h</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=organizer"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=organizer"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('organizer','Organizer biurkowy',22)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('organizer','Organizer biurkowy',22)">
                         + Koszyk
                     </button>
 
@@ -1901,7 +1379,6 @@ footer{
             </div>
 
         </article>
-
 
         <article class="product">
 
@@ -1915,9 +1392,7 @@ footer{
                     PRAKTYCZNE
                 </div>
 
-                <h3>
-                    Uchwyt Custom
-                </h3>
+                <h3>Uchwyt Custom</h3>
 
                 <p>
                     Uchwyt dopasowany
@@ -1925,30 +1400,19 @@ footer{
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        od 20 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 2–4 h
-                    </span>
-
+                    <span class="price">od 20 zł</span>
+                    <span class="time">⏱ 2–4 h</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=uchwyt"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=uchwyt"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('uchwyt','Uchwyt Custom',20)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('uchwyt','Uchwyt Custom',20)">
                         + Koszyk
                     </button>
 
@@ -1962,15 +1426,9 @@ footer{
 
 </section>
 
+<!-- FIGURKI -->
 
-<!-- =========================
-     FIGURKI
-========================= -->
-
-<section
-    class="section"
-    id="figurki"
->
+<section class="section" id="figurki">
 
     <div class="section-title">
 
@@ -1983,7 +1441,6 @@ footer{
         </h2>
 
     </div>
-
 
     <div class="products">
 
@@ -1999,39 +1456,26 @@ footer{
                     FIGURKA
                 </div>
 
-                <h3>
-                    Robot Mini
-                </h3>
+                <h3>Robot Mini</h3>
 
                 <p>
                     Mała figurka dekoracyjna.
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        25,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 3 h
-                    </span>
-
+                    <span class="price">25,00 zł</span>
+                    <span class="time">⏱ 3 h</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=robot"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=robot"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('robot','Robot Mini',25)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('robot','Robot Mini',25)">
                         + Koszyk
                     </button>
 
@@ -2040,7 +1484,6 @@ footer{
             </div>
 
         </article>
-
 
         <article class="product">
 
@@ -2054,39 +1497,26 @@ footer{
                     FIGURKA
                 </div>
 
-                <h3>
-                    Smok 3D
-                </h3>
+                <h3>Smok 3D</h3>
 
                 <p>
                     Ozdobna figurka smoka.
                 </p>
 
                 <div class="product-meta">
-
-                    <span class="price">
-                        35,00 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 5 h
-                    </span>
-
+                    <span class="price">35,00 zł</span>
+                    <span class="time">⏱ 5 h</span>
                 </div>
 
                 <div class="product-actions">
 
-                    <a
-                        href="produkt.html?id=smok"
-                        class="details"
-                    >
+                    <a href="produkt.html?id=smok"
+                       class="details">
                         Zobacz
                     </a>
 
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('smok','Smok 3D',35)"
-                    >
+                    <button class="add-cart"
+                        onclick="addProduct('smok','Smok 3D',35)">
                         + Koszyk
                     </button>
 
@@ -2100,83 +1530,38 @@ footer{
 
 </section>
 
+<!-- WŁASNY MODEL -->
 
-<!-- =========================
-     WŁASNY MODEL
-========================= -->
+<section class="section" id="custom">
 
-<section
-    class="section"
-    id="wlasny-model"
->
+    <div class="custom">
 
-    <div class="custom-model">
+        <span class="section-label">
+            CUSTOM 3D
+        </span>
 
-        <div class="custom-model-content">
+        <h2>
+            Masz własny model 3D?
+        </h2>
 
-            <span class="section-label">
-                CUSTOM 3D
-            </span>
+        <p>
+            Masz plik STL, OBJ albo własny pomysł?
+            Podeślij projekt i zamów indywidualny
+            wydruk 3D.
+        </p>
 
-            <h2>
-                Masz własny model?
-            </h2>
-
-            <p>
-                Masz plik STL, 3MF albo pomysł na
-                własny wydruk? Podeślij model,
-                a przygotujemy go do druku 3D.
-            </p>
-
-
-            <div class="model-features">
-
-                <div class="model-feature">
-                    <b>📁 STL / 3MF</b>
-                    <span>
-                        Możesz przesłać swój model.
-                    </span>
-                </div>
-
-                <div class="model-feature">
-                    <b>🎨 Kolor</b>
-                    <span>
-                        Wybierz dostępny kolor filamentu.
-                    </span>
-                </div>
-
-                <div class="model-feature">
-                    <b>🖨️ Druk 3D</b>
-                    <span>
-                        Przygotujemy model do wydruku.
-                    </span>
-                </div>
-
-            </div>
-
-
-            <a
-                href="wlasny-model.html"
-                class="btn btn-primary"
-            >
-                🖨️ Zamów własny model
-            </a>
-
-        </div>
+        <a href="checkout.html?custom=1"
+           class="btn btn-primary">
+            🖨️ Zamów własny model
+        </a>
 
     </div>
 
 </section>
 
+<!-- JAK DZIAŁA -->
 
-<!-- =========================
-     JAK TO DZIAŁA
-========================= -->
-
-<section
-    class="section"
-    id="jak-dziala"
->
+<section class="section" id="jak-dziala">
 
     <div class="section-title">
 
@@ -2190,88 +1575,47 @@ footer{
 
     </div>
 
-
     <div class="steps">
 
         <div class="step">
-
-            <div class="step-number">
-                1
-            </div>
-
-            <h3>
-                Wybierasz produkt
-            </h3>
-
+            <div class="step-number">1</div>
+            <h3>Wybierasz produkt</h3>
             <p>
-                Wybierz interesujący Cię
-                model z naszej oferty.
+                Wybierz model z naszej oferty.
             </p>
-
         </div>
 
-
         <div class="step">
-
-            <div class="step-number">
-                2
-            </div>
-
-            <h3>
-                Dodajesz do koszyka
-            </h3>
-
+            <div class="step-number">2</div>
+            <h3>Dodajesz do koszyka</h3>
             <p>
-                Dodaj produkt i przejdź
-                do podsumowania.
+                Dodaj produkty do koszyka.
             </p>
-
         </div>
 
-
         <div class="step">
-
-            <div class="step-number">
-                3
-            </div>
-
-            <h3>
-                Używasz kodu START10
-            </h3>
-
+            <div class="step-number">3</div>
+            <h3>Składasz zamówienie</h3>
             <p>
-                Przy pierwszym zamówieniu
-                możesz wykorzystać 10% rabatu.
+                Podajesz dane i wybierasz
+                metodę płatności.
             </p>
-
         </div>
 
-
         <div class="step">
-
-            <div class="step-number">
-                4
-            </div>
-
-            <h3>
-                Drukujemy
-            </h3>
-
+            <div class="step-number">4</div>
+            <h3>Drukujemy</h3>
             <p>
                 Przygotowujemy Twój wydruk
-                i realizujemy zamówienie.
+                i wysyłkę.
             </p>
-
         </div>
 
     </div>
 
 </section>
 
-
-<!-- =========================
-     OPINIE
-========================= -->
+<!-- OPINIE -->
 
 <section class="section">
 
@@ -2287,7 +1631,6 @@ footer{
 
     </div>
 
-
     <div class="reviews">
 
         <div class="review">
@@ -2299,7 +1642,7 @@ footer{
             <p>
                 „Brelok wyszedł mega dobrze,
                 napis jest wyraźny i wygląda
-                naprawdę super.”
+                świetnie.”
             </p>
 
             <div class="review-user">
@@ -2310,15 +1653,12 @@ footer{
 
                 <div>
                     <b>Kacper</b><br>
-                    <small>
-                        Zweryfikowany zakup
-                    </small>
+                    <small>Zweryfikowany zakup</small>
                 </div>
 
             </div>
 
         </div>
-
 
         <div class="review">
 
@@ -2339,15 +1679,12 @@ footer{
 
                 <div>
                     <b>Michał</b><br>
-                    <small>
-                        Zweryfikowany zakup
-                    </small>
+                    <small>Zweryfikowany zakup</small>
                 </div>
 
             </div>
 
         </div>
-
 
         <div class="review">
 
@@ -2368,9 +1705,7 @@ footer{
 
                 <div>
                     <b>Olek</b><br>
-                    <small>
-                        Zweryfikowany zakup
-                    </small>
+                    <small>Zweryfikowany zakup</small>
                 </div>
 
             </div>
@@ -2382,11 +1717,6 @@ footer{
 </section>
 
 </main>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
 
 <footer>
 
@@ -2412,31 +1742,23 @@ footer{
 
 </footer>
 
-
 <script>
 
-/* =====================================
+/* =========================
    KOSZYK
-===================================== */
+========================= */
 
 function getCart(){
 
     try{
-
         return JSON.parse(
-            localStorage.getItem(
-                "printerlase_cart"
-            )
+            localStorage.getItem("printerlase_cart")
         ) || [];
-
-    }catch(error){
-
+    }catch{
         return [];
-
     }
 
 }
-
 
 function saveCart(cart){
 
@@ -2447,14 +1769,14 @@ function saveCart(cart){
 
 }
 
-
 function updateCartCount(){
 
     const cart = getCart();
 
     const count = cart.reduce(
-        (sum,item) =>
-            sum + Number(item.quantity || 1),
+        (sum,item)=>{
+            return sum + Number(item.quantity || 1);
+        },
         0
     );
 
@@ -2466,7 +1788,6 @@ function updateCartCount(){
     }
 
 }
-
 
 function addProduct(id,name,price){
 
@@ -2483,35 +1804,21 @@ function addProduct(id,name,price){
     }else{
 
         cart.push({
-
             id:id,
-
             name:name,
-
             price:Number(price),
-
             quantity:1
-
         });
 
     }
 
     saveCart(cart);
-
     updateCartCount();
-
-    showToast(
-        "✓ Produkt dodany do koszyka"
-    );
+    showToast("✓ Dodano do koszyka");
 
 }
 
-
-/* =====================================
-   TOAST
-===================================== */
-
-function showToast(message){
+function showToast(text){
 
     const old =
         document.querySelector(".toast");
@@ -2523,96 +1830,86 @@ function showToast(message){
     const toast =
         document.createElement("div");
 
-    toast.className = "toast";
-
-    toast.textContent = message;
+    toast.className="toast";
+    toast.textContent=text;
 
     document.body.appendChild(toast);
 
-    setTimeout(() => {
+    setTimeout(()=>{
+        toast.style.opacity="0";
+        toast.style.transform="translateY(15px)";
+        toast.style.transition=".3s";
 
-        toast.style.opacity = "0";
-        toast.style.transform =
-            "translateY(20px)";
-        toast.style.transition = ".3s";
-
-        setTimeout(
-            () => toast.remove(),
-            300
-        );
+        setTimeout(()=>{
+            toast.remove();
+        },300);
 
     },1500);
 
 }
 
+/* =========================
+   KOD START10
+========================= */
 
-/* =====================================
-   KOPIOWANIE START10
-===================================== */
+function copyDiscountCode(){
 
-function copyPromoCode(){
+    const code="START10";
 
-    const code = "START10";
+    navigator.clipboard.writeText(code)
+    .then(()=>{
 
-    if(
-        navigator.clipboard &&
-        navigator.clipboard.writeText
-    ){
+        showToast("✓ Skopiowano kod START10");
 
-        navigator.clipboard.writeText(code);
+        /*
+          Zapamiętujemy kod,
+          żeby checkout mógł go później
+          automatycznie wykryć.
+        */
 
-    }else{
+        localStorage.setItem(
+            "printerlase_discount",
+            JSON.stringify({
+                code:"START10",
+                percent:10
+            })
+        );
 
-        const input =
-            document.createElement("input");
+    })
+    .catch(()=>{
 
-        input.value = code;
+        showToast("Kod rabatowy: START10");
 
-        document.body.appendChild(input);
-
-        input.select();
-
-        document.execCommand("copy");
-
-        input.remove();
-
-    }
-
-    showToast(
-        "✓ Kod START10 skopiowany!"
-    );
+    });
 
 }
 
-
-/* =====================================
+/* =========================
    START
-===================================== */
+========================= */
 
 updateCartCount();
 
-
-/* =====================================
-   ANIMACJE SCROLL
-===================================== */
+/* =========================
+   ANIMACJE
+========================= */
 
 const animated =
     document.querySelectorAll(
-        ".category, .product, .step, .review, .custom-model"
+        ".category,.product,.step,.review,.custom"
     );
-
 
 const observer =
     new IntersectionObserver(
-        entries => {
+        entries=>{
 
-            entries.forEach(entry => {
+            entries.forEach(entry=>{
 
                 if(entry.isIntersecting){
 
-                    entry.target.style.opacity = "1";
+                    entry.target.style.opacity="1";
 
-                    entry.target.style.transform =
+                    entry.target.style.transform=
                         "translateY(0)";
 
                     observer.unobserve(
@@ -2629,17 +1926,16 @@ const observer =
         }
     );
 
+animated.forEach((element,index)=>{
 
-animated.forEach((element,index) => {
+    element.style.opacity="0";
 
-    element.style.opacity = "0";
-
-    element.style.transform =
+    element.style.transform=
         "translateY(30px)";
 
-    element.style.transition =
-        `opacity .6s ease ${index * .04}s,
-         transform .6s ease ${index * .04}s`;
+    element.style.transition=
+        `opacity .6s ease ${index*.04}s,
+         transform .6s ease ${index*.04}s`;
 
     observer.observe(element);
 
