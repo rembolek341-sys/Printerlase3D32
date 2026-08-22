@@ -5,828 +5,1701 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Printerlase3D — Wydruki 3D</title>
-
-<link rel="stylesheet" href="style.css">
+<meta name="description" content="Printerlase3D — personalizowane wydruki 3D, breloki, figurki, dodatki i projekty custom.">
 
 <style>
-/* ===== DODATKOWE STYLE INDEX ===== */
 
-* {
-    box-sizing: border-box;
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-html {
-    scroll-behavior: smooth;
+html{
+    scroll-behavior:smooth;
 }
 
-body {
-    margin: 0;
-    background: #030712;
-    color: white;
-    font-family: Inter, Arial, sans-serif;
-    overflow-x: hidden;
+body{
+    background:#020611;
+    color:#fff;
+    font-family:Inter,Arial,Helvetica,sans-serif;
+    overflow-x:hidden;
 }
 
-/* ANIMOWANE TŁO */
-
-.bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: -10;
+button,
+input{
+    font-family:inherit;
 }
 
-.orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: .35;
-    animation: floatOrb 10s infinite alternate ease-in-out;
+a{
+    color:inherit;
 }
 
-.orb.one {
-    width: 420px;
-    height: 420px;
-    background: #008cff;
-    top: -180px;
-    left: -120px;
-}
 
-.orb.two {
-    width: 380px;
-    height: 380px;
-    background: #7c3cff;
-    right: -120px;
-    top: 350px;
-    animation-delay: 2s;
-}
+/* =========================================================
+   TŁO
+========================================================= */
 
-.orb.three {
-    width: 300px;
-    height: 300px;
-    background: #00d9ff;
-    left: 40%;
-    bottom: -180px;
-    animation-delay: 4s;
-}
-
-@keyframes floatOrb {
-    from {
-        transform: translate(0,0) scale(1);
-    }
-    to {
-        transform: translate(80px,60px) scale(1.15);
-    }
-}
-
-/* GRID */
-
-.grid {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -9;
-    opacity: .16;
-    background-image:
-        linear-gradient(#1b9cff18 1px, transparent 1px),
-        linear-gradient(90deg, #1b9cff18 1px, transparent 1px);
-    background-size: 55px 55px;
-    mask-image: linear-gradient(to bottom, black, transparent);
-}
-
-/* NAVBAR */
-
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 78px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5%;
-    z-index: 999;
-    background: rgba(3,7,18,.72);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,.08);
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    color: white;
-    text-decoration: none;
-    font-weight: 900;
-    font-size: 19px;
-}
-
-.brand-logo {
-    width: 43px;
-    height: 43px;
-    display: grid;
-    place-items: center;
-    border-radius: 13px;
+.bg{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:-20;
     background:
-        linear-gradient(135deg,#00d9ff,#187cff,#873cff);
+        radial-gradient(circle at 50% -20%,#102b55 0%,transparent 40%),
+        #020611;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    z-index:-19;
+    pointer-events:none;
+    opacity:.13;
+
+    background-image:
+        linear-gradient(#169cff22 1px,transparent 1px),
+        linear-gradient(90deg,#169cff22 1px,transparent 1px);
+
+    background-size:55px 55px;
+
+    mask-image:linear-gradient(
+        to bottom,
+        black 0%,
+        rgba(0,0,0,.7) 50%,
+        transparent 100%
+    );
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.3;
+    animation:orbFloat 12s ease-in-out infinite alternate;
+}
+
+.orb1{
+    width:430px;
+    height:430px;
+    background:#0077ff;
+    top:-200px;
+    left:-130px;
+}
+
+.orb2{
+    width:400px;
+    height:400px;
+    background:#743cff;
+    top:35%;
+    right:-180px;
+    animation-delay:2s;
+}
+
+.orb3{
+    width:350px;
+    height:350px;
+    background:#00d9ff;
+    bottom:-200px;
+    left:35%;
+    animation-delay:4s;
+}
+
+@keyframes orbFloat{
+    from{
+        transform:translate(0,0) scale(1);
+    }
+    to{
+        transform:translate(80px,60px) scale(1.15);
+    }
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#020611;
+}
+
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(#008cff,#743cff);
+    border-radius:20px;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:78px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 5%;
+
+    z-index:1000;
+
+    background:rgba(2,6,17,.72);
+    backdrop-filter:blur(22px);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    transition:.3s;
+}
+
+.navbar.scrolled{
+    background:rgba(2,6,17,.92);
+    box-shadow:0 15px 50px rgba(0,0,0,.3);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    text-decoration:none;
+    font-weight:1000;
+    font-size:18px;
+}
+
+.brand-logo{
+    width:43px;
+    height:43px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(135deg,#00d9ff,#147cff,#873cff);
+
     box-shadow:
-        0 0 20px #008cff55,
-        inset 0 0 15px #ffffff22;
-    transform: rotate(-4deg);
+        0 0 25px #008cff55,
+        inset 0 0 20px #ffffff20;
+
+    transform:rotate(-4deg);
+
+    transition:.3s;
 }
 
-.brand-logo span {
-    font-size: 23px;
-    font-weight: 1000;
-    transform: rotate(4deg);
+.brand:hover .brand-logo{
+    transform:rotate(5deg) scale(1.08);
 }
 
-.brand-name span {
-    background: linear-gradient(
+.brand-logo span{
+    font-size:23px;
+    font-weight:1000;
+    transform:rotate(4deg);
+}
+
+.brand-name span{
+    background:linear-gradient(
         90deg,
-        #ffffff,
+        #fff,
         #28d9ff,
         #9161ff
     );
-    -webkit-background-clip: text;
-    color: transparent;
+
+    -webkit-background-clip:text;
+    color:transparent;
 }
 
-.nav-links {
-    display: flex;
-    gap: 24px;
+.nav-links{
+    display:flex;
+    gap:25px;
 }
 
-.nav-links a {
-    color: #8996aa;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 800;
-    transition: .25s;
+.nav-links a{
+    color:#8794a8;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:900;
+    transition:.25s;
 }
 
-.nav-links a:hover {
-    color: #fff;
+.nav-links a:hover{
+    color:#fff;
+    text-shadow:0 0 15px #00cfff;
 }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 9px;
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
-.nav-btn {
-    color: white;
-    background: rgba(255,255,255,.05);
-    border: 1px solid rgba(255,255,255,.1);
-    padding: 10px 13px;
-    border-radius: 11px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 800;
-    transition: .25s;
+.nav-btn{
+    padding:10px 13px;
+    border-radius:11px;
+
+    background:#ffffff06;
+    border:1px solid #ffffff12;
+
+    color:#fff;
+    text-decoration:none;
+
+    font-size:12px;
+    font-weight:900;
+
+    transition:.25s;
 }
 
-.nav-btn:hover {
-    border-color: #00bfff66;
-    background: #008cff18;
-    transform: translateY(-2px);
+.nav-btn:hover{
+    transform:translateY(-2px);
+    border-color:#00bfff55;
+    background:#008cff15;
 }
 
-.cart {
-    position: relative;
+.cart{
+    position:relative;
 }
 
-.cart-count {
-    position: absolute;
-    right: -7px;
-    top: -8px;
-    min-width: 19px;
-    height: 19px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: linear-gradient(135deg,#00bfff,#7c3cff);
-    font-size: 10px;
-    border: 2px solid #030712;
-}
+.cart-count{
+    position:absolute;
 
-/* HERO */
+    right:-7px;
+    top:-8px;
 
-.hero {
-    max-width: 1400px;
-    min-height: 100vh;
-    margin: auto;
-    padding: 145px 6% 80px;
-    display: grid;
-    grid-template-columns: 1.05fr .95fr;
-    gap: 50px;
-    align-items: center;
-}
+    min-width:20px;
+    height:20px;
 
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 9px 14px;
-    border-radius: 30px;
-    border: 1px solid #00cfff38;
-    background: #00cfff0b;
-    color: #42dfff;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin-bottom: 24px;
-}
+    display:grid;
+    place-items:center;
 
-.badge-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #00d9ff;
-    box-shadow: 0 0 15px #00d9ff;
-    animation: pulse 1.5s infinite;
-}
+    border-radius:50%;
 
-@keyframes pulse {
-    50% {
-        transform: scale(1.5);
-        opacity: .5;
-    }
-}
-
-.hero h1 {
-    margin: 0;
-    font-size: clamp(52px,7vw,92px);
-    line-height: .94;
-    letter-spacing: -5px;
-}
-
-.gradient-text {
-    background: linear-gradient(
-        90deg,
-        #00e5ff,
-        #238cff,
-        #974cff
-    );
-    -webkit-background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 0 25px #008cff44);
-}
-
-.hero-description {
-    max-width: 620px;
-    color: #8794a7;
-    font-size: 16px;
-    line-height: 1.8;
-    margin: 30px 0;
-}
-
-.hero-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.btn {
-    border: 0;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    padding: 14px 20px;
-    border-radius: 13px;
-    font-weight: 900;
-    font-size: 13px;
-    transition: .3s;
-}
-
-.btn-primary {
-    color: white;
-    background: linear-gradient(100deg,#008cff,#754cff);
-    box-shadow: 0 12px 40px #008cff38;
-}
-
-.btn-primary:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 18px 55px #008cff55;
-}
-
-.btn-secondary {
-    color: white;
-    border: 1px solid #ffffff12;
-    background: #ffffff06;
-}
-
-.btn-secondary:hover {
-    border-color: #00cfff55;
-    background: #ffffff0d;
-    transform: translateY(-4px);
-}
-
-/* LOGO HERO */
-
-.hero-visual {
-    min-height: 500px;
-    display: grid;
-    place-items: center;
-    position: relative;
-}
-
-.hero-logo {
-    width: 310px;
-    height: 310px;
-    border-radius: 75px;
-    display: grid;
-    place-items: center;
-    position: relative;
-    z-index: 2;
-    background:
-        linear-gradient(145deg,#071a31,#090b20);
-    border: 1px solid #20cfff35;
-    box-shadow:
-        0 0 70px #008cff35,
-        inset 0 0 60px #008cff0c;
-    animation: logoFloat 4s ease-in-out infinite;
-}
-
-.hero-logo::before {
-    content: "";
-    position: absolute;
-    inset: -18px;
-    border-radius: 90px;
-    border: 1px solid #00cfff28;
-    animation: rotateRing 8s linear infinite;
-}
-
-.hero-logo::after {
-    content: "";
-    position: absolute;
-    inset: -45px;
-    border-radius: 110px;
-    border: 1px dashed #7c3cff22;
-    animation: rotateRing 14s linear infinite reverse;
-}
-
-.logo-symbol {
-    font-size: 110px;
-    font-weight: 1000;
-    background: linear-gradient(
+    background:linear-gradient(
         135deg,
-        #00e5ff,
-        #147dff,
-        #9b4cff
+        #00cfff,
+        #783cff
     );
-    -webkit-background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 0 30px #008cff88);
+
+    border:2px solid #020611;
+
+    font-size:10px;
 }
 
-.logo-small {
-    position: absolute;
-    bottom: 45px;
-    font-size: 17px;
-    font-weight: 1000;
-    letter-spacing: 3px;
+.mobile-menu{
+    display:none;
+    border:0;
+    background:#ffffff08;
+    color:#fff;
+    font-size:23px;
+    padding:8px 11px;
+    border-radius:10px;
+    cursor:pointer;
 }
 
-@keyframes logoFloat {
-    50% {
-        transform: translateY(-15px) rotate(2deg);
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    max-width:1400px;
+    min-height:100vh;
+
+    margin:auto;
+
+    padding:145px 6% 80px;
+
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+
+    gap:50px;
+
+    align-items:center;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+
+    padding:9px 14px;
+
+    border-radius:30px;
+
+    border:1px solid #00cfff38;
+    background:#00cfff0b;
+
+    color:#42dfff;
+
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:2px;
+
+    animation:badgeGlow 2s infinite alternate;
+}
+
+@keyframes badgeGlow{
+    from{
+        box-shadow:0 0 0 #00cfff00;
+    }
+    to{
+        box-shadow:0 0 25px #00cfff20;
     }
 }
 
-@keyframes rotateRing {
-    to {
-        transform: rotate(360deg);
+.badge-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#00d9ff;
+
+    box-shadow:0 0 15px #00d9ff;
+
+    animation:pulse 1.4s infinite;
+}
+
+@keyframes pulse{
+    50%{
+        transform:scale(1.5);
+        opacity:.5;
     }
 }
 
-/* SEKCJE */
+.hero h1{
+    margin-top:25px;
 
-.section {
-    max-width: 1320px;
-    margin: auto;
-    padding: 100px 30px;
+    font-size:clamp(50px,7vw,92px);
+
+    line-height:.95;
+
+    letter-spacing:-5px;
 }
 
-.section-label {
-    color: #35d8ff;
-    font-size: 10px;
-    font-weight: 1000;
-    letter-spacing: 3px;
-}
-
-.section-title {
-    margin-bottom: 42px;
-}
-
-.section-title h2 {
-    margin: 10px 0 0;
-    font-size: 43px;
-    letter-spacing: -2px;
-}
-
-/* KATEGORIE */
-
-.categories {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 18px;
-}
-
-.category {
-    text-decoration: none;
-    color: white;
-    min-height: 240px;
-    padding: 27px;
-    border-radius: 22px;
-    border: 1px solid #ffffff0c;
-    background: linear-gradient(145deg,#0a192d,#050b16);
-    position: relative;
-    overflow: hidden;
-    transition: .4s;
-}
-
-.category:hover {
-    transform: translateY(-10px);
-    border-color: #00bfff4d;
-    box-shadow: 0 25px 70px #0009;
-}
-
-.category-icon {
-    font-size: 48px;
-    margin-bottom: 30px;
-    transition: .4s;
-}
-
-.category:hover .category-icon {
-    transform: scale(1.15) rotate(-6deg);
-}
-
-.category h3 {
-    margin: 0 0 9px;
-    font-size: 19px;
-}
-
-.category p {
-    margin: 0;
-    color: #738095;
-    line-height: 1.6;
-    font-size: 13px;
-}
-
-/* PRODUKTY */
-
-.products {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 18px;
-}
-
-.product {
-    position: relative;
-    overflow: hidden;
-    border-radius: 21px;
-    border: 1px solid #ffffff0c;
-    background: #07101e;
-    transition: .35s;
-}
-
-.product:hover {
-    transform: translateY(-9px);
-    border-color: #00cfff45;
-    box-shadow: 0 25px 70px #0009;
-}
-
-.product-image {
-    height: 220px;
-    display: grid;
-    place-items: center;
+.gradient-text{
     background:
-        radial-gradient(circle,#008cff24,transparent 65%);
-    position: relative;
+        linear-gradient(
+            90deg,
+            #00e5ff,
+            #238cff,
+            #974cff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+
+    filter:drop-shadow(0 0 25px #008cff44);
 }
 
-.product-image span {
-    font-size: 85px;
-    filter: drop-shadow(0 0 20px #008cff44);
-    transition: .4s;
+.hero-description{
+    max-width:620px;
+
+    margin:30px 0;
+
+    color:#8794a7;
+
+    font-size:16px;
+
+    line-height:1.8;
 }
 
-.product:hover .product-image span {
-    transform: scale(1.12) rotate(-4deg);
+.hero-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
 }
 
-.product-body {
-    padding: 20px;
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+
+    padding:14px 20px;
+
+    border-radius:13px;
+
+    border:0;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-size:13px;
+    font-weight:1000;
+
+    transition:.3s;
 }
 
-.product-category {
-    color: #39d9ff;
-    font-size: 9px;
-    font-weight: 1000;
-    letter-spacing: 2px;
+.btn-primary{
+    color:#fff;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #754cff
+        );
+
+    box-shadow:0 12px 40px #008cff38;
 }
 
-.product-body h3 {
-    margin: 7px 0;
-    font-size: 17px;
+.btn-primary:hover{
+    transform:translateY(-4px) scale(1.02);
+    box-shadow:0 18px 55px #008cff55;
 }
 
-.product-body p {
-    margin: 0 0 16px;
-    color: #69778b;
-    font-size: 12px;
-    line-height: 1.6;
+.btn-secondary{
+    color:#fff;
+
+    background:#ffffff06;
+
+    border:1px solid #ffffff12;
 }
 
-.product-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.btn-secondary:hover{
+    transform:translateY(-4px);
+    border-color:#00cfff55;
 }
 
-.price {
-    font-size: 18px;
-    font-weight: 1000;
+
+/* =========================================================
+   HERO LOGO
+========================================================= */
+
+.hero-visual{
+    min-height:500px;
+
+    display:grid;
+    place-items:center;
+
+    position:relative;
 }
 
-.time {
-    color: #738095;
-    font-size: 10px;
+.hero-logo{
+    width:310px;
+    height:310px;
+
+    display:grid;
+    place-items:center;
+
+    position:relative;
+
+    border-radius:75px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #071a31,
+            #080b20
+        );
+
+    border:1px solid #20cfff35;
+
+    box-shadow:
+        0 0 80px #008cff35,
+        inset 0 0 60px #008cff0c;
+
+    animation:logoFloat 4s ease-in-out infinite;
 }
 
-.product-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
+.hero-logo::before{
+    content:"";
+
+    position:absolute;
+
+    inset:-18px;
+
+    border-radius:90px;
+
+    border:1px solid #00cfff28;
+
+    animation:rotateRing 8s linear infinite;
+}
+
+.hero-logo::after{
+    content:"";
+
+    position:absolute;
+
+    inset:-45px;
+
+    border-radius:110px;
+
+    border:1px dashed #7c3cff22;
+
+    animation:rotateRing 14s linear infinite reverse;
+}
+
+.logo-symbol{
+    font-size:110px;
+    font-weight:1000;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00e5ff,
+            #147dff,
+            #9b4cff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+
+    filter:drop-shadow(0 0 30px #008cff88);
+}
+
+.logo-small{
+    position:absolute;
+    bottom:45px;
+
+    font-size:17px;
+    font-weight:1000;
+
+    letter-spacing:3px;
+}
+
+@keyframes logoFloat{
+    50%{
+        transform:translateY(-15px) rotate(2deg);
+    }
+}
+
+@keyframes rotateRing{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    max-width:1200px;
+
+    margin:-25px auto 70px;
+
+    padding:0 30px;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+
+    gap:15px;
+}
+
+.stat{
+    padding:25px;
+
+    text-align:center;
+
+    border:1px solid #ffffff0b;
+
+    border-radius:18px;
+
+    background:#07101d;
+
+    transition:.3s;
+}
+
+.stat:hover{
+    transform:translateY(-5px);
+    border-color:#00bfff35;
+}
+
+.stat strong{
+    display:block;
+
+    font-size:30px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00d9ff,
+            #754cff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.stat span{
+    color:#718095;
+    font-size:11px;
+}
+
+
+/* =========================================================
+   SEKCJE
+========================================================= */
+
+.section{
+    max-width:1320px;
+
+    margin:auto;
+
+    padding:100px 30px;
+}
+
+.section-title{
+    margin-bottom:42px;
+}
+
+.section-label{
+    color:#35d8ff;
+
+    font-size:10px;
+
+    font-weight:1000;
+
+    letter-spacing:3px;
+}
+
+.section-title h2{
+    margin-top:10px;
+
+    font-size:43px;
+
+    letter-spacing:-2px;
+}
+
+
+/* =========================================================
+   PROMOCJA
+========================================================= */
+
+.promo{
+    max-width:1260px;
+
+    margin:30px auto 0;
+
+    padding:25px 30px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    border-radius:20px;
+
+    border:1px solid #00cfff25;
+
+    background:
+        linear-gradient(
+            100deg,
+            #071d36,
+            #15103b
+        );
+
+    box-shadow:0 20px 70px #0005;
+}
+
+.promo-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.promo-icon{
+    width:50px;
+    height:50px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:14px;
+
+    background:linear-gradient(
+        135deg,
+        #008cff,
+        #753cff
+    );
+
+    font-size:23px;
+}
+
+.promo h3{
+    margin-bottom:4px;
+}
+
+.promo p{
+    color:#7d8a9d;
+    font-size:12px;
+}
+
+.promo-code{
+    padding:12px 16px;
+
+    border-radius:11px;
+
+    border:1px dashed #00cfff55;
+
+    background:#00cfff0b;
+
+    color:#42dfff;
+
+    font-weight:1000;
+
+    letter-spacing:2px;
+}
+
+
+/* =========================================================
+   KATEGORIE
+========================================================= */
+
+.categories{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+}
+
+.category{
+    min-height:240px;
+
+    padding:27px;
+
+    position:relative;
+    overflow:hidden;
+
+    text-decoration:none;
+
+    border-radius:22px;
+
+    border:1px solid #ffffff0c;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0a192d,
+            #050b16
+        );
+
+    transition:.4s;
+}
+
+.category::after{
+    content:"";
+
+    position:absolute;
+
+    width:130px;
+    height:130px;
+
+    right:-60px;
+    bottom:-60px;
+
+    border-radius:50%;
+
+    background:#008cff;
+
+    filter:blur(55px);
+
+    opacity:.18;
+
+    transition:.4s;
+}
+
+.category:hover{
+    transform:translateY(-10px);
+
+    border-color:#00bfff4d;
+
+    box-shadow:0 25px 70px #0009;
+}
+
+.category:hover::after{
+    transform:scale(1.5);
+}
+
+.category-icon{
+    font-size:48px;
+
+    margin-bottom:30px;
+
+    transition:.4s;
+}
+
+.category:hover .category-icon{
+    transform:scale(1.15) rotate(-6deg);
+}
+
+.category h3{
+    margin-bottom:9px;
+
+    font-size:19px;
+}
+
+.category p{
+    color:#738095;
+
+    line-height:1.6;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.shop-tools{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:25px;
+}
+
+.search{
+    width:100%;
+    max-width:400px;
+
+    position:relative;
+}
+
+.search input{
+    width:100%;
+
+    padding:14px 18px;
+
+    border-radius:13px;
+
+    border:1px solid #ffffff12;
+
+    background:#07101d;
+
+    color:#fff;
+
+    outline:none;
+
+    transition:.25s;
+}
+
+.search input:focus{
+    border-color:#008cff66;
+
+    box-shadow:0 0 30px #008cff15;
+}
+
+.search input::placeholder{
+    color:#5f6d81;
+}
+
+
+/* =========================================================
+   PRODUKTY
+========================================================= */
+
+.products{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+}
+
+.product{
+    position:relative;
+    overflow:hidden;
+
+    border-radius:21px;
+
+    border:1px solid #ffffff0c;
+
+    background:#07101e;
+
+    transition:.35s;
+}
+
+.product:hover{
+    transform:translateY(-9px);
+
+    border-color:#00cfff45;
+
+    box-shadow:0 25px 70px #0009;
+}
+
+.product-image{
+    height:220px;
+
+    display:grid;
+    place-items:center;
+
+    position:relative;
+
+    background:
+        radial-gradient(
+            circle,
+            #008cff24,
+            transparent 65%
+        );
+}
+
+.product-image span{
+    font-size:85px;
+
+    filter:drop-shadow(
+        0 0 20px #008cff44
+    );
+
+    transition:.4s;
+}
+
+.product:hover .product-image span{
+    transform:scale(1.12) rotate(-4deg);
+}
+
+.sale{
+    position:absolute;
+
+    top:13px;
+    left:13px;
+
+    padding:6px 9px;
+
+    border-radius:8px;
+
+    background:linear-gradient(
+        100deg,
+        #ff3d7f,
+        #ff7a18
+    );
+
+    font-size:9px;
+    font-weight:1000;
+
+    box-shadow:0 5px 20px #ff3d7f33;
+}
+
+.product-body{
+    padding:20px;
+}
+
+.product-category{
+    color:#39d9ff;
+
+    font-size:9px;
+
+    font-weight:1000;
+
+    letter-spacing:2px;
+}
+
+.product-body h3{
+    margin:7px 0;
+
+    font-size:17px;
+}
+
+.product-body p{
+    margin-bottom:16px;
+
+    color:#69778b;
+
+    font-size:12px;
+
+    line-height:1.6;
+}
+
+.product-meta{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+}
+
+.price{
+    font-size:18px;
+    font-weight:1000;
+}
+
+.old-price{
+    color:#657184;
+    text-decoration:line-through;
+    font-size:12px;
+    margin-left:5px;
+}
+
+.time{
+    color:#738095;
+    font-size:10px;
+}
+
+.product-actions{
+    display:flex;
+
+    gap:8px;
+
+    margin-top:15px;
 }
 
 .product-actions button,
-.product-actions a {
-    flex: 1;
-    border: 0;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: 900;
-    font-size: 11px;
+.product-actions a{
+    flex:1;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+    font-weight:1000;
 }
 
-.details {
-    background: #ffffff08;
-    color: white;
-    border: 1px solid #ffffff10 !important;
+.details{
+    background:#ffffff08;
+
+    color:#fff;
+
+    border:1px solid #ffffff10;
 }
 
-.add-cart {
-    color: white;
-    background: linear-gradient(100deg,#008cff,#744cff);
-}
+.add-cart{
+    color:#fff;
 
-/* JAK TO DZIAŁA */
+    border:0;
 
-.steps {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 18px;
-}
-
-.step {
-    padding: 28px;
-    border: 1px solid #ffffff0b;
-    background: #07111f;
-    border-radius: 20px;
-    position: relative;
-    transition: .3s;
-}
-
-.step:hover {
-    transform: translateY(-7px);
-    border-color: #00bfff40;
-}
-
-.step-number {
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    background: linear-gradient(135deg,#008cff,#7d43ff);
-    font-weight: 1000;
-    margin-bottom: 20px;
-}
-
-.step h3 {
-    margin: 0 0 9px;
-}
-
-.step p {
-    margin: 0;
-    color: #758398;
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-/* OPINIE */
-
-.reviews {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 18px;
-}
-
-.review {
-    padding: 26px;
-    border: 1px solid #ffffff0b;
-    border-radius: 20px;
-    background: linear-gradient(145deg,#091526,#050a13);
-    transition: .3s;
-}
-
-.review:hover {
-    transform: translateY(-6px);
-    border-color: #00bfff35;
-}
-
-.stars {
-    color: #ffd34d;
-    letter-spacing: 2px;
-    margin-bottom: 17px;
-}
-
-.review p {
-    color: #9aa6b7;
-    line-height: 1.7;
-    font-size: 13px;
-}
-
-.review-user {
-    margin-top: 18px;
-    display: flex;
-    align-items: center;
-    gap: 11px;
-}
-
-.avatar {
-    width: 37px;
-    height: 37px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: linear-gradient(135deg,#008cff,#743cff);
-    font-weight: 1000;
-}
-
-.review-user small {
-    color: #69778b;
-}
-
-/* CUSTOM */
-
-.custom {
-    padding: 65px;
-    border-radius: 30px;
-    border: 1px solid #00bfff22;
     background:
-        linear-gradient(120deg,#061a31,#11103a);
-    position: relative;
-    overflow: hidden;
+        linear-gradient(
+            100deg,
+            #008cff,
+            #744cff
+        );
+
+    transition:.25s;
 }
 
-.custom h2 {
-    font-size: 42px;
-    margin: 10px 0 15px;
+.add-cart:hover{
+    transform:scale(1.03);
 }
 
-.custom p {
-    color: #8290a4;
-    max-width: 650px;
-    line-height: 1.8;
-    margin-bottom: 27px;
+
+/* =========================================================
+   CUSTOM
+========================================================= */
+
+.custom{
+    padding:65px;
+
+    position:relative;
+    overflow:hidden;
+
+    border-radius:30px;
+
+    border:1px solid #00bfff22;
+
+    background:
+        linear-gradient(
+            120deg,
+            #061a31,
+            #11103a
+        );
+
+    box-shadow:0 25px 80px #0005;
 }
 
-/* FOOTER */
+.custom::before{
+    content:"";
 
-footer {
-    padding: 45px 6%;
-    border-top: 1px solid #ffffff09;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #647186;
-    font-size: 12px;
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    right:-100px;
+    top:-120px;
+
+    border-radius:50%;
+
+    background:#008cff;
+
+    filter:blur(90px);
+
+    opacity:.18;
 }
 
-/* MOBILE */
+.custom h2{
+    margin:10px 0 15px;
 
-.mobile-menu {
-    display: none;
+    font-size:42px;
 }
 
-@media(max-width:1050px) {
-    .nav-links {
-        display: none;
+.custom p{
+    max-width:650px;
+
+    margin-bottom:27px;
+
+    color:#8290a4;
+
+    line-height:1.8;
+}
+
+
+/* =========================================================
+   STEPS
+========================================================= */
+
+.steps{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+}
+
+.step{
+    padding:28px;
+
+    border:1px solid #ffffff0b;
+
+    background:#07111f;
+
+    border-radius:20px;
+
+    transition:.3s;
+}
+
+.step:hover{
+    transform:translateY(-7px);
+
+    border-color:#00bfff40;
+}
+
+.step-number{
+    width:42px;
+    height:42px;
+
+    display:grid;
+    place-items:center;
+
+    margin-bottom:20px;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #008cff,
+            #7d43ff
+        );
+
+    font-weight:1000;
+}
+
+.step h3{
+    margin-bottom:9px;
+}
+
+.step p{
+    color:#758398;
+
+    font-size:13px;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   OPINIE
+========================================================= */
+
+.reviews{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:18px;
+}
+
+.review{
+    padding:26px;
+
+    border:1px solid #ffffff0b;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #091526,
+            #050a13
+        );
+
+    transition:.3s;
+}
+
+.review:hover{
+    transform:translateY(-6px);
+
+    border-color:#00bfff35;
+}
+
+.stars{
+    color:#ffd34d;
+
+    letter-spacing:2px;
+
+    margin-bottom:17px;
+}
+
+.review p{
+    color:#9aa6b7;
+
+    line-height:1.7;
+
+    font-size:13px;
+}
+
+.review-user{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    margin-top:18px;
+}
+
+.avatar{
+    width:37px;
+    height:37px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #008cff,
+            #743cff
+        );
+
+    font-weight:1000;
+}
+
+.review-user small{
+    color:#69778b;
+}
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+.faq{
+    max-width:900px;
+    margin:auto;
+}
+
+.faq-item{
+    margin-bottom:10px;
+
+    border:1px solid #ffffff0c;
+
+    border-radius:15px;
+
+    background:#07101d;
+
+    overflow:hidden;
+}
+
+.faq-question{
+    width:100%;
+
+    padding:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border:0;
+
+    background:none;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-weight:900;
+
+    text-align:left;
+}
+
+.faq-question span{
+    color:#35d8ff;
+    font-size:20px;
+}
+
+.faq-answer{
+    max-height:0;
+
+    overflow:hidden;
+
+    transition:.35s;
+}
+
+.faq-answer p{
+    padding:0 20px 20px;
+
+    color:#78869a;
+
+    font-size:13px;
+
+    line-height:1.7;
+}
+
+.faq-item.open .faq-answer{
+    max-height:200px;
+}
+
+
+/* =========================================================
+   NEWSLETTER
+========================================================= */
+
+.newsletter{
+    text-align:center;
+
+    padding:80px 30px;
+}
+
+.newsletter-box{
+    max-width:850px;
+
+    margin:auto;
+
+    padding:55px 30px;
+
+    border-radius:28px;
+
+    border:1px solid #00bfff20;
+
+    background:
+        linear-gradient(
+            120deg,
+            #071b32,
+            #120d30
+        );
+}
+
+.newsletter h2{
+    font-size:38px;
+
+    margin-bottom:12px;
+}
+
+.newsletter p{
+    color:#7d8a9d;
+
+    margin-bottom:25px;
+}
+
+.newsletter-form{
+    display:flex;
+
+    max-width:550px;
+
+    margin:auto;
+
+    gap:8px;
+}
+
+.newsletter-form input{
+    flex:1;
+
+    padding:14px 16px;
+
+    border-radius:12px;
+
+    border:1px solid #ffffff12;
+
+    background:#ffffff07;
+
+    color:#fff;
+
+    outline:none;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    padding:50px 6%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    color:#647186;
+
+    font-size:12px;
+
+    border-top:1px solid #ffffff09;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+
+    right:25px;
+    bottom:25px;
+
+    z-index:9999;
+
+    padding:16px 20px;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #754cff
+        );
+
+    color:#fff;
+
+    font-weight:1000;
+
+    box-shadow:0 15px 50px #0009;
+
+    animation:toastIn .3s ease;
+}
+
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.95);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+.reveal{
+    opacity:0;
+
+    transform:translateY(35px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+}
+
+.reveal.visible{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .nav-links{
+        display:none;
     }
 
-    .hero {
-        grid-template-columns: 1fr;
-        text-align: center;
+    .mobile-menu{
+        display:block;
     }
 
-    .hero-description {
-        margin-left: auto;
-        margin-right: auto;
+    .hero{
+        grid-template-columns:1fr;
+        text-align:center;
     }
 
-    .hero-buttons {
-        justify-content: center;
+    .hero-description{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
     }
 
     .categories,
     .products,
-    .steps {
-        grid-template-columns: repeat(2,1fr);
+    .steps{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .hero-visual {
-        min-height: 420px;
+    .stats{
+        grid-template-columns:repeat(2,1fr);
     }
 }
 
-@media(max-width:700px) {
-    .navbar {
-        padding: 0 18px;
+@media(max-width:700px){
+
+    .navbar{
+        padding:0 18px;
     }
 
-    .account {
-        display: none;
+    .account{
+        display:none;
     }
 
-    .hero {
-        padding: 130px 20px 70px;
+    .hero{
+        padding:125px 20px 70px;
     }
 
-    .hero h1 {
-        font-size: 52px;
-        letter-spacing: -3px;
+    .hero h1{
+        font-size:50px;
+        letter-spacing:-3px;
     }
 
-    .section {
-        padding: 75px 20px;
+    .hero-visual{
+        min-height:370px;
     }
 
-    .section-title h2 {
-        font-size: 34px;
+    .hero-logo{
+        width:240px;
+        height:240px;
+    }
+
+    .logo-symbol{
+        font-size:85px;
+    }
+
+    .logo-small{
+        font-size:13px;
+        bottom:32px;
+    }
+
+    .section{
+        padding:75px 20px;
+    }
+
+    .section-title h2{
+        font-size:34px;
     }
 
     .categories,
     .products,
     .steps,
-    .reviews {
-        grid-template-columns: 1fr;
+    .reviews,
+    .stats{
+        grid-template-columns:1fr;
     }
 
-    .custom {
-        padding: 40px 25px;
+    .promo{
+        margin:20px;
+        flex-direction:column;
+        align-items:flex-start;
     }
 
-    .custom h2 {
-        font-size: 32px;
+    .shop-tools{
+        flex-direction:column;
+        align-items:stretch;
     }
 
-    footer {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
+    .search{
+        max-width:none;
+    }
+
+    .custom{
+        padding:40px 25px;
+    }
+
+    .custom h2{
+        font-size:32px;
+    }
+
+    .newsletter h2{
+        font-size:30px;
+    }
+
+    .newsletter-form{
+        flex-direction:column;
+    }
+
+    footer{
+        flex-direction:column;
+        text-align:center;
     }
 }
+
 </style>
 </head>
 
+
 <body>
 
-<!-- TŁO -->
+
+<!-- =====================================================
+     TŁO
+===================================================== -->
 
 <div class="bg">
-    <div class="orb one"></div>
-    <div class="orb two"></div>
-    <div class="orb three"></div>
+
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
 </div>
 
 <div class="grid"></div>
 
 
-<!-- NAVBAR -->
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-<header class="navbar">
+<header class="navbar" id="navbar">
 
     <a href="index.html" class="brand">
 
@@ -843,12 +1716,12 @@ footer {
 
     <nav class="nav-links">
 
-        <a href="index.html">Strona główna</a>
         <a href="#produkty">Produkty</a>
         <a href="#breloki">Breloki</a>
         <a href="#dodatki">Dodatki</a>
         <a href="#figurki">Figurki</a>
-        <a href="#jak-dziala">Jak to działa?</a>
+        <a href="#custom">Custom</a>
+        <a href="#faq">FAQ</a>
 
     </nav>
 
@@ -861,51 +1734,83 @@ footer {
 
         <a href="koszyk.html" class="nav-btn cart">
             🛒 Koszyk
-            <span class="cart-count" id="cartCount">0</span>
+
+            <span
+                class="cart-count"
+                id="cartCount"
+            >
+                0
+            </span>
+
         </a>
+
+        <button
+            class="mobile-menu"
+            onclick="mobileMenu()"
+        >
+            ☰
+        </button>
 
     </div>
 
 </header>
 
 
-<!-- HERO -->
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <main>
 
 <section class="hero">
 
-    <div>
+    <div class="reveal">
 
         <div class="badge">
+
             <span class="badge-dot"></span>
+
             DRUKUJEMY TWOJE POMYSŁY
+
         </div>
 
 
         <h1>
+
             Twój pomysł.
+
             <br>
+
             <span class="gradient-text">
                 Nasza drukarka.
             </span>
+
         </h1>
 
 
         <p class="hero-description">
+
             Breloki, figurki, dodatki gamingowe,
             dekoracje i projekty wykonywane
             specjalnie dla Ciebie.
+
         </p>
 
 
         <div class="hero-buttons">
 
-            <a href="#produkty" class="btn btn-primary">
+            <a
+                href="#produkty"
+                class="btn btn-primary"
+            >
                 🛍️ Zobacz produkty
             </a>
 
-            <a href="#custom" class="btn btn-secondary">
+
+            <a
+                href="#custom"
+                class="btn btn-secondary"
+            >
                 🖨️ Zamów własny projekt
             </a>
 
@@ -914,7 +1819,7 @@ footer {
     </div>
 
 
-    <div class="hero-visual">
+    <div class="hero-visual reveal">
 
         <div class="hero-logo">
 
@@ -933,11 +1838,110 @@ footer {
 </section>
 
 
-<!-- KATEGORIE -->
+<!-- =====================================================
+     STATYSTYKI
+===================================================== -->
 
-<section class="section" id="produkty">
+<section class="stats">
 
-    <div class="section-title">
+    <div class="stat reveal">
+
+        <strong>
+            100+
+        </strong>
+
+        <span>
+            wykonanych wydruków
+        </span>
+
+    </div>
+
+
+    <div class="stat reveal">
+
+        <strong>
+            4.9★
+        </strong>
+
+        <span>
+            średnia ocena
+        </span>
+
+    </div>
+
+
+    <div class="stat reveal">
+
+        <strong>
+            3D
+        </strong>
+
+        <span>
+            drukujemy z pasją
+        </span>
+
+    </div>
+
+
+    <div class="stat reveal">
+
+        <strong>
+            100%
+        </strong>
+
+        <span>
+            personalizacji
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROMOCJA
+===================================================== -->
+
+<section class="promo reveal">
+
+    <div class="promo-left">
+
+        <div class="promo-icon">
+            🎁
+        </div>
+
+        <div>
+
+            <h3>
+                -10% na pierwsze zamówienie
+            </h3>
+
+            <p>
+                Użyj kodu przy zakupie.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="promo-code">
+        START10
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     KATEGORIE
+===================================================== -->
+
+<section
+    class="section"
+    id="produkty"
+>
+
+    <div class="section-title reveal">
 
         <span class="section-label">
             SKLEP
@@ -952,12 +1956,18 @@ footer {
 
     <div class="categories">
 
+        <a
+            href="#breloki"
+            class="category reveal"
+        >
 
-        <a href="#breloki" class="category">
+            <div class="category-icon">
+                🔑
+            </div>
 
-            <div class="category-icon">🔑</div>
-
-            <h3>Breloki</h3>
+            <h3>
+                Breloki
+            </h3>
 
             <p>
                 Personalizowane breloki
@@ -968,11 +1978,18 @@ footer {
         </a>
 
 
-        <a href="#dodatki" class="category">
+        <a
+            href="#dodatki"
+            class="category reveal"
+        >
 
-            <div class="category-icon">🎮</div>
+            <div class="category-icon">
+                🎮
+            </div>
 
-            <h3>Dodatki</h3>
+            <h3>
+                Dodatki
+            </h3>
 
             <p>
                 Akcesoria gamingowe,
@@ -983,11 +2000,18 @@ footer {
         </a>
 
 
-        <a href="#figurki" class="category">
+        <a
+            href="#figurki"
+            class="category reveal"
+        >
 
-            <div class="category-icon">🗿</div>
+            <div class="category-icon">
+                🗿
+            </div>
 
-            <h3>Figurki</h3>
+            <h3>
+                Figurki
+            </h3>
 
             <p>
                 Figurki kolekcjonerskie,
@@ -997,16 +2021,23 @@ footer {
         </a>
 
 
-        <a href="#dekoracje" class="category">
+        <a
+            href="#custom"
+            class="category reveal"
+        >
 
-            <div class="category-icon">✨</div>
+            <div class="category-icon">
+                ✨
+            </div>
 
-            <h3>Dekoracje</h3>
+            <h3>
+                Custom
+            </h3>
 
             <p>
-                Napisy, ozdoby,
-                dekoracje pokoju
-                i własne projekty.
+                Własne projekty,
+                napisy, loga
+                i nietypowe pomysły.
             </p>
 
         </a>
@@ -1016,33 +2047,65 @@ footer {
 </section>
 
 
-<!-- PRODUKTY -->
+<!-- =====================================================
+     PRODUKTY
+===================================================== -->
 
-<section class="section" id="breloki">
+<section
+    class="section"
+    id="breloki"
+>
 
-    <div class="section-title">
+    <div class="section-title reveal">
 
         <span class="section-label">
-            BRELOKI
+            PRODUKTY
         </span>
 
         <h2>
-            Najlepsze breloki
+            Najpopularniejsze
         </h2>
 
     </div>
 
 
-    <div class="products">
+    <div class="shop-tools">
+
+        <div class="search">
+
+            <input
+                id="productSearch"
+                type="text"
+                placeholder="🔎 Szukaj produktu..."
+                oninput="searchProducts()"
+            >
+
+        </div>
+
+    </div>
 
 
-        <!-- 1 -->
+    <div
+        class="products"
+        id="productGrid"
+    >
 
-        <article class="product">
+
+        <!-- FRIENDZ -->
+
+        <article
+            class="product reveal"
+            data-name="friendz brelok"
+        >
 
             <div class="product-image">
-                <span>🔑</span>
+
+                <span>
+                    🔑
+                </span>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1059,6 +2122,7 @@ footer {
                     z napisem FRIENDZ.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1071,6 +2135,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1082,7 +2147,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('friendz','Brelok FRIENDZ',12)"
+                        onclick="addProduct(
+                            'friendz',
+                            'Brelok FRIENDZ',
+                            12
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1094,13 +2163,21 @@ footer {
         </article>
 
 
-        <!-- 2 -->
+        <!-- NEON -->
 
-        <article class="product">
+        <article
+            class="product reveal"
+            data-name="neon logo brelok"
+        >
 
             <div class="product-image">
-                <span>⚡</span>
+
+                <span>
+                    ⚡
+                </span>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1117,6 +2194,7 @@ footer {
                     symbolem Printerlase3D.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1129,6 +2207,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1140,7 +2219,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('neon','Neon Logo',14)"
+                        onclick="addProduct(
+                            'neon',
+                            'Neon Logo',
+                            14
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1152,13 +2235,25 @@ footer {
         </article>
 
 
-        <!-- 3 -->
+        <!-- CREEPER -->
 
-        <article class="product">
+        <article
+            class="product reveal"
+            data-name="creeper minecraft brelok"
+        >
 
             <div class="product-image">
-                <span>👾</span>
+
+                <span>
+                    👾
+                </span>
+
+                <div class="sale">
+                    HIT
+                </div>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1175,6 +2270,7 @@ footer {
                     do plecaka lub kluczy.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1187,6 +2283,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1198,7 +2295,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('creeper','Brelok Creeper',10)"
+                        onclick="addProduct(
+                            'creeper',
+                            'Brelok Creeper',
+                            10
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1210,13 +2311,21 @@ footer {
         </article>
 
 
-        <!-- 4 -->
+        <!-- CUSTOM -->
 
-        <article class="product">
+        <article
+            class="product reveal"
+            data-name="custom napis brelok"
+        >
 
             <div class="product-image">
-                <span>★</span>
+
+                <span>
+                    ⭐
+                </span>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1233,6 +2342,7 @@ footer {
                     nazwa lub pseudonim.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1245,6 +2355,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1256,7 +2367,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('custom','Brelok Custom',12)"
+                        onclick="addProduct(
+                            'custom',
+                            'Brelok Custom',
+                            12
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1267,36 +2382,23 @@ footer {
 
         </article>
 
-    </div>
 
-</section>
+        <!-- PAD -->
 
-
-<!-- DODATKI -->
-
-<section class="section" id="dodatki">
-
-    <div class="section-title">
-
-        <span class="section-label">
-            DODATKI
-        </span>
-
-        <h2>
-            Gadżety 3D
-        </h2>
-
-    </div>
-
-
-    <div class="products">
-
-
-        <article class="product">
+        <article
+            class="product reveal"
+            id="dodatki"
+            data-name="uchwyt pad gaming"
+        >
 
             <div class="product-image">
-                <span>🎮</span>
+
+                <span>
+                    🎮
+                </span>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1309,9 +2411,10 @@ footer {
                 </h3>
 
                 <p>
-                    Prosty stojak na
-                    kontroler gamingowy.
+                    Stojak na kontroler
+                    gamingowy.
                 </p>
+
 
                 <div class="product-meta">
 
@@ -1325,6 +2428,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1336,7 +2440,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('pad','Uchwyt na pada',25)"
+                        onclick="addProduct(
+                            'pad',
+                            'Uchwyt na pada',
+                            25
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1348,11 +2456,21 @@ footer {
         </article>
 
 
-        <article class="product">
+        <!-- TELEFON -->
+
+        <article
+            class="product reveal"
+            data-name="stojak telefon"
+        >
 
             <div class="product-image">
-                <span>📱</span>
+
+                <span>
+                    📱
+                </span>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1369,6 +2487,7 @@ footer {
                     wykonany z PLA.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1381,6 +2500,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1392,7 +2512,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('telefon','Stojak na telefon',18)"
+                        onclick="addProduct(
+                            'telefon',
+                            'Stojak na telefon',
+                            18
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1404,11 +2528,21 @@ footer {
         </article>
 
 
-        <article class="product">
+        <!-- ORGANIZER -->
+
+        <article
+            class="product reveal"
+            data-name="organizer biurkowy kable"
+        >
 
             <div class="product-image">
-                <span>🧩</span>
+
+                <span>
+                    🧩
+                </span>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1425,6 +2559,7 @@ footer {
                     i małe rzeczy.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1437,6 +2572,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1448,7 +2584,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('organizer','Organizer biurkowy',22)"
+                        onclick="addProduct(
+                            'organizer',
+                            'Organizer biurkowy',
+                            22
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1460,90 +2600,22 @@ footer {
         </article>
 
 
-        <article class="product">
+        <!-- ROBOT -->
+
+        <article
+            class="product reveal"
+            id="figurki"
+            data-name="robot figurka 3d"
+        >
 
             <div class="product-image">
-                <span>🔧</span>
-            </div>
 
-            <div class="product-body">
-
-                <div class="product-category">
-                    PRAKTYCZNE
-                </div>
-
-                <h3>
-                    Uchwyt custom
-                </h3>
-
-                <p>
-                    Uchwyt dopasowany
-                    do Twojego projektu.
-                </p>
-
-                <div class="product-meta">
-
-                    <span class="price">
-                        od 20 zł
-                    </span>
-
-                    <span class="time">
-                        ⏱ 2–4 h
-                    </span>
-
-                </div>
-
-                <div class="product-actions">
-
-                    <a
-                        href="produkt.html?id=uchwyt"
-                        class="details"
-                    >
-                        Zobacz
-                    </a>
-
-                    <button
-                        class="add-cart"
-                        onclick="addProduct('uchwyt','Uchwyt Custom',20)"
-                    >
-                        + Koszyk
-                    </button>
-
-                </div>
+                <span>
+                    🤖
+                </span>
 
             </div>
 
-        </article>
-
-    </div>
-
-</section>
-
-
-<!-- FIGURKI -->
-
-<section class="section" id="figurki">
-
-    <div class="section-title">
-
-        <span class="section-label">
-            FIGURKI
-        </span>
-
-        <h2>
-            Modele 3D
-        </h2>
-
-    </div>
-
-
-    <div class="products">
-
-        <article class="product">
-
-            <div class="product-image">
-                <span>🤖</span>
-            </div>
 
             <div class="product-body">
 
@@ -1559,6 +2631,7 @@ footer {
                     Mała figurka dekoracyjna.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1571,6 +2644,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1582,7 +2656,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('robot','Robot Mini',25)"
+                        onclick="addProduct(
+                            'robot',
+                            'Robot Mini',
+                            25
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1594,11 +2672,25 @@ footer {
         </article>
 
 
-        <article class="product">
+        <!-- SMOK -->
+
+        <article
+            class="product reveal"
+            data-name="smok figurka 3d"
+        >
 
             <div class="product-image">
-                <span>🐉</span>
+
+                <span>
+                    🐉
+                </span>
+
+                <div class="sale">
+                    NOWOŚĆ
+                </div>
+
             </div>
+
 
             <div class="product-body">
 
@@ -1614,6 +2706,7 @@ footer {
                     Ozdobna figurka smoka.
                 </p>
 
+
                 <div class="product-meta">
 
                     <span class="price">
@@ -1626,6 +2719,7 @@ footer {
 
                 </div>
 
+
                 <div class="product-actions">
 
                     <a
@@ -1637,7 +2731,11 @@ footer {
 
                     <button
                         class="add-cart"
-                        onclick="addProduct('smok','Smok 3D',35)"
+                        onclick="addProduct(
+                            'smok',
+                            'Smok 3D',
+                            35
+                        )"
                     >
                         + Koszyk
                     </button>
@@ -1648,30 +2746,21 @@ footer {
 
         </article>
 
-
     </div>
 
 </section>
 
 
-<!-- DEKORACJE -->
+<!-- =====================================================
+     CUSTOM
+===================================================== -->
 
-<section class="section" id="dekoracje">
+<section
+    class="section"
+    id="custom"
+>
 
-    <div class="section-title">
-
-        <span class="section-label">
-            DEKORACJE
-        </span>
-
-        <h2>
-            Zrób coś wyjątkowego
-        </h2>
-
-    </div>
-
-
-    <div class="custom">
+    <div class="custom reveal">
 
         <span class="section-label">
             CUSTOM 3D
@@ -1682,13 +2771,20 @@ footer {
         </h2>
 
         <p>
+
             Możemy przygotować dla Ciebie
             własny napis, logo, figurkę,
             uchwyt albo praktyczny element.
-            Podeślij model lub opisz pomysł.
+
+            Podeślij model lub opisz swój pomysł.
+
         </p>
 
-        <a href="checkout.html" class="btn btn-primary">
+
+        <a
+            href="checkout.html"
+            class="btn btn-primary"
+        >
             🖨️ Zamów własny projekt
         </a>
 
@@ -1697,11 +2793,16 @@ footer {
 </section>
 
 
-<!-- JAK TO DZIAŁA -->
+<!-- =====================================================
+     JAK TO DZIAŁA
+===================================================== -->
 
-<section class="section" id="jak-dziala">
+<section
+    class="section"
+    id="jak-dziala"
+>
 
-    <div class="section-title">
+    <div class="section-title reveal">
 
         <span class="section-label">
             PROCES
@@ -1716,43 +2817,75 @@ footer {
 
     <div class="steps">
 
-        <div class="step">
-            <div class="step-number">1</div>
-            <h3>Wybierasz produkt</h3>
+        <div class="step reveal">
+
+            <div class="step-number">
+                1
+            </div>
+
+            <h3>
+                Wybierasz
+            </h3>
+
             <p>
-                Wybierz interesujący Cię
-                model z naszej oferty.
+                Wybierz produkt,
+                który Cię interesuje.
             </p>
+
         </div>
 
 
-        <div class="step">
-            <div class="step-number">2</div>
-            <h3>Dodajesz do koszyka</h3>
+        <div class="step reveal">
+
+            <div class="step-number">
+                2
+            </div>
+
+            <h3>
+                Dodajesz
+            </h3>
+
             <p>
-                Dodaj produkt i przejdź
-                do podsumowania zamówienia.
+                Dodaj produkt
+                do koszyka.
             </p>
+
         </div>
 
 
-        <div class="step">
-            <div class="step-number">3</div>
-            <h3>Wybierasz płatność</h3>
+        <div class="step reveal">
+
+            <div class="step-number">
+                3
+            </div>
+
+            <h3>
+                Zamawiasz
+            </h3>
+
             <p>
-                W checkout możesz wybrać
-                dostępną metodę płatności.
+                Uzupełnij dane
+                i wybierz płatność.
             </p>
+
         </div>
 
 
-        <div class="step">
-            <div class="step-number">4</div>
-            <h3>Drukujemy</h3>
+        <div class="step reveal">
+
+            <div class="step-number">
+                4
+            </div>
+
+            <h3>
+                Drukujemy
+            </h3>
+
             <p>
-                Po zamówieniu przygotowujemy
-                Twój wydruk i wysyłkę.
+                Przygotowujemy
+                Twój wydruk.
             </p>
+
         </div>
 
     </div>
@@ -1760,11 +2893,13 @@ footer {
 </section>
 
 
-<!-- OPINIE -->
+<!-- =====================================================
+     OPINIE
+===================================================== -->
 
 <section class="section">
 
-    <div class="section-title">
+    <div class="section-title reveal">
 
         <span class="section-label">
             OPINIE
@@ -1779,8 +2914,7 @@ footer {
 
     <div class="reviews">
 
-
-        <div class="review">
+        <div class="review reveal">
 
             <div class="stars">
                 ★★★★★
@@ -1799,8 +2933,11 @@ footer {
                 </div>
 
                 <div>
-                    <b>Kacper</b><br>
-                    <small>Zweryfikowany zakup</small>
+                    <b>Kacper</b>
+                    <br>
+                    <small>
+                        Zweryfikowany zakup
+                    </small>
                 </div>
 
             </div>
@@ -1808,7 +2945,7 @@ footer {
         </div>
 
 
-        <div class="review">
+        <div class="review reveal">
 
             <div class="stars">
                 ★★★★★
@@ -1827,8 +2964,11 @@ footer {
                 </div>
 
                 <div>
-                    <b>Michał</b><br>
-                    <small>Zweryfikowany zakup</small>
+                    <b>Michał</b>
+                    <br>
+                    <small>
+                        Zweryfikowany zakup
+                    </small>
                 </div>
 
             </div>
@@ -1836,7 +2976,7 @@ footer {
         </div>
 
 
-        <div class="review">
+        <div class="review reveal">
 
             <div class="stars">
                 ★★★★★
@@ -1845,7 +2985,7 @@ footer {
             <p>
                 „Zamówiłem własny projekt.
                 Wszystko wyglądało super,
-                a sam produkt jest bardzo solidny.”
+                a produkt jest bardzo solidny.”
             </p>
 
             <div class="review-user">
@@ -1855,9 +2995,153 @@ footer {
                 </div>
 
                 <div>
-                    <b>Olek</b><br>
-                    <small>Zweryfikowany zakup</small>
+                    <b>Olek</b>
+                    <br>
+                    <small>
+                        Zweryfikowany zakup
+                    </small>
                 </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FAQ
+===================================================== -->
+
+<section
+    class="section"
+    id="faq"
+>
+
+    <div class="section-title reveal">
+
+        <span class="section-label">
+            FAQ
+        </span>
+
+        <h2>
+            Najczęstsze pytania
+        </h2>
+
+    </div>
+
+
+    <div class="faq">
+
+
+        <div class="faq-item reveal">
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)"
+            >
+
+                Ile trwa wydruk?
+
+                <span>
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Czas zależy od modelu.
+                    Małe breloki mogą być gotowe
+                    nawet w około 30–60 minut.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item reveal">
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)"
+            >
+
+                Czy mogę zamówić własny projekt?
+
+                <span>
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Tak. Możesz wysłać model 3D
+                    albo opisać swój pomysł,
+                    a my przygotujemy wycenę.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item reveal">
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)"
+            >
+
+                Jaki jest kod rabatowy?
+
+                <span>
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Na pierwsze zamówienie możesz
+                    użyć kodu START10,
+                    który daje 10% rabatu.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="faq-item reveal">
+
+            <button
+                class="faq-question"
+                onclick="toggleFAQ(this)"
+            >
+
+                Z czego drukujecie?
+
+                <span>
+                    +
+                </span>
+
+            </button>
+
+            <div class="faq-answer">
+
+                <p>
+                    Standardowe produkty mogą być
+                    drukowane z PLA. Materiał możemy
+                    dobrać również do konkretnego projektu.
+                </p>
 
             </div>
 
@@ -1868,10 +3152,56 @@ footer {
 
 </section>
 
+
+<!-- =====================================================
+     NEWSLETTER
+===================================================== -->
+
+<section class="newsletter">
+
+    <div class="newsletter-box reveal">
+
+        <h2>
+            🔥 Nie przegap promocji
+        </h2>
+
+        <p>
+            Zapisz się i otrzymuj informacje
+            o nowych wydrukach.
+        </p>
+
+
+        <form
+            class="newsletter-form"
+            onsubmit="subscribe(event)"
+        >
+
+            <input
+                id="email"
+                type="email"
+                placeholder="Twój e-mail"
+                required
+            >
+
+            <button
+                class="btn btn-primary"
+                type="submit"
+            >
+                Zapisz mnie
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
 </main>
 
 
-<!-- FOOTER -->
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
 
@@ -1902,19 +3232,21 @@ footer {
 
 <script>
 
-/* ==========================================
+/* =========================================================
    KOSZYK
-========================================== */
+========================================================= */
 
-function getCart() {
+function getCart(){
 
-    try {
+    try{
 
         return JSON.parse(
-            localStorage.getItem("printerlase_cart")
+            localStorage.getItem(
+                "printerlase_cart"
+            )
         ) || [];
 
-    } catch {
+    }catch{
 
         return [];
 
@@ -1923,7 +3255,7 @@ function getCart() {
 }
 
 
-function saveCart(cart) {
+function saveCart(cart){
 
     localStorage.setItem(
         "printerlase_cart",
@@ -1933,134 +3265,344 @@ function saveCart(cart) {
 }
 
 
-function updateCartCount() {
+function updateCartCount(){
 
     const cart = getCart();
 
     const count = cart.reduce(
-        (sum, item) =>
-            sum + (Number(item.quantity) || 1),
+        (sum,item)=>{
+            return sum +
+            (Number(item.quantity)||1);
+        },
         0
     );
 
     const element =
         document.getElementById("cartCount");
 
-    if(element) {
+    if(element){
 
-        element.textContent = count;
+        element.textContent=count;
 
     }
 
 }
 
 
-function addProduct(id, name, price) {
+function addProduct(id,name,price){
 
-    const cart = getCart();
+    const cart=getCart();
 
     const existing =
-        cart.find(item => item.id === id);
+        cart.find(
+            item=>item.id===id
+        );
 
-    if(existing) {
+
+    if(existing){
 
         existing.quantity =
-            (existing.quantity || 1) + 1;
+            (existing.quantity||1)+1;
 
-    } else {
+    }else{
 
         cart.push({
 
-            id: id,
+            id:id,
 
-            name: name,
+            name:name,
 
-            price: Number(price),
+            price:Number(price),
 
-            quantity: 1
+            quantity:1
 
         });
 
     }
 
+
     saveCart(cart);
 
     updateCartCount();
 
-    showAdded();
+    showToast(
+        "✓ Dodano do koszyka"
+    );
 
 }
 
 
-function showAdded() {
+/* =========================================================
+   TOAST
+========================================================= */
 
-    const notification =
+function showToast(message){
+
+    const old =
+        document.querySelector(".toast");
+
+    if(old){
+        old.remove();
+    }
+
+
+    const toast =
         document.createElement("div");
 
-    notification.innerHTML =
-        "✓ Produkt dodany do koszyka";
+    toast.className="toast";
 
-    notification.style.position = "fixed";
-    notification.style.right = "25px";
-    notification.style.bottom = "25px";
-    notification.style.zIndex = "9999";
-    notification.style.padding = "15px 20px";
-    notification.style.borderRadius = "14px";
-    notification.style.background =
-        "linear-gradient(100deg,#008cff,#754cff)";
-    notification.style.color = "white";
-    notification.style.fontWeight = "900";
-    notification.style.boxShadow =
-        "0 15px 50px #0009";
+    toast.textContent=message;
 
-    document.body.appendChild(notification);
+    document.body.appendChild(toast);
 
-    setTimeout(() => {
 
-        notification.style.opacity = "0";
-        notification.style.transform =
-            "translateY(15px)";
+    setTimeout(()=>{
 
-        notification.style.transition =
-            ".3s";
+        toast.style.opacity="0";
+        toast.style.transform=
+            "translateY(20px)";
+
+        toast.style.transition=".3s";
 
         setTimeout(
-            () => notification.remove(),
+            ()=>toast.remove(),
             300
         );
 
-    }, 1500);
+    },1800);
 
 }
 
 
-/* START */
+/* =========================================================
+   RABAT
+========================================================= */
 
-updateCartCount();
+function applyDiscount(code,total){
+
+    const clean =
+        code.trim().toUpperCase();
+
+    if(clean==="START10"){
+
+        return total*0.90;
+
+    }
+
+    return total;
+
+}
 
 
-/* ==========================================
-   ANIMACJE ELEMENTÓW
-========================================== */
+/* =========================================================
+   WYSZUKIWARKA
+========================================================= */
 
-const animated =
-    document.querySelectorAll(
-        ".category, .product, .step, .review, .custom"
+function searchProducts(){
+
+    const input =
+        document
+        .getElementById("productSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const products =
+        document.querySelectorAll(
+            "#productGrid .product"
+        );
+
+
+    products.forEach(product=>{
+
+        const name =
+            product
+            .dataset
+            .name
+            .toLowerCase();
+
+
+        if(name.includes(input)){
+
+            product.style.display="block";
+
+        }else{
+
+            product.style.display="none";
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+function toggleFAQ(button){
+
+    const item =
+        button.parentElement;
+
+    const wasOpen =
+        item.classList.contains("open");
+
+
+    document
+        .querySelectorAll(".faq-item")
+        .forEach(el=>{
+            el.classList.remove("open");
+        });
+
+
+    if(!wasOpen){
+
+        item.classList.add("open");
+
+        button
+            .querySelector("span")
+            .textContent="−";
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".faq-item:not(.open) .faq-question span"
+        )
+        .forEach(el=>{
+            el.textContent="+";
+        });
+
+}
+
+
+/* =========================================================
+   NEWSLETTER
+========================================================= */
+
+function subscribe(event){
+
+    event.preventDefault();
+
+    const email =
+        document
+        .getElementById("email")
+        .value;
+
+
+    localStorage.setItem(
+        "printerlase_newsletter",
+        email
     );
 
 
+    showToast(
+        "✓ Zapisano do newslettera!"
+    );
+
+
+    event.target.reset();
+
+}
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function mobileMenu(){
+
+    const nav =
+        document.querySelector(".nav-links");
+
+
+    if(nav.style.display==="flex"){
+
+        nav.style.display="none";
+
+        return;
+
+    }
+
+
+    nav.style.display="flex";
+
+    nav.style.position="absolute";
+
+    nav.style.top="78px";
+
+    nav.style.left="0";
+
+    nav.style.width="100%";
+
+    nav.style.padding="20px";
+
+    nav.style.flexDirection="column";
+
+    nav.style.background=
+        "rgba(2,6,17,.97)";
+
+    nav.style.borderBottom=
+        "1px solid #ffffff10";
+
+}
+
+
+/* =========================================================
+   NAVBAR SCROLL
+========================================================= */
+
+window.addEventListener(
+    "scroll",
+    ()=>{
+
+        const navbar =
+            document.getElementById(
+                "navbar"
+            );
+
+
+        if(window.scrollY>30){
+
+            navbar.classList.add(
+                "scrolled"
+            );
+
+        }else{
+
+            navbar.classList.remove(
+                "scrolled"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
 const observer =
     new IntersectionObserver(
-        entries => {
+        entries=>{
 
-            entries.forEach(entry => {
+            entries.forEach(entry=>{
 
-                if(entry.isIntersecting) {
+                if(entry.isIntersecting){
 
-                    entry.target.style.opacity = "1";
+                    entry.target
+                        .classList
+                        .add("visible");
 
-                    entry.target.style.transform =
-                        "translateY(0)";
+                    observer.unobserve(
+                        entry.target
+                    );
 
                 }
 
@@ -2068,25 +3610,55 @@ const observer =
 
         },
         {
-            threshold: .12
+            threshold:.12
         }
     );
 
 
-animated.forEach((element, index) => {
+document
+    .querySelectorAll(".reveal")
+    .forEach(el=>{
+        observer.observe(el);
+    });
 
-    element.style.opacity = "0";
 
-    element.style.transform =
-        "translateY(30px)";
+/* =========================================================
+   START
+========================================================= */
 
-    element.style.transition =
-        `opacity .6s ease ${index * .04}s,
-         transform .6s ease ${index * .04}s`;
+updateCartCount();
 
-    observer.observe(element);
 
-});
+/* =========================================================
+   KLAWIATURA
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        if(
+            event.key==="/" &&
+            document.activeElement.tagName!=="INPUT"
+        ){
+
+            event.preventDefault();
+
+            const search =
+                document.getElementById(
+                    "productSearch"
+                );
+
+            if(search){
+
+                search.focus();
+
+            }
+
+        }
+
+    }
+);
 
 </script>
 
