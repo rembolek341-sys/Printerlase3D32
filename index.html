@@ -4,8 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Printerlase3D — kolorowe wydruki 3D, breloki, dodatki i personalizowane projekty.">
-<title>Printerlase3D — Wydruki 3D</title>
+
+<title>Printerlase3D — Druk 3D</title>
 
 <style>
 *{
@@ -14,36 +14,20 @@
     padding:0;
 }
 
-:root{
-    --bg:#030712;
-    --panel:#071120;
-    --panel2:#0a1729;
-    --border:#182b44;
-    --blue:#00c8ff;
-    --blue2:#008cff;
-    --purple:#713cff;
-    --green:#39e6a0;
-    --red:#ff5577;
-    --white:#fff;
-    --muted:#8b99ad;
-}
-
 html{
     scroll-behavior:smooth;
 }
 
 body{
-    min-height:100vh;
-    color:var(--white);
-    background:
-        radial-gradient(circle at 15% 0%,rgba(0,200,255,.16),transparent 30%),
-        radial-gradient(circle at 90% 0%,rgba(113,60,255,.18),transparent 30%),
-        var(--bg);
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:Inter,Arial,Helvetica,sans-serif;
+    color:#fff;
+    background:#030712;
+    overflow-x:hidden;
 }
 
 button,
-input{
+input,
+select{
     font:inherit;
 }
 
@@ -56,6 +40,34 @@ a{
     text-decoration:none;
 }
 
+/* =========================
+   TŁO
+========================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(0,174,255,.13),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(115,50,255,.14),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(0,217,255,.08),transparent 35%);
+    z-index:-3;
+}
+
+.grid-bg{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.15;
+    z-index:-2;
+    background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+    background-size:55px 55px;
+    mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
 
 /* =========================
    HEADER
@@ -65,528 +77,477 @@ header{
     position:sticky;
     top:0;
     z-index:100;
+    height:76px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(3,7,18,.78);
+    backdrop-filter:blur(20px);
+}
 
-    height:72px;
-    padding:0 5%;
-
+.nav{
+    width:min(1250px,92%);
+    height:100%;
+    margin:auto;
     display:flex;
     align-items:center;
     justify-content:space-between;
-
-    background:rgba(3,8,18,.82);
-    border-bottom:1px solid var(--border);
-
-    backdrop-filter:blur(18px);
 }
 
 .logo{
-    font-size:23px;
+    font-size:21px;
     font-weight:1000;
     letter-spacing:-1px;
 }
 
 .logo span{
-    color:var(--blue);
+    color:#00c8ff;
 }
 
-.nav{
+.logoDot{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    margin-left:3px;
+    border-radius:50%;
+    background:#7c3cff;
+    box-shadow:0 0 15px #7c3cff;
+}
+
+.navLinks{
     display:flex;
-    align-items:center;
-    gap:8px;
+    gap:28px;
+    color:#9ca9bd;
+    font-size:12px;
+    font-weight:800;
 }
 
-.nav a{
-    padding:10px 13px;
-    border-radius:9px;
-
-    color:#b9c4d3;
-
-    font-size:10px;
-    font-weight:900;
-
+.navLinks a{
     transition:.2s;
 }
 
-.nav a:hover{
+.navLinks a:hover{
     color:#fff;
-    background:#0b1b2e;
 }
 
-.cartButton{
+.cartBtn{
     position:relative;
-
-    padding:11px 15px;
-
+    border:1px solid #21324b;
+    background:#091426;
     color:#fff;
-
-    border:1px solid #23415f;
-    border-radius:11px;
-
-    background:#09182a;
-
-    font-size:10px;
-    font-weight:1000;
-
-    transition:.2s;
-}
-
-.cartButton:hover{
-    border-color:var(--blue);
-    transform:translateY(-2px);
+    padding:11px 15px;
+    border-radius:12px;
+    font-size:11px;
+    font-weight:900;
 }
 
 .cartCount{
     position:absolute;
-
     top:-7px;
     right:-7px;
-
-    min-width:20px;
-    height:20px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:0 5px;
-
-    border-radius:20px;
-
-    color:#fff;
-
-    background:
-        linear-gradient(100deg,var(--blue2),var(--purple));
-
+    min-width:19px;
+    height:19px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#00c8ff;
+    color:#00131b;
     font-size:9px;
     font-weight:1000;
 }
-
 
 /* =========================
    HERO
 ========================= */
 
 .hero{
-    width:min(1200px,92%);
-
-    min-height:430px;
-
-    margin:45px auto 30px;
-
+    width:min(1250px,92%);
+    min-height:650px;
+    margin:auto;
     display:grid;
-    grid-template-columns:1.15fr .85fr;
+    grid-template-columns:1fr 1fr;
     align-items:center;
-    gap:40px;
+    gap:50px;
 }
 
-.heroBadge{
+.badge{
     display:inline-flex;
-
+    align-items:center;
+    gap:8px;
     padding:8px 12px;
-
-    border:1px solid rgba(0,200,255,.25);
+    border:1px solid rgba(0,200,255,.2);
     border-radius:999px;
-
-    color:var(--blue);
-
     background:rgba(0,200,255,.06);
+    color:#55dfff;
+    font-size:10px;
+    font-weight:900;
+    animation:fadeUp .7s ease both;
+}
 
-    font-size:9px;
-    font-weight:1000;
+.badge i{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#42e6a4;
+    box-shadow:0 0 12px #42e6a4;
 }
 
 .hero h1{
-    margin-top:18px;
-
-    font-size:clamp(42px,6vw,75px);
-
+    margin-top:22px;
+    max-width:650px;
+    font-size:clamp(48px,6vw,82px);
     line-height:.95;
-    letter-spacing:-4px;
+    letter-spacing:-5px;
+    animation:fadeUp .8s .1s ease both;
 }
 
 .hero h1 span{
-    background:
-        linear-gradient(
-            100deg,
-            var(--blue),
-            #fff,
-            #9d78ff
-        );
-
+    background:linear-gradient(100deg,#00c8ff,#8b5cff);
     -webkit-background-clip:text;
-    background-clip:text;
     color:transparent;
 }
 
-.hero p{
-    max-width:620px;
-
-    margin-top:20px;
-
-    color:var(--muted);
-
-    font-size:14px;
+.heroText{
+    max-width:560px;
+    margin-top:25px;
+    color:#8e9bb0;
+    font-size:15px;
     line-height:1.7;
+    animation:fadeUp .8s .2s ease both;
 }
 
 .heroButtons{
     display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-
-    margin-top:25px;
+    gap:12px;
+    margin-top:30px;
+    animation:fadeUp .8s .3s ease both;
 }
 
 .primary{
-    padding:14px 19px;
-
     border:0;
-    border-radius:11px;
-
+    padding:14px 20px;
+    border-radius:12px;
     color:#fff;
-
-    background:
-        linear-gradient(
-            100deg,
-            var(--blue2),
-            var(--purple)
-        );
-
-    font-size:10px;
+    background:linear-gradient(100deg,#008cff,#713cff);
+    box-shadow:0 12px 35px rgba(0,140,255,.18);
+    font-size:11px;
     font-weight:1000;
-
-    box-shadow:
-        0 12px 35px rgba(0,140,255,.2);
-
-    transition:.2s;
+    transition:.25s;
 }
 
 .primary:hover{
     transform:translateY(-3px);
+    box-shadow:0 18px 45px rgba(0,140,255,.3);
 }
 
 .secondary{
-    padding:14px 19px;
-
-    border:1px solid #23415f;
-    border-radius:11px;
-
+    border:1px solid #263851;
+    padding:14px 20px;
+    border-radius:12px;
     color:#fff;
-    background:#081628;
-
-    font-size:10px;
+    background:#081222;
+    font-size:11px;
     font-weight:1000;
+    transition:.25s;
 }
 
-.heroCard{
-    min-height:330px;
+.secondary:hover{
+    border-color:#00c8ff;
+}
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+/* =========================
+   WŁASNY MODEL 3D
+========================= */
 
+.heroModel{
+    height:480px;
     position:relative;
-    overflow:hidden;
-
-    border:1px solid var(--border);
-    border-radius:30px;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(0,200,255,.15),
-            transparent 55%
-        ),
-        #06101e;
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.35);
+    display:grid;
+    place-items:center;
+    perspective:1000px;
+    animation:fadeIn 1s .25s ease both;
 }
 
-.heroCube{
-    width:180px;
-    height:180px;
+.modelGlow{
+    position:absolute;
+    width:330px;
+    height:330px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(0,200,255,.25),transparent 65%);
+    filter:blur(20px);
+    animation:pulse 3s infinite;
+}
 
+.productModel{
+    position:relative;
+    width:280px;
+    height:330px;
+    transform-style:preserve-3d;
+    animation:floatModel 4s ease-in-out infinite;
+}
+
+.modelBody{
+    position:absolute;
+    width:210px;
+    height:260px;
+    left:35px;
+    top:35px;
+    border-radius:28px;
+    background:
+        linear-gradient(135deg,#111d31,#07101d 55%,#101a2d);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:
+        25px 30px 60px rgba(0,0,0,.55),
+        inset 0 0 35px rgba(0,200,255,.05);
+    transform:rotateY(-16deg) rotateX(5deg);
+}
+
+.modelBody::before{
+    content:"";
+    position:absolute;
+    left:20px;
+    right:20px;
+    top:22px;
+    height:105px;
+    border-radius:18px;
+    background:
+        linear-gradient(145deg,#162944,#07101d);
+    border:1px solid rgba(0,200,255,.22);
+    box-shadow:inset 0 0 25px rgba(0,200,255,.08);
+}
+
+.modelBody::after{
+    content:"";
+    position:absolute;
+    left:35px;
+    right:35px;
+    bottom:30px;
+    height:12px;
+    border-radius:20px;
+    background:#00c8ff;
+    box-shadow:0 0 20px rgba(0,200,255,.7);
+}
+
+.modelScreen{
+    position:absolute;
+    left:43px;
+    top:45px;
+    width:140px;
+    height:65px;
+    z-index:2;
     display:flex;
-    align-items:center;
+    flex-direction:column;
     justify-content:center;
-
-    border:1px solid rgba(0,200,255,.3);
-    border-radius:35px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0,200,255,.16),
-            rgba(113,60,255,.2)
-        );
-
-    box-shadow:
-        0 0 80px rgba(0,200,255,.18);
-
-    transform:rotate(-8deg);
-
-    font-size:65px;
+    align-items:center;
+    border-radius:10px;
+    background:#02070e;
+    border:1px solid #203f5b;
+    transform:translateZ(10px);
 }
 
+.modelScreen small{
+    color:#668096;
+    font-size:7px;
+    font-weight:900;
+}
+
+.modelSpeed{
+    color:#fff;
+    font-size:28px;
+    font-weight:1000;
+    line-height:1;
+}
+
+.modelSpeed span{
+    color:#00c8ff;
+    font-size:9px;
+}
+
+.modelWheel{
+    position:absolute;
+    right:-20px;
+    bottom:35px;
+    width:105px;
+    height:105px;
+    border:14px solid #111827;
+    border-radius:50%;
+    box-shadow:
+        inset 0 0 0 3px #334155,
+        0 10px 30px rgba(0,0,0,.4);
+    transform:translateZ(25px);
+}
+
+.modelWheel::after{
+    content:"";
+    position:absolute;
+    width:15px;
+    height:15px;
+    left:31px;
+    top:31px;
+    border-radius:50%;
+    background:#00c8ff;
+    box-shadow:0 0 15px #00c8ff;
+}
+
+.modelStand{
+    position:absolute;
+    width:12px;
+    height:100px;
+    right:45px;
+    bottom:-35px;
+    border-radius:10px;
+    background:linear-gradient(#334155,#0f172a);
+    transform:rotate(-12deg);
+}
+
+.modelTag{
+    position:absolute;
+    top:30px;
+    right:0;
+    padding:8px 11px;
+    border:1px solid rgba(0,200,255,.3);
+    border-radius:9px;
+    background:rgba(4,14,27,.9);
+    color:#00c8ff;
+    font-size:8px;
+    font-weight:1000;
+    transform:rotate(5deg);
+}
 
 /* =========================
    SECTION
 ========================= */
 
 .section{
-    width:min(1200px,92%);
-
+    width:min(1250px,92%);
     margin:80px auto;
 }
 
 .sectionHead{
-    margin-bottom:25px;
-
     display:flex;
     justify-content:space-between;
     align-items:end;
-
-    gap:20px;
-}
-
-.sectionHead h2{
-    font-size:30px;
-    letter-spacing:-1px;
-}
-
-.sectionHead p{
-    margin-top:6px;
-
-    color:var(--muted);
-
-    font-size:11px;
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-.tools{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-
     margin-bottom:25px;
 }
 
-.search{
-    flex:1;
-    min-width:220px;
-
-    padding:14px 16px;
-
-    outline:none;
-
-    color:#fff;
-
-    border:1px solid var(--border);
-    border-radius:12px;
-
-    background:#06101e;
+.sectionHead h2{
+    font-size:34px;
+    letter-spacing:-2px;
 }
 
-.search:focus{
-    border-color:var(--blue);
+.sectionHead p{
+    margin-top:7px;
+    color:#758399;
+    font-size:12px;
 }
-
-.categories{
-    display:flex;
-    flex-wrap:wrap;
-    gap:7px;
-}
-
-.category{
-    padding:11px 14px;
-
-    border:1px solid var(--border);
-    border-radius:10px;
-
-    color:#aab6c7;
-
-    background:#071120;
-
-    font-size:9px;
-    font-weight:1000;
-}
-
-.category.active,
-.category:hover{
-    color:#fff;
-
-    border-color:var(--blue);
-
-    background:
-        rgba(0,200,255,.08);
-}
-
 
 /* =========================
-   PRODUCTS
+   PRODUKTY
 ========================= */
 
 .products{
     display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:18px;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
 }
 
 .product{
-    overflow:hidden;
-
     position:relative;
-
-    border:1px solid var(--border);
-    border-radius:20px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #091628,
-            #050d18
-        );
-
-    transition:.25s;
+    overflow:hidden;
+    border:1px solid #18283e;
+    border-radius:22px;
+    background:linear-gradient(145deg,#081323,#050b15);
+    transition:.35s;
 }
 
 .product:hover{
-    transform:translateY(-6px);
-
-    border-color:#285070;
-
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.3);
+    transform:translateY(-8px);
+    border-color:#245078;
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
 }
 
-.productImage{
-    height:230px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
+.productVisual{
+    height:260px;
     position:relative;
-
+    display:grid;
+    place-items:center;
     overflow:hidden;
-
     background:
-        radial-gradient(
-            circle at center,
-            rgba(0,200,255,.13),
-            transparent 65%
-        ),
-        #081323;
+        radial-gradient(circle at 50% 45%,rgba(0,200,255,.12),transparent 50%);
 }
 
-.productImage img{
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-
-    transition:.3s;
-}
-
-.product:hover .productImage img{
-    transform:scale(1.05);
-}
-
-.imagePlaceholder{
-    width:125px;
-    height:125px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border:1px solid rgba(0,200,255,.25);
-    border-radius:25px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0,200,255,.1),
-            rgba(113,60,255,.15)
-        );
-
-    font-size:48px;
-
-    box-shadow:
-        0 0 50px rgba(0,200,255,.12);
-}
-
-.badge{
+.productVisual::before{
+    content:"";
     position:absolute;
-
-    top:12px;
-    left:12px;
-
-    padding:6px 9px;
-
-    border-radius:7px;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            100deg,
-            var(--blue2),
-            var(--purple)
-        );
-
-    font-size:8px;
-    font-weight:1000;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    border:1px solid rgba(0,200,255,.12);
+    animation:spin 12s linear infinite;
 }
 
-.productBody{
-    padding:18px;
+.miniModel{
+    position:relative;
+    width:125px;
+    height:150px;
+    border-radius:18px;
+    background:linear-gradient(145deg,#172a43,#07101c);
+    border:1px solid #2d4b69;
+    box-shadow:20px 25px 40px rgba(0,0,0,.5);
+    transform:rotateY(-15deg);
+    transition:.5s;
 }
 
-.productCategory{
-    color:var(--blue);
-
-    font-size:8px;
-    font-weight:1000;
-
-    text-transform:uppercase;
+.product:hover .miniModel{
+    transform:rotateY(15deg) rotateX(4deg) scale(1.05);
 }
 
-.product h3{
-    margin-top:7px;
+.miniModel::before{
+    content:"";
+    position:absolute;
+    left:18px;
+    right:18px;
+    top:18px;
+    height:55px;
+    border-radius:10px;
+    background:#02070e;
+    border:1px solid #00c8ff;
+    box-shadow:0 0 20px rgba(0,200,255,.12);
+}
 
+.miniModel::after{
+    content:"";
+    position:absolute;
+    left:25px;
+    right:25px;
+    bottom:22px;
+    height:7px;
+    border-radius:10px;
+    background:#00c8ff;
+    box-shadow:0 0 15px #00c8ff;
+}
+
+.productInfo{
+    padding:20px;
+}
+
+.productName{
     font-size:19px;
+    font-weight:1000;
 }
 
 .productDescription{
-    height:38px;
-
-    margin-top:7px;
-
-    overflow:hidden;
-
-    color:var(--muted);
-
-    font-size:10px;
-    line-height:1.6;
+    min-height:40px;
+    margin-top:8px;
+    color:#7f8da2;
+    font-size:11px;
+    line-height:1.5;
 }
 
 .productBottom{
-    margin-top:17px;
-
     display:flex;
-    align-items:center;
     justify-content:space-between;
-
+    align-items:center;
     gap:10px;
+    margin-top:20px;
 }
 
 .price{
@@ -601,521 +562,284 @@ header{
 
 .viewBtn,
 .addBtn{
-    padding:9px 11px;
-
     border-radius:9px;
-
-    font-size:8px;
+    padding:10px 12px;
+    font-size:9px;
     font-weight:1000;
 }
 
 .viewBtn{
     color:#fff;
-
-    border:1px solid #23415f;
-    background:#0a192b;
+    background:#101d30;
+    border:1px solid #263b55;
 }
 
 .addBtn{
-    color:#fff;
-
+    color:#001018;
+    background:#00c8ff;
     border:0;
-
-    background:
-        linear-gradient(
-            100deg,
-            var(--blue2),
-            var(--purple)
-        );
 }
-
 
 /* =========================
    INFO
 ========================= */
 
-.features{
+.infoGrid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-
     gap:15px;
 }
 
-.feature{
-    padding:22px;
-
-    border:1px solid var(--border);
+.infoCard{
+    padding:25px;
+    border:1px solid #18283e;
     border-radius:18px;
-
     background:#071120;
 }
 
-.featureIcon{
+.infoIcon{
     font-size:25px;
 }
 
-.feature h3{
-    margin-top:12px;
-
-    font-size:14px;
+.infoCard h3{
+    margin-top:15px;
+    font-size:16px;
 }
 
-.feature p{
-    margin-top:7px;
-
-    color:var(--muted);
-
-    font-size:10px;
+.infoCard p{
+    margin-top:8px;
+    color:#7e8ca1;
+    font-size:11px;
     line-height:1.6;
 }
 
-
 /* =========================
-   MODAL PRODUCT
+   MODAL PRODUKTU
 ========================= */
 
 .modal{
-    display:none;
-
     position:fixed;
     inset:0;
-
-    z-index:500;
-
-    padding:25px;
-
-    overflow:auto;
-
-    background:
-        rgba(0,0,0,.85);
-
-    backdrop-filter:blur(10px);
+    z-index:300;
+    display:none;
+    place-items:center;
+    padding:20px;
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(12px);
 }
 
 .modal.show{
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:grid;
 }
 
 .modalBox{
     width:min(900px,100%);
+    max-height:90vh;
+    overflow:auto;
+    border:1px solid #243a55;
+    border-radius:24px;
+    background:#071120;
+    box-shadow:0 30px 100px rgba(0,0,0,.6);
+    animation:modalIn .25s ease;
+}
 
+.modalClose{
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:38px;
+    height:38px;
+    border:1px solid #2b3c54;
+    border-radius:50%;
+    color:#fff;
+    background:#0b1728;
+}
+
+.modalContent{
     display:grid;
     grid-template-columns:1fr 1fr;
-
-    overflow:hidden;
-
-    border:1px solid #284461;
-    border-radius:25px;
-
-    background:#071120;
-
-    box-shadow:
-        0 40px 120px rgba(0,0,0,.6);
 }
 
-.modalImage{
-    min-height:500px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    position:relative;
-
+.modalVisual{
+    min-height:430px;
+    display:grid;
+    place-items:center;
     background:
-        radial-gradient(
-            circle,
-            rgba(0,200,255,.16),
-            transparent 65%
-        ),
-        #06101d;
+        radial-gradient(circle,#0b3350,transparent 55%),
+        #040b15;
 }
 
-.modalImage img{
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
+.modalProduct{
+    width:210px;
+    height:260px;
+    position:relative;
+    border-radius:30px;
+    background:linear-gradient(145deg,#1b304c,#07101d);
+    border:1px solid #31506d;
+    transform:rotateY(-18deg);
+    animation:modalFloat 3s ease-in-out infinite;
+    box-shadow:30px 40px 70px rgba(0,0,0,.55);
 }
 
-.modalImage .imagePlaceholder{
-    width:190px;
-    height:190px;
-
-    font-size:70px;
+.modalProduct::before{
+    content:"";
+    position:absolute;
+    left:28px;
+    right:28px;
+    top:30px;
+    height:95px;
+    border-radius:16px;
+    background:#02070e;
+    border:1px solid #00c8ff;
+    box-shadow:0 0 25px rgba(0,200,255,.15);
 }
 
-.modalInfo{
-    padding:35px;
+.modalProduct::after{
+    content:"";
+    position:absolute;
+    left:35px;
+    right:35px;
+    bottom:30px;
+    height:11px;
+    border-radius:20px;
+    background:#00c8ff;
+    box-shadow:0 0 25px #00c8ff;
 }
 
-.close{
-    float:right;
-
-    width:35px;
-    height:35px;
-
-    border:1px solid #29415e;
-    border-radius:9px;
-
-    color:#fff;
-    background:#0a192b;
-
-    font-size:15px;
+.modalDetails{
+    padding:40px;
 }
 
-.modalCategory{
-    margin-top:55px;
-
-    color:var(--blue);
-
-    font-size:9px;
-    font-weight:1000;
-}
-
-.modalInfo h2{
-    margin-top:8px;
-
+.modalDetails h2{
     font-size:34px;
 }
 
-.modalDescription{
-    margin-top:17px;
-
-    color:var(--muted);
-
-    font-size:12px;
-    line-height:1.8;
+.modalDetails p{
+    margin-top:14px;
+    color:#8592a7;
+    line-height:1.7;
+    font-size:13px;
 }
 
 .modalPrice{
     margin-top:25px;
-
-    font-size:32px;
+    font-size:30px;
     font-weight:1000;
 }
 
-.modalStock{
-    margin-top:8px;
-
-    color:var(--green);
-
-    font-size:10px;
-    font-weight:900;
-}
-
-.modalControls{
-    display:flex;
-    gap:9px;
-
-    margin-top:22px;
-}
-
-.quantity{
-    width:110px;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    border:1px solid var(--border);
-    border-radius:10px;
-
-    overflow:hidden;
-}
-
-.quantity button{
-    width:32px;
-    height:40px;
-
-    border:0;
-
-    color:#fff;
-    background:#0b1a2d;
-}
-
-.quantity span{
-    font-size:11px;
-    font-weight:1000;
-}
-
-
-/* =========================
-   CART
-========================= */
-
-.cartOverlay{
-    display:none;
-
-    position:fixed;
-    inset:0;
-
-    z-index:600;
-
-    background:rgba(0,0,0,.75);
-}
-
-.cartOverlay.show{
+.optionLabel{
     display:block;
-}
-
-.cart{
-    position:absolute;
-
-    top:0;
-    right:0;
-
-    width:min(430px,100%);
-    height:100%;
-
-    padding:25px;
-
-    overflow:auto;
-
-    border-left:1px solid var(--border);
-
-    background:
-        linear-gradient(
-            145deg,
-            #081628,
-            #030a14
-        );
-}
-
-.cartHead{
-    display:flex;
-
-    justify-content:space-between;
-    align-items:center;
-
-    padding-bottom:18px;
-
-    border-bottom:1px solid var(--border);
-}
-
-.cartHead h2{
-    font-size:22px;
-}
-
-.cartItem{
-    padding:16px 0;
-
-    display:grid;
-    grid-template-columns:1fr auto;
-
-    gap:10px;
-
-    border-bottom:1px solid #14253a;
-}
-
-.cartItemName{
-    font-size:12px;
-    font-weight:1000;
-}
-
-.cartItemPrice{
-    margin-top:5px;
-
-    color:var(--blue);
-
-    font-size:10px;
-}
-
-.cartItemControls{
-    display:flex;
-    align-items:center;
-    gap:5px;
-}
-
-.qtyBtn{
-    width:28px;
-    height:28px;
-
-    border:1px solid #29415e;
-    border-radius:7px;
-
-    color:#fff;
-    background:#09192c;
-}
-
-.cartSummary{
     margin-top:25px;
-
-    padding-top:20px;
-
-    border-top:1px solid var(--border);
-}
-
-.summaryLine{
-    display:flex;
-
-    justify-content:space-between;
-
-    margin-bottom:10px;
-
-    color:#a9b5c5;
-
-    font-size:11px;
-}
-
-.summaryTotal{
-    display:flex;
-
-    justify-content:space-between;
-
-    margin-top:15px;
-
-    font-size:22px;
-    font-weight:1000;
-}
-
-.discount{
-    margin-top:15px;
-
-    display:flex;
-    gap:7px;
-}
-
-.discount input{
-    flex:1;
-
-    padding:11px;
-
-    color:#fff;
-
-    border:1px solid var(--border);
-    border-radius:9px;
-
-    outline:none;
-
-    background:#030914;
-}
-
-.discount button{
-    padding:11px;
-
-    border:0;
-    border-radius:9px;
-
-    color:#fff;
-
-    background:#172a43;
-
+    margin-bottom:8px;
+    color:#77869d;
     font-size:9px;
     font-weight:1000;
 }
 
-.checkout{
+select{
     width:100%;
+    padding:13px;
+    border:1px solid #253a55;
+    border-radius:10px;
+    color:#fff;
+    background:#050d19;
+    outline:none;
+}
 
-    margin-top:18px;
+/* =========================
+   KOSZYK
+========================= */
 
-    padding:15px;
+.cartPanel{
+    position:fixed;
+    top:0;
+    right:-430px;
+    width:min(420px,94%);
+    height:100vh;
+    z-index:400;
+    padding:25px;
+    border-left:1px solid #20344d;
+    background:#050d19;
+    box-shadow:-30px 0 80px rgba(0,0,0,.45);
+    transition:.3s;
+}
 
+.cartPanel.open{
+    right:0;
+}
+
+.cartHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-bottom:20px;
+    border-bottom:1px solid #1b2a3e;
+}
+
+.cartHeader h2{
+    font-size:22px;
+}
+
+.closeCart{
+    border:1px solid #263b55;
+    background:#0b1728;
+    color:#fff;
+    width:35px;
+    height:35px;
+    border-radius:10px;
+}
+
+.cartItems{
+    height:calc(100vh - 200px);
+    overflow:auto;
+    padding:15px 0;
+}
+
+.cartItem{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:15px 0;
+    border-bottom:1px solid #152236;
+}
+
+.cartItem strong{
+    font-size:12px;
+}
+
+.cartItem small{
+    display:block;
+    margin-top:5px;
+    color:#738197;
+    font-size:9px;
+}
+
+.removeItem{
     border:0;
-    border-radius:11px;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            100deg,
-            var(--blue2),
-            var(--purple)
-        );
-
+    color:#ff5577;
+    background:transparent;
     font-size:10px;
-    font-weight:1000;
+    font-weight:900;
 }
 
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-    padding:45px 5%;
-
-    border-top:1px solid var(--border);
-
-    color:var(--muted);
-
-    background:#020711;
-
-    text-align:center;
-
-    font-size:10px;
+.cartFooter{
+    position:absolute;
+    left:25px;
+    right:25px;
+    bottom:25px;
+    padding-top:15px;
+    border-top:1px solid #1b2a3e;
 }
 
-footer strong{
-    color:#fff;
+.cartTotal{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:13px;
 }
 
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:900px){
-
-    .hero{
-        grid-template-columns:1fr;
-    }
-
-    .heroCard{
-        min-height:250px;
-    }
-
-    .products{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .features{
-        grid-template-columns:1fr;
-    }
-
+.cartTotal strong{
+    font-size:20px;
 }
-
-@media(max-width:600px){
-
-    header{
-        height:65px;
-    }
-
-    .nav a{
-        display:none;
-    }
-
-    .hero{
-        margin-top:25px;
-    }
-
-    .hero h1{
-        font-size:48px;
-        letter-spacing:-3px;
-    }
-
-    .products{
-        grid-template-columns:1fr;
-    }
-
-    .modalBox{
-        grid-template-columns:1fr;
-    }
-
-    .modalImage{
-        min-height:270px;
-    }
-
-    .modalInfo{
-        padding:23px;
-    }
-
-}
-
 
 /* =========================
    TOAST
@@ -1123,29 +847,19 @@ footer strong{
 
 .toast{
     position:fixed;
-
     left:50%;
     bottom:25px;
-
-    z-index:1000;
-
+    z-index:600;
     padding:13px 18px;
-
-    border:1px solid #29415e;
+    border:1px solid #28405d;
     border-radius:12px;
-
     color:#fff;
-
-    background:#102038;
-
-    transform:translate(-50%,30px);
-
-    opacity:0;
-
-    transition:.2s;
-
+    background:#0c1a2c;
     font-size:10px;
-    font-weight:1000;
+    font-weight:900;
+    opacity:0;
+    transform:translate(-50%,30px);
+    transition:.25s;
 }
 
 .toast.show{
@@ -1153,103 +867,256 @@ footer strong{
     transform:translate(-50%,0);
 }
 
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    margin-top:100px;
+    padding:35px 5%;
+    border-top:1px solid #162337;
+    text-align:center;
+    color:#637188;
+    font-size:10px;
+}
+
+footer strong{
+    color:#00c8ff;
+}
+
+/* =========================
+   ANIMACJE
+========================= */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+}
+
+@keyframes floatModel{
+    0%,100%{
+        transform:translateY(0) rotateZ(0);
+    }
+    50%{
+        transform:translateY(-15px) rotateZ(1deg);
+    }
+}
+
+@keyframes modalFloat{
+    0%,100%{
+        transform:rotateY(-18deg) translateY(0);
+    }
+    50%{
+        transform:rotateY(18deg) translateY(-12px);
+    }
+}
+
+@keyframes pulse{
+    0%,100%{
+        transform:scale(.9);
+        opacity:.6;
+    }
+    50%{
+        transform:scale(1.1);
+        opacity:1;
+    }
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:scale(.95) translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:850px){
+
+    .navLinks{
+        display:none;
+    }
+
+    .hero{
+        grid-template-columns:1fr;
+        padding-top:50px;
+        text-align:center;
+    }
+
+    .heroText{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .heroButtons{
+        justify-content:center;
+    }
+
+    .heroModel{
+        height:390px;
+    }
+
+    .products{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .infoGrid{
+        grid-template-columns:1fr;
+    }
+
+    .modalContent{
+        grid-template-columns:1fr;
+    }
+
+    .modalVisual{
+        min-height:300px;
+    }
+}
+
+@media(max-width:550px){
+
+    .hero h1{
+        font-size:48px;
+        letter-spacing:-3px;
+    }
+
+    .heroButtons{
+        flex-direction:column;
+    }
+
+    .products{
+        grid-template-columns:1fr;
+    }
+
+    .sectionHead{
+        display:block;
+    }
+
+    .sectionHead h2{
+        font-size:28px;
+    }
+
+    .modalDetails{
+        padding:25px;
+    }
+
+    .modalDetails h2{
+        font-size:27px;
+    }
+
+}
 </style>
 </head>
 
 <body>
 
-
-<!-- =========================
-     HEADER
-========================= -->
+<div class="grid-bg"></div>
 
 <header>
-
-    <a
-        href="/"
-        class="logo"
-    >
-        Printerlase<span>3D</span>
-    </a>
-
     <nav class="nav">
 
-        <a href="#produkty">
-            PRODUKTY
+        <a href="#" class="logo">
+            Printerlase<span>3D</span><i class="logoDot"></i>
         </a>
 
-        <a href="#dlaczego">
-            DLACZEGO MY
-        </a>
+        <div class="navLinks">
+            <a href="#produkty">Produkty</a>
+            <a href="#dlaczego">Dlaczego my?</a>
+            <a href="#kontakt">Kontakt</a>
+        </div>
 
-        <button
-            class="cartButton"
-            onclick="openCart()"
-        >
-            🛒 KOSZYK
-
-            <span
-                id="cartCount"
-                class="cartCount"
-            >
-                0
-            </span>
-
+        <button class="cartBtn" onclick="openCart()">
+            🛒 Koszyk
+            <span id="cartCount" class="cartCount">0</span>
         </button>
 
     </nav>
-
 </header>
 
 
-<!-- =========================
-     HERO
-========================= -->
+<main>
+
+<!-- HERO -->
 
 <section class="hero">
 
     <div>
 
-        <span class="heroBadge">
-            ⚡ DRUK 3D • POLSKA • PRINTERLASE3D
-        </span>
+        <div class="badge">
+            <i></i>
+            DRUK 3D • WŁASNE PROJEKTY
+        </div>
 
         <h1>
             Twój pomysł.<br>
-            <span>Nasz wydruk.</span>
+            <span>Nasza drukarka.</span>
         </h1>
 
-        <p>
-            Kolorowe wydruki 3D, breloki, dodatki,
-            organizery i projekty tworzone z myślą
-            o tym, żeby wyglądały zajebiście.
+        <p class="heroText">
+            Unikalne modele 3D tworzone z dbałością o każdy szczegół.
+            Breloki, dodatki, akcesoria i własne projekty Printerlase3D.
         </p>
 
         <div class="heroButtons">
 
-            <a
-                href="#produkty"
-                class="primary"
-            >
-                🚀 ZOBACZ PRODUKTY
+            <a href="#produkty" class="primary">
+                🛒 ZOBACZ PRODUKTY
             </a>
 
-            <button
-                class="secondary"
-                onclick="openCart()"
-            >
-                🛒 OTWÓRZ KOSZYK
-            </button>
+            <a href="#kontakt" class="secondary">
+                ✨ WŁASNY PROJEKT
+            </a>
 
         </div>
 
     </div>
 
 
-    <div class="heroCard">
+    <div class="heroModel">
 
-        <div class="heroCube">
-            🖨️
+        <div class="modelGlow"></div>
+
+        <div class="productModel">
+
+            <div class="modelBody"></div>
+
+            <div class="modelScreen">
+                <small>PRINTERLASE3D</small>
+                <div class="modelSpeed">
+                    3D <span>PRINT</span>
+                </div>
+            </div>
+
+            <div class="modelWheel"></div>
+            <div class="modelStand"></div>
+
+            <div class="modelTag">
+                CUSTOM 3D
+            </div>
+
         </div>
 
     </div>
@@ -1257,138 +1124,77 @@ footer strong{
 </section>
 
 
-<!-- =========================
-     PRODUCTS
-========================= -->
+<!-- PRODUKTY -->
 
-<section
-    id="produkty"
-    class="section"
->
+<section id="produkty" class="section">
 
     <div class="sectionHead">
 
         <div>
-
-            <h2>
-                🔥 Produkty
-            </h2>
-
-            <p>
-                Wybierz produkt i kliknij
-                <b>ZOBACZ</b>, żeby zobaczyć
-                pełne informacje.
-            </p>
-
+            <h2>🔥 Najnowsze produkty</h2>
+            <p>Kliknij „Zobacz”, żeby zobaczyć pełny opis produktu.</p>
         </div>
 
     </div>
 
-
-    <div class="tools">
-
-        <input
-            id="search"
-            class="search"
-            type="search"
-            placeholder="🔎 Szukaj produktu..."
-            oninput="renderProducts()"
-        >
-
-        <div
-            id="categories"
-            class="categories"
-        ></div>
-
-    </div>
-
-
-    <div
-        id="products"
-        class="products"
-    ></div>
+    <div id="products" class="products"></div>
 
 </section>
 
 
-<!-- =========================
-     WHY US
-========================= -->
+<!-- DLACZEGO -->
 
-<section
-    id="dlaczego"
-    class="section"
->
+<section id="dlaczego" class="section">
 
     <div class="sectionHead">
 
         <div>
-
-            <h2>
-                💙 Dlaczego Printerlase3D?
-            </h2>
-
-            <p>
-                Prosto, szybko i bez zbędnego pierdolenia.
-            </p>
-
+            <h2>Dlaczego Printerlase3D?</h2>
+            <p>Mała drukarnia, duże pomysły.</p>
         </div>
 
     </div>
 
 
-    <div class="features">
+    <div class="infoGrid">
 
-        <div class="feature">
+        <div class="infoCard">
 
-            <div class="featureIcon">
-                🖨️
-            </div>
+            <div class="infoIcon">🧊</div>
 
-            <h3>
-                Wydruk na zamówienie
-            </h3>
+            <h3>Własne modele</h3>
 
             <p>
-                Produkty są przygotowywane
-                pod konkretne zamówienie.
+                Projektujemy własne produkty i dopasowujemy
+                je do tego, czego naprawdę potrzebujesz.
             </p>
 
         </div>
 
 
-        <div class="feature">
+        <div class="infoCard">
 
-            <div class="featureIcon">
-                ⚡
-            </div>
+            <div class="infoIcon">⚡</div>
 
-            <h3>
-                Szybka realizacja
-            </h3>
+            <h3>Szybka realizacja</h3>
 
             <p>
-                Zamówienie trafia do realizacji
-                bez zbędnych komplikacji.
+                Po zamówieniu przygotowujemy model,
+                drukujemy go i pakujemy do wysyłki.
             </p>
 
         </div>
 
 
-        <div class="feature">
+        <div class="infoCard">
 
-            <div class="featureIcon">
-                💙
-            </div>
+            <div class="infoIcon">🎨</div>
 
-            <h3>
-                Mały sklep, duże pomysły
-            </h3>
+            <h3>Wybierz kolor</h3>
 
             <p>
-                Możesz zamówić gotowy produkt
-                albo z czasem rozszerzyć sklep
-                o własne projekty.
+                Produkty mogą być wykonywane w różnych
+                kolorach zależnie od dostępnego filamentu.
             </p>
 
         </div>
@@ -1398,86 +1204,85 @@ footer strong{
 </section>
 
 
-<!-- =========================
-     PRODUCT MODAL
-========================= -->
+<!-- KONTAKT -->
 
-<div
-    id="productModal"
-    class="modal"
-    onclick="closeModalOutside(event)"
->
+<section id="kontakt" class="section">
 
-    <div
-        class="modalBox"
-        onclick="event.stopPropagation()"
-    >
+    <div class="infoCard">
 
-        <div
-            id="modalImage"
-            class="modalImage"
-        ></div>
+        <h2>✨ Chcesz własny model?</h2>
 
+        <p>
+            Masz pomysł na brelok, uchwyt, figurkę albo inny
+            element do druku 3D? Napisz do Printerlase3D.
+        </p>
 
-        <div class="modalInfo">
+        <br>
 
-            <button
-                class="close"
-                onclick="closeProduct()"
-            >
-                ✕
-            </button>
+        <a href="mailto:kontakt@printerlase3d.pl" class="primary">
+            ✉️ NAPISZ DO NAS
+        </a>
 
-            <div
-                id="modalCategory"
-                class="modalCategory"
-            ></div>
+    </div>
 
-            <h2 id="modalName"></h2>
+</section>
 
-            <p
-                id="modalDescription"
-                class="modalDescription"
-            ></p>
-
-            <div
-                id="modalPrice"
-                class="modalPrice"
-            ></div>
-
-            <div
-                id="modalStock"
-                class="modalStock"
-            ></div>
+</main>
 
 
-            <div class="modalControls">
+<footer>
+    © 2026 <strong>Printerlase3D</strong> • Druk 3D
+</footer>
 
-                <div class="quantity">
 
-                    <button
-                        onclick="changeModalQty(-1)"
-                    >
-                        −
-                    </button>
+<!-- MODAL PRODUKTU -->
 
-                    <span id="modalQty">
-                        1
-                    </span>
+<div id="productModal" class="modal">
 
-                    <button
-                        onclick="changeModalQty(1)"
-                    >
-                        +
-                    </button>
+    <div class="modalBox">
 
+        <button class="modalClose" onclick="closeProduct()">
+            ✕
+        </button>
+
+        <div class="modalContent">
+
+            <div class="modalVisual">
+
+                <div class="modalProduct"></div>
+
+            </div>
+
+            <div class="modalDetails">
+
+                <h2 id="modalName">
+                    Produkt
+                </h2>
+
+                <p id="modalDescription">
+                    Opis produktu.
+                </p>
+
+                <div id="modalPrice" class="modalPrice">
+                    0,00 zł
                 </div>
 
+                <label class="optionLabel">
+                    KOLOR
+                </label>
+
+                <select id="modalColor">
+                    <option>Czarny</option>
+                    <option>Biały</option>
+                    <option>Niebieski</option>
+                    <option>Czerwony</option>
+                    <option>Zielony</option>
+                </select>
 
                 <button
+                    id="modalAdd"
                     class="primary"
-                    style="flex:1"
-                    onclick="addModalToCart()"
+                    style="width:100%;margin-top:18px"
                 >
                     🛒 DODAJ DO KOSZYKA
                 </button>
@@ -1491,148 +1296,48 @@ footer strong{
 </div>
 
 
-<!-- =========================
-     CART
-========================= -->
+<!-- KOSZYK -->
 
-<div
-    id="cartOverlay"
-    class="cartOverlay"
-    onclick="closeCartOutside(event)"
->
+<aside id="cartPanel" class="cartPanel">
 
-    <aside
-        class="cart"
-        onclick="event.stopPropagation()"
-    >
+    <div class="cartHeader">
 
-        <div class="cartHead">
+        <h2>🛒 Koszyk</h2>
 
-            <h2>
-                🛒 Koszyk
-            </h2>
+        <button class="closeCart" onclick="closeCart()">
+            ✕
+        </button>
 
-            <button
-                class="close"
-                onclick="closeCart()"
-            >
-                ✕
-            </button>
+    </div>
+
+    <div id="cartItems" class="cartItems"></div>
+
+    <div class="cartFooter">
+
+        <div class="cartTotal">
+
+            <span>Razem</span>
+
+            <strong id="cartTotal">
+                0,00 zł
+            </strong>
 
         </div>
 
+        <button
+            class="primary"
+            style="width:100%"
+            onclick="checkout()"
+        >
+            📦 PRZEJDŹ DO ZAMÓWIENIA
+        </button>
 
-        <div
-            id="cartItems"
-            style="margin-top:10px"
-        ></div>
+    </div>
 
-
-        <div class="cartSummary">
-
-            <div class="summaryLine">
-
-                <span>
-                    Produkty
-                </span>
-
-                <span id="subtotal">
-                    0,00 zł
-                </span>
-
-            </div>
+</aside>
 
 
-            <div class="summaryLine">
-
-                <span>
-                    Dostawa
-                </span>
-
-                <span id="shipping">
-                    9,99 zł
-                </span>
-
-            </div>
-
-
-            <div class="summaryLine">
-
-                <span>
-                    Rabat
-                </span>
-
-                <span id="discountValue">
-                    0,00 zł
-                </span>
-
-            </div>
-
-
-            <div class="discount">
-
-                <input
-                    id="coupon"
-                    placeholder="Kod rabatowy"
-                >
-
-                <button
-                    onclick="applyCoupon()"
-                >
-                    ZASTOSUJ
-                </button>
-
-            </div>
-
-
-            <div class="summaryTotal">
-
-                <span>
-                    Razem
-                </span>
-
-                <span id="total">
-                    0,00 zł
-                </span>
-
-            </div>
-
-
-            <button
-                class="checkout"
-                onclick="goCheckout()"
-            >
-                💳 PRZEJDŹ DO ZAMÓWIENIA
-            </button>
-
-        </div>
-
-    </aside>
-
-</div>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-    <strong>
-        Printerlase3D
-    </strong>
-
-    <br><br>
-
-    Wydruki 3D • Breloki • Dodatki • Projekty
-
-</footer>
-
-
-<div
-    id="toast"
-    class="toast"
-></div>
+<div id="toast" class="toast"></div>
 
 
 <script>
@@ -1641,134 +1346,84 @@ footer strong{
    PRODUKTY
 ========================= */
 
-const PRODUCTS = [
+const products = [
 
     {
-        id:"friendz",
-        name:"FRIENDZ",
-        price:15,
-        category:"Breloki",
-        emoji:"🤝",
+        id:"brelok-printerlase",
+        name:"Brelok Printerlase3D",
+        price:12.99,
         description:
-            "Stylowy brelok FRIENDZ wykonany w technologii druku 3D. Mały, lekki i idealny do kluczy lub plecaka.",
-        stock:25,
-        image:""
+            "Lekki i wytrzymały brelok z logo Printerlase3D. Idealny do kluczy, plecaka lub torby."
     },
 
     {
-        id:"gamer",
-        name:"Gamer",
-        price:12,
-        category:"Breloki",
-        emoji:"🎮",
+        id:"brelok-custom",
+        name:"Brelok CUSTOM",
+        price:15.99,
         description:
-            "Gamingowy dodatek dla każdego gracza. Prosty design i kompaktowy rozmiar sprawiają, że świetnie pasuje do plecaka.",
-        stock:30,
-        image:""
+            "Personalizowany brelok 3D. Możesz wybrać kolor i przygotować własny napis."
     },
 
     {
-        id:"mini-figurka",
-        name:"Mini figurka",
-        price:20,
-        category:"Figurki",
-        emoji:"🗿",
+        id:"uchwyt-3d",
+        name:"Uchwyt 3D",
+        price:19.99,
         description:
-            "Mała figurka 3D idealna na biurko, półkę albo jako kolekcjonerski dodatek.",
-        stock:15,
-        image:""
+            "Praktyczny uchwyt drukowany 3D. Prosty projekt wykonany z trwałego materiału."
     },
 
     {
-        id:"podstawka",
-        name:"Podstawka",
-        price:25,
-        category:"Dodatki",
-        emoji:"📱",
+        id:"model-gaming",
+        name:"Gaming Model 3D",
+        price:24.99,
         description:
-            "Praktyczna podstawka do telefonu lub innych małych przedmiotów. Minimalistyczny projekt drukowany 3D.",
-        stock:12,
-        image:""
+            "Dekoracyjny model 3D dla graczy. Świetnie wygląda na biurku obok komputera."
     },
 
     {
-        id:"custom",
-        name:"CUSTOM",
-        price:18,
-        category:"Personalizowane",
-        emoji:"✨",
+        id:"pixel-art",
+        name:"Pixel Art 3D",
+        price:17.99,
         description:
-            "Personalizowany projekt 3D. Napis, kształt albo pomysł — produkt przygotowany specjalnie pod Ciebie.",
-        stock:10,
-        image:""
+            "Kolorowy model inspirowany pixel artem. Idealny jako dekoracja pokoju lub biurka."
     },
 
     {
-        id:"organizer",
-        name:"Organizer",
-        price:10,
-        category:"Dodatki",
-        emoji:"🗂️",
+        id:"custom-model",
+        name:"Własny model 3D",
+        price:29.99,
         description:
-            "Mały organizer drukowany 3D, który pomaga utrzymać porządek na biurku.",
-        stock:20,
-        image:""
+            "Masz własny pomysł? Możemy przygotować model pod druk 3D."
     }
 
 ];
 
 
 /* =========================
-   STATE
+   KOSZYK
 ========================= */
 
 let cart =
     JSON.parse(
-        localStorage.getItem(
-            "printerlase_cart"
-        ) || "[]"
+        localStorage.getItem("printerlase_cart") || "[]"
     );
 
-let activeCategory = "Wszystkie";
 
 let selectedProduct = null;
 
-let modalQuantity = 1;
-
-let couponApplied = false;
-
 
 /* =========================
-   SAVE CART
-========================= */
-
-function saveCart(){
-
-    localStorage.setItem(
-        "printerlase_cart",
-        JSON.stringify(cart)
-    );
-
-}
-
-
-/* =========================
-   FORMAT MONEY
+   POMOCNICZE
 ========================= */
 
 function money(value){
 
-    return Number(value || 0)
+    return Number(value)
         .toFixed(2)
-        .replace(".",",") +
-        " zł";
+        .replace(".",",") + " zł";
 
 }
 
-
-/* =========================
-   ESCAPE
-========================= */
 
 function escapeHTML(value){
 
@@ -1783,811 +1438,317 @@ function escapeHTML(value){
 
 
 /* =========================
-   CATEGORIES
-========================= */
-
-function renderCategories(){
-
-    const categories =
-        [
-            "Wszystkie",
-            ...new Set(
-                PRODUCTS.map(
-                    product =>
-                        product.category
-                )
-            )
-        ];
-
-    document.getElementById(
-        "categories"
-    ).innerHTML =
-        categories
-        .map(category => `
-
-            <button
-                class="category ${
-                    activeCategory === category
-                        ? "active"
-                        : ""
-                }"
-                onclick="setCategory(
-                    '${escapeHTML(category)}'
-                )"
-            >
-                ${escapeHTML(category)}
-            </button>
-
-        `)
-        .join("");
-
-}
-
-
-function setCategory(category){
-
-    activeCategory =
-        category;
-
-    renderCategories();
-    renderProducts();
-
-}
-
-
-/* =========================
-   PRODUCTS
+   PRODUKTY
 ========================= */
 
 function renderProducts(){
 
-    const search =
-        document.getElementById(
-            "search"
-        ).value
-        .trim()
-        .toLowerCase();
+    const container =
+        document.getElementById("products");
 
-    const filtered =
-        PRODUCTS.filter(product => {
+    container.innerHTML =
+        products.map(product => `
 
-            const matchesCategory =
-                activeCategory ===
-                "Wszystkie" ||
-                product.category ===
-                activeCategory;
+            <article class="product">
 
-            const matchesSearch =
-                product.name
-                    .toLowerCase()
-                    .includes(search) ||
+                <div class="productVisual">
 
-                product.description
-                    .toLowerCase()
-                    .includes(search);
+                    <div class="miniModel"></div>
 
-            return (
-                matchesCategory &&
-                matchesSearch
-            );
-
-        });
-
-
-    const box =
-        document.getElementById(
-            "products"
-        );
-
-
-    if(!filtered.length){
-
-        box.innerHTML = `
-            <div
-                style="
-                    grid-column:1/-1;
-                    padding:60px;
-                    text-align:center;
-                    color:var(--muted);
-                "
-            >
-                🔎 Nie znaleziono produktu.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    box.innerHTML =
-        filtered
-        .map(product => {
-
-            const image =
-                product.image
-                    ? `
-                        <img
-                            src="${escapeHTML(product.image)}"
-                            alt="${escapeHTML(product.name)}"
-                        >
-                    `
-                    : `
-                        <div class="imagePlaceholder">
-                            ${product.emoji}
-                        </div>
-                    `;
-
-
-            return `
-
-                <article class="product">
-
-                    <div class="productImage">
-
-                        ${
-                            product.id === "friendz"
-                                ? `
-                                    <div class="badge">
-                                        🔥 POPULARNE
-                                    </div>
-                                `
-                                : ""
-                        }
-
-                        ${image}
-
-                    </div>
-
-
-                    <div class="productBody">
-
-                        <div class="productCategory">
-                            ${escapeHTML(product.category)}
-                        </div>
-
-                        <h3>
-                            ${escapeHTML(product.name)}
-                        </h3>
-
-                        <p class="productDescription">
-                            ${escapeHTML(product.description)}
-                        </p>
-
-
-                        <div class="productBottom">
-
-                            <div class="price">
-                                ${money(product.price)}
-                            </div>
-
-
-                            <div class="productActions">
-
-                                <button
-                                    class="viewBtn"
-                                    onclick="openProduct(
-                                        '${escapeHTML(product.id)}'
-                                    )"
-                                >
-                                    👁️ ZOBACZ
-                                </button>
-
-                                <button
-                                    class="addBtn"
-                                    onclick="addToCart(
-                                        '${escapeHTML(product.id)}'
-                                    )"
-                                >
-                                    + KOSZYK
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            `;
-
-        })
-        .join("");
-
-}
-
-
-/* =========================
-   PRODUCT MODAL
-========================= */
-
-function openProduct(id){
-
-    const product =
-        PRODUCTS.find(
-            item =>
-                item.id === id
-        );
-
-    if(!product) return;
-
-    selectedProduct =
-        product;
-
-    modalQuantity = 1;
-
-    document.getElementById(
-        "modalQty"
-    ).textContent = "1";
-
-    document.getElementById(
-        "modalCategory"
-    ).textContent =
-        product.category;
-
-    document.getElementById(
-        "modalName"
-    ).textContent =
-        product.name;
-
-    document.getElementById(
-        "modalDescription"
-    ).textContent =
-        product.description;
-
-    document.getElementById(
-        "modalPrice"
-    ).textContent =
-        money(product.price);
-
-    document.getElementById(
-        "modalStock"
-    ).textContent =
-        product.stock > 0
-            ? `✓ Dostępne: ${product.stock} szt.`
-            : "Brak produktu";
-
-
-    document.getElementById(
-        "modalImage"
-    ).innerHTML =
-        product.image
-            ? `
-                <img
-                    src="${escapeHTML(product.image)}"
-                    alt="${escapeHTML(product.name)}"
-                >
-            `
-            : `
-                <div class="imagePlaceholder">
-                    ${product.emoji}
-                </div>
-            `;
-
-
-    document.getElementById(
-        "productModal"
-    ).classList.add("show");
-
-}
-
-
-function closeProduct(){
-
-    document.getElementById(
-        "productModal"
-    ).classList.remove("show");
-
-}
-
-
-function closeModalOutside(event){
-
-    if(
-        event.target.id ===
-        "productModal"
-    ){
-
-        closeProduct();
-
-    }
-
-}
-
-
-function changeModalQty(amount){
-
-    if(!selectedProduct)
-        return;
-
-    modalQuantity =
-        Math.max(
-            1,
-            Math.min(
-                selectedProduct.stock,
-                modalQuantity + amount
-            )
-        );
-
-    document.getElementById(
-        "modalQty"
-    ).textContent =
-        modalQuantity;
-
-}
-
-
-function addModalToCart(){
-
-    if(!selectedProduct)
-        return;
-
-    for(
-        let i = 0;
-        i < modalQuantity;
-        i++
-    ){
-
-        addToCart(
-            selectedProduct.id,
-            false
-        );
-
-    }
-
-    closeProduct();
-
-    openCart();
-
-    showToast(
-        "✓ Dodano produkt do koszyka."
-    );
-
-}
-
-
-/* =========================
-   CART
-========================= */
-
-function addToCart(
-    id,
-    showMessage = true
-){
-
-    const product =
-        PRODUCTS.find(
-            item =>
-                item.id === id
-        );
-
-    if(!product)
-        return;
-
-
-    const existing =
-        cart.find(
-            item =>
-                item.id === id
-        );
-
-
-    if(existing){
-
-        if(
-            existing.quantity >=
-            product.stock
-        ){
-
-            showToast(
-                "❌ Brak większej ilości."
-            );
-
-            return;
-
-        }
-
-        existing.quantity++;
-
-    }
-    else{
-
-        cart.push({
-            id:product.id,
-            name:product.name,
-            price:product.price,
-            quantity:1
-        });
-
-    }
-
-
-    saveCart();
-    updateCart();
-
-
-    if(showMessage){
-
-        showToast(
-            `✓ ${product.name} dodano do koszyka.`
-        );
-
-    }
-
-}
-
-
-function removeFromCart(id){
-
-    cart =
-        cart.filter(
-            item =>
-                item.id !== id
-        );
-
-    saveCart();
-
-    updateCart();
-
-}
-
-
-function changeCartQuantity(
-    id,
-    amount
-){
-
-    const item =
-        cart.find(
-            x => x.id === id
-        );
-
-    if(!item)
-        return;
-
-
-    const product =
-        PRODUCTS.find(
-            x => x.id === id
-        );
-
-
-    item.quantity +=
-        amount;
-
-
-    if(
-        item.quantity <= 0
-    ){
-
-        removeFromCart(id);
-
-        return;
-
-    }
-
-
-    if(
-        product &&
-        item.quantity >
-        product.stock
-    ){
-
-        item.quantity =
-            product.stock;
-
-    }
-
-
-    saveCart();
-    updateCart();
-
-}
-
-
-/* =========================
-   UPDATE CART
-========================= */
-
-function updateCart(){
-
-    const count =
-        cart.reduce(
-            (sum,item) =>
-                sum + item.quantity,
-            0
-        );
-
-
-    document.getElementById(
-        "cartCount"
-    ).textContent =
-        count;
-
-
-    const box =
-        document.getElementById(
-            "cartItems"
-        );
-
-
-    if(!cart.length){
-
-        box.innerHTML = `
-
-            <div
-                style="
-                    padding:45px 10px;
-                    text-align:center;
-                    color:var(--muted);
-                "
-            >
-                <div
-                    style="
-                        font-size:40px;
-                        margin-bottom:10px;
-                    "
-                >
-                    🛒
                 </div>
 
-                Koszyk jest pusty.
+                <div class="productInfo">
 
-            </div>
-
-        `;
-
-    }
-    else{
-
-        box.innerHTML =
-            cart
-            .map(item => `
-
-                <div class="cartItem">
-
-                    <div>
-
-                        <div class="cartItemName">
-                            ${escapeHTML(item.name)}
-                        </div>
-
-                        <div class="cartItemPrice">
-                            ${money(item.price)}
-                        </div>
-
+                    <div class="productName">
+                        ${escapeHTML(product.name)}
                     </div>
 
+                    <div class="productDescription">
+                        ${escapeHTML(product.description)}
+                    </div>
 
-                    <div>
+                    <div class="productBottom">
 
-                        <div class="cartItemControls">
+                        <div class="price">
+                            ${money(product.price)}
+                        </div>
+
+                        <div class="productActions">
 
                             <button
-                                class="qtyBtn"
-                                onclick="changeCartQuantity(
-                                    '${escapeHTML(item.id)}',
-                                    -1
-                                )"
+                                class="viewBtn"
+                                onclick="openProduct('${product.id}')"
                             >
-                                −
+                                👀 ZOBACZ
                             </button>
 
-                            <strong>
-                                ${item.quantity}
-                            </strong>
-
                             <button
-                                class="qtyBtn"
-                                onclick="changeCartQuantity(
-                                    '${escapeHTML(item.id)}',
-                                    1
-                                )"
+                                class="addBtn"
+                                onclick="addToCart('${product.id}')"
                             >
                                 +
                             </button>
 
                         </div>
 
-                        <button
-                            style="
-                                margin-top:7px;
-                                border:0;
-                                background:none;
-                                color:var(--red);
-                                font-size:8px;
-                                font-weight:900;
-                            "
-                            onclick="removeFromCart(
-                                '${escapeHTML(item.id)}'
-                            )"
-                        >
-                            USUŃ
-                        </button>
-
                     </div>
 
                 </div>
 
-            `)
-            .join("");
+            </article>
 
+        `).join("");
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openProduct(id){
+
+    selectedProduct =
+        products.find(
+            product => product.id === id
+        );
+
+    if(!selectedProduct){
+        return;
+    }
+
+    document.getElementById("modalName")
+        .textContent =
+        selectedProduct.name;
+
+    document.getElementById("modalDescription")
+        .textContent =
+        selectedProduct.description;
+
+    document.getElementById("modalPrice")
+        .textContent =
+        money(selectedProduct.price);
+
+    document.getElementById("productModal")
+        .classList.add("show");
+
+}
+
+
+function closeProduct(){
+
+    document.getElementById("productModal")
+        .classList.remove("show");
+
+}
+
+
+document.getElementById("modalAdd")
+    .addEventListener("click",()=>{
+
+        if(!selectedProduct){
+            return;
+        }
+
+        const color =
+            document.getElementById("modalColor")
+                .value;
+
+        addToCart(
+            selectedProduct.id,
+            color
+        );
+
+        closeProduct();
+
+    });
+
+
+/* =========================
+   DODAWANIE
+========================= */
+
+function addToCart(id,color="Czarny"){
+
+    const product =
+        products.find(
+            item => item.id === id
+        );
+
+    if(!product){
+        return;
+    }
+
+    cart.push({
+
+        id:product.id,
+
+        name:product.name,
+
+        price:product.price,
+
+        color:color
+
+    });
+
+    saveCart();
+
+    showToast(
+        "✓ Dodano do koszyka: " +
+        product.name
+    );
+
+}
+
+
+/* =========================
+   KOSZYK
+========================= */
+
+function saveCart(){
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+    renderCart();
+
+}
+
+
+function renderCart(){
+
+    document.getElementById("cartCount")
+        .textContent =
+        cart.length;
+
+    const box =
+        document.getElementById("cartItems");
+
+    if(!cart.length){
+
+        box.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:50px 10px;
+                color:#66758b;
+                font-size:11px;
+            ">
+                🛒<br><br>
+                Koszyk jest pusty.
+            </div>
+        `;
+
+        document.getElementById("cartTotal")
+            .textContent =
+            "0,00 zł";
+
+        return;
     }
 
 
-    const subtotal =
-        cart.reduce(
-            (sum,item) =>
-                sum +
-                item.price *
-                item.quantity,
-            0
-        );
+    box.innerHTML =
+        cart.map((item,index)=>`
 
+            <div class="cartItem">
 
-    const discount =
-        couponApplied
-            ? subtotal * .10
-            : 0;
+                <div>
 
+                    <strong>
+                        ${escapeHTML(item.name)}
+                    </strong>
 
-    const afterDiscount =
-        Math.max(
-            0,
-            subtotal - discount
-        );
+                    <small>
+                        Kolor: ${escapeHTML(item.color)}
+                    </small>
 
+                    <small>
+                        ${money(item.price)}
+                    </small>
 
-    const shipping =
-        afterDiscount >= 50 ||
-        subtotal === 0
-            ? 0
-            : 9.99;
+                </div>
+
+                <button
+                    class="removeItem"
+                    onclick="removeFromCart(${index})"
+                >
+                    USUŃ
+                </button>
+
+            </div>
+
+        `).join("");
 
 
     const total =
-        afterDiscount +
-        shipping;
+        cart.reduce(
+            (sum,item) =>
+                sum + Number(item.price),
+            0
+        );
 
-
-    document.getElementById(
-        "subtotal"
-    ).textContent =
-        money(subtotal);
-
-
-    document.getElementById(
-        "discountValue"
-    ).textContent =
-        "-" + money(discount);
-
-
-    document.getElementById(
-        "shipping"
-    ).textContent =
-        shipping === 0
-            ? "GRATIS"
-            : money(shipping);
-
-
-    document.getElementById(
-        "total"
-    ).textContent =
+    document.getElementById("cartTotal")
+        .textContent =
         money(total);
 
 }
 
 
-/* =========================
-   COUPON
-========================= */
+function removeFromCart(index){
 
-function applyCoupon(){
+    cart.splice(index,1);
 
-    const input =
-        document.getElementById(
-            "coupon"
-        );
-
-    const code =
-        input.value
-            .trim()
-            .toUpperCase();
-
-
-    if(code === "START10"){
-
-        couponApplied =
-            true;
-
-        showToast(
-            "🎉 START10 — rabat 10%!"
-        );
-
-    }
-    else{
-
-        couponApplied =
-            false;
-
-        showToast(
-            "❌ Nieprawidłowy kod."
-        );
-
-    }
-
-
-    updateCart();
+    saveCart();
 
 }
 
 
 /* =========================
-   CART OPEN/CLOSE
+   PANEL KOSZYKA
 ========================= */
 
 function openCart(){
 
-    updateCart();
-
-    document.getElementById(
-        "cartOverlay"
-    ).classList.add("show");
+    document.getElementById("cartPanel")
+        .classList.add("open");
 
 }
 
 
 function closeCart(){
 
-    document.getElementById(
-        "cartOverlay"
-    ).classList.remove("show");
-
-}
-
-
-function closeCartOutside(event){
-
-    if(
-        event.target.id ===
-        "cartOverlay"
-    ){
-
-        closeCart();
-
-    }
+    document.getElementById("cartPanel")
+        .classList.remove("open");
 
 }
 
 
 /* =========================
-   CHECKOUT
+   ZAMÓWIENIE
 ========================= */
 
-function goCheckout(){
+function checkout(){
 
     if(!cart.length){
 
         showToast(
-            "🛒 Koszyk jest pusty."
+            "🛒 Najpierw dodaj produkt."
         );
 
         return;
 
     }
 
-
     /*
-       Zachowujemy koszyk w localStorage,
-       więc checkout.html może go odczytać.
+       Jeżeli Twój server.js ma własny
+       endpoint checkout, możesz tutaj
+       podłączyć fetch().
     */
 
-    saveCart();
-
-
-    window.location.href =
-        "/checkout.html";
+    showToast(
+        "📦 Koszyk gotowy do zamówienia."
+    );
 
 }
 
@@ -2599,34 +1760,43 @@ function goCheckout(){
 function showToast(text){
 
     const toast =
-        document.getElementById(
-            "toast"
-        );
+        document.getElementById("toast");
 
-    toast.textContent =
-        text;
+    toast.textContent = text;
 
-    toast.classList.add(
-        "show"
-    );
+    toast.classList.add("show");
 
     clearTimeout(
         window.toastTimer
     );
 
     window.toastTimer =
-        setTimeout(
-            () => {
+        setTimeout(()=>{
 
-                toast.classList.remove(
-                    "show"
-                );
+            toast.classList.remove("show");
 
-            },
-            2500
-        );
+        },3000);
 
 }
+
+
+/* =========================
+   KLIK POZA MODALEM
+========================= */
+
+document.getElementById("productModal")
+    .addEventListener("click",event=>{
+
+        if(
+            event.target.id ===
+            "productModal"
+        ){
+
+            closeProduct();
+
+        }
+
+    });
 
 
 /* =========================
@@ -2635,11 +1805,9 @@ function showToast(text){
 
 document.addEventListener(
     "keydown",
-    event => {
+    event=>{
 
-        if(
-            event.key === "Escape"
-        ){
+        if(event.key === "Escape"){
 
             closeProduct();
             closeCart();
@@ -2654,11 +1822,8 @@ document.addEventListener(
    START
 ========================= */
 
-renderCategories();
-
 renderProducts();
-
-updateCart();
+renderCart();
 
 </script>
 
