@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Konto — Printerlase3D</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Inter,Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at 15% 10%,rgba(0,170,255,.20),transparent 32%),
+        radial-gradient(circle at 85% 80%,rgba(125,60,255,.20),transparent 35%),
+        #030712;
+    overflow-x:hidden;
+}
+
+/* TŁO */
+
+.bg{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:-1;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.35;
+    animation:float 9s ease-in-out infinite alternate;
+}
+
+.orb.one{
+    width:350px;
+    height:350px;
+    background:#008cff;
+    left:-120px;
+    top:-120px;
+}
+
+.orb.two{
+    width:320px;
+    height:320px;
+    background:#773cff;
+    right:-100px;
+    bottom:-100px;
+    animation-delay:2s;
+}
+
+@keyframes float{
+    to{
+        transform:translate(70px,50px) scale(1.12);
+    }
+}
+
+/* NAVBAR */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 5%;
+    z-index:100;
+    background:rgba(3,7,18,.78);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:white;
+    text-decoration:none;
+    font-weight:900;
+}
+
+.logo{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#00d9ff,#187cff,#873cff);
+    box-shadow:0 0 25px #008cff55;
+    font-size:22px;
+}
+
+.brand span{
+    background:linear-gradient(90deg,#fff,#25d9ff,#9161ff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.nav-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.nav-btn{
+    text-decoration:none;
+    color:white;
+    padding:10px 14px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,.1);
+    background:#ffffff08;
+    font-size:13px;
+    font-weight:800;
+    transition:.25s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-2px);
+    border-color:#00bfff66;
+    background:#008cff18;
+}
+
+/* GŁÓWNA */
+
+.page{
+    min-height:100vh;
+    padding:125px 20px 60px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    width:100%;
+    max-width:460px;
+}
+
+/* NAGŁÓWEK */
+
+.header{
+    text-align:center;
+    margin-bottom:28px;
+}
+
+.label{
+    color:#35d8ff;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:3px;
+}
+
+.header h1{
+    font-size:42px;
+    margin:10px 0;
+    letter-spacing:-2px;
+}
+
+.header p{
+    color:#7f8ca0;
+    margin:0;
+}
+
+/* KARTA */
+
+.card{
+    padding:30px;
+    border-radius:25px;
+    background:rgba(7,17,32,.88);
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.45),
+        inset 0 0 50px rgba(0,140,255,.025);
+    backdrop-filter:blur(20px);
+}
+
+/* TABS */
+
+.tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    padding:4px;
+    margin-bottom:25px;
+    border-radius:13px;
+    background:#030914;
+}
+
+.tab{
+    border:0;
+    padding:12px;
+    border-radius:10px;
+    background:transparent;
+    color:#718096;
+    font-weight:900;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.tab.active{
+    color:white;
+    background:linear-gradient(100deg,#008cff,#744cff);
+    box-shadow:0 7px 25px #008cff30;
+}
+
+/* FORMULARZ */
+
+.form{
+    display:none;
+    animation:fade .35s ease;
+}
+
+.form.active{
+    display:block;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.field{
+    margin-bottom:16px;
+}
+
+.field label{
+    display:block;
+    color:#aab5c5;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.field input{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.10);
+    outline:none;
+    background:#030914;
+    color:white;
+    font-size:14px;
+    transition:.25s;
+}
+
+.field input:focus{
+    border-color:#00cfff;
+    box-shadow:0 0 22px #00bfff15;
+}
+
+.main-btn{
+    width:100%;
+    padding:15px;
+    margin-top:5px;
+    border:0;
+    border-radius:13px;
+    color:white;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+    background:linear-gradient(100deg,#008cff,#754cff);
+    box-shadow:0 12px 35px #008cff30;
+    transition:.25s;
+}
+
+.main-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 45px #008cff45;
+}
+
+/* ALERT */
+
+.message{
+    display:none;
+    margin-bottom:17px;
+    padding:12px 14px;
+    border-radius:11px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.message.error{
+    display:block;
+    color:#ff9a9a;
+    background:#ff303015;
+    border:1px solid #ff303035;
+}
+
+.message.success{
+    display:block;
+    color:#6dffca;
+    background:#00d99112;
+    border:1px solid #00d99135;
+}
+
+/* KONTO */
+
+.account-panel{
+    display:none;
+    animation:fade .4s ease;
+}
+
+.account-panel.active{
+    display:block;
+}
+
+.user-card{
+    padding:20px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#071a31,#10102c);
+    border:1px solid #00bfff25;
+    margin-bottom:18px;
+}
+
+.user-avatar{
+    width:58px;
+    height:58px;
+    display:grid;
+    place-items:center;
+    border-radius:18px;
+    margin-bottom:15px;
+    font-size:22px;
+    font-weight:1000;
+    background:linear-gradient(135deg,#008cff,#754cff);
+    box-shadow:0 10px 30px #008cff30;
+}
+
+.user-name{
+    font-size:21px;
+    font-weight:1000;
+}
+
+.user-email{
+    color:#758398;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+
+.info{
+    padding:15px;
+    border-radius:13px;
+    background:#ffffff06;
+    border:1px solid #ffffff08;
+}
+
+.info small{
+    color:#68778b;
+    display:block;
+    font-size:10px;
+    margin-bottom:5px;
+}
+
+.info b{
+    font-size:14px;
+}
+
+/* KOD RABATOWY */
+
+.discount{
+    padding:20px;
+    border-radius:17px;
+    border:1px solid #7b4cff35;
+    background:linear-gradient(135deg,#11102e,#08172c);
+    margin-bottom:18px;
+}
+
+.discount-title{
+    font-size:13px;
+    font-weight:1000;
+    color:#bda6ff;
+    margin-bottom:8px;
+}
+
+.discount-code{
+    font-size:24px;
+    font-weight:1000;
+    letter-spacing:2px;
+    color:#35d8ff;
+}
+
+.discount-desc{
+    color:#718096;
+    font-size:11px;
+    margin-top:7px;
+}
+
+.logout{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    border:1px solid #ff526633;
+    color:#ff8e9d;
+    background:#ff52660b;
+    font-weight:900;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.logout:hover{
+    background:#ff526615;
+}
+
+/* STOPKA */
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#526075;
+    font-size:11px;
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:0 15px;
+    }
+
+    .page{
+        padding-top:110px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    .header h1{
+        font-size:34px;
+    }
+
+    .nav-btn{
+        padding:9px;
+        font-size:11px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+</div>
+
+<header class="navbar">
+
+    <a href="index.html" class="brand">
+        <div class="logo">P</div>
+        <div>Printerlase<span>3D</span></div>
+    </a>
+
+    <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">← Sklep</a>
+        <a href="koszyk.html" class="nav-btn">🛒 Koszyk</a>
+    </div>
+
+</header>
+
+<main class="page">
+
+<div class="container">
+
+    <div class="header">
+        <div class="label">PRINTERLASE3D</div>
+        <h1 id="pageTitle">Twoje konto</h1>
+        <p id="pageDescription">
+            Zaloguj się albo utwórz nowe konto.
+        </p>
+    </div>
+
+    <div class="card">
+
+        <!-- LOGOWANIE / REJESTRACJA -->
+
+        <div id="auth">
+
+            <div class="tabs">
+
+                <button
+                    class="tab active"
+                    id="loginTab"
+                    onclick="showForm('login')"
+                >
+                    Logowanie
+                </button>
+
+                <button
+                    class="tab"
+                    id="registerTab"
+                    onclick="showForm('register')"
+                >
+                    Rejestracja
+                </button>
+
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <!-- LOGOWANIE -->
+
+            <form
+                class="form active"
+                id="loginForm"
+                onsubmit="login(event)"
+            >
+
+                <div class="field">
+                    <label>E-mail</label>
+                    <input
+                        id="loginEmail"
+                        type="email"
+                        placeholder="twoj@email.pl"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label>Hasło</label>
+                    <input
+                        id="loginPassword"
+                        type="password"
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button class="main-btn" type="submit">
+                    🔐 Zaloguj się
+                </button>
+
+            </form>
+
+            <!-- REJESTRACJA -->
+
+            <form
+                class="form"
+                id="registerForm"
+                onsubmit="register(event)"
+            >
+
+                <div class="field">
+                    <label>Nazwa użytkownika</label>
+                    <input
+                        id="registerName"
+                        type="text"
+                        placeholder="np. Czat"
+                        minlength="2"
+                        maxlength="30"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label>E-mail</label>
+                    <input
+                        id="registerEmail"
+                        type="email"
+                        placeholder="twoj@email.pl"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label>Hasło</label>
+                    <input
+                        id="registerPassword"
+                        type="password"
+                        placeholder="Minimum 6 znaków"
+                        minlength="6"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label>Powtórz hasło</label>
+                    <input
+                        id="registerPassword2"
+                        type="password"
+                        placeholder="Powtórz hasło"
+                        minlength="6"
+                        required
+                    >
+                </div>
+
+                <button class="main-btn" type="submit">
+                    ✨ Utwórz konto
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- PANEL KONTA -->
+
+        <div class="account-panel" id="accountPanel">
+
+            <div class="user-card">
+
+                <div class="user-avatar" id="avatar">
+                    P
+                </div>
+
+                <div class="user-name" id="userName">
+                    Użytkownik
+                </div>
+
+                <div class="user-email" id="userEmail">
+                    email@example.com
+                </div>
+
+                <div class="info-grid">
+
+                    <div class="info">
+                        <small>ZAMÓWIENIA</small>
+                        <b id="ordersCount">0</b>
+                    </div>
+
+                    <div class="info">
+                        <small>RABAT</small>
+                        <b id="discountInfo">0%</b>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="discount">
+
+                <div class="discount-title">
+                    🎁 TWÓJ KOD RABATOWY
+                </div>
+
+                <div
+                    class="discount-code"
+                    id="discountCode"
+                >
+                    Brak kodu
+                </div>
+
+                <div class="discount-desc" id="discountDesc">
+                    Kod rabatowy pojawi się po pierwszym zakupie.
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout"
+                onclick="logout()"
+            >
+                🚪 Wyloguj się
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        © 2026 Printerlase3D • Wydruki 3D
+    </div>
+
+</div>
+
+</main>
+
+<script>
+
+/* =========================================
+   STORAGE
+========================================= */
+
+function getUsers(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem("printerlase_users")
+        ) || [];
+
+    }catch{
+
+        return [];
+
+    }
+
+}
+
+function saveUsers(users){
+
+    localStorage.setItem(
+        "printerlase_users",
+        JSON.stringify(users)
+    );
+
+}
+
+function getCurrentUser(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem("printerlase_current_user")
+        );
+
+    }catch{
+
+        return null;
+
+    }
+
+}
+
+
+/* =========================================
+   FORMULARZE
+========================================= */
+
+function showForm(type){
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const registerForm =
+        document.getElementById("registerForm");
+
+    const loginTab =
+        document.getElementById("loginTab");
+
+    const registerTab =
+        document.getElementById("registerTab");
+
+    clearMessage();
+
+    if(type === "login"){
+
+        loginForm.classList.add("active");
+        registerForm.classList.remove("active");
+
+        loginTab.classList.add("active");
+        registerTab.classList.remove("active");
+
+    }else{
+
+        loginForm.classList.remove("active");
+        registerForm.classList.add("active");
+
+        loginTab.classList.remove("active");
+        registerTab.classList.add("active");
+
+    }
+
+}
+
+
+/* =========================================
+   WIADOMOŚCI
+========================================= */
+
+function showMessage(text,type){
+
+    const box =
+        document.getElementById("message");
+
+    box.textContent = text;
+
+    box.className =
+        "message " + type;
+
+}
+
+function clearMessage(){
+
+    const box =
+        document.getElementById("message");
+
+    box.textContent = "";
+
+    box.className = "message";
+
+}
+
+
+/* =========================================
+   REJESTRACJA
+========================================= */
+
+function register(event){
+
+    event.preventDefault();
+
+    const name =
+        document.getElementById("registerName")
+        .value
+        .trim();
+
+    const email =
+        document.getElementById("registerEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password =
+        document.getElementById("registerPassword")
+        .value;
+
+    const password2 =
+        document.getElementById("registerPassword2")
+        .value;
+
+
+    if(password !== password2){
+
+        showMessage(
+            "Hasła nie są takie same.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(password.length < 6){
+
+        showMessage(
+            "Hasło musi mieć minimum 6 znaków.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const users = getUsers();
+
+    const exists =
+        users.some(
+            user => user.email === email
+        );
+
+
+    if(exists){
+
+        showMessage(
+            "Konto z tym adresem e-mail już istnieje.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const user = {
+
+        id:
+            "user_" +
+            Date.now(),
+
+        name:name,
+
+        email:email,
+
+        password:password,
+
+        orders:0,
+
+        discountCode:null,
+
+        discountPercent:0,
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
+    users.push(user);
+
+    saveUsers(users);
+
+
+    localStorage.setItem(
+        "printerlase_current_user",
+        JSON.stringify({
+            id:user.id,
+            name:user.name,
+            email:user.email
+        })
+    );
+
+
+    showMessage(
+        "Konto zostało utworzone!",
+        "success"
+    );
+
+
+    setTimeout(
+        loadAccount,
+        500
+    );
+
+}
+
+
+/* =========================================
+   LOGOWANIE
+========================================= */
+
+function login(event){
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("loginEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password =
+        document.getElementById("loginPassword")
+        .value;
+
+
+    const users = getUsers();
+
+    const user =
+        users.find(
+            item =>
+                item.email === email &&
+                item.password === password
+        );
+
+
+    if(!user){
+
+        showMessage(
+            "Nieprawidłowy e-mail lub hasło.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "printerlase_current_user",
+        JSON.stringify({
+            id:user.id,
+            name:user.name,
+            email:user.email
+        })
+    );
+
+
+    showMessage(
+        "Zalogowano pomyślnie!",
+        "success"
+    );
+
+
+    setTimeout(
+        loadAccount,
+        500
+    );
+
+}
+
+
+/* =========================================
+   PANEL KONTA
+========================================= */
+
+function loadAccount(){
+
+    const current =
+        getCurrentUser();
+
+    if(!current){
+
+        document
+            .getElementById("auth")
+            .style.display = "block";
+
+        document
+            .getElementById("accountPanel")
+            .classList.remove("active");
+
+        return;
+
+    }
+
+
+    const users = getUsers();
+
+    const user =
+        users.find(
+            item => item.id === current.id
+        );
+
+
+    if(!user){
+
+        localStorage.removeItem(
+            "printerlase_current_user"
+        );
+
+        location.reload();
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("auth")
+        .style.display = "none";
+
+
+    document
+        .getElementById("accountPanel")
+        .classList.add("active");
+
+
+    document
+        .getElementById("pageTitle")
+        .textContent =
+        "Witaj, " + user.name + "!";
+
+
+    document
+        .getElementById("pageDescription")
+        .textContent =
+        "Twoje konto Printerlase3D";
+
+
+    document
+        .getElementById("userName")
+        .textContent =
+        user.name;
+
+
+    document
+        .getElementById("userEmail")
+        .textContent =
+        user.email;
+
+
+    document
+        .getElementById("avatar")
+        .textContent =
+        user.name.charAt(0).toUpperCase();
+
+
+    document
+        .getElementById("ordersCount")
+        .textContent =
+        user.orders || 0;
+
+
+    document
+        .getElementById("discountInfo")
+        .textContent =
+        (user.discountPercent || 0) + "%";
+
+
+    if(user.discountCode){
+
+        document
+            .getElementById("discountCode")
+            .textContent =
+            user.discountCode;
+
+        document
+            .getElementById("discountDesc")
+            .textContent =
+            "Twój kod rabatowy: " +
+            user.discountPercent +
+            "% na następne zamówienie.";
+
+    }
+
+}
+
+
+/* =========================================
+   WYLOGOWANIE
+========================================= */
+
+function logout(){
+
+    localStorage.removeItem(
+        "printerlase_current_user"
+    );
+
+    location.reload();
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadAccount
+);
+
+</script>
+
+</body>
+</html>
