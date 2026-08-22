@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Panel — Printerlase3D</title>
+<title>Printerlase3D — Panel Admin</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -16,711 +15,183 @@
 
 body{
     min-height:100vh;
-    font-family:Arial,Helvetica,sans-serif;
-    color:#fff;
-    background:
-        radial-gradient(
-            circle at 15% 10%,
-            rgba(0,180,255,.20),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 85% 80%,
-            rgba(120,60,255,.20),
-            transparent 35%
-        ),
-        #020611;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-#loginScreen{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:25px;
-}
-
-.loginBox{
-    width:100%;
-    max-width:430px;
-    padding:40px;
-    border-radius:25px;
-    background:rgba(7,17,32,.92);
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 30px 100px rgba(0,0,0,.5);
-    text-align:center;
-    backdrop-filter:blur(20px);
-}
-
-.loginLogo{
-    width:70px;
-    height:70px;
-    margin:0 auto 20px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    border-radius:20px;
-
-    font-size:30px;
-    font-weight:1000;
-
-    background:
-        linear-gradient(
-            135deg,
-            #00dfff,
-            #087dff,
-            #813cff
-        );
-
-    box-shadow:
-        0 0 40px
-        rgba(0,160,255,.3);
-}
-
-.loginBox h1{
-    font-size:28px;
-}
-
-.loginBox p{
-    margin-top:10px;
-    color:#718096;
-    font-size:13px;
-}
-
-.loginBox input{
-    width:100%;
-    margin-top:25px;
-    padding:15px;
-
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,.1);
-
-    background:#030a14;
+    font-family:Arial, sans-serif;
     color:white;
-
-    outline:none;
-    font-size:15px;
+    background:#030712;
 }
 
-.loginBox input:focus{
-    border-color:#00cfff;
-}
-
-.loginButton{
-    width:100%;
-    margin-top:15px;
-    padding:15px;
-
-    border:0;
-    border-radius:12px;
-
-    color:white;
-    font-weight:1000;
-
-    cursor:pointer;
-
-    background:
-        linear-gradient(
-            100deg,
-            #008cff,
-            #783cff
-        );
-
-    transition:.25s;
-}
-
-.loginButton:hover{
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 15px 40px
-        rgba(0,140,255,.3);
-}
-
-.error{
-    min-height:20px;
-    margin-top:15px;
-
-    color:#ff7180;
-    font-size:12px;
-}
-
-.back{
-    display:block;
-    margin-top:20px;
-
-    color:#718096;
-    text-decoration:none;
-
-    font-size:12px;
-}
-
-/* =========================
-   ADMIN
-========================= */
-
-#adminPanel{
-    display:none;
-}
-
-header{
-    height:75px;
-
+.top{
+    min-height:70px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-
-    padding:0 5%;
-
-    background:
-        rgba(2,7,18,.88);
-
-    border-bottom:
-        1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(20px);
+    padding:0 6%;
+    background:rgba(5,10,20,.95);
+    border-bottom:1px solid rgba(255,255,255,.08);
 }
 
 .logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-
-    font-weight:1000;
-}
-
-.logoIcon{
-    width:42px;
-    height:42px;
-
-    display:grid;
-    place-items:center;
-
-    border-radius:12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #00dfff,
-            #087dff,
-            #813cff
-        );
+    font-size:20px;
+    font-weight:900;
 }
 
 .logo span{
-    color:#35d8ff;
+    color:#29d8ff;
 }
 
-.headerButtons{
-    display:flex;
-    gap:10px;
-}
-
-.headerButton{
-    padding:10px 15px;
-
-    border-radius:10px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.1);
-
-    background:
-        rgba(255,255,255,.05);
-
+.back{
     color:white;
-
     text-decoration:none;
-
-    cursor:pointer;
-
-    font-size:11px;
-    font-weight:900;
-}
-
-.logout{
-    color:#ff8290;
-    border-color:#ff405020;
+    padding:10px 15px;
+    border-radius:10px;
+    background:#111c2e;
 }
 
 .container{
-    width:min(1400px,92%);
-    margin:auto;
-    padding:45px 0;
+    width:min(1100px,90%);
+    margin:50px auto;
 }
 
-.title{
-    margin-bottom:35px;
+h1{
+    font-size:40px;
 }
 
-.title small{
-    color:#35d8ff;
-
-    font-size:10px;
-    letter-spacing:3px;
-    font-weight:1000;
-}
-
-.title h1{
-    margin-top:10px;
-    font-size:45px;
-}
-
-.title p{
-    margin-top:10px;
+.subtitle{
     color:#718096;
+    margin-top:8px;
 }
 
-/* =========================
-   STATYSTYKI
-========================= */
-
-.stats{
+.cards{
     display:grid;
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:15px;
-
-    margin-bottom:25px;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:30px;
 }
 
-.stat{
-    padding:23px;
-
+.card{
+    padding:25px;
     border-radius:18px;
-
-    background:
-        rgba(7,17,32,.9);
-
-    border:
-        1px solid
-        rgba(255,255,255,.07);
+    background:#071120;
+    border:1px solid rgba(255,255,255,.08);
 }
 
-.statIcon{
-    font-size:25px;
+.card .icon{
+    font-size:30px;
 }
 
-.statName{
+.card h3{
     margin-top:15px;
+    font-size:13px;
+    color:#8fa0b5;
+}
 
-    color:#718096;
-
-    font-size:10px;
+.number{
+    margin-top:8px;
+    font-size:32px;
     font-weight:900;
 }
 
-.statValue{
-    margin-top:7px;
-
-    font-size:28px;
-    font-weight:1000;
-}
-
-/* =========================
-   PANEL
-========================= */
-
 .panel{
+    margin-top:25px;
     padding:25px;
-    margin-bottom:20px;
-
-    border-radius:20px;
-
-    background:
-        rgba(7,17,32,.9);
-
-    border:
-        1px solid
-        rgba(255,255,255,.07);
+    border-radius:18px;
+    background:#071120;
+    border:1px solid rgba(255,255,255,.08);
 }
 
 .panel h2{
     margin-bottom:20px;
 }
 
-/* =========================
-   ZAMÓWIENIA
-========================= */
-
-.empty{
-    padding:50px;
-
-    text-align:center;
-
-    color:#718096;
-}
-
-.emptyIcon{
-    font-size:50px;
-    margin-bottom:15px;
-}
-
 .order{
-    margin-bottom:15px;
-
-    padding:20px;
-
-    border-radius:16px;
-
-    background:#020a15;
-
-    border:
-        1px solid
-        rgba(255,255,255,.06);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:15px 0;
+    border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .order:last-child{
-    margin-bottom:0;
-}
-
-.orderTop{
-    display:flex;
-
-    justify-content:space-between;
-    align-items:flex-start;
-
-    gap:15px;
-
-    margin-bottom:20px;
-}
-
-.orderNumber{
-    color:#35d8ff;
-
-    font-size:14px;
-    font-weight:1000;
-}
-
-.orderDate{
-    margin-top:5px;
-
-    color:#647288;
-
-    font-size:10px;
+    border-bottom:0;
 }
 
 .status{
     padding:7px 10px;
-
     border-radius:8px;
-
-    color:#42e6a4;
-
-    background:
-        rgba(66,230,164,.08);
-
-    border:
-        1px solid
-        rgba(66,230,164,.15);
-
-    font-size:9px;
-    font-weight:1000;
-}
-
-.orderInfo{
-    display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:15px;
-}
-
-.infoTitle{
-    margin-bottom:6px;
-
-    color:#647288;
-
-    font-size:9px;
-    font-weight:900;
-}
-
-.infoValue{
-    font-size:13px;
-    font-weight:700;
-
-    word-break:break-word;
-}
-
-.products{
-    margin-top:20px;
-
-    padding-top:18px;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,.06);
-}
-
-.product{
-    display:flex;
-
-    justify-content:space-between;
-
-    padding:8px 0;
-
-    color:#9ba8b9;
-
-    font-size:12px;
-}
-
-.productPrice{
-    color:white;
-    font-weight:900;
-}
-
-.total{
-    margin-top:18px;
-
-    text-align:right;
-
-    font-size:21px;
-    font-weight:1000;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-.tools{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-}
-
-.toolButton{
-    padding:12px 16px;
-
-    border-radius:10px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.1);
-
-    background:
-        rgba(255,255,255,.05);
-
-    color:white;
-
-    cursor:pointer;
-
-    text-decoration:none;
-
+    background:rgba(0,200,140,.12);
+    color:#4ff0b0;
     font-size:11px;
     font-weight:900;
 }
 
-.toolButton:hover{
-    background:
-        rgba(255,255,255,.1);
+.button{
+    border:0;
+    padding:10px 14px;
+    border-radius:9px;
+    color:white;
+    background:linear-gradient(100deg,#008cff,#783cff);
+    cursor:pointer;
+    font-weight:900;
 }
 
-.deleteButton{
-    color:#ff8290;
-
-    border-color:
-        rgba(255,50,70,.2);
-
-    background:
-        rgba(255,50,70,.06);
+.empty{
+    padding:30px;
+    text-align:center;
+    color:#718096;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:1000px){
-
-    .stats{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .orderInfo{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-}
-
-@media(max-width:600px){
-
-    header{
-        padding:0 15px;
-    }
-
-    .container{
-        width:94%;
-        padding-top:30px;
-    }
-
-    .stats{
+@media(max-width:700px){
+    .cards{
         grid-template-columns:1fr;
     }
 
-    .orderInfo{
-        grid-template-columns:1fr;
+    .order{
+        align-items:flex-start;
+        flex-direction:column;
     }
-
-    .title h1{
-        font-size:33px;
-    }
-
-    .logo{
-        font-size:13px;
-    }
-
 }
-
 </style>
 </head>
 
 <body>
 
-
-<!-- =========================
-     LOGOWANIE ADMINA
-========================= -->
-
-<div id="loginScreen">
-
-    <div class="loginBox">
-
-        <div class="loginLogo">
-            P
-        </div>
-
-        <h1>
-            Panel Administratora
-        </h1>
-
-        <p>
-            Printerlase3D
-        </p>
-
-        <input
-            id="adminPassword"
-            type="password"
-            placeholder="Hasło administratora"
-            onkeydown="
-                if(event.key === 'Enter'){
-                    loginAdmin();
-                }
-            "
-        >
-
-        <button
-            class="loginButton"
-            onclick="loginAdmin()"
-        >
-            🔐 Zaloguj do panelu
-        </button>
-
-        <div
-            id="loginError"
-            class="error"
-        ></div>
-
-        <a
-            href="index.html"
-            class="back"
-        >
-            ← Wróć do sklepu
-        </a>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     PANEL ADMINA
-========================= -->
-
-<div id="adminPanel">
-
-
-<header>
+<header class="top">
 
     <div class="logo">
-
-        <div class="logoIcon">
-            P
-        </div>
-
         Printerlase<span>3D</span>
-
     </div>
 
-
-    <div class="headerButtons">
-
-        <a
-            href="index.html"
-            class="headerButton"
-        >
-            ← Sklep
-        </a>
-
-        <button
-            class="headerButton logout"
-            onclick="logoutAdmin()"
-        >
-            Wyloguj
-        </button>
-
-    </div>
+    <a href="./index.html" class="back">
+        ← Sklep
+    </a>
 
 </header>
 
-
 <main class="container">
 
+    <h1>
+        🔐 Panel Admin
+    </h1>
 
-    <div class="title">
-
-        <small>
-            ADMINISTRATOR
-        </small>
-
-        <h1>
-            Panel Printerlase3D 👑
-        </h1>
-
-        <p>
-            Tutaj zobaczysz swoje zamówienia,
-            klientów i sprzedaż.
-        </p>
-
-    </div>
+    <p class="subtitle">
+        Zarządzanie sklepem Printerlase3D
+    </p>
 
 
-    <!-- STATYSTYKI -->
+    <section class="cards">
 
-    <section class="stats">
+        <div class="card">
 
+            <div class="icon">📦</div>
 
-        <div class="stat">
-
-            <div class="statIcon">
-                📦
-            </div>
-
-            <div class="statName">
+            <h3>
                 ZAMÓWIENIA
-            </div>
+            </h3>
 
             <div
-                class="statValue"
-                id="ordersCount"
+                class="number"
+                id="orders"
             >
                 0
             </div>
@@ -728,297 +199,107 @@ header{
         </div>
 
 
-        <div class="stat">
+        <div class="card">
 
-            <div class="statIcon">
-                💰
-            </div>
+            <div class="icon">💰</div>
 
-            <div class="statName">
+            <h3>
                 SPRZEDAŻ
-            </div>
+            </h3>
 
             <div
-                class="statValue"
+                class="number"
                 id="sales"
             >
-                0,00 zł
+                0 zł
             </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="card">
 
-            <div class="statIcon">
-                👥
-            </div>
+            <div class="icon">🛒</div>
 
-            <div class="statName">
-                KLIENCI
-            </div>
-
-            <div
-                class="statValue"
-                id="customers"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat">
-
-            <div class="statIcon">
-                🛒
-            </div>
-
-            <div class="statName">
+            <h3>
                 PRODUKTY
-            </div>
+            </h3>
 
             <div
-                class="statValue"
-                id="products"
+                class="number"
             >
-                0
+                6
             </div>
 
         </div>
 
-
     </section>
 
-
-    <!-- ZAMÓWIENIA -->
 
     <section class="panel">
 
         <h2>
-            📦 Zamówienia
+            📋 Zamówienia
         </h2>
 
-        <div id="orders">
+        <div id="ordersList">
+
+            <div class="empty">
+                Brak zamówień.
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- NARZĘDZIA -->
-
     <section class="panel">
 
         <h2>
-            ⚙️ Narzędzia
+            ⚙️ Sklep
         </h2>
 
-        <div class="tools">
-
-
-            <a
-                href="index.html"
-                class="toolButton"
-            >
-                🏠 Strona główna
-            </a>
-
-
-            <button
-                class="toolButton"
-                onclick="loadOrders()"
-            >
-                🔄 Odśwież
-            </button>
-
-
-            <button
-                class="toolButton deleteButton"
-                onclick="deleteOrders()"
-            >
-                🗑️ Usuń zamówienia
-            </button>
-
-
-        </div>
+        <button
+            class="button"
+            onclick="clearOrders()"
+        >
+            🗑️ Wyczyść zamówienia
+        </button>
 
     </section>
-
 
 </main>
-
-</div>
 
 
 <script>
 
-/* =====================================
-   USTAWIENIA
-===================================== */
+function loadOrders(){
 
-const ADMIN_PASSWORD =
-    "Admin2137";
-
-
-const ADMIN_SESSION =
-    "printerlase_admin_logged";
-
-
-/* =====================================
-   LOGOWANIE
-===================================== */
-
-function loginAdmin(){
-
-    const password =
-        document
-        .getElementById(
-            "adminPassword"
-        )
-        .value;
-
-
-    if(password === ADMIN_PASSWORD){
-
-        localStorage.setItem(
-            ADMIN_SESSION,
-            "true"
-        );
-
-
-        document
-        .getElementById(
-            "loginScreen"
-        )
-        .style.display =
-            "none";
-
-
-        document
-        .getElementById(
-            "adminPanel"
-        )
-        .style.display =
-            "block";
-
-
-        loadOrders();
-
-
-    }else{
-
-        document
-        .getElementById(
-            "loginError"
-        )
-        .textContent =
-            "❌ Nieprawidłowe hasło.";
-
-    }
-
-}
-
-
-/* =====================================
-   SPRAWDZENIE SESJI
-===================================== */
-
-if(
-    localStorage.getItem(
-        ADMIN_SESSION
-    ) === "true"
-){
-
-    document
-    .getElementById(
-        "loginScreen"
-    )
-    .style.display =
-        "none";
-
-
-    document
-    .getElementById(
-        "adminPanel"
-    )
-    .style.display =
-        "block";
-
-
-    loadOrders();
-
-}
-
-
-/* =====================================
-   WYLOGOWANIE
-===================================== */
-
-function logoutAdmin(){
-
-    localStorage.removeItem(
-        ADMIN_SESSION
-    );
-
-
-    location.reload();
-
-}
-
-
-/* =====================================
-   POBIERANIE ZAMÓWIEŃ
-===================================== */
-
-function getOrders(){
+    let orders = [];
 
     try{
 
-        const orders =
+        orders =
             JSON.parse(
                 localStorage.getItem(
                     "printerlase_orders"
                 )
-            );
+            ) || [];
 
+    }catch(e){
 
-        if(
-            Array.isArray(orders)
-        ){
-
-            return orders;
-
-        }
-
-
-        return [];
-
-    }catch(error){
-
-        return [];
+        orders=[];
 
     }
 
-}
+
+    document.getElementById(
+        "orders"
+    ).textContent =
+        orders.length;
 
 
-/* =====================================
-   ŁADOWANIE ZAMÓWIEŃ
-===================================== */
-
-function loadOrders(){
-
-    const orders =
-        getOrders();
-
-
-    let sales = 0;
-
-    let products = 0;
-
-    const customers =
-        new Set();
+    let sales=0;
 
 
     orders.forEach(order=>{
@@ -1028,101 +309,29 @@ function loadOrders(){
                 order.total || 0
             );
 
-
-        if(
-            order.customer &&
-            order.customer.email
-        ){
-
-            customers.add(
-                order.customer.email
-            );
-
-        }
-
-
-        if(
-            Array.isArray(
-                order.products
-            )
-        ){
-
-            order.products.forEach(
-                product=>{
-
-                    products +=
-                        Number(
-                            product.quantity ||
-                            product.qty ||
-                            1
-                        );
-
-                }
-            );
-
-        }
-
     });
-
-
-    document.getElementById(
-        "ordersCount"
-    ).textContent =
-        orders.length;
 
 
     document.getElementById(
         "sales"
     ).textContent =
-        formatMoney(sales);
+        sales.toFixed(2)
+        .replace(".",",")
+        + " zł";
 
 
-    document.getElementById(
-        "customers"
-    ).textContent =
-        customers.size;
-
-
-    document.getElementById(
-        "products"
-    ).textContent =
-        products;
-
-
-    renderOrders(orders);
-
-}
-
-
-/* =====================================
-   WYŚWIETLANIE ZAMÓWIEŃ
-===================================== */
-
-function renderOrders(orders){
-
-    const container =
+    const list =
         document.getElementById(
-            "orders"
+            "ordersList"
         );
 
 
-    if(orders.length === 0){
+    if(!orders.length){
 
-        container.innerHTML = `
+        list.innerHTML=`
 
             <div class="empty">
-
-                <div class="emptyIcon">
-                    📦
-                </div>
-
-                Brak zamówień.
-
-                <br><br>
-
-                Gdy ktoś kupi produkt,
-                zamówienie pojawi się tutaj.
-
+                📦 Brak zamówień.
             </div>
 
         `;
@@ -1132,322 +341,75 @@ function renderOrders(orders){
     }
 
 
-    container.innerHTML = "";
+    list.innerHTML="";
 
 
-    const reversed =
-        [...orders].reverse();
+    orders.forEach(
+        (order,index)=>{
+
+            const date =
+                order.date ||
+                "Brak daty";
 
 
-    reversed.forEach(order=>{
+            list.innerHTML += `
 
-        const customer =
-            order.customer || {};
-
-
-        const products =
-            Array.isArray(
-                order.products
-            )
-            ? order.products
-            : [];
-
-
-        let productsHTML =
-            "";
-
-
-        products.forEach(product=>{
-
-            const quantity =
-                Number(
-                    product.quantity ||
-                    product.qty ||
-                    1
-                );
-
-
-            const price =
-                Number(
-                    product.price || 0
-                );
-
-
-            productsHTML += `
-
-                <div class="product">
-
-                    <span>
-
-                        ${escapeHTML(
-                            product.name ||
-                            "Produkt"
-                        )}
-
-                        × ${quantity}
-
-                    </span>
-
-
-                    <span
-                        class="productPrice"
-                    >
-
-                        ${formatMoney(
-                            price * quantity
-                        )}
-
-                    </span>
-
-                </div>
-
-            `;
-
-        });
-
-
-        let date =
-            "Brak daty";
-
-
-        if(order.date){
-
-            const d =
-                new Date(
-                    order.date
-                );
-
-
-            if(
-                !isNaN(
-                    d.getTime()
-                )
-            ){
-
-                date =
-                    d.toLocaleString(
-                        "pl-PL"
-                    );
-
-            }
-
-        }
-
-
-        const number =
-            order.number ||
-            "PL3D-" +
-            Math.floor(
-                Math.random()*999999
-            );
-
-
-        const delivery =
-            order.delivery ||
-            order.shipping ||
-            "Nie podano";
-
-
-        container.innerHTML += `
-
-            <div class="order">
-
-
-                <div class="orderTop">
+                <div class="order">
 
                     <div>
 
-                        <div class="orderNumber">
+                        <strong>
+                            Zamówienie #${index+1}
+                        </strong>
 
-                            ${escapeHTML(
-                                number
-                            )}
+                        <br>
 
-                        </div>
-
-
-                        <div class="orderDate">
-
+                        <small>
                             ${date}
+                        </small>
 
-                        </div>
+                        <br>
+
+                        <small>
+                            ${order.name || "Klient"}
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            ${Number(
+                                order.total || 0
+                            ).toFixed(2)
+                            .replace(".",",")} zł
+                        </strong>
 
                     </div>
 
 
                     <div class="status">
-
-                        ZAMÓWIENIE
-
+                        NOWE
                     </div>
 
                 </div>
 
+            `;
 
-                <div class="orderInfo">
-
-
-                    <div>
-
-                        <div class="infoTitle">
-                            KLIENT
-                        </div>
-
-                        <div class="infoValue">
-
-                            ${escapeHTML(
-                                customer.name ||
-                                "-"
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="infoTitle">
-                            E-MAIL
-                        </div>
-
-                        <div class="infoValue">
-
-                            ${escapeHTML(
-                                customer.email ||
-                                "-"
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="infoTitle">
-                            TELEFON
-                        </div>
-
-                        <div class="infoValue">
-
-                            ${escapeHTML(
-                                customer.phone ||
-                                "-"
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="infoTitle">
-                            DOSTAWA
-                        </div>
-
-                        <div class="infoValue">
-
-                            ${escapeHTML(
-                                delivery
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-                <div class="products">
-
-                    ${productsHTML}
-
-                </div>
-
-
-                <div class="total">
-
-                    Razem:
-
-                    ${formatMoney(
-                        order.total
-                    )}
-
-                </div>
-
-
-            </div>
-
-        `;
-
-    });
+        }
+    );
 
 }
 
 
-/* =====================================
-   CENA
-===================================== */
+function clearOrders(){
 
-function formatMoney(value){
-
-    return Number(
-        value || 0
-    )
-    .toFixed(2)
-    .replace(".",",")
-    + " zł";
-
-}
-
-
-/* =====================================
-   BEZPIECZNE HTML
-===================================== */
-
-function escapeHTML(value){
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
+    if(
+        !confirm(
+            "Na pewno usunąć wszystkie zamówienia?"
         )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =====================================
-   USUWANIE ZAMÓWIEŃ
-===================================== */
-
-function deleteOrders(){
-
-    const confirmDelete =
-        confirm(
-            "Czy na pewno chcesz usunąć wszystkie zamówienia?"
-        );
-
-
-    if(!confirmDelete){
+    ){
 
         return;
 
@@ -1464,14 +426,7 @@ function deleteOrders(){
 }
 
 
-/* =====================================
-   AUTOMATYCZNE ODŚWIEŻANIE
-===================================== */
-
-setInterval(
-    loadOrders,
-    5000
-);
+loadOrders();
 
 </script>
 
