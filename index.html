@@ -5,29 +5,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Printerlase3D — Druk 3D</title>
+<meta name="theme-color" content="#050816">
+<meta name="description" content="Printerlase3D — nowoczesny sklep z produktami drukowanymi w 3D.">
 
-<meta name="description" content="Printerlase3D — breloki, akcesoria i personalizowane wydruki 3D.">
+<title>Printerlase3D — Sklep 3D</title>
 
 <style>
 :root{
     --bg:#030712;
-    --panel:#07111f;
-    --panel2:#0a1628;
+    --bg2:#07101f;
+    --card:#091426;
+    --card2:#0c1930;
+    --line:rgba(255,255,255,.08);
+    --text:#f7fbff;
+    --muted:#8390a5;
     --blue:#00bfff;
-    --blue2:#1677ff;
-    --purple:#7040ff;
-    --text:#f5f8ff;
-    --muted:#7d8ba1;
-    --border:rgba(255,255,255,.08);
-    --green:#38e6a2;
+    --blue2:#3478ff;
+    --purple:#7546ff;
+    --green:#43e6a4;
     --red:#ff4f70;
 }
 
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
 html{
@@ -35,14 +37,14 @@ html{
 }
 
 body{
-    font-family:Inter,Arial,Helvetica,sans-serif;
-    background:
-        radial-gradient(circle at 15% 0%,rgba(0,191,255,.13),transparent 30%),
-        radial-gradient(circle at 90% 15%,rgba(112,64,255,.14),transparent 30%),
-        var(--bg);
-    color:var(--text);
     min-height:100vh;
     overflow-x:hidden;
+    color:var(--text);
+    background:
+        radial-gradient(circle at 10% 0%,rgba(0,191,255,.12),transparent 28%),
+        radial-gradient(circle at 90% 10%,rgba(117,70,255,.12),transparent 30%),
+        var(--bg);
+    font-family:Inter,Arial,Helvetica,sans-serif;
 }
 
 body::before{
@@ -51,6 +53,7 @@ body::before{
     inset:0;
     z-index:-2;
     pointer-events:none;
+    opacity:.2;
     background-image:
         linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
         linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
@@ -73,60 +76,45 @@ a{
 }
 
 /* =========================
-   SCROLLBAR
-========================= */
-
-::-webkit-scrollbar{
-    width:8px;
-}
-
-::-webkit-scrollbar-track{
-    background:#02050c;
-}
-
-::-webkit-scrollbar-thumb{
-    background:linear-gradient(var(--blue),var(--purple));
-    border-radius:20px;
-}
-
-/* =========================
    PROMO
 ========================= */
 
 .promo{
-    min-height:38px;
-    padding:9px 15px;
+    min-height:42px;
+    padding:9px 18px;
+
     display:flex;
     justify-content:center;
     align-items:center;
-    gap:9px;
+    gap:8px;
     flex-wrap:wrap;
 
     background:
         linear-gradient(
-            90deg,
-            #086dff,
-            #00bfff,
-            #7040ff,
-            #086dff
+            100deg,
+            #006eff,
+            #00cfff,
+            #7145ff,
+            #006eff
         );
 
     background-size:300% 100%;
-    animation:promo 8s linear infinite;
+    animation:promo 9s linear infinite;
 
     font-size:11px;
     font-weight:900;
 }
 
 @keyframes promo{
-    from{background-position:0}
-    to{background-position:300%}
+    to{
+        background-position:300% 0;
+    }
 }
 
-.promo-code{
+.promoCode{
     padding:5px 9px;
     border-radius:7px;
-    background:rgba(0,0,0,.25);
+    background:rgba(0,0,0,.22);
     letter-spacing:1px;
 }
 
@@ -139,31 +127,32 @@ a{
     top:0;
     z-index:100;
 
-    height:76px;
-    padding:0 5%;
+    min-height:74px;
+    padding:12px 5%;
 
     display:flex;
     align-items:center;
     justify-content:space-between;
+    gap:20px;
 
     background:rgba(3,7,18,.78);
-    backdrop-filter:blur(22px);
-
-    border-bottom:1px solid var(--border);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(20px);
 }
 
 .logo{
     display:flex;
     align-items:center;
-    gap:11px;
+    gap:10px;
 
     font-size:20px;
     font-weight:1000;
+    white-space:nowrap;
 }
 
-.logo-icon{
-    width:43px;
-    height:43px;
+.logoBox{
+    width:42px;
+    height:42px;
 
     display:grid;
     place-items:center;
@@ -173,41 +162,41 @@ a{
     background:
         linear-gradient(
             135deg,
-            #00d9ff,
-            #1677ff,
-            #7040ff
+            #00dcff,
+            #087eff,
+            #7546ff
         );
 
     box-shadow:
-        0 0 35px rgba(0,191,255,.25);
+        0 0 35px rgba(0,180,255,.22);
 }
 
-.logo span{
-    color:#27d8ff;
+.logo3d{
+    color:#29dfff;
 }
 
-.nav-right{
+.navRight{
     display:flex;
-    gap:8px;
     align-items:center;
+    gap:8px;
 }
 
-.nav-btn{
-    min-height:40px;
-    padding:0 13px;
+.navBtn{
+    position:relative;
 
-    display:flex;
+    min-height:42px;
+    padding:0 14px;
+
+    display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:6px;
+    gap:7px;
 
-    border-radius:10px;
-
-    border:1px solid var(--border);
-
-    background:#081426;
+    border:1px solid var(--line);
+    border-radius:11px;
 
     color:white;
+    background:#091426;
 
     font-size:10px;
     font-weight:900;
@@ -215,25 +204,26 @@ a{
     transition:.2s;
 }
 
-.nav-btn:hover{
+.navBtn:hover{
     transform:translateY(-2px);
-    background:#10213a;
+    border-color:rgba(0,191,255,.3);
+    background:#102039;
 }
 
-.nav-btn.account{
-    background:
-        linear-gradient(100deg,#087dff,#7040ff);
+.navBtn.primary{
     border:0;
+    background:
+        linear-gradient(
+            100deg,
+            #087eff,
+            #7546ff
+        );
 }
 
-.cart-btn{
-    position:relative;
-}
-
-.cart-count{
+.cartCount{
     position:absolute;
+    top:-7px;
     right:-7px;
-    top:-8px;
 
     min-width:20px;
     height:20px;
@@ -245,7 +235,7 @@ a{
 
     border-radius:50%;
 
-    background:#ff4267;
+    background:#ff4165;
 
     font-size:9px;
 }
@@ -255,65 +245,49 @@ a{
 ========================= */
 
 .hero{
+    min-height:650px;
+    padding:80px 5% 90px;
+
     position:relative;
 
-    min-height:650px;
+    display:grid;
+    place-items:center;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:90px 5% 80px;
-
-    text-align:center;
     overflow:hidden;
 }
 
-.hero-glow{
+.heroGlow{
     position:absolute;
 
-    width:500px;
-    height:500px;
+    width:520px;
+    height:520px;
 
     border-radius:50%;
 
-    filter:blur(110px);
+    filter:blur(120px);
+    opacity:.22;
 
     pointer-events:none;
 }
 
-.glow-left{
-    left:-250px;
+.heroGlow.one{
+    left:-260px;
     top:-200px;
-    background:rgba(0,191,255,.16);
+    background:#00bfff;
 }
 
-.glow-right{
-    right:-250px;
-    bottom:-250px;
-    background:rgba(112,64,255,.16);
+.heroGlow.two{
+    right:-260px;
+    bottom:-240px;
+    background:#7546ff;
 }
 
-.hero-content{
-    max-width:1000px;
-    position:relative;
-    z-index:2;
-
-    animation:heroIn .8s ease;
+.heroContent{
+    max-width:950px;
+    text-align:center;
 }
 
-@keyframes heroIn{
-    from{
-        opacity:0;
-        transform:translateY(25px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.live{
+.status{
     display:inline-flex;
     align-items:center;
     gap:8px;
@@ -323,30 +297,32 @@ a{
     border:1px solid rgba(0,191,255,.2);
     border-radius:999px;
 
-    color:#5de3ff;
     background:rgba(0,191,255,.06);
+
+    color:#65e6ff;
 
     font-size:9px;
     font-weight:1000;
+    letter-spacing:.8px;
 }
 
-.live-dot{
+.statusDot{
     width:7px;
     height:7px;
+
     border-radius:50%;
-    background:#3fe7b0;
-    box-shadow:0 0 15px #3fe7b0;
+    background:#45e4ff;
+
+    box-shadow:0 0 14px #45e4ff;
 }
 
 .hero h1{
     margin-top:24px;
 
-    font-size:clamp(50px,8vw,94px);
+    font-size:clamp(52px,9vw,105px);
+    line-height:.9;
 
-    line-height:.93;
-
-    letter-spacing:-5px;
-
+    letter-spacing:-6px;
     font-weight:1000;
 }
 
@@ -355,45 +331,46 @@ a{
         linear-gradient(
             100deg,
             #fff,
-            #2edfff,
-            #6c78ff
+            #29dcff,
+            #6c70ff
         );
 
     -webkit-background-clip:text;
     background-clip:text;
+
     color:transparent;
 }
 
-.hero p{
+.heroText{
     max-width:650px;
 
-    margin:27px auto 0;
+    margin:25px auto 0;
 
     color:var(--muted);
 
-    line-height:1.7;
     font-size:14px;
+    line-height:1.7;
 }
 
-.hero-actions{
-    margin-top:31px;
+.heroButtons{
+    margin-top:30px;
 
     display:flex;
     justify-content:center;
-    flex-wrap:wrap;
     gap:12px;
+    flex-wrap:wrap;
 }
 
-.btn{
-    min-height:50px;
-    padding:0 21px;
+.heroBtn{
+    min-height:48px;
+    padding:0 20px;
 
     display:inline-flex;
     align-items:center;
     justify-content:center;
     gap:8px;
 
-    border-radius:13px;
+    border-radius:12px;
 
     font-size:10px;
     font-weight:1000;
@@ -401,60 +378,52 @@ a{
     transition:.2s;
 }
 
-.btn:hover{
+.heroBtn:hover{
     transform:translateY(-3px);
 }
 
-.btn-primary{
+.heroBtn.main{
     color:white;
-    border:0;
-
     background:
         linear-gradient(
             100deg,
             #008cff,
-            #7040ff
+            #7546ff
         );
-
     box-shadow:
-        0 15px 45px rgba(0,120,255,.2);
+        0 15px 45px rgba(0,110,255,.2);
 }
 
-.btn-secondary{
-    color:white;
-    background:#091527;
-    border:1px solid var(--border);
+.heroBtn.second{
+    border:1px solid var(--line);
+    background:#091426;
 }
 
 /* =========================
-   FLOATING STATS
+   STATS
 ========================= */
 
 .stats{
-    width:min(1000px,90%);
-
+    width:min(950px,90%);
     margin:-35px auto 0;
 
     display:grid;
     grid-template-columns:repeat(3,1fr);
 
-    border:1px solid var(--border);
-    border-radius:18px;
-
     overflow:hidden;
 
-    background:rgba(7,17,32,.8);
-    backdrop-filter:blur(20px);
+    border:1px solid var(--line);
+    border-radius:18px;
 
-    position:relative;
-    z-index:5;
+    background:rgba(8,19,36,.8);
+    backdrop-filter:blur(18px);
 }
 
 .stat{
     padding:23px;
     text-align:center;
 
-    border-right:1px solid var(--border);
+    border-right:1px solid var(--line);
 }
 
 .stat:last-child{
@@ -466,9 +435,9 @@ a{
     font-size:18px;
 }
 
-.stat small{
+.stat span{
     display:block;
-    margin-top:5px;
+    margin-top:6px;
     color:var(--muted);
     font-size:9px;
 }
@@ -478,104 +447,26 @@ a{
 ========================= */
 
 .section{
-    width:min(1180px,90%);
+    width:min(1150px,90%);
     margin:120px auto 0;
 }
 
-.section-top{
+.sectionTop{
     display:flex;
     align-items:end;
     justify-content:space-between;
     gap:20px;
 }
 
-.section-title{
+.sectionTitle{
     font-size:32px;
-    letter-spacing:-1.5px;
+    letter-spacing:-1.2px;
 }
 
-.section-subtitle{
+.sectionDesc{
     margin-top:7px;
     color:var(--muted);
     font-size:11px;
-}
-
-/* =========================
-   SEARCH
-========================= */
-
-.shop-tools{
-    margin-top:25px;
-
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.search{
-    flex:1;
-    min-width:220px;
-
-    position:relative;
-}
-
-.search input{
-    width:100%;
-    height:45px;
-
-    padding:0 15px 0 42px;
-
-    border:1px solid var(--border);
-    border-radius:11px;
-
-    outline:none;
-
-    color:white;
-    background:#071222;
-
-    font-size:10px;
-}
-
-.search input:focus{
-    border-color:rgba(0,191,255,.4);
-    box-shadow:0 0 0 3px rgba(0,191,255,.05);
-}
-
-.search-icon{
-    position:absolute;
-    left:14px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#607087;
-}
-
-.filters{
-    display:flex;
-    gap:7px;
-    flex-wrap:wrap;
-}
-
-.filter{
-    height:45px;
-    padding:0 13px;
-
-    border:1px solid var(--border);
-    border-radius:11px;
-
-    color:#8e9db2;
-    background:#071222;
-
-    font-size:9px;
-    font-weight:900;
-
-    transition:.2s;
-}
-
-.filter:hover,
-.filter.active{
-    color:white;
-    background:#10233c;
-    border-color:rgba(0,191,255,.25);
 }
 
 /* =========================
@@ -583,28 +474,25 @@ a{
 ========================= */
 
 .products{
-    margin-top:20px;
+    margin-top:28px;
 
     display:grid;
     grid-template-columns:repeat(3,1fr);
-
     gap:18px;
 }
 
 .product{
-    position:relative;
     overflow:hidden;
 
+    border:1px solid var(--line);
     border-radius:20px;
 
     background:
         linear-gradient(
             145deg,
-            #091729,
-            #050d19
+            #0a172a,
+            #050d1b
         );
-
-    border:1px solid var(--border);
 
     transition:.25s;
 }
@@ -612,89 +500,96 @@ a{
 .product:hover{
     transform:translateY(-7px);
 
-    border-color:rgba(0,191,255,.3);
+    border-color:rgba(0,191,255,.28);
 
     box-shadow:
-        0 25px 70px rgba(0,0,0,.35);
+        0 30px 80px rgba(0,0,0,.35);
 }
 
-.product-image{
-    height:225px;
+.productVisual{
+    height:230px;
+
+    position:relative;
 
     display:grid;
     place-items:center;
 
-    position:relative;
-
     background:
         radial-gradient(
-            circle,
-            rgba(0,191,255,.13),
+            circle at center,
+            rgba(0,191,255,.14),
             transparent 62%
         );
 }
 
-.product-image::after{
+.productVisual::after{
     content:"";
 
     position:absolute;
 
-    width:150px;
-    height:150px;
+    width:155px;
+    height:155px;
 
-    border:1px solid rgba(0,191,255,.08);
-
+    border:1px solid rgba(0,191,255,.1);
     border-radius:50%;
 
-    animation:spin 15s linear infinite;
+    animation:rotate 12s linear infinite;
 }
 
-@keyframes spin{
-    to{transform:rotate(360deg)}
+@keyframes rotate{
+    to{
+        transform:rotate(360deg);
+    }
 }
 
-.product-emoji{
+.productIcon{
     position:relative;
     z-index:2;
 
-    font-size:76px;
+    font-size:82px;
 
-    filter:drop-shadow(0 20px 20px rgba(0,0,0,.5));
+    filter:drop-shadow(0 20px 25px rgba(0,0,0,.5));
 
-    transition:.3s;
+    transition:.25s;
 }
 
-.product:hover .product-emoji{
+.product:hover .productIcon{
     transform:scale(1.1) rotate(-4deg);
 }
 
 .badge{
     position:absolute;
-    top:13px;
-    left:13px;
-    z-index:5;
+    top:14px;
+    left:14px;
+    z-index:4;
 
-    padding:6px 8px;
+    padding:6px 9px;
 
     border-radius:7px;
 
+    color:white;
     background:
-        linear-gradient(100deg,#008cff,#7040ff);
+        linear-gradient(
+            100deg,
+            #008cff,
+            #7546ff
+        );
 
     font-size:8px;
     font-weight:1000;
 }
 
-.product-info{
+.productBody{
     padding:20px;
 }
 
-.product-info h3{
+.productBody h3{
     font-size:15px;
 }
 
-.product-info p{
-    min-height:34px;
+.productBody p{
+    min-height:35px;
+
     margin-top:7px;
 
     color:var(--muted);
@@ -703,7 +598,7 @@ a{
     line-height:1.5;
 }
 
-.product-bottom{
+.productBottom{
     margin-top:18px;
 
     display:flex;
@@ -717,8 +612,9 @@ a{
     font-weight:1000;
 }
 
-.add{
-    padding:10px 14px;
+.addBtn{
+    min-height:37px;
+    padding:0 13px;
 
     border:0;
     border-radius:9px;
@@ -726,7 +622,11 @@ a{
     color:white;
 
     background:
-        linear-gradient(100deg,#008cff,#7040ff);
+        linear-gradient(
+            100deg,
+            #008cff,
+            #7546ff
+        );
 
     font-size:9px;
     font-weight:1000;
@@ -734,43 +634,8 @@ a{
     transition:.2s;
 }
 
-.add:hover{
+.addBtn:hover{
     transform:scale(1.04);
-}
-
-/* =========================
-   CUSTOM CTA
-========================= */
-
-.custom{
-    margin-top:22px;
-
-    padding:38px;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:30px;
-
-    border-radius:22px;
-
-    background:
-        radial-gradient(circle at 90% 20%,rgba(112,64,255,.2),transparent 35%),
-        radial-gradient(circle at 10% 80%,rgba(0,191,255,.14),transparent 35%),
-        #071222;
-
-    border:1px solid var(--border);
-}
-
-.custom h2{
-    font-size:27px;
-}
-
-.custom p{
-    margin-top:8px;
-    color:var(--muted);
-    font-size:11px;
-    line-height:1.6;
 }
 
 /* =========================
@@ -778,45 +643,484 @@ a{
 ========================= */
 
 .benefits{
-    margin-top:25px;
+    margin-top:28px;
 
     display:grid;
     grid-template-columns:repeat(4,1fr);
-
     gap:14px;
 }
 
 .benefit{
     padding:22px;
 
+    border:1px solid var(--line);
     border-radius:17px;
 
     background:#071222;
-
-    border:1px solid var(--border);
 
     transition:.2s;
 }
 
 .benefit:hover{
     transform:translateY(-4px);
-    border-color:rgba(0,191,255,.25);
+    border-color:rgba(0,191,255,.2);
 }
 
-.benefit-icon{
-    font-size:27px;
+.benefitIcon{
+    font-size:25px;
 }
 
 .benefit h3{
-    margin-top:13px;
+    margin-top:12px;
     font-size:12px;
 }
 
 .benefit p{
-    margin-top:6px;
+    margin-top:7px;
     color:var(--muted);
     font-size:10px;
     line-height:1.5;
+}
+
+/* =========================
+   CART OVERLAY
+========================= */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:500;
+
+    display:none;
+
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(8px);
+}
+
+.overlay.show{
+    display:block;
+}
+
+.cartPanel{
+    position:absolute;
+    right:0;
+    top:0;
+
+    width:min(500px,100%);
+    height:100%;
+
+    overflow-y:auto;
+
+    padding:24px;
+
+    border-left:1px solid var(--line);
+
+    background:
+        linear-gradient(
+            180deg,
+            #071120,
+            #030913
+        );
+
+    animation:cartIn .25s ease;
+}
+
+@keyframes cartIn{
+    from{
+        transform:translateX(100%);
+    }
+    to{
+        transform:translateX(0);
+    }
+}
+
+.cartHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.cartHeader h2{
+    font-size:23px;
+}
+
+.closeCart{
+    width:38px;
+    height:38px;
+
+    border:1px solid var(--line);
+    border-radius:10px;
+
+    color:white;
+    background:#0d1b30;
+
+    font-size:16px;
+}
+
+/* =========================
+   CART ITEMS
+========================= */
+
+.cartList{
+    margin-top:20px;
+}
+
+.cartItem{
+    padding:15px 0;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    border-bottom:1px solid var(--line);
+}
+
+.cartItemIcon{
+    width:54px;
+    height:54px;
+
+    flex-shrink:0;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:#0c1b30;
+
+    font-size:25px;
+}
+
+.cartItemInfo{
+    flex:1;
+    min-width:0;
+}
+
+.cartItemName{
+    display:block;
+
+    overflow:hidden;
+
+    color:white;
+
+    font-size:11px;
+    font-weight:900;
+
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.cartItemPrice{
+    display:block;
+    margin-top:4px;
+
+    color:var(--muted);
+    font-size:9px;
+}
+
+.quantity{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.qtyBtn{
+    width:26px;
+    height:26px;
+
+    display:grid;
+    place-items:center;
+
+    border:1px solid var(--line);
+    border-radius:7px;
+
+    color:white;
+    background:#0d1b30;
+
+    font-size:13px;
+}
+
+.qtyNumber{
+    min-width:17px;
+    text-align:center;
+    font-size:10px;
+    font-weight:900;
+}
+
+.deleteBtn{
+    width:28px;
+    height:28px;
+
+    border:0;
+    border-radius:7px;
+
+    color:#ff7188;
+    background:rgba(255,60,90,.08);
+}
+
+/* =========================
+   EMPTY CART
+========================= */
+
+.emptyCart{
+    margin-top:35px;
+    padding:35px 20px;
+
+    text-align:center;
+
+    border:1px dashed rgba(255,255,255,.09);
+    border-radius:16px;
+
+    background:rgba(255,255,255,.015);
+}
+
+.emptyCartIcon{
+    font-size:40px;
+    opacity:.65;
+}
+
+.emptyCart h3{
+    margin-top:13px;
+    font-size:14px;
+}
+
+.emptyCart p{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.emptyCart button{
+    margin-top:17px;
+
+    padding:11px 15px;
+
+    border:0;
+    border-radius:9px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #7546ff
+        );
+
+    font-size:9px;
+    font-weight:1000;
+}
+
+/* =========================
+   CHECKOUT
+========================= */
+
+.checkoutBox{
+    margin-top:20px;
+
+    padding:18px;
+
+    border:1px solid var(--line);
+    border-radius:16px;
+
+    background:#091528;
+}
+
+.summaryRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+
+    margin-top:10px;
+
+    color:#8794a8;
+    font-size:10px;
+}
+
+.summaryRow:first-child{
+    margin-top:0;
+}
+
+.summaryRow strong{
+    color:white;
+}
+
+.discount{
+    color:var(--green)!important;
+}
+
+.shippingFree{
+    color:var(--green)!important;
+}
+
+.total{
+    margin-top:16px;
+    padding-top:15px;
+
+    border-top:1px solid var(--line);
+
+    color:white;
+    font-size:17px;
+    font-weight:1000;
+}
+
+.shippingInfo{
+    margin-top:13px;
+    padding:10px;
+
+    border-radius:9px;
+
+    color:var(--green);
+
+    background:rgba(67,230,164,.06);
+
+    font-size:9px;
+    font-weight:900;
+}
+
+.form{
+    margin-top:20px;
+}
+
+.field{
+    margin-top:12px;
+}
+
+.field:first-child{
+    margin-top:0;
+}
+
+.field label{
+    display:block;
+
+    margin-bottom:6px;
+
+    color:#8490a4;
+
+    font-size:9px;
+    font-weight:900;
+}
+
+.field input,
+.field select{
+    width:100%;
+
+    min-height:42px;
+
+    padding:0 12px;
+
+    outline:none;
+
+    border:1px solid var(--line);
+    border-radius:9px;
+
+    color:white;
+    background:#040b15;
+
+    font-size:10px;
+
+    transition:.2s;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:rgba(0,191,255,.5);
+    box-shadow:0 0 0 3px rgba(0,191,255,.06);
+}
+
+.field select option{
+    color:#000;
+}
+
+.paymentButton{
+    width:100%;
+
+    min-height:48px;
+
+    margin-top:16px;
+
+    border:0;
+    border-radius:11px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #7546ff
+        );
+
+    font-size:10px;
+    font-weight:1000;
+
+    box-shadow:
+        0 15px 35px rgba(0,120,255,.15);
+
+    transition:.2s;
+}
+
+.paymentButton:hover{
+    transform:translateY(-2px);
+}
+
+.paymentButton:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.secure{
+    margin-top:10px;
+
+    text-align:center;
+
+    color:#657287;
+
+    font-size:8px;
+}
+
+/* =========================
+   REVIEWS
+========================= */
+
+.reviews{
+    margin-top:28px;
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.review{
+    padding:20px;
+
+    border:1px solid var(--line);
+    border-radius:17px;
+
+    background:#071222;
+}
+
+.stars{
+    color:#ffd34d;
+    letter-spacing:2px;
+}
+
+.reviewText{
+    margin-top:12px;
+
+    color:#a8b2c2;
+
+    font-size:10px;
+    line-height:1.6;
+}
+
+.reviewName{
+    margin-top:15px;
+
+    font-size:9px;
+    font-weight:1000;
 }
 
 /* =========================
@@ -829,262 +1133,23 @@ footer{
 
     text-align:center;
 
-    border-top:1px solid var(--border);
+    border-top:1px solid var(--line);
 }
 
-.footer-logo{
-    font-size:20px;
+.footerLogo{
+    font-size:19px;
     font-weight:1000;
 }
 
-.footer-logo span{
-    color:#28d9ff;
+.footerLogo span{
+    color:#2bddff;
 }
 
 footer p{
     margin-top:8px;
-    color:#627188;
+
+    color:#657287;
     font-size:9px;
-}
-
-/* =========================
-   CART
-========================= */
-
-.overlay{
-    position:fixed;
-    inset:0;
-    z-index:500;
-
-    display:none;
-
-    background:rgba(0,0,0,.7);
-    backdrop-filter:blur(8px);
-}
-
-.overlay.show{
-    display:block;
-}
-
-.cart{
-    position:absolute;
-    right:0;
-    top:0;
-
-    width:min(480px,100%);
-    height:100%;
-
-    overflow-y:auto;
-
-    padding:25px;
-
-    background:#040b16;
-
-    border-left:1px solid var(--border);
-
-    animation:cartIn .25s ease;
-}
-
-@keyframes cartIn{
-    from{transform:translateX(100%)}
-    to{transform:translateX(0)}
-}
-
-.cart-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.cart-head h2{
-    font-size:22px;
-}
-
-.close{
-    width:37px;
-    height:37px;
-
-    border:0;
-    border-radius:10px;
-
-    color:white;
-    background:#0d1b2e;
-}
-
-.cart-items{
-    margin-top:18px;
-}
-
-.cart-item{
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    padding:15px 0;
-
-    border-bottom:1px solid var(--border);
-}
-
-.cart-item-icon{
-    width:52px;
-    height:52px;
-
-    display:grid;
-    place-items:center;
-
-    border-radius:12px;
-
-    background:#0b192b;
-
-    font-size:25px;
-}
-
-.cart-info{
-    flex:1;
-}
-
-.cart-info strong{
-    display:block;
-    font-size:11px;
-}
-
-.cart-info small{
-    display:block;
-    margin-top:4px;
-    color:var(--muted);
-    font-size:9px;
-}
-
-.quantity{
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-
-.quantity button{
-    width:25px;
-    height:25px;
-
-    border:1px solid var(--border);
-    border-radius:6px;
-
-    color:white;
-    background:#0a1728;
-}
-
-.quantity span{
-    min-width:18px;
-    text-align:center;
-    font-size:10px;
-}
-
-.remove{
-    padding:7px;
-
-    border:0;
-    border-radius:7px;
-
-    color:#ff6a83;
-    background:rgba(255,60,90,.08);
-}
-
-.empty-cart{
-    padding:70px 10px;
-
-    text-align:center;
-
-    color:var(--muted);
-
-    font-size:12px;
-}
-
-.summary{
-    margin-top:25px;
-
-    padding:18px;
-
-    border-radius:16px;
-
-    background:#081426;
-
-    border:1px solid var(--border);
-}
-
-.summary-line{
-    display:flex;
-    justify-content:space-between;
-
-    margin-top:11px;
-
-    color:#8b9aad;
-
-    font-size:11px;
-}
-
-.summary-line:first-child{
-    margin-top:0;
-}
-
-.summary-line strong{
-    color:white;
-}
-
-.discount{
-    color:var(--green)!important;
-}
-
-.total{
-    margin-top:17px;
-    padding-top:15px;
-
-    border-top:1px solid var(--border);
-
-    font-size:18px;
-    font-weight:1000;
-
-    color:white;
-}
-
-.shipping-progress{
-    margin-top:14px;
-    padding:11px;
-
-    border-radius:9px;
-
-    background:rgba(56,230,162,.06);
-
-    color:var(--green);
-
-    font-size:9px;
-    font-weight:900;
-}
-
-.checkout-btn{
-    width:100%;
-
-    margin-top:15px;
-    padding:15px;
-
-    border:0;
-    border-radius:11px;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            100deg,
-            #008cff,
-            #7040ff
-        );
-
-    font-size:10px;
-    font-weight:1000;
-
-    transition:.2s;
-}
-
-.checkout-btn:hover{
-    transform:translateY(-2px);
 }
 
 /* =========================
@@ -1095,26 +1160,29 @@ footer p{
     position:fixed;
     left:50%;
     bottom:25px;
-    z-index:1000;
+    z-index:900;
+
+    max-width:90%;
 
     padding:13px 18px;
 
     border:1px solid rgba(0,191,255,.2);
     border-radius:11px;
 
-    background:#0b1a2d;
+    color:white;
+    background:#0b1b30;
 
     box-shadow:0 20px 50px rgba(0,0,0,.4);
 
     font-size:10px;
     font-weight:900;
 
-    transform:translate(-50%,30px);
     opacity:0;
-
     pointer-events:none;
 
-    transition:.3s;
+    transform:translate(-50%,25px);
+
+    transition:.25s;
 }
 
 .toast.show{
@@ -1136,9 +1204,8 @@ footer p{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .custom{
-        flex-direction:column;
-        align-items:flex-start;
+    .reviews{
+        grid-template-columns:1fr;
     }
 
 }
@@ -1146,15 +1213,24 @@ footer p{
 @media(max-width:700px){
 
     .nav{
-        height:68px;
+        min-height:66px;
     }
 
-    .nav-btn{
+    .navBtn span{
+        display:none;
+    }
+
+    .navBtn{
         padding:0 10px;
     }
 
-    .nav-btn span{
-        display:none;
+    .hero{
+        min-height:580px;
+        padding-top:60px;
+    }
+
+    .hero h1{
+        letter-spacing:-4px;
     }
 
     .stats{
@@ -1163,32 +1239,24 @@ footer p{
 
     .stat{
         border-right:0;
-        border-bottom:1px solid var(--border);
+        border-bottom:1px solid var(--line);
     }
 
     .stat:last-child{
         border-bottom:0;
     }
 
-    .hero{
-        min-height:570px;
-    }
-
 }
 
-@media(max-width:560px){
+@media(max-width:550px){
 
     .logo{
         font-size:16px;
     }
 
-    .logo-icon{
+    .logoBox{
         width:36px;
         height:36px;
-    }
-
-    .nav-btn.account{
-        display:none;
     }
 
     .products,
@@ -1196,25 +1264,16 @@ footer p{
         grid-template-columns:1fr;
     }
 
-    .hero h1{
-        font-size:49px;
-        letter-spacing:-3px;
-    }
-
-    .hero p{
-        font-size:12px;
-    }
-
     .section{
         width:92%;
     }
 
-    .custom{
-        padding:25px;
+    .hero h1{
+        font-size:49px;
     }
 
-    .custom h2{
-        font-size:23px;
+    .adminLink{
+        display:none;
     }
 
 }
@@ -1223,33 +1282,42 @@ footer p{
 
 <body>
 
-<!-- PROMO -->
+<!-- =========================
+     PROMO
+========================= -->
+
 <div class="promo">
-    ⚡ PROMOCJA STARTOWA
-    <span class="promo-code">START10</span>
-    <span>−10% na zamówienie</span>
-    <span>•</span>
-    <span>🚚 Dostawa GRATIS od 50 zł</span>
+    🎉 START10
+    <span class="promoCode">-10%</span>
+    na pierwsze zamówienie
+    • 🚚 Darmowa dostawa od 50 zł
 </div>
 
 
-<!-- NAV -->
+<!-- =========================
+     NAV
+========================= -->
+
 <nav class="nav">
 
     <a href="#home" class="logo">
-        <div class="logo-icon">P</div>
-        Printerlase<span>3D</span>
+        <div class="logoBox">P</div>
+        Printerlase<span class="logo3d">3D</span>
     </a>
 
-    <div class="nav-right">
+    <div class="navRight">
 
-        <a href="konto.html" class="nav-btn account">
+        <a href="konto.html" class="navBtn">
             👤 <span>Konto</span>
         </a>
 
-        <button class="nav-btn cart-btn" onclick="openCart()">
+        <a href="admin.html" class="navBtn adminLink">
+            🔐 <span>Admin</span>
+        </a>
+
+        <button class="navBtn primary" onclick="openCart()">
             🛒 <span>Koszyk</span>
-            <b id="cartCount" class="cart-count">0</b>
+            <b id="cartCount" class="cartCount">0</b>
         </button>
 
     </div>
@@ -1257,40 +1325,44 @@ footer p{
 </nav>
 
 
-<!-- HERO -->
+<!-- =========================
+     HERO
+========================= -->
+
 <section id="home" class="hero">
 
-    <div class="hero-glow glow-left"></div>
-    <div class="hero-glow glow-right"></div>
+    <div class="heroGlow one"></div>
+    <div class="heroGlow two"></div>
 
-    <div class="hero-content">
+    <div class="heroContent">
 
-        <div class="live">
-            <span class="live-dot"></span>
+        <div class="status">
+            <span class="statusDot"></span>
             PRINTERLASE3D • DRUK 3D
         </div>
 
         <h1>
             Twój pomysł.
             <br>
-            Nasz <span class="gradient">wydruk.</span>
+            Nasz
+            <span class="gradient">wydruk.</span>
         </h1>
 
-        <p>
-            Breloki, akcesoria, figurki i personalizowane
-            projekty 3D. Wybierz coś dla siebie i zamów
-            bez zbędnego pierdolenia.
+        <p class="heroText">
+            Breloki, dodatki, figurki i personalizowane
+            projekty 3D. Wybierz produkt, dodaj go do
+            koszyka i przejdź do zamówienia.
         </p>
 
-        <div class="hero-actions">
+        <div class="heroButtons">
 
-            <a href="#produkty" class="btn btn-primary">
-                🛒 Przeglądaj produkty
+            <a href="#produkty" class="heroBtn main">
+                🛒 Zobacz produkty
             </a>
 
-            <a href="#custom" class="btn btn-secondary">
-                ✨ Własny projekt
-            </a>
+            <button class="heroBtn second" onclick="openCart()">
+                🛍️ Otwórz koszyk
+            </button>
 
         </div>
 
@@ -1299,147 +1371,97 @@ footer p{
 </section>
 
 
-<!-- STATS -->
+<!-- =========================
+     STATS
+========================= -->
+
 <section class="stats">
 
     <div class="stat">
         <strong>🖨️ Druk 3D</strong>
-        <small>Produkty wykonywane na zamówienie</small>
+        <span>Produkty wykonywane na drukarce 3D</span>
     </div>
 
     <div class="stat">
         <strong>🎟️ START10</strong>
-        <small>10% rabatu na zakupy</small>
+        <span>10% rabatu</span>
     </div>
 
     <div class="stat">
         <strong>🚚 50 zł</strong>
-        <small>Darmowa dostawa od tej kwoty</small>
+        <span>Darmowa dostawa od 50 zł</span>
     </div>
 
 </section>
 
 
-<!-- PRODUCTS -->
+<!-- =========================
+     PRODUCTS
+========================= -->
+
 <section id="produkty" class="section">
 
-    <div class="section-top">
+    <div class="sectionTop">
 
         <div>
-            <h2 class="section-title">🔥 Sklep</h2>
-            <p class="section-subtitle">
-                Wybierz produkt i dodaj go do koszyka.
+            <h2 class="sectionTitle">🔥 Produkty</h2>
+            <p class="sectionDesc">
+                Wybierz coś dla siebie.
             </p>
         </div>
 
     </div>
-
-
-    <div class="shop-tools">
-
-        <div class="search">
-            <span class="search-icon">🔎</span>
-
-            <input
-                id="searchInput"
-                type="text"
-                placeholder="Szukaj produktu..."
-                oninput="filterProducts()"
-            >
-        </div>
-
-        <div class="filters">
-
-            <button class="filter active" onclick="setCategory('all',this)">
-                Wszystkie
-            </button>
-
-            <button class="filter" onclick="setCategory('breloki',this)">
-                🔑 Breloki
-            </button>
-
-            <button class="filter" onclick="setCategory('akcesoria',this)">
-                ⚙️ Akcesoria
-            </button>
-
-            <button class="filter" onclick="setCategory('figurki',this)">
-                🗿 Figurki
-            </button>
-
-        </div>
-
-    </div>
-
 
     <div id="products" class="products"></div>
 
 </section>
 
 
-<!-- CUSTOM -->
-<section id="custom" class="section">
+<!-- =========================
+     BENEFITS
+========================= -->
 
-    <div class="custom">
-
-        <div>
-            <h2>✨ Masz własny pomysł?</h2>
-
-            <p>
-                Chcesz brelok z własnym napisem, logo albo
-                inny model? Napisz do nas i zobaczymy,
-                co da się wydrukować.
-            </p>
-        </div>
-
-        <a href="mailto:printerlase3d@gmail.com" class="btn btn-primary">
-            💬 Napisz do nas
-        </a>
-
-    </div>
-
-</section>
-
-
-<!-- BENEFITS -->
 <section class="section">
 
-    <h2 class="section-title">💙 Dlaczego my?</h2>
+    <h2 class="sectionTitle">
+        💙 Dlaczego Printerlase3D?
+    </h2>
 
-    <p class="section-subtitle">
-        Prosto, szybko i bez kombinowania.
+    <p class="sectionDesc">
+        Prosto, szybko i bez zbędnego kombinowania.
     </p>
 
     <div class="benefits">
 
         <div class="benefit">
-            <div class="benefit-icon">🖨️</div>
+            <div class="benefitIcon">🖨️</div>
             <h3>Druk 3D</h3>
             <p>
-                Produkty wykonywane technologią druku 3D.
+                Produkty tworzone przy użyciu technologii druku 3D.
             </p>
         </div>
 
         <div class="benefit">
-            <div class="benefit-icon">🎨</div>
+            <div class="benefitIcon">🎨</div>
             <h3>Personalizacja</h3>
             <p>
-                Własne napisy, kolory i projekty.
+                Własne napisy, kolory i projekty mogą być przygotowane indywidualnie.
             </p>
         </div>
 
         <div class="benefit">
-            <div class="benefit-icon">🚚</div>
-            <h3>Darmowa dostawa</h3>
+            <div class="benefitIcon">📦</div>
+            <h3>Dostawa</h3>
             <p>
-                Przy zamówieniu od 50 zł.
+                Od 50 zł dostawa jest darmowa.
             </p>
         </div>
 
         <div class="benefit">
-            <div class="benefit-icon">⚡</div>
+            <div class="benefitIcon">⚡</div>
             <h3>Szybka realizacja</h3>
             <p>
-                Zamówienie trafia prosto do realizacji.
+                Po złożeniu zamówienia można rozpocząć jego realizację.
             </p>
         </div>
 
@@ -1448,10 +1470,70 @@ footer p{
 </section>
 
 
-<!-- FOOTER -->
+<!-- =========================
+     REVIEWS
+========================= -->
+
+<section class="section">
+
+    <h2 class="sectionTitle">
+        ⭐ Opinie
+    </h2>
+
+    <p class="sectionDesc">
+        Przykładowe opinie klientów.
+    </p>
+
+    <div class="reviews">
+
+        <div class="review">
+            <div class="stars">★★★★★</div>
+
+            <p class="reviewText">
+                Brelok wygląda świetnie i wykonanie jest naprawdę dobre.
+            </p>
+
+            <div class="reviewName">
+                — Klient Printerlase3D
+            </div>
+        </div>
+
+        <div class="review">
+            <div class="stars">★★★★★</div>
+
+            <p class="reviewText">
+                Fajny projekt, dobra jakość i bardzo ciekawy wygląd.
+            </p>
+
+            <div class="reviewName">
+                — Klient Printerlase3D
+            </div>
+        </div>
+
+        <div class="review">
+            <div class="stars">★★★★★</div>
+
+            <p class="reviewText">
+                Zamówienie wyglądało dokładnie tak, jak oczekiwałem.
+            </p>
+
+            <div class="reviewName">
+                — Klient Printerlase3D
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
 <footer>
 
-    <div class="footer-logo">
+    <div class="footerLogo">
         Printerlase<span>3D</span>
     </div>
 
@@ -1462,38 +1544,42 @@ footer p{
 </footer>
 
 
-<!-- CART -->
-<div id="overlay" class="overlay" onclick="outsideCart(event)">
+<!-- =========================
+     CART
+========================= -->
 
-    <aside class="cart" onclick="event.stopPropagation()">
+<div id="overlay" class="overlay" onclick="overlayClick(event)">
 
-        <div class="cart-head">
+    <aside class="cartPanel" onclick="event.stopPropagation()">
 
-            <h2>🛒 Koszyk</h2>
+        <div class="cartHeader">
 
-            <button class="close" onclick="closeCart()">
+            <h2>🛒 Twój koszyk</h2>
+
+            <button class="closeCart" onclick="closeCart()">
                 ✕
             </button>
 
         </div>
 
-        <div id="cartItems" class="cart-items"></div>
-
-        <div id="cartSummary"></div>
+        <div id="cartContent"></div>
 
     </aside>
 
 </div>
 
 
-<!-- TOAST -->
+<!-- =========================
+     TOAST
+========================= -->
+
 <div id="toast" class="toast"></div>
 
 
 <script>
 
 /* =========================================================
-   PRODUCTS
+   PRODUKTY
 ========================================================= */
 
 const products = [
@@ -1501,242 +1587,142 @@ const products = [
     {
         id:1,
         name:"Brelok FRIENDZ",
-        description:"Personalizowany brelok 3D z napisem FRIENDZ.",
+        description:"Personalizowany brelok 3D.",
         price:15,
         emoji:"🔑",
-        badge:"POPULARNE",
-        category:"breloki"
+        badge:"POPULARNE"
     },
 
     {
         id:2,
         name:"Brelok Gamer",
-        description:"Brelok dla fana gamingu i komputerów.",
+        description:"Brelok dla fana gamingu.",
         price:12,
         emoji:"🎮",
-        badge:"NOWOŚĆ",
-        category:"breloki"
+        badge:"NOWOŚĆ"
     },
 
     {
         id:3,
-        name:"Brelok CUSTOM",
-        description:"Własny napis lub prosty projekt 3D.",
-        price:18,
-        emoji:"✨",
-        badge:"CUSTOM",
-        category:"breloki"
+        name:"Mini figurka 3D",
+        description:"Mała figurka do postawienia.",
+        price:20,
+        emoji:"🗿",
+        badge:"3D"
     },
 
     {
         id:4,
         name:"Podstawka na telefon",
-        description:"Minimalistyczna podstawka na biurko.",
+        description:"Praktyczna podstawka na biurko.",
         price:25,
         emoji:"📱",
-        badge:"BESTSELLER",
-        category:"akcesoria"
+        badge:"BESTSELLER"
     },
 
     {
         id:5,
-        name:"Organizer kabli",
-        description:"Mały organizer do uporządkowania kabli.",
-        price:10,
-        emoji:"🔌",
-        badge:"TANIO",
-        category:"akcesoria"
+        name:"Brelok CUSTOM",
+        description:"Własny napis lub projekt.",
+        price:18,
+        emoji:"✨",
+        badge:"CUSTOM"
     },
 
     {
         id:6,
-        name:"Mini figurka 3D",
-        description:"Mała dekoracyjna figurka do postawienia.",
-        price:20,
-        emoji:"🗿",
-        badge:"3D",
-        category:"figurki"
+        name:"Organizer kabli",
+        description:"Mały organizer do biurka.",
+        price:10,
+        emoji:"🔌",
+        badge:"TANIO"
     }
 
 ];
 
 
 /* =========================================================
-   STATE
+   KOSZYK
 ========================================================= */
 
-let cart =
-    JSON.parse(
-        localStorage.getItem("printerlase_cart") || "[]"
-    );
-
-let currentCategory = "all";
+let cart = JSON.parse(
+    localStorage.getItem("printerlase_cart")
+) || [];
 
 
 /* =========================================================
-   MONEY
-========================================================= */
-
-function money(value){
-
-    return Number(value)
-        .toFixed(2)
-        .replace(".",",") + " zł";
-
-}
-
-
-/* =========================================================
-   PRODUCTS
+   PRODUKTY
 ========================================================= */
 
 function renderProducts(){
 
-    const box =
-        document.getElementById("products");
+    const box = document.getElementById("products");
 
-    const search =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase()
-        .trim();
+    box.innerHTML = products.map(product => `
 
+        <article class="product">
 
-    const filtered =
-        products.filter(product => {
+            <div class="productVisual">
 
-            const categoryMatch =
-                currentCategory === "all" ||
-                product.category === currentCategory;
+                <div class="badge">
+                    ${product.badge}
+                </div>
 
-            const searchMatch =
-                product.name.toLowerCase().includes(search) ||
-                product.description.toLowerCase().includes(search);
+                <div class="productIcon">
+                    ${product.emoji}
+                </div>
 
-            return categoryMatch && searchMatch;
-
-        });
-
-
-    if(filtered.length === 0){
-
-        box.innerHTML = `
-            <div style="
-                grid-column:1/-1;
-                padding:60px;
-                text-align:center;
-                color:#718096;
-            ">
-                🔎 Nie znaleziono produktu.
             </div>
-        `;
 
-        return;
-    }
+            <div class="productBody">
 
+                <h3>
+                    ${escapeHTML(product.name)}
+                </h3>
 
-    box.innerHTML =
-        filtered.map(product => `
+                <p>
+                    ${escapeHTML(product.description)}
+                </p>
 
-            <article class="product">
+                <div class="productBottom">
 
-                <div class="product-image">
-
-                    <div class="badge">
-                        ${product.badge}
+                    <div class="price">
+                        ${money(product.price)}
                     </div>
 
-                    <div class="product-emoji">
-                        ${product.emoji}
-                    </div>
+                    <button
+                        class="addBtn"
+                        onclick="addToCart(${product.id})"
+                    >
+                        + Dodaj
+                    </button>
 
                 </div>
 
+            </div>
 
-                <div class="product-info">
+        </article>
 
-                    <h3>
-                        ${product.name}
-                    </h3>
-
-                    <p>
-                        ${product.description}
-                    </p>
-
-
-                    <div class="product-bottom">
-
-                        <div class="price">
-                            ${money(product.price)}
-                        </div>
-
-                        <button
-                            class="add"
-                            onclick="addToCart(${product.id})"
-                        >
-                            + Dodaj
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-        `).join("");
+    `).join("");
 
 }
 
 
 /* =========================================================
-   FILTER
+   DODAJ DO KOSZYKA
 ========================================================= */
-
-function setCategory(category,button){
-
-    currentCategory = category;
-
-    document
-        .querySelectorAll(".filter")
-        .forEach(btn => btn.classList.remove("active"));
-
-    button.classList.add("active");
-
-    renderProducts();
-
-}
-
-
-function filterProducts(){
-    renderProducts();
-}
-
-
-/* =========================================================
-   CART HELPERS
-========================================================= */
-
-function saveCart(){
-
-    localStorage.setItem(
-        "printerlase_cart",
-        JSON.stringify(cart)
-    );
-
-}
-
 
 function addToCart(id){
 
-    const product =
-        products.find(p => p.id === id);
+    const product = products.find(
+        product => product.id === id
+    );
 
     if(!product) return;
 
-
-    const existing =
-        cart.find(item => item.id === id);
-
+    const existing = cart.find(
+        item => item.id === id
+    );
 
     if(existing){
 
@@ -1751,50 +1737,36 @@ function addToCart(id){
 
     }
 
-
     saveCart();
     renderCart();
     updateCartCount();
 
-    showToast("✓ Dodano do koszyka");
+    showToast("✓ Dodano produkt do koszyka");
 
 }
 
 
-function changeQuantity(id,amount){
+/* =========================================================
+   ZMIANA ILOŚCI
+========================================================= */
 
-    const item =
-        cart.find(product => product.id === id);
+function changeQuantity(id, amount){
+
+    const item = cart.find(
+        product => product.id === id
+    );
 
     if(!item) return;
 
-
     item.quantity += amount;
-
 
     if(item.quantity <= 0){
 
-        cart =
-            cart.filter(
-                product => product.id !== id
-            );
+        cart = cart.filter(
+            product => product.id !== id
+        );
 
     }
-
-
-    saveCart();
-    renderCart();
-    updateCartCount();
-
-}
-
-
-function removeFromCart(id){
-
-    cart =
-        cart.filter(
-            item => item.id !== id
-        );
 
     saveCart();
     renderCart();
@@ -1804,19 +1776,56 @@ function removeFromCart(id){
 
 
 /* =========================================================
-   TOTALS
+   USUWANIE
+========================================================= */
+
+function removeItem(id){
+
+    cart = cart.filter(
+        item => item.id !== id
+    );
+
+    saveCart();
+    renderCart();
+    updateCartCount();
+
+    showToast("Produkt usunięty z koszyka");
+
+}
+
+
+/* =========================================================
+   ZAPIS
+========================================================= */
+
+function saveCart(){
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =========================================================
+   SUMA PRODUKTÓW
 ========================================================= */
 
 function subtotal(){
 
     return cart.reduce(
         (sum,item) =>
-            sum + item.price * item.quantity,
+            sum + Number(item.price) * Number(item.quantity),
         0
     );
 
 }
 
+
+/* =========================================================
+   RABAT
+========================================================= */
 
 function discount(){
 
@@ -1825,169 +1834,281 @@ function discount(){
 }
 
 
+/* =========================================================
+   DOSTAWA
+========================================================= */
+
 function shipping(){
 
-    return subtotal() >= 50 ? 0 : 10;
+    if(subtotal() === 0){
+        return 0;
+    }
 
-}
-
-
-function total(){
-
-    return Math.max(
-        0,
-        subtotal() - discount() + shipping()
-    );
+    return subtotal() >= 50
+        ? 0
+        : 10;
 
 }
 
 
 /* =========================================================
-   CART RENDER
+   RENDER KOSZYKA
 ========================================================= */
 
 function renderCart(){
 
-    const items =
-        document.getElementById("cartItems");
-
-    const summary =
-        document.getElementById("cartSummary");
-
+    const content =
+        document.getElementById("cartContent");
 
     if(cart.length === 0){
 
-        items.innerHTML = `
-            <div class="empty-cart">
-                🛒
-                <br><br>
-                Koszyk jest pusty.
-                <br>
-                Dodaj coś fajnego, kurwa 😭
-            </div>
-        `;
+        content.innerHTML = `
 
-        summary.innerHTML = "";
+            <div class="emptyCart">
+
+                <div class="emptyCartIcon">
+                    🛒
+                </div>
+
+                <h3>
+                    Koszyk jest pusty
+                </h3>
+
+                <p>
+                    Wybierz produkt ze sklepu,
+                    żeby rozpocząć zamówienie.
+                </p>
+
+                <button onclick="goToProducts()">
+                    🔥 Zobacz produkty
+                </button>
+
+            </div>
+
+        `;
 
         return;
 
     }
 
 
-    items.innerHTML =
-        cart.map(item => `
+    const sub = subtotal();
+    const disc = discount();
+    const ship = shipping();
 
-            <div class="cart-item">
-
-                <div class="cart-item-icon">
-                    ${item.emoji}
-                </div>
-
-                <div class="cart-info">
-
-                    <strong>
-                        ${item.name}
-                    </strong>
-
-                    <small>
-                        ${money(item.price)}
-                    </small>
-
-                </div>
+    const total = Math.max(
+        0,
+        sub - disc + ship
+    );
 
 
-                <div class="quantity">
+    const itemsHTML = cart.map(item => `
 
-                    <button
-                        onclick="changeQuantity(${item.id},-1)"
-                    >
-                        −
-                    </button>
+        <div class="cartItem">
 
-                    <span>
-                        ${item.quantity}
-                    </span>
+            <div class="cartItemIcon">
+                ${item.emoji}
+            </div>
 
-                    <button
-                        onclick="changeQuantity(${item.id},1)"
-                    >
-                        +
-                    </button>
+            <div class="cartItemInfo">
 
-                </div>
+                <span class="cartItemName">
+                    ${escapeHTML(item.name)}
+                </span>
 
+                <span class="cartItemPrice">
+                    ${money(item.price)} / szt.
+                </span>
+
+            </div>
+
+            <div class="quantity">
 
                 <button
-                    class="remove"
-                    onclick="removeFromCart(${item.id})"
+                    class="qtyBtn"
+                    onclick="changeQuantity(${item.id},-1)"
                 >
-                    ✕
+                    −
+                </button>
+
+                <span class="qtyNumber">
+                    ${item.quantity}
+                </span>
+
+                <button
+                    class="qtyBtn"
+                    onclick="changeQuantity(${item.id},1)"
+                >
+                    +
                 </button>
 
             </div>
 
-        `).join("");
+            <button
+                class="deleteBtn"
+                onclick="removeItem(${item.id})"
+                title="Usuń"
+            >
+                🗑
+            </button>
+
+        </div>
+
+    `).join("");
 
 
-    const sub = subtotal();
-    const disc = discount();
-    const ship = shipping();
-    const finalTotal = total();
+    content.innerHTML = `
 
+        <div class="cartList">
+            ${itemsHTML}
+        </div>
 
-    const missing =
-        Math.max(0,50 - sub);
+        <div class="checkoutBox">
 
+            <div class="summaryRow">
 
-    summary.innerHTML = `
+                <span>
+                    Produkty
+                </span>
 
-        <div class="summary">
+                <strong>
+                    ${money(sub)}
+                </strong>
 
-            <div class="summary-line">
-                <span>Produkty</span>
-                <strong>${money(sub)}</strong>
             </div>
 
+            <div class="summaryRow">
 
-            <div class="summary-line">
-                <span>START10 −10%</span>
+                <span>
+                    START10 (-10%)
+                </span>
+
                 <strong class="discount">
                     −${money(disc)}
                 </strong>
+
             </div>
 
+            <div class="summaryRow">
 
-            <div class="summary-line">
-                <span>Dostawa</span>
-                <strong class="${ship === 0 ? "discount" : ""}">
-                    ${ship === 0 ? "GRATIS" : money(ship)}
+                <span>
+                    Dostawa
+                </span>
+
+                <strong class="${ship === 0 ? "shippingFree" : ""}">
+                    ${
+                        ship === 0
+                        ? "DARMOWA"
+                        : money(ship)
+                    }
                 </strong>
+
             </div>
 
-
-            <div class="shipping-progress">
+            <div class="shippingInfo">
 
                 ${
                     ship === 0
                     ? "🎉 Masz darmową dostawę!"
-                    : `🚚 Dodaj jeszcze ${money(missing)}, aby mieć darmową dostawę.`
+                    : `🚚 Dodaj jeszcze ${money(50 - sub)}, aby mieć darmową dostawę.`
                 }
 
             </div>
 
+            <div class="summaryRow total">
 
-            <div class="summary-line total">
-                <span>Razem</span>
-                <strong>${money(finalTotal)}</strong>
+                <span>
+                    Razem
+                </span>
+
+                <strong>
+                    ${money(total)}
+                </strong>
+
             </div>
 
+            <div class="form">
 
-            <button
-                class="checkout-btn"
-                onclick="goToCheckout()"
-            >
-                💳 Przejdź do płatności
-            </button>
+                <div class="field">
+
+                    <label for="customerName">
+                        IMIĘ I NAZWISKO
+                    </label>
+
+                    <input
+                        id="customerName"
+                        type="text"
+                        autocomplete="name"
+                        placeholder="Jan Kowalski"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label for="customerEmail">
+                        E-MAIL
+                    </label>
+
+                    <input
+                        id="customerEmail"
+                        type="email"
+                        autocomplete="email"
+                        placeholder="twoj@email.pl"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label for="shippingMethod">
+                        METODA DOSTAWY
+                    </label>
+
+                    <select id="shippingMethod">
+
+                        <option value="InPost">
+                            📦 InPost
+                        </option>
+
+                        <option value="ORLEN Paczka">
+                            📦 ORLEN Paczka
+                        </option>
+
+                        <option value="DPD">
+                            🚚 DPD
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label for="customerNote">
+                        UWAGI DO ZAMÓWIENIA
+                    </label>
+
+                    <input
+                        id="customerNote"
+                        type="text"
+                        placeholder="Np. kolor czarny"
+                    >
+
+                </div>
+
+                <button
+                    class="paymentButton"
+                    onclick="goToPayment()"
+                >
+                    💳 Przejdź do płatności
+                </button>
+
+                <div class="secure">
+                    🔒 Twoje dane są używane wyłącznie do przygotowania zamówienia.
+                </div>
+
+            </div>
 
         </div>
 
@@ -1997,10 +2118,49 @@ function renderCart(){
 
 
 /* =========================================================
-   CHECKOUT
+   PRZEJŚCIE DO PŁATNOŚCI
 ========================================================= */
 
-function goToCheckout(){
+function goToPayment(){
+
+    const name =
+        document.getElementById("customerName")
+        ?.value.trim();
+
+    const email =
+        document.getElementById("customerEmail")
+        ?.value.trim()
+        .toLowerCase();
+
+    const method =
+        document.getElementById("shippingMethod")
+        ?.value;
+
+    const note =
+        document.getElementById("customerNote")
+        ?.value.trim();
+
+
+    if(!name){
+
+        showToast("❌ Wpisz imię i nazwisko.");
+
+        return;
+
+    }
+
+
+    if(
+        !email ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ){
+
+        showToast("❌ Wpisz prawidłowy adres e-mail.");
+
+        return;
+
+    }
+
 
     if(cart.length === 0){
 
@@ -2011,19 +2171,91 @@ function goToCheckout(){
     }
 
 
+    const order = {
+
+        id:
+            "PL-" +
+            Date.now(),
+
+        customer:{
+            name,
+            email,
+            shippingMethod:method,
+            note
+        },
+
+        products:
+            cart.map(item => ({
+                id:item.id,
+                name:item.name,
+                quantity:item.quantity,
+                price:item.price
+            })),
+
+        subtotal:
+            Number(subtotal().toFixed(2)),
+
+        discount:
+            Number(discount().toFixed(2)),
+
+        shipping:
+            shipping(),
+
+        total:
+            Number(
+                Math.max(
+                    0,
+                    subtotal() -
+                    discount() +
+                    shipping()
+                ).toFixed(2)
+            ),
+
+        status:"OCZEKUJE NA PŁATNOŚĆ",
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
     /*
-        Koszyk zostaje w localStorage.
-        checkout.html może go odczytać
-        i obsłużyć dane zamówienia/płatność.
+       Zapisujemy zamówienie lokalnie.
+       Prawdziwy operator płatności powinien
+       zostać podłączony po stronie backendu.
     */
 
-    window.location.href = "checkout.html";
+    localStorage.setItem(
+        "printerlase_pending_order",
+        JSON.stringify(order)
+    );
+
+
+    showToast(
+        "✓ Zamówienie przygotowane"
+    );
+
+
+    /*
+       Jeśli masz później stronę payment.html,
+       wystarczy odkomentować:
+       
+       window.location.href = "payment.html";
+    */
+
+    setTimeout(() => {
+
+        showToast(
+            "💳 Podłącz bramkę płatności w backendzie."
+        );
+
+    },1000);
 
 }
 
 
 /* =========================================================
-   CART UI
+   KOSZYK
 ========================================================= */
 
 function openCart(){
@@ -2033,6 +2265,8 @@ function openCart(){
         .classList.add("show");
 
     document.body.style.overflow = "hidden";
+
+    renderCart();
 
 }
 
@@ -2048,7 +2282,7 @@ function closeCart(){
 }
 
 
-function outsideCart(event){
+function overlayClick(event){
 
     if(event.target.id === "overlay"){
         closeCart();
@@ -2057,18 +2291,69 @@ function outsideCart(event){
 }
 
 
+function goToProducts(){
+
+    closeCart();
+
+    setTimeout(() => {
+
+        document
+            .getElementById("produkty")
+            .scrollIntoView({
+                behavior:"smooth"
+            });
+
+    },100);
+
+}
+
+
+/* =========================================================
+   LICZNIK
+========================================================= */
+
 function updateCartCount(){
 
     const count =
         cart.reduce(
             (sum,item) =>
-                sum + item.quantity,
+                sum + Number(item.quantity),
             0
         );
 
-    document
-        .getElementById("cartCount")
-        .textContent = count;
+    document.getElementById(
+        "cartCount"
+    ).textContent = count;
+
+}
+
+
+/* =========================================================
+   FORMAT CENY
+========================================================= */
+
+function money(value){
+
+    return Number(value || 0)
+        .toFixed(2)
+        .replace(".",",") +
+        " zł";
+
+}
+
+
+/* =========================================================
+   BEZPIECZNY TEKST
+========================================================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 
 }
 
@@ -2090,31 +2375,33 @@ function showToast(message){
 
     clearTimeout(toastTimer);
 
-    toastTimer =
-        setTimeout(() => {
+    toastTimer = setTimeout(() => {
 
-            toast.classList.remove("show");
+        toast.classList.remove("show");
 
-        },2500);
+    },2500);
 
 }
 
 
 /* =========================================================
-   KEYBOARD
+   ESC
 ========================================================= */
 
-document.addEventListener("keydown",event => {
+document.addEventListener(
+    "keydown",
+    event => {
 
-    if(event.key === "Escape"){
-        closeCart();
+        if(event.key === "Escape"){
+            closeCart();
+        }
+
     }
-
-});
+);
 
 
 /* =========================================================
-   INIT
+   START
 ========================================================= */
 
 renderProducts();
