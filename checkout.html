@@ -18,12 +18,13 @@ html{
 body{
     margin:0;
     min-height:100vh;
+    color:#fff;
+    font-family:Arial, sans-serif;
+
     background:
-        radial-gradient(circle at 15% 10%,rgba(0,170,255,.18),transparent 32%),
-        radial-gradient(circle at 85% 80%,rgba(125,65,255,.18),transparent 32%),
+        radial-gradient(circle at 15% 10%,rgba(0,170,255,.20),transparent 32%),
+        radial-gradient(circle at 85% 80%,rgba(125,65,255,.20),transparent 32%),
         #030712;
-    color:white;
-    font-family:Inter,Arial,sans-serif;
 }
 
 .page{
@@ -31,6 +32,10 @@ body{
     margin:auto;
     padding:100px 20px 60px;
 }
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
     text-align:center;
@@ -46,19 +51,29 @@ body{
 }
 
 .header h1{
-    font-size:48px;
     margin:12px 0;
+    font-size:48px;
+    letter-spacing:-2px;
 }
 
 .header p{
+    margin:0;
     color:#8190a5;
 }
+
+/* =========================
+   GRID
+========================= */
 
 .grid{
     display:grid;
     grid-template-columns:1fr 390px;
     gap:25px;
 }
+
+/* =========================
+   BOX
+========================= */
 
 .box{
     background:rgba(7,17,32,.88);
@@ -72,6 +87,10 @@ body{
 .box h2{
     margin:0 0 22px;
 }
+
+/* =========================
+   INPUTS
+========================= */
 
 .field{
     margin-bottom:16px;
@@ -89,11 +108,16 @@ body{
 .field select{
     width:100%;
     padding:14px;
+
     border-radius:12px;
     border:1px solid rgba(255,255,255,.1);
+
     background:#050c18;
     color:white;
+
     outline:none;
+
+    transition:.25s;
 }
 
 .field input:focus,
@@ -102,10 +126,14 @@ body{
     box-shadow:0 0 20px rgba(0,191,255,.12);
 }
 
+/* =========================
+   DELIVERY / PAYMENT
+========================= */
+
 .delivery{
     display:grid;
     gap:12px;
-    margin-bottom:30px;
+    margin-bottom:25px;
 }
 
 .delivery-option{
@@ -122,11 +150,16 @@ body{
     align-items:center;
     justify-content:space-between;
     gap:15px;
+
     padding:17px;
+
     border-radius:15px;
     border:1px solid rgba(255,255,255,.08);
+
     background:#050c18;
+
     cursor:pointer;
+
     transition:.25s;
 }
 
@@ -158,14 +191,23 @@ body{
 
 .free{
     color:#32e6a1;
+    font-weight:1000;
 }
+
+/* =========================
+   PACZKOMAT
+========================= */
 
 .paczkomat-box{
     display:none;
-    margin-top:-15px;
+
+    margin-top:-5px;
     margin-bottom:25px;
+
     padding:16px;
+
     border-radius:15px;
+
     background:rgba(0,191,255,.06);
     border:1px solid rgba(0,191,255,.15);
 }
@@ -173,6 +215,10 @@ body{
 .paczkomat-box.show{
     display:block;
 }
+
+/* =========================
+   COUPON
+========================= */
 
 .coupon{
     display:flex;
@@ -182,23 +228,43 @@ body{
 
 .coupon input{
     flex:1;
+
     padding:13px;
+
     border-radius:11px;
     border:1px solid rgba(255,255,255,.1);
+
     background:#050c18;
     color:white;
+
     outline:none;
+
     text-transform:uppercase;
+}
+
+.coupon input:focus{
+    border-color:#00bfff;
 }
 
 .coupon button{
     border:0;
     border-radius:11px;
+
     padding:0 16px;
+
     color:white;
     font-weight:900;
+
     cursor:pointer;
-    background:linear-gradient(100deg,#008cff,#754cff);
+
+    background:
+        linear-gradient(100deg,#008cff,#754cff);
+
+    transition:.25s;
+}
+
+.coupon button:hover{
+    transform:translateY(-2px);
 }
 
 .coupon-message{
@@ -215,11 +281,17 @@ body{
     color:#ff6b7a;
 }
 
+/* =========================
+   CART
+========================= */
+
 .order-item{
     display:flex;
     justify-content:space-between;
     gap:15px;
+
     padding:14px 0;
+
     border-bottom:1px solid rgba(255,255,255,.07);
 }
 
@@ -238,6 +310,16 @@ body{
     white-space:nowrap;
 }
 
+.empty{
+    text-align:center;
+    padding:40px 10px;
+    color:#718096;
+}
+
+/* =========================
+   SUMMARY
+========================= */
+
 .summary{
     margin-top:20px;
 }
@@ -245,7 +327,9 @@ body{
 .summary-row{
     display:flex;
     justify-content:space-between;
+
     margin:11px 0;
+
     color:#8794a7;
     font-size:13px;
 }
@@ -257,31 +341,50 @@ body{
 .total{
     display:flex;
     justify-content:space-between;
+
     padding-top:18px;
     margin-top:18px;
+
     border-top:1px solid rgba(255,255,255,.09);
+
     font-size:22px;
     font-weight:1000;
 }
 
+/* =========================
+   BUTTON
+========================= */
+
 .pay{
     width:100%;
+
     margin-top:25px;
     padding:17px;
+
     border:0;
     border-radius:14px;
+
     color:white;
+
     font-size:15px;
     font-weight:1000;
+
     cursor:pointer;
-    background:linear-gradient(100deg,#008cff,#754cff);
-    box-shadow:0 15px 45px rgba(0,140,255,.25);
+
+    background:
+        linear-gradient(100deg,#008cff,#754cff);
+
+    box-shadow:
+        0 15px 45px rgba(0,140,255,.25);
+
     transition:.25s;
 }
 
 .pay:hover{
     transform:translateY(-3px);
-    box-shadow:0 20px 55px rgba(0,140,255,.4);
+
+    box-shadow:
+        0 20px 55px rgba(0,140,255,.4);
 }
 
 .pay:disabled{
@@ -292,35 +395,45 @@ body{
 
 .secure{
     text-align:center;
+
     margin-top:13px;
+
     color:#66758a;
     font-size:11px;
 }
 
-.empty{
-    text-align:center;
-    padding:40px 10px;
-    color:#718096;
-}
+/* =========================
+   SUCCESS
+========================= */
 
 .success{
     display:none;
+
     text-align:center;
+
     padding:70px 25px;
 }
 
 .success-icon{
     width:90px;
     height:90px;
+
     margin:0 auto 25px;
+
     display:grid;
     place-items:center;
+
     border-radius:50%;
+
     background:rgba(0,220,150,.12);
     border:1px solid rgba(0,220,150,.4);
+
     color:#32e6a1;
+
     font-size:45px;
-    box-shadow:0 0 40px rgba(0,220,150,.12);
+
+    box-shadow:
+        0 0 40px rgba(0,220,150,.12);
 }
 
 .success h1{
@@ -334,26 +447,50 @@ body{
 
 .order-number{
     display:inline-block;
+
     padding:13px 18px;
+
     border-radius:11px;
+
     background:#081525;
+
     color:#35d8ff;
+
     font-weight:900;
+
     margin-top:10px;
 }
 
 .back{
     display:inline-block;
+
     margin-top:25px;
+
     padding:13px 20px;
+
     border-radius:12px;
+
     color:white;
     text-decoration:none;
+
     background:#ffffff0c;
+
     border:1px solid #ffffff12;
+
+    transition:.25s;
 }
 
+.back:hover{
+    background:#ffffff12;
+    transform:translateY(-2px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
 @media(max-width:850px){
+
     .grid{
         grid-template-columns:1fr;
     }
@@ -361,6 +498,32 @@ body{
     .header h1{
         font-size:36px;
     }
+
+}
+
+@media(max-width:500px){
+
+    .page{
+        padding:70px 14px 40px;
+    }
+
+    .box{
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .header h1{
+        font-size:31px;
+    }
+
+    .delivery-option label{
+        padding:14px;
+    }
+
+    .delivery-title{
+        font-size:13px;
+    }
+
 }
 </style>
 </head>
@@ -369,89 +532,151 @@ body{
 
 <div class="page">
 
-    <header class="header">
-        <div class="logo">PRINTERLASE3D</div>
+    <!-- =========================
+         HEADER
+    ========================= -->
 
-        <h1>Finalizacja zamówienia</h1>
+    <header class="header">
+
+        <div class="logo">
+            PRINTERLASE3D
+        </div>
+
+        <h1>
+            Finalizacja zamówienia
+        </h1>
 
         <p>
-            Uzupełnij dane, wybierz dostawę i sprawdź swoje zamówienie.
+            Uzupełnij dane, wybierz dostawę
+            i sprawdź swoje zamówienie.
         </p>
+
     </header>
 
 
-    <!-- CHECKOUT -->
+    <!-- =========================
+         CHECKOUT
+    ========================= -->
 
     <div id="checkoutContent">
 
         <div class="grid">
 
-            <!-- LEWA STRONA -->
+
+            <!-- =========================
+                 LEWA STRONA
+            ========================= -->
 
             <div class="box">
 
-                <h2>👤 Dane zamawiającego</h2>
+                <h2>
+                    👤 Dane zamawiającego
+                </h2>
+
 
                 <div class="field">
-                    <label>Imię i nazwisko</label>
+
+                    <label>
+                        Imię i nazwisko
+                    </label>
+
                     <input
                         id="name"
                         type="text"
                         placeholder="Jan Kowalski"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>E-mail</label>
+
+                    <label>
+                        E-mail
+                    </label>
+
                     <input
                         id="email"
                         type="email"
                         placeholder="jan@example.com"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>Telefon</label>
+
+                    <label>
+                        Telefon
+                    </label>
+
                     <input
                         id="phone"
                         type="tel"
                         placeholder="123 456 789"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>Adres</label>
+
+                    <label>
+                        Adres
+                    </label>
+
                     <input
                         id="address"
                         type="text"
                         placeholder="ul. Przykładowa 10"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>Kod pocztowy</label>
+
+                    <label>
+                        Kod pocztowy
+                    </label>
+
                     <input
                         id="postcode"
                         type="text"
                         placeholder="41-000"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>Miasto</label>
+
+                    <label>
+                        Miasto
+                    </label>
+
                     <input
                         id="city"
                         type="text"
                         placeholder="Mikołów"
                     >
+
                 </div>
 
+
+                <!-- =========================
+                     DOSTAWA
+                ========================= -->
 
                 <h2 style="margin-top:35px;">
                     📦 Dostawa
                 </h2>
 
+
                 <div class="delivery">
+
+
+                    <!-- INPOST PACZKOMAT -->
 
                     <div class="delivery-option">
 
@@ -466,6 +691,7 @@ body{
                         <label for="inpost">
 
                             <div>
+
                                 <div class="delivery-title">
                                     📦 InPost Paczkomat
                                 </div>
@@ -473,6 +699,7 @@ body{
                                 <div class="delivery-desc">
                                     Dostawa do wybranego paczkomatu
                                 </div>
+
                             </div>
 
                             <div
@@ -487,6 +714,8 @@ body{
                     </div>
 
 
+                    <!-- INPOST KURIER -->
+
                     <div class="delivery-option">
 
                         <input
@@ -500,6 +729,7 @@ body{
                         <label for="inpostCourier">
 
                             <div>
+
                                 <div class="delivery-title">
                                     🚚 InPost Kurier
                                 </div>
@@ -507,6 +737,7 @@ body{
                                 <div class="delivery-desc">
                                     Dostawa kurierem pod adres
                                 </div>
+
                             </div>
 
                             <div
@@ -521,6 +752,8 @@ body{
                     </div>
 
 
+                    <!-- ORLEN -->
+
                     <div class="delivery-option">
 
                         <input
@@ -534,6 +767,7 @@ body{
                         <label for="orlen">
 
                             <div>
+
                                 <div class="delivery-title">
                                     📮 ORLEN Paczka
                                 </div>
@@ -541,9 +775,13 @@ body{
                                 <div class="delivery-desc">
                                     Odbiór w punkcie ORLEN
                                 </div>
+
                             </div>
 
-                            <div class="delivery-price">
+                            <div
+                                class="delivery-price"
+                                id="orlenPrice"
+                            >
                                 10,00 zł
                             </div>
 
@@ -551,6 +789,8 @@ body{
 
                     </div>
 
+
+                    <!-- DPD -->
 
                     <div class="delivery-option">
 
@@ -565,6 +805,7 @@ body{
                         <label for="dpd">
 
                             <div>
+
                                 <div class="delivery-title">
                                     🚚 DPD Kurier
                                 </div>
@@ -572,9 +813,13 @@ body{
                                 <div class="delivery-desc">
                                     Dostawa kurierem
                                 </div>
+
                             </div>
 
-                            <div class="delivery-price">
+                            <div
+                                class="delivery-price"
+                                id="dpdPrice"
+                            >
                                 16,00 zł
                             </div>
 
@@ -585,14 +830,19 @@ body{
                 </div>
 
 
-                <!-- PACZKOMAT -->
+                <!-- =========================
+                     PACZKOMAT
+                ========================= -->
 
                 <div
                     class="paczkomat-box"
                     id="paczkomatBox"
                 >
 
-                    <div class="field" style="margin:0;">
+                    <div
+                        class="field"
+                        style="margin:0;"
+                    >
 
                         <label>
                             Kod paczkomatu InPost
@@ -609,11 +859,17 @@ body{
                 </div>
 
 
+                <!-- =========================
+                     PŁATNOŚĆ
+                ========================= -->
+
                 <h2 style="margin-top:30px;">
                     💳 Płatność
                 </h2>
 
+
                 <div class="delivery">
+
 
                     <div class="delivery-option">
 
@@ -628,6 +884,7 @@ body{
                         <label for="blik">
 
                             <div>
+
                                 <div class="delivery-title">
                                     📱 BLIK
                                 </div>
@@ -635,6 +892,7 @@ body{
                                 <div class="delivery-desc">
                                     Płatność kodem BLIK
                                 </div>
+
                             </div>
 
                         </label>
@@ -654,6 +912,7 @@ body{
                         <label for="card">
 
                             <div>
+
                                 <div class="delivery-title">
                                     💳 Karta
                                 </div>
@@ -661,6 +920,7 @@ body{
                                 <div class="delivery-desc">
                                     Visa / Mastercard
                                 </div>
+
                             </div>
 
                         </label>
@@ -680,6 +940,7 @@ body{
                         <label for="transfer">
 
                             <div>
+
                                 <div class="delivery-title">
                                     🏦 Przelew
                                 </div>
@@ -687,6 +948,7 @@ body{
                                 <div class="delivery-desc">
                                     Przelew bankowy
                                 </div>
+
                             </div>
 
                         </label>
@@ -698,14 +960,21 @@ body{
             </div>
 
 
-            <!-- PRAWA STRONA -->
+            <!-- =========================
+                 PRAWA STRONA
+            ========================= -->
 
             <div class="box">
 
-                <h2>🛒 Zamówienie</h2>
+                <h2>
+                    🛒 Twoje zamówienie
+                </h2>
+
 
                 <div id="orderItems"></div>
 
+
+                <!-- KOD RABATOWY -->
 
                 <div class="coupon">
 
@@ -721,51 +990,83 @@ body{
 
                 </div>
 
+
                 <div
                     id="couponMessage"
                     class="coupon-message"
                 ></div>
 
 
+                <!-- PODSUMOWANIE -->
+
                 <div class="summary">
 
                     <div class="summary-row">
-                        <span>Produkty</span>
+
+                        <span>
+                            Produkty
+                        </span>
+
                         <span id="productsTotal">
                             0,00 zł
                         </span>
+
                     </div>
 
+
                     <div class="summary-row">
-                        <span>Dostawa</span>
+
+                        <span>
+                            Dostawa
+                        </span>
+
                         <span id="deliveryTotal">
                             0,00 zł
                         </span>
+
                     </div>
+
 
                     <div
                         class="summary-row discount"
                         id="discountRow"
                         style="display:none;"
                     >
-                        <span>Rabat START10</span>
+
+                        <span>
+                            Rabat START10
+                        </span>
+
                         <span id="discountTotal">
                             -0,00 zł
                         </span>
+
                     </div>
 
+
                     <div class="summary-row">
-                        <span>Do zapłaty</span>
+
+                        <span>
+                            Przed rabatem
+                        </span>
+
                         <span id="beforeTotal">
                             0,00 zł
                         </span>
+
                     </div>
 
+
                     <div class="total">
-                        <span>RAZEM</span>
+
+                        <span>
+                            RAZEM
+                        </span>
+
                         <span id="total">
                             0,00 zł
                         </span>
+
                     </div>
 
                 </div>
@@ -779,8 +1080,9 @@ body{
                     🛍️ Złóż zamówienie
                 </button>
 
+
                 <div class="secure">
-                    🔒 Twoje dane są używane do realizacji zamówienia.
+                    🔒 Bezpieczna realizacja zamówienia
                 </div>
 
             </div>
@@ -790,7 +1092,9 @@ body{
     </div>
 
 
-    <!-- SUCCESS -->
+    <!-- =========================
+         SUCCESS
+    ========================= -->
 
     <div
         class="box success"
@@ -801,28 +1105,42 @@ body{
             ✓
         </div>
 
-        <h1>Zamówienie przyjęte!</h1>
+
+        <h1>
+            Zamówienie przyjęte!
+        </h1>
+
 
         <p>
-            Dzięki za zakupy w Printerlase3D! 🥳
+
+            Dzięki za zakupy w
+            Printerlase3D! 🥳
+
             <br>
+
             Twoje zamówienie zostało zapisane.
+
         </p>
+
 
         <div
             class="order-number"
             id="orderNumber"
         ></div>
 
+
         <p>
-            🎁 Otrzymujesz również kolejny kod rabatowy:
+            🎁 Twój kolejny kod rabatowy:
         </p>
+
 
         <div class="order-number">
             NEXT10
         </div>
 
+
         <br>
+
 
         <a
             href="index.html"
@@ -838,33 +1156,44 @@ body{
 
 <script>
 
-/* =========================================
+/* ==================================================
    KOSZYK
-========================================= */
+================================================== */
 
 let cart = [];
 
 try{
-    cart = JSON.parse(
-        localStorage.getItem("printerlase_cart") || "[]"
-    );
+
+    cart =
+        JSON.parse(
+            localStorage.getItem(
+                "printerlase_cart"
+            ) || "[]"
+        );
+
 }catch{
+
     cart = [];
+
 }
 
 
 const itemsContainer =
-    document.getElementById("orderItems");
+    document.getElementById(
+        "orderItems"
+    );
 
 
 let productsTotal = 0;
+
 let discount = 0;
+
 let couponApplied = false;
 
 
-/* =========================================
+/* ==================================================
    FORMAT CENY
-========================================= */
+================================================== */
 
 function money(value){
 
@@ -875,9 +1204,45 @@ function money(value){
 }
 
 
-/* =========================================
-   WYŚWIETLANIE PRODUKTÓW
-========================================= */
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+function escapeHTML(text){
+
+    return String(text)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* ==================================================
+   WYŚWIETLANIE KOSZYKA
+================================================== */
 
 function renderCart(){
 
@@ -889,38 +1254,69 @@ function renderCart(){
     if(cart.length === 0){
 
         itemsContainer.innerHTML = `
+
             <div class="empty">
+
                 🛒 Twój koszyk jest pusty.
+
                 <br><br>
+
                 <a
                     href="index.html"
                     style="color:#35d8ff;"
                 >
                     Wróć do sklepu
                 </a>
+
             </div>
+
         `;
 
-        document.getElementById("payButton").disabled = true;
+
+        document
+            .getElementById(
+                "payButton"
+            )
+            .disabled = true;
+
 
         updateSummary();
 
         return;
+
     }
+
+
+    document
+        .getElementById(
+            "payButton"
+        )
+        .disabled = false;
 
 
     cart.forEach(item => {
 
         const quantity =
-            Number(item.quantity || item.qty || 1);
+            Number(
+                item.quantity ||
+                item.qty ||
+                1
+            );
+
 
         const price =
-            Number(item.price || 0);
+            Number(
+                item.price ||
+                0
+            );
+
 
         const itemTotal =
             price * quantity;
 
-        productsTotal += itemTotal;
+
+        productsTotal +=
+            itemTotal;
 
 
         itemsContainer.innerHTML += `
@@ -930,7 +1326,10 @@ function renderCart(){
                 <div>
 
                     <div class="item-name">
-                        ${escapeHTML(item.name || "Produkt")}
+                        ${escapeHTML(
+                            item.name ||
+                            "Produkt"
+                        )}
                     </div>
 
                     <div class="item-qty">
@@ -950,30 +1349,28 @@ function renderCart(){
     });
 
 
+    /*
+       Jeśli produkty zmieniły cenę
+       po załadowaniu checkoutu,
+       przeliczamy rabat.
+    */
+
+    if(couponApplied){
+
+        discount =
+            productsTotal * 0.10;
+
+    }
+
+
     updateSummary();
 
 }
 
 
-/* =========================================
-   ZABEZPIECZENIE HTML
-========================================= */
-
-function escapeHTML(text){
-
-    return String(text)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================
-   DOSTAWA
-========================================= */
+/* ==================================================
+   CENA DOSTAWY
+================================================== */
 
 function getDeliveryPrice(){
 
@@ -990,12 +1387,8 @@ function getDeliveryPrice(){
     }
 
 
-    const normalPrice =
-        Number(selected.dataset.price || 0);
-
-
     /*
-       DARMOWA DOSTAWA OD 50 ZŁ
+       OD 50 ZŁ DOSTAWA = 0 ZŁ
     */
 
     if(productsTotal >= 50){
@@ -1005,14 +1398,73 @@ function getDeliveryPrice(){
     }
 
 
-    return normalPrice;
+    return Number(
+        selected.dataset.price ||
+        0
+    );
 
 }
 
 
-/* =========================================
+/* ==================================================
+   AKTUALIZACJA NAPISÓW PRZY DOSTAWIE
+================================================== */
+
+function updateDeliveryLabels(){
+
+    const freeShipping =
+        productsTotal >= 50;
+
+
+    const prices = {
+
+        inpostPrice:12,
+
+        courierPrice:15,
+
+        orlenPrice:10,
+
+        dpdPrice:16
+
+    };
+
+
+    Object.keys(prices)
+        .forEach(id => {
+
+            const element =
+                document.getElementById(id);
+
+
+            if(!element){
+
+                return;
+
+            }
+
+
+            if(freeShipping){
+
+                element.innerHTML =
+                    '<span class="free">DARMOWA</span>';
+
+            }else{
+
+                element.textContent =
+                    money(
+                        prices[id]
+                    );
+
+            }
+
+        });
+
+}
+
+
+/* ==================================================
    PODSUMOWANIE
-========================================= */
+================================================== */
 
 function updateSummary(){
 
@@ -1021,11 +1473,13 @@ function updateSummary(){
 
 
     const subtotal =
-        productsTotal + delivery;
+        productsTotal +
+        delivery;
 
 
     let finalTotal =
-        subtotal - discount;
+        subtotal -
+        discount;
 
 
     if(finalTotal < 0){
@@ -1037,51 +1491,83 @@ function updateSummary(){
 
     document.getElementById(
         "productsTotal"
-    ).textContent = money(productsTotal);
+    ).textContent =
+        money(
+            productsTotal
+        );
 
 
     document.getElementById(
         "deliveryTotal"
     ).innerHTML =
+
         productsTotal >= 50
+
         ? '<span class="free">DARMOWA</span>'
-        : money(delivery);
+
+        : money(
+            delivery
+        );
 
 
     document.getElementById(
         "discountTotal"
     ).textContent =
-        "-" + money(discount);
+        "-" +
+        money(
+            discount
+        );
 
 
     document.getElementById(
         "beforeTotal"
     ).textContent =
-        money(subtotal);
+        money(
+            subtotal
+        );
 
 
     document.getElementById(
         "total"
     ).textContent =
-        money(finalTotal);
+        money(
+            finalTotal
+        );
+
+
+    /*
+       Najważniejsze:
+       aktualizujemy też ceny
+       bezpośrednio przy wyborze dostawy.
+    */
+
+    updateDeliveryLabels();
 
 }
 
 
-/* =========================================
-   KOD RABATOWY START10
-========================================= */
+/* ==================================================
+   KOD START10
+================================================== */
 
 function applyCoupon(){
 
     const input =
-        document.getElementById("coupon");
+        document.getElementById(
+            "coupon"
+        );
+
 
     const message =
-        document.getElementById("couponMessage");
+        document.getElementById(
+            "couponMessage"
+        );
+
 
     const code =
-        input.value.trim().toUpperCase();
+        input.value
+            .trim()
+            .toUpperCase();
 
 
     message.className =
@@ -1093,7 +1579,9 @@ function applyCoupon(){
         message.textContent =
             "Wpisz kod rabatowy.";
 
-        message.classList.add("error-text");
+        message.classList.add(
+            "error-text"
+        );
 
         return;
 
@@ -1107,7 +1595,9 @@ function applyCoupon(){
             message.textContent =
                 "Kod został już zastosowany.";
 
-            message.classList.add("error-text");
+            message.classList.add(
+                "error-text"
+            );
 
             return;
 
@@ -1117,16 +1607,19 @@ function applyCoupon(){
         discount =
             productsTotal * 0.10;
 
+
         couponApplied = true;
 
 
         document.getElementById(
             "discountRow"
-        ).style.display = "flex";
+        ).style.display =
+            "flex";
 
 
         message.textContent =
             "✓ Kod START10 daje 10% rabatu!";
+
 
         message.classList.add(
             "success-text"
@@ -1135,7 +1628,9 @@ function applyCoupon(){
 
         input.disabled = true;
 
+
         updateSummary();
+
 
         return;
 
@@ -1145,6 +1640,7 @@ function applyCoupon(){
     message.textContent =
         "❌ Nieprawidłowy kod rabatowy.";
 
+
     message.classList.add(
         "error-text"
     );
@@ -1152,9 +1648,9 @@ function applyCoupon(){
 }
 
 
-/* =========================================
-   POKAŻ POLE PACZKOMATU
-========================================= */
+/* ==================================================
+   ZMIANA DOSTAWY
+================================================== */
 
 document
     .querySelectorAll(
@@ -1172,16 +1668,33 @@ document
                     );
 
 
-                if(this.value === "InPost Paczkomat"){
+                /*
+                   Pokazujemy paczkomat
+                   tylko dla InPost Paczkomat.
+                */
 
-                    box.classList.add("show");
+                if(
+                    this.value ===
+                    "InPost Paczkomat"
+                ){
+
+                    box.classList.add(
+                        "show"
+                    );
 
                 }else{
 
-                    box.classList.remove("show");
+                    box.classList.remove(
+                        "show"
+                    );
 
                 }
 
+
+                /*
+                   Przeliczamy cenę
+                   po zmianie dostawy.
+                */
 
                 updateSummary();
 
@@ -1191,9 +1704,9 @@ document
     });
 
 
-/* =========================================
-   ZAMÓWIENIE
-========================================= */
+/* ==================================================
+   ZŁOŻENIE ZAMÓWIENIA
+================================================== */
 
 function finishOrder(){
 
@@ -1209,28 +1722,39 @@ function finishOrder(){
 
 
     const name =
-        document.getElementById("name")
-            .value.trim();
+        document.getElementById(
+            "name"
+        ).value.trim();
+
 
     const email =
-        document.getElementById("email")
-            .value.trim();
+        document.getElementById(
+            "email"
+        ).value.trim();
+
 
     const phone =
-        document.getElementById("phone")
-            .value.trim();
+        document.getElementById(
+            "phone"
+        ).value.trim();
+
 
     const address =
-        document.getElementById("address")
-            .value.trim();
+        document.getElementById(
+            "address"
+        ).value.trim();
+
 
     const postcode =
-        document.getElementById("postcode")
-            .value.trim();
+        document.getElementById(
+            "postcode"
+        ).value.trim();
+
 
     const city =
-        document.getElementById("city")
-            .value.trim();
+        document.getElementById(
+            "city"
+        ).value.trim();
 
 
     const delivery =
@@ -1244,6 +1768,8 @@ function finishOrder(){
             'input[name="payment"]:checked'
         );
 
+
+    /* WALIDACJA */
 
     if(
         !name ||
@@ -1285,6 +1811,8 @@ function finishOrder(){
     }
 
 
+    /* PACZKOMAT */
+
     let paczkomat = "";
 
 
@@ -1312,6 +1840,8 @@ function finishOrder(){
     }
 
 
+    /* CENA */
+
     const deliveryPrice =
         getDeliveryPrice();
 
@@ -1322,7 +1852,8 @@ function finishOrder(){
 
 
     let finalTotal =
-        subtotal - discount;
+        subtotal -
+        discount;
 
 
     if(finalTotal < 0){
@@ -1332,6 +1863,8 @@ function finishOrder(){
     }
 
 
+    /* NUMER ZAMÓWIENIA */
+
     const orderNumber =
         "PL3D-" +
         Date.now()
@@ -1339,58 +1872,93 @@ function finishOrder(){
             .slice(-8);
 
 
+    /* OBIEKT ZAMÓWIENIA */
+
     const order = {
 
-        number: orderNumber,
+        number:
+            orderNumber,
+
 
         customer:{
 
-            name:name,
+            name:
+                name,
 
-            email:email,
+            email:
+                email,
 
-            phone:phone,
+            phone:
+                phone,
 
-            address:address,
+            address:
+                address,
 
-            postcode:postcode,
+            postcode:
+                postcode,
 
-            city:city
+            city:
+                city
 
         },
+
 
         delivery:{
 
-            method:delivery.value,
+            method:
+                delivery.value,
 
-            price:deliveryPrice,
+            price:
+                deliveryPrice,
 
-            paczkomat:paczkomat
+            paczkomat:
+                paczkomat
 
         },
 
-        payment:payment.value,
 
-        products:cart,
+        payment:
+            payment.value,
 
-        productsTotal:productsTotal,
 
-        discount:discount,
+        products:
+            cart,
 
-        deliveryPrice:deliveryPrice,
 
-        total:finalTotal,
+        productsTotal:
+            productsTotal,
 
-        date:new Date().toISOString(),
 
-        nextCoupon:"NEXT10"
+        discount:
+            discount,
+
+
+        deliveryPrice:
+            deliveryPrice,
+
+
+        total:
+            finalTotal,
+
+
+        coupon:
+            couponApplied
+            ? "START10"
+            : null,
+
+
+        nextCoupon:
+            "NEXT10",
+
+
+        date:
+            new Date()
+                .toISOString()
 
     };
 
 
-    /*
-       ZAPISUJEMY ZAMÓWIENIE
-    */
+    /* ZAPIS OSTATNIEGO ZAMÓWIENIA */
 
     localStorage.setItem(
         "printerlase_last_order",
@@ -1398,11 +1966,10 @@ function finishOrder(){
     );
 
 
-    /*
-       ZAPISUJEMY HISTORIĘ ZAMÓWIEŃ
-    */
+    /* HISTORIA ZAMÓWIEŃ */
 
     let orders = [];
+
 
     try{
 
@@ -1420,36 +1987,38 @@ function finishOrder(){
     }
 
 
-    orders.push(order);
+    orders.push(
+        order
+    );
 
 
     localStorage.setItem(
         "printerlase_orders",
-        JSON.stringify(orders)
+        JSON.stringify(
+            orders
+        )
     );
 
 
-    /*
-       Czyścimy koszyk
-    */
+    /* CZYŚCIMY KOSZYK */
 
     localStorage.removeItem(
         "printerlase_cart"
     );
 
 
-    /*
-       EKRAN SUKCESU
-    */
+    /* EKRAN SUKCESU */
 
     document.getElementById(
         "checkoutContent"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 
     document.getElementById(
         "success"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     document.getElementById(
@@ -1461,16 +2030,13 @@ function finishOrder(){
 }
 
 
-/* =========================================
+/* ==================================================
    START
-========================================= */
+================================================== */
 
 renderCart();
 
-
-/*
-   Automatycznie aktualizuj dostawę
-*/
+updateDeliveryLabels();
 
 updateSummary();
 
