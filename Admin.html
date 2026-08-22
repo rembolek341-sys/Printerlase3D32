@@ -4,80 +4,125 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Printerlase3D — Panel Admin</title>
+<title>Admin — Printerlase3D</title>
 
 <style>
 
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
 body{
     min-height:100vh;
+
     font-family:Arial,Helvetica,sans-serif;
-    color:white;
+
+    color:#fff;
+
+    background:#020611;
+
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:-2;
 
     background:
         radial-gradient(
-            circle at 15% 10%,
-            rgba(0,150,255,.16),
+            circle at 10% 10%,
+            rgba(0,180,255,.13),
             transparent 30%
         ),
         radial-gradient(
-            circle at 85% 20%,
-            rgba(120,50,255,.15),
+            circle at 90% 20%,
+            rgba(110,50,255,.14),
             transparent 30%
-        ),
-        #020611;
+        );
 }
 
-/* ================================
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#020611;
+}
+
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(
+        #00d9ff,
+        #673cff
+    );
+
+    border-radius:20px;
+}
+
+
+/* =========================
    LOGIN
-================================ */
+========================= */
 
 .loginScreen{
-    min-height:100vh;
+    position:fixed;
+
+    inset:0;
+
+    z-index:1000;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     padding:20px;
+
+    background:
+        rgba(2,6,17,.96);
+
+    backdrop-filter:blur(20px);
 }
 
 .loginBox{
-    width:100%;
-    max-width:420px;
+    width:min(430px,100%);
 
-    padding:35px;
+    padding:32px;
 
-    border-radius:25px;
-
-    text-align:center;
+    border-radius:22px;
 
     background:
-        rgba(7,17,32,.94);
+        linear-gradient(
+            145deg,
+            #0a1729,
+            #050c18
+        );
 
-    border:
-        1px solid
+    border:1px solid
         rgba(255,255,255,.08);
 
     box-shadow:
         0 30px 100px
-        rgba(0,0,0,.55);
+        rgba(0,0,0,.5);
 
-    animation:
-        appear .5s ease;
+    text-align:center;
+
+    animation:loginIn .5s ease;
 }
 
-@keyframes appear{
+@keyframes loginIn{
 
     from{
         opacity:0;
         transform:
-            translateY(20px)
+            translateY(25px)
             scale(.97);
     }
 
@@ -91,72 +136,69 @@ body{
 }
 
 .loginLogo{
-    width:70px;
-    height:70px;
+    width:65px;
+    height:65px;
+
+    margin:0 auto;
 
     display:grid;
+
     place-items:center;
 
-    margin:0 auto 20px;
-
-    border-radius:20px;
-
-    font-size:27px;
-    font-weight:1000;
+    border-radius:18px;
 
     background:
         linear-gradient(
             135deg,
             #00d9ff,
             #087dff,
-            #783cff
+            #743cff
         );
 
+    font-size:28px;
+
+    font-weight:1000;
+
     box-shadow:
-        0 0 45px
-        rgba(0,180,255,.35);
+        0 0 40px
+        rgba(0,180,255,.2);
 }
 
 .loginBox h1{
-    font-size:28px;
+    margin-top:20px;
+
+    font-size:25px;
 }
 
-.loginSubtitle{
+.loginBox p{
     margin-top:8px;
 
     color:#718096;
 
-    font-size:12px;
+    font-size:10px;
+
+    line-height:1.5;
 }
 
-.loginInput{
+.loginBox input{
     width:100%;
 
-    margin-top:25px;
+    margin-top:22px;
 
-    padding:15px;
+    padding:14px;
 
     outline:none;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    color:white;
+    color:#fff;
 
-    background:#091426;
+    background:#040b16;
 
-    border:
-        1px solid
-        rgba(255,255,255,.1);
+    border:1px solid
+        rgba(255,255,255,.08);
 
-    font-size:14px;
-}
-
-.loginInput:focus{
-    border-color:#159fff;
-
-    box-shadow:
-        0 0 20px
-        rgba(0,150,255,.15);
+    font-size:11px;
 }
 
 .loginButton{
@@ -164,72 +206,59 @@ body{
 
     margin-top:12px;
 
-    padding:15px;
+    padding:14px;
 
     border:0;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    color:white;
+    color:#fff;
 
     background:
         linear-gradient(
             100deg,
             #008cff,
-            #783cff
+            #703cff
         );
 
     cursor:pointer;
 
-    font-size:13px;
+    font-size:10px;
+
     font-weight:1000;
-
-    transition:.2s;
 }
 
-.loginButton:hover{
-    transform:translateY(-2px);
+.loginError{
+    min-height:15px;
 
-    box-shadow:
-        0 10px 30px
-        rgba(0,140,255,.25);
-}
+    margin-top:10px;
 
-.error{
-    display:none;
+    color:#ff5d75;
 
-    margin-top:12px;
+    font-size:9px;
 
-    color:#ff7184;
-
-    font-size:11px;
     font-weight:900;
 }
 
-.back{
-    display:inline-block;
 
-    margin-top:20px;
-
-    color:#718096;
-
-    text-decoration:none;
-
-    font-size:11px;
-}
-
-/* ================================
+/* =========================
    ADMIN
-================================ */
+========================= */
 
-.adminScreen{
+#adminApp{
     display:none;
-
-    min-height:100vh;
 }
 
-header{
-    height:75px;
+.topbar{
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    min-height:75px;
+
+    padding:12px 5%;
 
     display:flex;
 
@@ -237,422 +266,561 @@ header{
 
     justify-content:space-between;
 
-    padding:0 5%;
+    gap:15px;
 
     background:
-        rgba(3,8,18,.9);
+        rgba(2,7,17,.82);
 
-    border-bottom:
-        1px solid
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid
         rgba(255,255,255,.07);
-
-    backdrop-filter:
-        blur(15px);
-
-    position:sticky;
-
-    top:0;
-
-    z-index:10;
 }
 
 .brand{
-    font-size:19px;
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
     font-weight:1000;
 }
 
-.brand span{
-    color:#31d9ff;
+.brandIcon{
+    width:40px;
+    height:40px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00d9ff,
+            #087dff,
+            #703cff
+        );
 }
 
-.headerButtons{
+.brand span{
+    color:#2bdcff;
+}
+
+.topActions{
     display:flex;
 
-    gap:10px;
+    gap:8px;
 }
 
-.headerButton{
-    padding:10px 14px;
+.topButton{
+    padding:10px 13px;
 
-    border:0;
+    border-radius:9px;
 
-    border-radius:10px;
+    color:#fff;
 
-    color:white;
+    background:#0a1729;
 
-    background:#101d31;
+    border:1px solid
+        rgba(255,255,255,.07);
 
     text-decoration:none;
 
     cursor:pointer;
 
-    font-size:11px;
-    font-weight:900;
+    font-size:9px;
+
+    font-weight:1000;
 }
 
 .logout{
-    background:#8b2036;
+    background:
+        rgba(255,60,90,.08);
+
+    color:#ff7184;
 }
+
+
+/* =========================
+   MAIN
+========================= */
 
 .container{
-    width:min(1150px,90%);
+    width:min(1200px,92%);
 
-    margin:45px auto 80px;
+    margin:45px auto 100px;
 }
 
-.container h1{
-    font-size:40px;
+.pageTitle{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    gap:20px;
 }
 
-.subtitle{
-    margin-top:8px;
+.pageTitle h1{
+    font-size:34px;
+
+    letter-spacing:-1px;
+}
+
+.pageTitle p{
+    margin-top:7px;
 
     color:#718096;
 
-    font-size:13px;
+    font-size:10px;
 }
 
-/* ================================
-   CARDS
-================================ */
 
-.cards{
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    margin-top:25px;
+
     display:grid;
 
     grid-template-columns:
         repeat(4,1fr);
 
-    gap:15px;
-
-    margin-top:30px;
+    gap:14px;
 }
 
-.card{
-    padding:22px;
+.stat{
+    padding:20px;
 
-    border-radius:18px;
+    border-radius:16px;
 
     background:#071120;
 
-    border:
-        1px solid
+    border:1px solid
+        rgba(255,255,255,.07);
+}
+
+.statIcon{
+    font-size:22px;
+}
+
+.statValue{
+    margin-top:12px;
+
+    font-size:24px;
+
+    font-weight:1000;
+}
+
+.statLabel{
+    margin-top:5px;
+
+    color:#718096;
+
+    font-size:9px;
+
+    font-weight:900;
+}
+
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar{
+    margin-top:30px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+}
+
+.search{
+    flex:1;
+
+    min-width:220px;
+
+    padding:13px;
+
+    outline:none;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    background:#071120;
+
+    border:1px solid
+        rgba(255,255,255,.07);
+}
+
+.filter{
+    padding:13px;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    background:#071120;
+
+    border:1px solid
+        rgba(255,255,255,.07);
+}
+
+
+/* =========================
+   ORDERS
+========================= */
+
+.orders{
+    margin-top:18px;
+
+    display:grid;
+
+    gap:13px;
+}
+
+.order{
+    padding:20px;
+
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #081426,
+            #050d1a
+        );
+
+    border:1px solid
         rgba(255,255,255,.07);
 
     transition:.2s;
 }
 
-.card:hover{
-    transform:translateY(-4px);
-
+.order:hover{
     border-color:
-        rgba(0,180,255,.25);
+        rgba(0,200,255,.22);
+
+    transform:
+        translateY(-2px);
 }
 
-.icon{
-    font-size:28px;
+.orderTop{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:start;
+
+    gap:15px;
 }
 
-.cardTitle{
-    margin-top:15px;
+.orderId{
+    color:#31ddff;
 
-    color:#718096;
-
-    font-size:10px;
-
-    font-weight:900;
-}
-
-.number{
-    margin-top:7px;
-
-    font-size:27px;
+    font-size:12px;
 
     font-weight:1000;
 }
 
-/* ================================
-   PANEL
-================================ */
+.orderDate{
+    margin-top:5px;
 
-.panel{
-    margin-top:25px;
+    color:#66758a;
 
-    padding:25px;
-
-    border-radius:18px;
-
-    background:#071120;
-
-    border:
-        1px solid
-        rgba(255,255,255,.07);
-}
-
-.panel h2{
-    margin-bottom:20px;
-
-    font-size:18px;
-}
-
-/* ================================
-   ORDERS
-================================ */
-
-.order{
-    display:grid;
-
-    grid-template-columns:
-        1.5fr
-        1fr
-        120px
-        100px;
-
-    align-items:center;
-
-    gap:15px;
-
-    padding:18px 0;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.06);
-}
-
-.order:last-child{
-    border-bottom:0;
-}
-
-.order strong{
-    font-size:12px;
-}
-
-.order small{
-    color:#718096;
-
-    font-size:10px;
+    font-size:8px;
 }
 
 .status{
-    display:inline-block;
-
-    padding:7px 10px;
+    padding:7px 9px;
 
     border-radius:8px;
 
-    color:#49e6a5;
-
-    background:
-        rgba(0,255,170,.1);
-
-    font-size:9px;
+    font-size:8px;
 
     font-weight:1000;
 }
 
-.delete{
-    margin-top:7px;
+.status.nowe{
+    color:#40dfff;
 
-    padding:7px 9px;
+    background:
+        rgba(0,200,255,.08);
+}
 
-    border:0;
+.status.realizowane{
+    color:#ffd35c;
 
-    border-radius:7px;
+    background:
+        rgba(255,200,60,.08);
+}
 
-    color:white;
+.status.zrealizowane{
+    color:#4fe6aa;
 
-    background:#7e2033;
+    background:
+        rgba(70,220,160,.08);
+}
 
-    cursor:pointer;
+.status.anulowane{
+    color:#ff637a;
 
-    font-size:9px;
+    background:
+        rgba(255,60,90,.08);
+}
+
+.orderGrid{
+    margin-top:18px;
+
+    display:grid;
+
+    grid-template-columns:
+        1.2fr 1fr 1fr .8fr;
+
+    gap:15px;
+}
+
+.infoBox{
+    padding:12px;
+
+    border-radius:10px;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.infoTitle{
+    color:#66758a;
+
+    font-size:8px;
 
     font-weight:900;
 }
 
-.empty{
-    padding:40px;
-
-    text-align:center;
-
-    color:#718096;
-}
-
-/* ================================
-   WITHDRAW
-================================ */
-
-.withdrawCards{
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:15px;
-
-    margin-bottom:25px;
-}
-
-.withdrawBox{
-    padding:20px;
-
-    border-radius:15px;
-
-    background:#091426;
-
-    border:
-        1px solid
-        rgba(255,255,255,.06);
-}
-
-.withdrawBox .smallTitle{
-    color:#718096;
+.infoValue{
+    margin-top:6px;
 
     font-size:10px;
 
     font-weight:900;
+
+    word-break:break-word;
 }
 
-.withdrawBox .amount{
-    margin-top:8px;
+.productsList{
+    margin-top:15px;
 
-    font-size:25px;
+    padding-top:14px;
 
-    font-weight:1000;
-}
-
-.withdrawForm{
-    padding:20px;
-
-    border-radius:15px;
-
-    background:#091426;
-
-    border:
-        1px solid
+    border-top:1px solid
         rgba(255,255,255,.06);
 }
 
-.withdrawForm h3{
-    font-size:14px;
-
-    margin-bottom:15px;
+.productsList strong{
+    font-size:9px;
 }
 
-.withdrawInput{
-    width:100%;
+.productRow{
+    display:flex;
 
-    padding:14px;
+    justify-content:space-between;
 
-    border:1px solid
-        rgba(255,255,255,.1);
+    gap:10px;
 
-    border-radius:10px;
+    margin-top:8px;
 
-    outline:none;
+    color:#8997aa;
 
-    color:white;
-
-    background:#050c18;
-
-    font-size:14px;
+    font-size:9px;
 }
 
-.withdrawInput:focus{
-    border-color:#159fff;
+.orderBottom{
+    margin-top:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    flex-wrap:wrap;
 }
 
-.withdrawButton{
-    width:100%;
-
-    margin-top:10px;
-
-    padding:14px;
-
-    border:0;
-
-    border-radius:10px;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            100deg,
-            #00a879,
-            #008cff
-        );
-
-    cursor:pointer;
+.orderTotal{
+    font-size:19px;
 
     font-weight:1000;
 }
 
-.withdrawMessage{
-    display:none;
+.orderButtons{
+    display:flex;
 
-    margin-top:12px;
+    gap:7px;
 
-    font-size:11px;
-
-    font-weight:900;
+    flex-wrap:wrap;
 }
 
-/* ================================
-   DELETE ALL
-================================ */
-
-.dangerButton{
-    padding:12px 15px;
+.actionButton{
+    padding:9px 11px;
 
     border:0;
 
-    border-radius:10px;
+    border-radius:8px;
 
-    color:white;
+    color:#fff;
 
-    background:#7e2033;
+    background:#102039;
 
     cursor:pointer;
+
+    font-size:8px;
+
+    font-weight:1000;
+}
+
+.actionButton.green{
+    background:
+        rgba(50,210,150,.1);
+
+    color:#4fe6aa;
+}
+
+.actionButton.yellow{
+    background:
+        rgba(255,190,50,.1);
+
+    color:#ffd35c;
+}
+
+.actionButton.red{
+    background:
+        rgba(255,60,90,.1);
+
+    color:#ff7184;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:70px 20px;
+
+    text-align:center;
+
+    border-radius:17px;
+
+    background:#071120;
+
+    border:1px solid
+        rgba(255,255,255,.06);
+
+    color:#718096;
+
+    font-size:11px;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+
+    left:50%;
+
+    bottom:25px;
+
+    z-index:2000;
+
+    padding:13px 18px;
+
+    border-radius:11px;
+
+    color:#fff;
+
+    background:#0c1b2e;
+
+    border:1px solid
+        rgba(0,200,255,.2);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.4);
+
+    transform:
+        translate(-50%,30px);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s;
+
+    font-size:9px;
 
     font-weight:900;
 }
 
-/* ================================
+.toast.show{
+    opacity:1;
+
+    transform:
+        translate(-50%,0);
+}
+
+
+/* =========================
    MOBILE
-================================ */
+========================= */
 
 @media(max-width:850px){
 
-    .cards{
+    .stats{
         grid-template-columns:
             repeat(2,1fr);
     }
 
-    .order{
-        grid-template-columns:1fr;
-    }
-
-    .withdrawCards{
-        grid-template-columns:1fr;
+    .orderGrid{
+        grid-template-columns:
+            repeat(2,1fr);
     }
 
 }
 
-@media(max-width:500px){
+@media(max-width:550px){
 
-    .cards{
+    .brandText{
+        display:none;
+    }
+
+    .stats{
         grid-template-columns:1fr;
     }
 
-    .container h1{
-        font-size:30px;
+    .orderGrid{
+        grid-template-columns:1fr;
     }
 
-    header{
-        padding:0 20px;
-    }
-
-    .brand{
-        font-size:15px;
+    .pageTitle h1{
+        font-size:27px;
     }
 
 }
@@ -660,14 +828,15 @@ header{
 </style>
 </head>
 
+
 <body>
 
 
-<!-- =================================================
+<!-- =====================================================
      LOGIN
-================================================= -->
+===================================================== -->
 
-<div
+<section
     id="loginScreen"
     class="loginScreen"
 >
@@ -682,17 +851,24 @@ header{
             Panel Admin
         </h1>
 
-        <div class="loginSubtitle">
+        <p>
             Printerlase3D
-        </div>
+        </p>
 
 
         <input
-            id="password"
-            class="loginInput"
+            id="adminEmail"
+            type="email"
+            placeholder="E-mail administratora"
+            autocomplete="username"
+        >
+
+
+        <input
+            id="adminPassword"
             type="password"
-            placeholder="Hasło administratora"
-            autocomplete="off"
+            placeholder="Hasło"
+            autocomplete="current-password"
         >
 
 
@@ -700,418 +876,1204 @@ header{
             class="loginButton"
             onclick="login()"
         >
-            🔐 Zaloguj się
+            🔐 Zaloguj do panelu
         </button>
 
 
         <div
-            id="error"
-            class="error"
-        >
-            ❌ Nieprawidłowe hasło
-        </div>
-
-
-        <a
-            href="./index.html"
-            class="back"
-        >
-            ← Wróć do sklepu
-        </a>
+            id="loginError"
+            class="loginError"
+        ></div>
 
     </div>
 
-</div>
+</section>
 
 
-<!-- =================================================
-     ADMIN SCREEN
-================================================= -->
+<!-- =====================================================
+     ADMIN APP
+===================================================== -->
 
-<div
-    id="adminScreen"
-    class="adminScreen"
->
+<div id="adminApp">
 
 
-<header>
+    <!-- TOPBAR -->
 
-    <div class="brand">
+    <header class="topbar">
 
-        Printerlase<span>3D</span>
+        <div class="brand">
 
-    </div>
-
-
-    <div class="headerButtons">
-
-        <a
-            href="./index.html"
-            class="headerButton"
-        >
-            🏠 Sklep
-        </a>
-
-
-        <button
-            class="headerButton logout"
-            onclick="logout()"
-        >
-            Wyloguj
-        </button>
-
-    </div>
-
-</header>
-
-
-<main class="container">
-
-    <h1>
-        Dashboard
-    </h1>
-
-    <p class="subtitle">
-        Zarządzanie sklepem Printerlase3D
-    </p>
-
-
-    <!-- =================================================
-         STATYSTYKI
-    ================================================= -->
-
-    <section class="cards">
-
-
-        <div class="card">
-
-            <div class="icon">
-                📦
+            <div class="brandIcon">
+                P
             </div>
 
-            <div class="cardTitle">
-                ZAMÓWIENIA
+            <div class="brandText">
+
+                Printerlase<span>3D</span>
+
+                <small>
+                    • ADMIN
+                </small>
+
             </div>
 
-            <div
-                id="ordersCount"
-                class="number"
+        </div>
+
+
+        <div class="topActions">
+
+            <a
+                href="index.html"
+                class="topButton"
             >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">
-                💰
-            </div>
-
-            <div class="cardTitle">
-                PRZYCHÓD
-            </div>
-
-            <div
-                id="sales"
-                class="number"
-            >
-                0,00 zł
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">
-                🛒
-            </div>
-
-            <div class="cardTitle">
-                PRODUKTY
-            </div>
-
-            <div class="number">
-                6
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">
-                🎟️
-            </div>
-
-            <div class="cardTitle">
-                KOD RABATOWY
-            </div>
-
-            <div
-                class="number"
-                style="font-size:18px"
-            >
-                START10
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =================================================
-         ZAMÓWIENIA
-    ================================================= -->
-
-    <section class="panel">
-
-        <h2>
-            📦 Zamówienia
-        </h2>
-
-
-        <div id="ordersList">
-
-            <div class="empty">
-                Brak zamówień.
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =================================================
-         WYPŁATY
-    ================================================= -->
-
-    <section class="panel">
-
-        <h2>
-            💸 Wypłaty
-        </h2>
-
-
-        <div class="withdrawCards">
-
-
-            <div class="withdrawBox">
-
-                <div class="smallTitle">
-                    DOSTĘPNE SALDO
-                </div>
-
-                <div
-                    id="withdrawBalance"
-                    class="amount"
-                >
-                    0,00 zł
-                </div>
-
-            </div>
-
-
-            <div class="withdrawBox">
-
-                <div class="smallTitle">
-                    ŁĄCZNY PRZYCHÓD
-                </div>
-
-                <div
-                    id="withdrawRevenue"
-                    class="amount"
-                >
-                    0,00 zł
-                </div>
-
-            </div>
-
-
-            <div class="withdrawBox">
-
-                <div class="smallTitle">
-                    WYPŁACONO
-                </div>
-
-                <div
-                    id="withdrawn"
-                    class="amount"
-                >
-                    0,00 zł
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-        <div class="withdrawForm">
-
-            <h3>
-                💳 Zleć wypłatę
-            </h3>
-
-
-            <input
-                id="withdrawAmount"
-                class="withdrawInput"
-                type="number"
-                min="1"
-                step="0.01"
-                placeholder="Kwota, np. 50"
-            >
+                🏠 Sklep
+            </a>
 
 
             <button
-                class="withdrawButton"
-                onclick="withdrawMoney()"
+                class="topButton"
+                onclick="refreshOrders()"
             >
-                💸 Wypłać środki
+                🔄 Odśwież
             </button>
 
 
-            <div
-                id="withdrawMessage"
-                class="withdrawMessage"
-            ></div>
+            <button
+                class="topButton logout"
+                onclick="logout()"
+            >
+                Wyloguj
+            </button>
 
         </div>
 
-
-        <div style="margin-top:25px">
-
-            <h3
-                style="
-                    font-size:14px;
-                    margin-bottom:15px;
-                "
-            >
-                📋 Historia wypłat
-            </h3>
+    </header>
 
 
-            <div id="withdrawHistory">
+    <!-- MAIN -->
 
-                <div class="empty">
-                    Brak wypłat.
-                </div>
+    <main class="container">
+
+
+        <div class="pageTitle">
+
+            <div>
+
+                <h1>
+                    Panel administracyjny
+                </h1>
+
+                <p>
+                    Zarządzanie zamówieniami Printerlase3D
+                </p>
 
             </div>
 
         </div>
 
-    </section>
+
+        <!-- STATS -->
+
+        <section class="stats">
 
 
-    <!-- =================================================
-         ZARZĄDZANIE
-    ================================================= -->
+            <div class="stat">
 
-    <section class="panel">
+                <div class="statIcon">
+                    📦
+                </div>
 
-        <h2>
-            ⚙️ Zarządzanie
-        </h2>
+                <div
+                    id="ordersCount"
+                    class="statValue"
+                >
+                    0
+                </div>
+
+                <div class="statLabel">
+                    Wszystkie zamówienia
+                </div>
+
+            </div>
 
 
-        <button
-            class="dangerButton"
-            onclick="clearOrders()"
-        >
-            🗑️ Usuń wszystkie zamówienia
-        </button>
+            <div class="stat">
 
-    </section>
+                <div class="statIcon">
+                    🆕
+                </div>
+
+                <div
+                    id="newCount"
+                    class="statValue"
+                >
+                    0
+                </div>
+
+                <div class="statLabel">
+                    Nowe
+                </div>
+
+            </div>
 
 
-</main>
+            <div class="stat">
+
+                <div class="statIcon">
+                    💰
+                </div>
+
+                <div
+                    id="revenue"
+                    class="statValue"
+                >
+                    0,00 zł
+                </div>
+
+                <div class="statLabel">
+                    Łączna wartość
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="statIcon">
+                    🚚
+                </div>
+
+                <div
+                    id="freeShippingCount"
+                    class="statValue"
+                >
+                    0
+                </div>
+
+                <div class="statLabel">
+                    Darmowa dostawa
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- TOOLBAR -->
+
+        <section class="toolbar">
+
+            <input
+                id="search"
+                class="search"
+                type="search"
+                placeholder="🔎 Szukaj po ID, kliencie lub e-mailu..."
+                oninput="renderOrders()"
+            >
+
+
+            <select
+                id="statusFilter"
+                class="filter"
+                onchange="renderOrders()"
+            >
+
+                <option value="ALL">
+                    Wszystkie
+                </option>
+
+                <option value="NOWE">
+                    Nowe
+                </option>
+
+                <option value="REALIZOWANE">
+                    Realizowane
+                </option>
+
+                <option value="ZREALIZOWANE">
+                    Zrealizowane
+                </option>
+
+                <option value="ANULOWANE">
+                    Anulowane
+                </option>
+
+            </select>
+
+        </section>
+
+
+        <!-- ORDERS -->
+
+        <section
+            id="orders"
+            class="orders"
+        ></section>
+
+
+    </main>
 
 </div>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
 
 
 <script>
 
-/* =================================================
-   HASŁO ADMINA
-================================================= */
+/* =====================================================
+   KONFIGURACJA ADMINA
+===================================================== */
 
-const ADMIN_PASSWORD = "Admin2137";
+const ADMIN_EMAILS = [
+
+    "rembolek341@gmail.com",
+
+    "kaniar2013@gmail.com"
+
+];
 
 
-/* =================================================
+/*
+    To hasło jest tylko lokalnym zabezpieczeniem
+    demonstracyjnego panelu.
+
+    Zmień je tutaj.
+*/
+
+const ADMIN_PASSWORD =
+    "Printerlase3D2026";
+
+
+/* =====================================================
    LOGIN
-================================================= */
+===================================================== */
 
 function login(){
 
+    const email =
+        document
+        .getElementById(
+            "adminEmail"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
     const password =
-        document.getElementById(
-            "password"
-        ).value;
+        document
+        .getElementById(
+            "adminPassword"
+        )
+        .value;
+
 
     const error =
-        document.getElementById(
-            "error"
+        document
+        .getElementById(
+            "loginError"
         );
 
 
     if(
-        password ===
+        !ADMIN_EMAILS.includes(
+            email
+        )
+    ){
+
+        error.textContent =
+            "❌ Ten e-mail nie ma dostępu.";
+
+        return;
+
+    }
+
+
+    if(
+        password !==
         ADMIN_PASSWORD
     ){
 
-        sessionStorage.setItem(
-            "printerlase_admin",
-            "true"
+        error.textContent =
+            "❌ Nieprawidłowe hasło.";
+
+        return;
+
+    }
+
+
+    sessionStorage.setItem(
+        "printerlase_admin",
+        "true"
+    );
+
+
+    document
+        .getElementById(
+            "loginScreen"
+        )
+        .style.display =
+        "none";
+
+
+    document
+        .getElementById(
+            "adminApp"
+        )
+        .style.display =
+        "block";
+
+
+    renderOrders();
+
+}
+
+
+/* =====================================================
+   AUTO LOGIN
+===================================================== */
+
+function checkLogin(){
+
+    const logged =
+        sessionStorage.getItem(
+            "printerlase_admin"
         );
 
 
-        document.getElementById(
-            "loginScreen"
-        ).style.display = "none";
+    if(
+        logged === "true"
+    ){
+
+        document
+            .getElementById(
+                "loginScreen"
+            )
+            .style.display =
+            "none";
 
 
-        document.getElementById(
-            "adminScreen"
-        ).style.display = "block";
+        document
+            .getElementById(
+                "adminApp"
+            )
+            .style.display =
+            "block";
 
 
-        loadEverything();
-
-    }else{
-
-        error.style.display = "block";
-
-        document.getElementById(
-            "password"
-        ).value = "";
-
-        document.getElementById(
-            "password"
-        ).focus();
+        renderOrders();
 
     }
 
 }
 
 
-/* =================================================
-   ENTER
-================================================= */
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    sessionStorage.removeItem(
+        "printerlase_admin"
+    );
+
+
+    location.reload();
+
+}
+
+
+/* =====================================================
+   GET ORDERS
+===================================================== */
+
+function getOrders(){
+
+    return JSON.parse(
+        localStorage.getItem(
+            "printerlase_orders"
+        )
+    ) || [];
+
+}
+
+
+/* =====================================================
+   SAVE ORDERS
+===================================================== */
+
+function saveOrders(
+    orders
+){
+
+    localStorage.setItem(
+        "printerlase_orders",
+        JSON.stringify(
+            orders
+        )
+    );
+
+}
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+function money(
+    value
+){
+
+    return Number(
+        value || 0
+    )
+    .toFixed(2)
+    .replace(
+        ".",
+        ","
+    )
+    + " zł";
+
+}
+
+
+/* =====================================================
+   STATUS CLASS
+===================================================== */
+
+function statusClass(
+    status
+){
+
+    return String(
+        status
+    )
+    .toLowerCase()
+    .normalize(
+        "NFD"
+    )
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderOrders(){
+
+    const orders =
+        getOrders();
+
+
+    const search =
+        document
+        .getElementById(
+            "search"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const filter =
+        document
+        .getElementById(
+            "statusFilter"
+        )
+        .value;
+
+
+    const filtered =
+        orders.filter(
+            order => {
+
+                const searchable = (
+
+                    String(
+                        order.id || ""
+                    )
+                    + " " +
+
+                    String(
+                        order.name || ""
+                    )
+                    + " " +
+
+                    String(
+                        order.email || ""
+                    )
+                    + " " +
+
+                    String(
+                        order.shippingMethod || ""
+                    )
+
+                )
+                .toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    searchable.includes(
+                        search
+                    );
+
+
+                const matchesStatus =
+                    filter === "ALL" ||
+                    order.status ===
+                    filter;
+
+
+                return (
+                    matchesSearch &&
+                    matchesStatus
+                );
+
+            }
+        )
+        .reverse();
+
+
+    updateStats(
+        orders
+    );
+
+
+    const box =
+        document.getElementById(
+            "orders"
+        );
+
+
+    if(
+        filtered.length === 0
+    ){
+
+        box.innerHTML = `
+
+            <div class="empty">
+
+                📦
+
+                <br><br>
+
+                Brak zamówień spełniających kryteria.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+        filtered
+        .map(
+            order => renderOrder(
+                order
+            )
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   ORDER HTML
+===================================================== */
+
+function renderOrder(
+    order
+){
+
+    const products =
+        order.products || [];
+
+
+    return `
+
+        <article class="order">
+
+            <div class="orderTop">
+
+                <div>
+
+                    <div class="orderId">
+
+                        ${escapeHTML(
+                            order.id
+                        )}
+
+                    </div>
+
+                    <div class="orderDate">
+
+                        ${escapeHTML(
+                            order.date || ""
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="status ${statusClass(
+                        order.status
+                    )}"
+                >
+
+                    ${escapeHTML(
+                        order.status || "NOWE"
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="orderGrid">
+
+
+                <div class="infoBox">
+
+                    <div class="infoTitle">
+                        KLIENT
+                    </div>
+
+                    <div class="infoValue">
+
+                        ${escapeHTML(
+                            order.name || "-"
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="infoBox">
+
+                    <div class="infoTitle">
+                        E-MAIL
+                    </div>
+
+                    <div class="infoValue">
+
+                        ${escapeHTML(
+                            order.email || "-"
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="infoBox">
+
+                    <div class="infoTitle">
+                        DOSTAWA
+                    </div>
+
+                    <div class="infoValue">
+
+                        📦
+                        ${escapeHTML(
+                            order.shippingMethod || "-"
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="infoBox">
+
+                    <div class="infoTitle">
+                        DOSTAWA
+                    </div>
+
+                    <div class="infoValue">
+
+                        ${
+                            Number(
+                                order.shipping
+                            ) === 0
+
+                            ? "🟢 GRATIS"
+
+                            : money(
+                                order.shipping
+                            )
+                        }
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="productsList">
+
+                <strong>
+                    PRODUKTY
+                </strong>
+
+
+                ${
+                    products
+                    .map(
+                        product => `
+
+                            <div
+                                class="productRow"
+                            >
+
+                                <span>
+
+                                    ${escapeHTML(
+                                        product.name
+                                    )}
+
+                                </span>
+
+                                <span>
+
+                                    ${money(
+                                        product.price
+                                    )}
+
+                                </span>
+
+                            </div>
+
+                        `
+                    )
+                    .join("")
+                }
+
+            </div>
+
+
+            <div class="orderBottom">
+
+                <div>
+
+                    <div class="orderTotal">
+
+                        ${money(
+                            order.total
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="orderButtons">
+
+
+                    <button
+                        class="actionButton yellow"
+                        onclick="changeStatus(
+                            '${escapeJS(order.id)}',
+                            'REALIZOWANE'
+                        )"
+                    >
+                        🔧 Realizowane
+                    </button>
+
+
+                    <button
+                        class="actionButton green"
+                        onclick="changeStatus(
+                            '${escapeJS(order.id)}',
+                            'ZREALIZOWANE'
+                        )"
+                    >
+                        ✓ Zrealizowane
+                    </button>
+
+
+                    <button
+                        class="actionButton red"
+                        onclick="changeStatus(
+                            '${escapeJS(order.id)}',
+                            'ANULOWANE'
+                        )"
+                    >
+                        ✕ Anuluj
+                    </button>
+
+
+                    <button
+                        class="actionButton"
+                        onclick="deleteOrder(
+                            '${escapeJS(order.id)}'
+                        )"
+                    >
+                        🗑 Usuń
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =====================================================
+   CHANGE STATUS
+===================================================== */
+
+function changeStatus(
+    id,
+    status
+){
+
+    const orders =
+        getOrders();
+
+
+    const order =
+        orders.find(
+            item =>
+                item.id === id
+        );
+
+
+    if(!order){
+
+        return;
+
+    }
+
+
+    order.status =
+        status;
+
+
+    saveOrders(
+        orders
+    );
+
+
+    renderOrders();
+
+
+    showToast(
+        "✓ Status zmieniony na: "
+        + status
+    );
+
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+function deleteOrder(
+    id
+){
+
+    const confirmDelete =
+        confirm(
+            "Czy na pewno chcesz usunąć to zamówienie?"
+        );
+
+
+    if(
+        !confirmDelete
+    ){
+
+        return;
+
+    }
+
+
+    let orders =
+        getOrders();
+
+
+    orders =
+        orders.filter(
+            order =>
+                order.id !== id
+        );
+
+
+    saveOrders(
+        orders
+    );
+
+
+    renderOrders();
+
+
+    showToast(
+        "🗑 Zamówienie usunięte"
+    );
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(
+    orders
+){
+
+    const total =
+        orders.length;
+
+
+    const newOrders =
+        orders.filter(
+            order =>
+                order.status ===
+                "NOWE"
+        ).length;
+
+
+    const revenue =
+        orders.reduce(
+            (
+                sum,
+                order
+            ) => {
+
+                if(
+                    order.status ===
+                    "ANULOWANE"
+                ){
+
+                    return sum;
+
+                }
+
+                return (
+                    sum +
+                    Number(
+                        order.total || 0
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const freeShipping =
+        orders.filter(
+            order =>
+                Number(
+                    order.shipping
+                ) === 0
+        ).length;
+
+
+    document
+        .getElementById(
+            "ordersCount"
+        )
+        .textContent =
+        total;
+
+
+    document
+        .getElementById(
+            "newCount"
+        )
+        .textContent =
+        newOrders;
+
+
+    document
+        .getElementById(
+            "revenue"
+        )
+        .textContent =
+        money(
+            revenue
+        );
+
+
+    document
+        .getElementById(
+            "freeShippingCount"
+        )
+        .textContent =
+        freeShipping;
+
+}
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+function refreshOrders(){
+
+    renderOrders();
+
+    showToast(
+        "✓ Panel odświeżony"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE JS
+===================================================== */
+
+function escapeJS(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    )
+    .replace(
+        /\n/g,
+        "\\n"
+    )
+    .replace(
+        /\r/g,
+        "\\r"
+    );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+function showToast(
+    text
+){
+
+    const toast =
+        document
+        .getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        text;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2500
+        );
+
+}
+
+
+/* =====================================================
+   ENTER LOGIN
+===================================================== */
 
 document
-.getElementById("password")
+.getElementById(
+    "adminPassword"
+)
 .addEventListener(
     "keydown",
-    function(event){
+    event => {
 
         if(
-            event.key === "Enter"
+            event.key ===
+            "Enter"
         ){
 
             login();
@@ -1122,706 +2084,11 @@ document
 );
 
 
-/* =================================================
-   LOGOUT
-================================================= */
-
-function logout(){
-
-    sessionStorage.removeItem(
-        "printerlase_admin"
-    );
-
-    location.reload();
-
-}
-
-
-/* =================================================
-   POBIERANIE ZAMÓWIEŃ
-================================================= */
-
-function getOrders(){
-
-    try{
-
-        return JSON.parse(
-            localStorage.getItem(
-                "printerlase_orders"
-            )
-        ) || [];
-
-    }catch(error){
-
-        return [];
-
-    }
-
-}
-
-
-/* =================================================
-   PRZYCHÓD
-================================================= */
-
-function calculateRevenue(){
-
-    const orders =
-        getOrders();
-
-    let total = 0;
-
-
-    orders.forEach(
-        order => {
-
-            total += Number(
-                order.total || 0
-            );
-
-        }
-    );
-
-
-    return total;
-
-}
-
-
-/* =================================================
-   WYPŁACONO
-================================================= */
-
-function getWithdrawn(){
-
-    return Number(
-        localStorage.getItem(
-            "printerlase_withdrawn"
-        )
-    ) || 0;
-
-}
-
-
-/* =================================================
-   HISTORIA WYPŁAT
-================================================= */
-
-function getWithdrawHistory(){
-
-    try{
-
-        return JSON.parse(
-            localStorage.getItem(
-                "printerlase_withdraw_history"
-            )
-        ) || [];
-
-    }catch(error){
-
-        return [];
-
-    }
-
-}
-
-
-/* =================================================
-   ŁADOWANIE WSZYSTKIEGO
-================================================= */
-
-function loadEverything(){
-
-    loadOrders();
-
-    loadWithdrawals();
-
-}
-
-
-/* =================================================
-   ZAMÓWIENIA
-================================================= */
-
-function loadOrders(){
-
-    const orders =
-        getOrders();
-
-
-    document.getElementById(
-        "ordersCount"
-    ).textContent =
-        orders.length;
-
-
-    const revenue =
-        calculateRevenue();
-
-
-    document.getElementById(
-        "sales"
-    ).textContent =
-        money(revenue);
-
-
-    const list =
-        document.getElementById(
-            "ordersList"
-        );
-
-
-    if(
-        orders.length === 0
-    ){
-
-        list.innerHTML = `
-
-            <div class="empty">
-
-                📦
-
-                <br><br>
-
-                Nie ma jeszcze żadnych zamówień.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    list.innerHTML = "";
-
-
-    orders.forEach(
-        (order,index) => {
-
-            list.innerHTML += `
-
-                <div class="order">
-
-                    <div>
-
-                        <strong>
-                            Zamówienie #${index + 1}
-                        </strong>
-
-                        <br>
-
-                        <small>
-                            ${escapeHTML(
-                                order.date ||
-                                "Brak daty"
-                            )}
-                        </small>
-
-                    </div>
-
-
-                    <div>
-
-                        <strong>
-                            ${escapeHTML(
-                                order.name ||
-                                "Klient"
-                            )}
-                        </strong>
-
-                        <br>
-
-                        <small>
-                            ${escapeHTML(
-                                order.email ||
-                                "Brak e-maila"
-                            )}
-                        </small>
-
-                    </div>
-
-
-                    <div>
-
-                        <strong>
-                            ${money(
-                                Number(
-                                    order.total || 0
-                                )
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span class="status">
-                            NOWE
-                        </span>
-
-                        <br>
-
-                        <button
-                            class="delete"
-                            onclick="
-                                deleteOrder(
-                                    ${index}
-                                )
-                            "
-                        >
-                            Usuń
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-    );
-
-}
-
-
-/* =================================================
-   USUWANIE JEDNEGO ZAMÓWIENIA
-================================================= */
-
-function deleteOrder(index){
-
-    if(
-        !confirm(
-            "Usunąć to zamówienie?"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    const orders =
-        getOrders();
-
-
-    orders.splice(
-        index,
-        1
-    );
-
-
-    localStorage.setItem(
-        "printerlase_orders",
-        JSON.stringify(
-            orders
-        )
-    );
-
-
-    loadEverything();
-
-}
-
-
-/* =================================================
-   USUWANIE WSZYSTKICH
-================================================= */
-
-function clearOrders(){
-
-    if(
-        !confirm(
-            "Na pewno usunąć WSZYSTKIE zamówienia?"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    localStorage.removeItem(
-        "printerlase_orders"
-    );
-
-
-    loadEverything();
-
-}
-
-
-/* =================================================
-   WYPŁATY
-================================================= */
-
-function loadWithdrawals(){
-
-    const revenue =
-        calculateRevenue();
-
-
-    const withdrawn =
-        getWithdrawn();
-
-
-    const balance =
-        Math.max(
-            0,
-            revenue - withdrawn
-        );
-
-
-    document.getElementById(
-        "withdrawBalance"
-    ).textContent =
-        money(balance);
-
-
-    document.getElementById(
-        "withdrawRevenue"
-    ).textContent =
-        money(revenue);
-
-
-    document.getElementById(
-        "withdrawn"
-    ).textContent =
-        money(withdrawn);
-
-
-    renderWithdrawHistory();
-
-}
-
-
-/* =================================================
-   ZLECENIE WYPŁATY
-================================================= */
-
-function withdrawMoney(){
-
-    const input =
-        document.getElementById(
-            "withdrawAmount"
-        );
-
-
-    const message =
-        document.getElementById(
-            "withdrawMessage"
-        );
-
-
-    const amount =
-        Number(
-            input.value
-        );
-
-
-    const revenue =
-        calculateRevenue();
-
-
-    const withdrawn =
-        getWithdrawn();
-
-
-    const balance =
-        Math.max(
-            0,
-            revenue - withdrawn
-        );
-
-
-    if(
-        !amount ||
-        amount <= 0
-    ){
-
-        showWithdrawMessage(
-            "❌ Wpisz prawidłową kwotę.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    if(
-        amount > balance
-    ){
-
-        showWithdrawMessage(
-            "❌ Nie masz tylu środków.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    const newWithdrawn =
-        withdrawn + amount;
-
-
-    localStorage.setItem(
-        "printerlase_withdrawn",
-        String(
-            newWithdrawn
-        )
-    );
-
-
-    const history =
-        getWithdrawHistory();
-
-
-    history.unshift({
-
-        amount:amount,
-
-        date:
-            new Date()
-            .toLocaleString(
-                "pl-PL"
-            ),
-
-        status:
-            "ZLECONO"
-
-    });
-
-
-    localStorage.setItem(
-        "printerlase_withdraw_history",
-        JSON.stringify(
-            history
-        )
-    );
-
-
-    input.value = "";
-
-
-    showWithdrawMessage(
-        "✓ Wypłata została dodana do historii.",
-        true
-    );
-
-
-    loadWithdrawals();
-
-}
-
-
-/* =================================================
-   KOMUNIKAT WYPŁATY
-================================================= */
-
-function showWithdrawMessage(
-    text,
-    success
-){
-
-    const message =
-        document.getElementById(
-            "withdrawMessage"
-        );
-
-
-    message.style.display =
-        "block";
-
-
-    message.style.color =
-        success
-        ? "#49e6a5"
-        : "#ff7184";
-
-
-    message.textContent =
-        text;
-
-}
-
-
-/* =================================================
-   HISTORIA WYPŁAT
-================================================= */
-
-function renderWithdrawHistory(){
-
-    const box =
-        document.getElementById(
-            "withdrawHistory"
-        );
-
-
-    const history =
-        getWithdrawHistory();
-
-
-    if(
-        history.length === 0
-    ){
-
-        box.innerHTML = `
-
-            <div class="empty">
-                Brak wypłat.
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    box.innerHTML = "";
-
-
-    history.forEach(
-        item => {
-
-            box.innerHTML += `
-
-                <div class="order">
-
-                    <div>
-
-                        <strong>
-                            💸 Wypłata
-                        </strong>
-
-                        <br>
-
-                        <small>
-                            ${escapeHTML(
-                                item.date
-                            )}
-                        </small>
-
-                    </div>
-
-
-                    <div>
-
-                        <strong>
-                            ${money(
-                                Number(
-                                    item.amount || 0
-                                )
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span class="status">
-                            ${escapeHTML(
-                                item.status ||
-                                "ZLECONO"
-                            )}
-                        </span>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-    );
-
-}
-
-
-/* =================================================
-   MONEY
-================================================= */
-
-function money(value){
-
-    return Number(
-        value || 0
-    )
-    .toFixed(2)
-    .replace(".",",")
-    + " zł";
-
-}
-
-
-/* =================================================
-   ESCAPE HTML
-================================================= */
-
-function escapeHTML(value){
-
-    return String(
-        value ?? ""
-    )
-
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-
-    .replace(
-        /</g,
-        "&lt;"
-    )
-
-    .replace(
-        />/g,
-        "&gt;"
-    )
-
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
-}
-
-
-/* =================================================
-   SPRAWDZENIE SESJI
-================================================= */
-
-if(
-    sessionStorage.getItem(
-        "printerlase_admin"
-    ) === "true"
-){
-
-    document.getElementById(
-        "loginScreen"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "adminScreen"
-    ).style.display = "block";
-
-
-    loadEverything();
-
-}
+/* =====================================================
+   START
+===================================================== */
+
+checkLogin();
 
 </script>
 
