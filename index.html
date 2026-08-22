@@ -1,1555 +1,523 @@
-```html
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Printerlase3D — Druk 3D</title>
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-font-family:Inter,Arial,sans-serif;
-background:#030712;
-color:#fff;
-overflow-x:hidden
-}
-button,input{font:inherit}
-button{cursor:pointer}
-a{color:inherit;text-decoration:none}
+/* =========================
+   ANIMOWANE PRODUKTY
+========================= */
 
-body:before{
-content:"";
-position:fixed;
-inset:-30%;
-z-index:-2;
-background:
-radial-gradient(circle at 15% 10%,#006eff35,transparent 25%),
-radial-gradient(circle at 85% 20%,#8b36ff28,transparent 25%),
-radial-gradient(circle at 50% 100%,#00d9ff18,transparent 30%);
-animation:bg 12s ease-in-out infinite alternate
-}
-@keyframes bg{to{transform:scale(1.15) rotate(3deg)}}
-
-header{
-position:sticky;
-top:0;
-z-index:100;
-height:76px;
-padding:0 5%;
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:#030712cc;
-backdrop-filter:blur(18px);
-border-bottom:1px solid #ffffff12
+.product-card {
+    opacity: 0;
+    transform: translateX(-100px) scale(.96);
+    transition:
+        opacity .8s cubic-bezier(.22,1,.36,1),
+        transform .8s cubic-bezier(.22,1,.36,1);
+    will-change: transform, opacity;
 }
 
-.logo{
-font-size:23px;
-font-weight:1000;
-letter-spacing:-1px
-}
-.logo span{color:#00cfff}
-
-.nav{
-display:flex;
-align-items:center;
-gap:8px
-}
-.nav button,.nav a{
-border:1px solid #ffffff12;
-background:#ffffff08;
-color:#fff;
-padding:11px 14px;
-border-radius:12px;
-font-size:11px;
-font-weight:900;
-transition:.2s
-}
-.nav button:hover,.nav a:hover{
-background:#00cfff18;
-border-color:#00cfff55;
-transform:translateY(-2px)
+/* Produkty parzyste lecą z prawej */
+.product-card:nth-child(even) {
+    transform: translateX(100px) scale(.96);
 }
 
-.cartCount{
-display:inline-flex;
-min-width:19px;
-height:19px;
-align-items:center;
-justify-content:center;
-margin-left:5px;
-border-radius:50%;
-background:#00cfff;
-color:#001018;
-font-size:9px
+/* Po wejściu na ekran */
+.product-card.show {
+    opacity: 1;
+    transform: translateX(0) scale(1);
 }
 
-.hero{
-width:min(1250px,92%);
-margin:0 auto;
-min-height:590px;
-display:grid;
-grid-template-columns:1.1fr .9fr;
-align-items:center;
-gap:40px
+/* Hover */
+.product-card:hover {
+    transform: translateY(-12px) scale(1.025);
 }
 
-.badge{
-display:inline-block;
-padding:9px 13px;
-border:1px solid #00cfff45;
-border-radius:999px;
-background:#00cfff0c;
-color:#5ce5ff;
-font-size:10px;
-font-weight:1000;
-margin-bottom:20px
+/* Zdjęcie produktu */
+.product-card img {
+    transition:
+        transform .6s cubic-bezier(.22,1,.36,1),
+        filter .6s ease;
 }
 
-.hero h1{
-font-size:clamp(44px,7vw,88px);
-line-height:.9;
-letter-spacing:-5px
-}
-.hero h1 span{
-background:linear-gradient(90deg,#00d9ff,#667aff,#b55cff);
--webkit-background-clip:text;
-color:transparent
-}
-.hero p{
-max-width:600px;
-margin-top:25px;
-color:#8d9ab0;
-font-size:15px;
-line-height:1.7
+/* Powiększenie zdjęcia */
+.product-card:hover img {
+    transform: scale(1.07) rotate(-1deg);
 }
 
-.heroBtns{
-display:flex;
-gap:12px;
-margin-top:30px;
-flex-wrap:wrap
+/* =========================
+   ANIMOWANE PRZYCISKI
+========================= */
+
+.product-card button {
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
 }
 
-.primary,.secondary{
-border:0;
-padding:15px 20px;
-border-radius:13px;
-font-size:11px;
-font-weight:1000;
-transition:.25s
-}
-.primary{
-color:#001018;
-background:linear-gradient(100deg,#00d9ff,#6078ff)
-}
-.secondary{
-color:#fff;
-background:#ffffff0a;
-border:1px solid #ffffff18
-}
-.primary:hover,.secondary:hover{
-transform:translateY(-4px) scale(1.02)
+.product-card button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 150, 255, .25);
 }
 
-.hero3d{
-height:430px;
-position:relative;
-border:1px solid #ffffff15;
-border-radius:30px;
-overflow:hidden;
-background:
-radial-gradient(circle,#15385a55,transparent 55%),
-#07101d;
-box-shadow:0 30px 100px #0008
+.product-card button:active {
+    transform: scale(.94);
 }
 
-.hero3d:after{
-content:"3D";
-position:absolute;
-right:20px;
-top:15px;
-font-size:80px;
-font-weight:1000;
-color:#ffffff04;
-pointer-events:none
+
+/* =========================
+   SEKCJE
+========================= */
+
+.scroll-animation {
+    opacity: 0;
+    transform: translateY(70px);
+    transition:
+        opacity .9s ease,
+        transform .9s cubic-bezier(.22,1,.36,1);
 }
 
-.section{
-width:min(1250px,92%);
-margin:80px auto
+.scroll-animation.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.sectionHead{
-display:flex;
-align-items:end;
-justify-content:space-between;
-gap:20px;
-margin-bottom:25px
-}
-.sectionHead h2{font-size:32px}
-.muted{color:#77859b;font-size:11px}
 
-.filters{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin-bottom:25px
-}
-.filter{
-padding:9px 13px;
-border-radius:999px;
-border:1px solid #ffffff12;
-background:#ffffff07;
-color:#8996aa;
-font-size:10px;
-font-weight:900
-}
-.filter.active{
-color:#fff;
-background:#007fff22;
-border-color:#00cfff55
+/* =========================
+   HERO
+========================= */
+
+.hero-animation {
+    animation:
+        heroEnter 1.1s cubic-bezier(.22,1,.36,1);
 }
 
-.search{
-width:240px;
-padding:11px 14px;
-border-radius:11px;
-border:1px solid #ffffff15;
-outline:0;
-background:#ffffff08;
-color:#fff
+@keyframes heroEnter {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(40px)
+            scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
 }
 
-.products{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:18px
+
+/* =========================
+   DELIKATNE ŚWIATŁO TŁA
+========================= */
+
+.animated-bg {
+    position: relative;
+    overflow: hidden;
 }
 
-.product{
-position:relative;
-overflow:hidden;
-background:#07101d;
-border:1px solid #ffffff12;
-border-radius:22px;
-transition:.3s;
-animation:appear .6s both
-}
-@keyframes appear{
-from{opacity:0;transform:translateY(25px)}
-to{opacity:1;transform:none}
-}
-.product:hover{
-transform:translateY(-8px);
-border-color:#00cfff55;
-box-shadow:0 25px 60px #0008
+.animated-bg::before {
+    content: "";
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    left: -200px;
+    top: -200px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 174, 255, .18),
+            transparent 70%
+        );
+
+    filter: blur(20px);
+
+    animation:
+        backgroundMove 8s ease-in-out infinite alternate;
+
+    pointer-events: none;
 }
 
-.productVisual{
-height:240px;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-background:
-radial-gradient(circle at center,#00cfff16,transparent 60%)
+.animated-bg::after {
+    content: "";
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: -200px;
+    bottom: -200px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(100, 50, 255, .15),
+            transparent 70%
+        );
+
+    filter: blur(20px);
+
+    animation:
+        backgroundMove2 10s ease-in-out infinite alternate;
+
+    pointer-events: none;
 }
 
-.productVisual img{
-width:100%;
-height:100%;
-object-fit:cover
+@keyframes backgroundMove {
+
+    from {
+        transform: translate(0,0);
+    }
+
+    to {
+        transform: translate(180px,100px);
+    }
+
 }
 
-.fakeModel{
-font-size:95px;
-filter:drop-shadow(0 20px 25px #00cfff44);
-animation:float 3s ease-in-out infinite
-}
-@keyframes float{
-50%{transform:translateY(-12px) rotate(4deg)}
+@keyframes backgroundMove2 {
+
+    from {
+        transform: translate(0,0);
+    }
+
+    to {
+        transform: translate(-150px,-100px);
+    }
+
 }
 
-.sale{
-position:absolute;
-left:13px;
-top:13px;
-padding:7px 9px;
-border-radius:8px;
-background:#ff3d65;
-font-size:8px;
-font-weight:1000
+
+/* =========================
+   KOSZYK WYSUWANY Z PRAWEJ
+========================= */
+
+.cart-panel {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+
+    width: min(420px, 95vw);
+    height: 100vh;
+
+    background: rgba(5,12,25,.96);
+
+    backdrop-filter: blur(20px);
+
+    border-left:
+        1px solid rgba(255,255,255,.1);
+
+    transform: translateX(100%);
+
+    transition:
+        transform .45s cubic-bezier(.22,1,.36,1);
+
+    z-index: 9999;
 }
 
-.productInfo{padding:20px}
-.productInfo h3{font-size:18px}
-.productInfo p{
-height:42px;
-overflow:hidden;
-margin-top:8px;
-color:#7e8ba0;
-font-size:10px;
-line-height:1.5
+.cart-panel.open {
+    transform: translateX(0);
 }
 
-.priceRow{
-display:flex;
-align-items:end;
-justify-content:space-between;
-margin-top:17px
+
+/* =========================
+   MODAL PRODUKTU
+========================= */
+
+.product-modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0,0,0,.75);
+
+    backdrop-filter: blur(10px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity .3s ease,
+        visibility .3s ease;
+
+    z-index: 9998;
 }
 
-.price{
-font-size:29px;
-font-weight:1000;
-color:#fff
-}
-.oldPrice{
-display:block;
-color:#687487;
-font-size:10px;
-text-decoration:line-through
-}
-.discount{color:#46e7a5;font-size:9px;font-weight:1000}
-
-.productBtns{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:7px;
-margin-top:17px
+.product-modal.open {
+    opacity: 1;
+    visibility: visible;
 }
 
-.productBtns button{
-padding:11px 5px;
-border-radius:10px;
-font-size:9px;
-font-weight:1000;
-border:1px solid #ffffff14;
-color:#fff;
-background:#ffffff08
-}
-.productBtns .add{
-border:0;
-background:linear-gradient(100deg,#008dff,#6b42ff)
+.product-modal-content {
+    width: min(900px, 95vw);
+    max-height: 90vh;
+
+    overflow: auto;
+
+    background: #071120;
+
+    border:
+        1px solid #20324c;
+
+    border-radius: 25px;
+
+    transform:
+        translateY(40px)
+        scale(.94);
+
+    transition:
+        transform .45s
+        cubic-bezier(.22,1,.36,1);
 }
 
-.infoCards{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px
-}
-.infoCard{
-padding:25px;
-border-radius:20px;
-background:#07101d;
-border:1px solid #ffffff10
-}
-.infoCard b{font-size:15px}
-.infoCard p{
-margin-top:9px;
-color:#77859b;
-font-size:10px;
-line-height:1.6
+.product-modal.open
+.product-modal-content {
+
+    transform:
+        translateY(0)
+        scale(1);
+
 }
 
-/* MODAL */
 
-.overlay{
-position:fixed;
-inset:0;
-z-index:300;
-display:none;
-align-items:center;
-justify-content:center;
-padding:20px;
-background:#000b;
-backdrop-filter:blur(10px)
-}
-.overlay.show{display:flex}
+/* =========================
+   3D MODEL
+========================= */
 
-.modal{
-width:min(1050px,100%);
-max-height:92vh;
-overflow:auto;
-border:1px solid #ffffff15;
-border-radius:25px;
-background:#07101d;
-box-shadow:0 40px 120px #000;
-animation:modal .25s ease
-}
-@keyframes modal{
-from{opacity:0;transform:scale(.95)}
-to{opacity:1;transform:scale(1)}
+.model-3d {
+    transition:
+        transform .7s cubic-bezier(.22,1,.36,1);
 }
 
-.close{
-position:absolute;
-right:15px;
-top:15px;
-z-index:2;
-width:38px;
-height:38px;
-border:0;
-border-radius:50%;
-background:#ffffff12;
-color:#fff
+.model-3d:hover {
+    transform:
+        rotateY(8deg)
+        rotateX(-4deg)
+        scale(1.03);
 }
 
-.productModal{
-display:grid;
-grid-template-columns:1fr 1fr;
-min-height:600px
-}
 
-.modelViewer{
-position:relative;
-min-height:600px;
-background:
-radial-gradient(circle,#0d3b5a,transparent 65%),
-#030912;
-overflow:hidden
-}
+/* =========================
+   REDUKCJA ANIMACJI
+   DLA OSÓB, KTÓRE JĄ WYŁĄCZYŁY
+========================= */
 
-.modelViewer model-viewer{
-width:100%;
-height:100%;
-min-height:600px
-}
+@media (prefers-reduced-motion: reduce) {
 
-.viewerHint{
-position:absolute;
-left:50%;
-bottom:18px;
-transform:translateX(-50%);
-padding:9px 13px;
-border-radius:999px;
-background:#0008;
-color:#9aa9bc;
-font-size:9px;
-pointer-events:none
-}
+    *,
+    *::before,
+    *::after {
 
-.productDetails{
-padding:55px 40px
-}
-.productDetails .tag{
-color:#4edfff;
-font-size:10px;
-font-weight:1000
-}
-.productDetails h2{
-margin-top:10px;
-font-size:42px;
-line-height:1
-}
-.bigPrice{
-margin-top:25px;
-font-size:52px;
-font-weight:1000
-}
-.detailsDescription{
-margin-top:20px;
-color:#8a97aa;
-line-height:1.7;
-font-size:12px
-}
-.specs{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-margin-top:25px
-}
-.spec{
-padding:13px;
-background:#ffffff06;
-border:1px solid #ffffff0d;
-border-radius:10px
-}
-.spec small{
-display:block;
-color:#657287;
-font-size:8px
-}
-.spec b{
-display:block;
-margin-top:4px;
-font-size:11px
-}
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
 
-.bigAdd{
-width:100%;
-margin-top:25px;
-padding:17px;
-border:0;
-border-radius:13px;
-background:linear-gradient(100deg,#00cfff,#6949ff);
-color:#001018;
-font-size:11px;
-font-weight:1000
-}
+        transition-duration: .01ms !important;
 
-/* CART */
+        scroll-behavior: auto !important;
+    }
 
-.side{
-position:fixed;
-right:-450px;
-top:0;
-bottom:0;
-z-index:400;
-width:min(430px,95%);
-padding:25px;
-background:#07101d;
-border-left:1px solid #ffffff15;
-box-shadow:-30px 0 100px #0008;
-transition:.3s
-}
-.side.open{right:0}
-
-.sideHead{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding-bottom:18px;
-border-bottom:1px solid #ffffff10
-}
-
-.cartItems{
-height:calc(100vh - 230px);
-overflow:auto;
-padding:15px 0
-}
-.cartItem{
-display:grid;
-grid-template-columns:55px 1fr auto;
-gap:12px;
-align-items:center;
-padding:13px 0;
-border-bottom:1px solid #ffffff0d
-}
-.cartIcon{
-width:55px;
-height:55px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:12px;
-background:#00cfff12;
-font-size:25px
-}
-.cartItem h4{font-size:11px}
-.cartItem small{color:#748197}
-.cartItem strong{font-size:12px}
-.remove{
-margin-top:5px;
-padding:4px 7px;
-border:0;
-border-radius:5px;
-background:#ff315815;
-color:#ff6280;
-font-size:8px
-}
-
-.cartBottom{
-position:absolute;
-left:25px;
-right:25px;
-bottom:25px
-}
-.summary{
-display:flex;
-justify-content:space-between;
-padding:8px 0;
-font-size:10px;
-color:#8492a6
-}
-.summary.total{
-padding-top:15px;
-border-top:1px solid #ffffff12;
-color:#fff;
-font-size:20px;
-font-weight:1000
-}
-.coupon{
-display:flex;
-gap:7px;
-margin:10px 0
-}
-.coupon input{
-min-width:0;
-flex:1;
-padding:11px;
-border:1px solid #ffffff12;
-border-radius:9px;
-background:#ffffff08;
-color:#fff;
-outline:0
-}
-.coupon button{
-padding:10px;
-border:0;
-border-radius:9px;
-background:#00cfff;
-font-size:9px;
-font-weight:1000
-}
-
-/* ACCOUNT */
-
-.account{
-width:min(500px,100%);
-padding:35px
-}
-.account h2{font-size:30px}
-.account input{
-width:100%;
-margin-top:10px;
-padding:13px;
-border:1px solid #ffffff14;
-border-radius:10px;
-background:#ffffff07;
-color:#fff;
-outline:0
-}
-.account button{
-width:100%;
-margin-top:12px;
-padding:13px;
-border:0;
-border-radius:10px;
-background:linear-gradient(100deg,#008dff,#7048ff);
-color:#fff;
-font-size:10px;
-font-weight:1000
-}
-
-/* FOOTER */
-
-footer{
-margin-top:100px;
-padding:50px 5%;
-border-top:1px solid #ffffff0d;
-color:#637085;
-text-align:center;
-font-size:10px
-}
-
-@media(max-width:900px){
-.hero{grid-template-columns:1fr;padding:60px 0}
-.hero3d{height:350px}
-.products{grid-template-columns:repeat(2,1fr)}
-.productModal{grid-template-columns:1fr}
-.modelViewer,.modelViewer model-viewer{min-height:400px}
-.infoCards{grid-template-columns:1fr}
-}
-
-@media(max-width:600px){
-header{height:65px}
-.logo{font-size:18px}
-.nav a:first-child{display:none}
-.nav button,.nav a{padding:9px}
-.hero h1{letter-spacing:-3px}
-.products{grid-template-columns:1fr}
-.sectionHead{align-items:flex-start;flex-direction:column}
-.search{width:100%}
-.productDetails{padding:30px 22px}
-.productDetails h2{font-size:34px}
-.bigPrice{font-size:43px}
-.modelViewer,.modelViewer model-viewer{min-height:320px}
 }
 </style>
-
-<!-- MODEL-VIEWER DO WŁASNYCH MODELI 3D -->
-<script type="module"
-src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-</script>
-</head>
-
-<body>
-
-<header>
-<a href="#" class="logo">Printerlase<span>3D</span></a>
-
-<nav class="nav">
-<a href="#products">Produkty</a>
-<a href="#about">O nas</a>
-<button onclick="openAccount()">👤 Konto</button>
-<button onclick="openCart()">🛒 Koszyk <span id="cartCount" class="cartCount">0</span></button>
-</nav>
-</header>
-
-
-<section class="hero">
-
-<div>
-<div class="badge">⚡ DRUK 3D • WŁASNE PROJEKTY • POLSKA</div>
-
-<h1>
-Twój pomysł.<br>
-<span>Nasza drukarka.</span>
-</h1>
-
-<p>
-Wysokiej jakości wydruki 3D, własne modele i dodatki.
-Wybierz produkt, zobacz jego model 3D i dodaj go do koszyka.
-</p>
-
-<div class="heroBtns">
-<button class="primary" onclick="document.getElementById('products').scrollIntoView()">
-ZOBACZ PRODUKTY →
-</button>
-<button class="secondary" onclick="openModelUpload()">
-🧊 WŁAŚNY MODEL 3D
-</button>
-</div>
-</div>
-
-<div class="hero3d">
-<model-viewer
-id="heroModel"
-src=""
-camera-controls
-auto-rotate
-interaction-prompt="none"
-shadow-intensity="1"
-environment-image="neutral">
-</model-viewer>
-
-<div id="heroPlaceholder" style="
-position:absolute;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-gap:10px;
-pointer-events:none">
-<div class="fakeModel">🧊</div>
-<strong>Twój model 3D</strong>
-<span class="muted">Wgraj plik .GLB lub .GLTF</span>
-</div>
-</div>
-
-</section>
-
-
-<section class="section" id="products">
-
-<div class="sectionHead">
-<div>
-<h2>🔥 Produkty</h2>
-<p class="muted">Wybierz coś dla siebie</p>
-</div>
-
-<input
-class="search"
-id="search"
-placeholder="🔎 Szukaj produktu..."
-oninput="renderProducts()">
-</div>
-
-<div class="filters">
-<button class="filter active" onclick="setCategory('Wszystko',this)">Wszystko</button>
-<button class="filter" onclick="setCategory('Breloki',this)">Breloki</button>
-<button class="filter" onclick="setCategory('Dodatki',this)">Dodatki</button>
-<button class="filter" onclick="setCategory('Dekoracje',this)">Dekoracje</button>
-</div>
-
-<div class="products" id="productsGrid"></div>
-
-</section>
-
-
-<section class="section" id="about">
-
-<div class="sectionHead">
-<div>
-<h2>Dlaczego Printerlase3D?</h2>
-<p class="muted">Mały sklep, duże możliwości.</p>
-</div>
-</div>
-
-<div class="infoCards">
-
-<div class="infoCard">
-<b>🧊 Własne modele</b>
-<p>Możesz prezentować produkty jako interaktywne modele 3D zamiast zwykłych zdjęć.</p>
-</div>
-
-<div class="infoCard">
-<b>⚡ Szybka realizacja</b>
-<p>Produkty są przygotowywane pod konkretną ofertę i drukowane na miejscu.</p>
-</div>
-
-<div class="infoCard">
-<b>🚚 Darmowa dostawa</b>
-<p>Przy zamówieniu od 50 zł dostawa jest automatycznie darmowa.</p>
-</div>
-
-</div>
-
-</section>
-
-
-<footer>
-<strong>Printerlase3D</strong><br><br>
-© 2026 Printerlase3D • Druk 3D
-</footer>
-
-
-<!-- PRODUCT MODAL -->
-
-<div class="overlay" id="productOverlay" onclick="closeIfBackground(event,'productOverlay')">
-
-<div class="modal productModal">
-
-<button class="close" onclick="closeProduct()">✕</button>
-
-<div class="modelViewer">
-
-<model-viewer
-id="productModel"
-camera-controls
-auto-rotate
-shadow-intensity="1"
-environment-image="neutral"
-interaction-prompt="none">
-</model-viewer>
-
-<div class="viewerHint">
-🖱️ Obracaj • Scroll = zoom
-</div>
-
-</div>
-
-<div class="productDetails">
-
-<div class="tag" id="modalCategory"></div>
-<h2 id="modalName"></h2>
-
-<div class="bigPrice" id="modalPrice"></div>
-
-<div id="modalOldPrice"></div>
-
-<p class="detailsDescription" id="modalDescription"></p>
-
-<div class="specs">
-<div class="spec">
-<small>MATERIAŁ</small>
-<b id="modalMaterial">PLA</b>
-</div>
-
-<div class="spec">
-<small>WYSYŁKA</small>
-<b>1–3 dni</b>
-</div>
-
-<div class="spec">
-<small>MODEL</small>
-<b>3D / GLB</b>
-</div>
-
-<div class="spec">
-<small>DOSTAWA</small>
-<b>Od 50 zł GRATIS</b>
-</div>
-</div>
-
-<button class="bigAdd" onclick="addCurrentProduct()">
-🛒 DODAJ DO KOSZYKA
-</button>
-
-</div>
-
-</div>
-</div>
-
-
-<!-- CART -->
-
-<aside class="side" id="cartSide">
-
-<div class="sideHead">
-<h2>🛒 Koszyk</h2>
-<button class="close" onclick="closeCart()">✕</button>
-</div>
-
-<div class="cartItems" id="cartItems"></div>
-
-<div class="cartBottom">
-
-<div class="coupon">
-<input id="couponInput" placeholder="Kod rabatowy">
-<button onclick="applyCoupon()">ZASTOSUJ</button>
-</div>
-
-<div id="couponMessage" class="muted"></div>
-
-<div class="summary">
-<span>Produkty</span>
-<strong id="subtotal">0,00 zł</strong>
-</div>
-
-<div class="summary">
-<span>Rabat</span>
-<strong id="discount">0,00 zł</strong>
-</div>
-
-<div class="summary">
-<span>Dostawa</span>
-<strong id="shipping">0,00 zł</strong>
-</div>
-
-<div class="summary total">
-<span>Razem</span>
-<strong id="total">0,00 zł</strong>
-</div>
-
-<button class="primary" style="width:100%;margin-top:10px" onclick="checkout()">
-PRZEJDŹ DO ZAMÓWIENIA →
-</button>
-
-</div>
-
-</aside>
-
-
-<!-- ACCOUNT -->
-
-<div class="overlay" id="accountOverlay" onclick="closeIfBackground(event,'accountOverlay')">
-
-<div class="modal account">
-
-<button class="close" onclick="closeAccount()">✕</button>
-
-<h2>👤 Konto</h2>
-<p class="muted" style="margin-top:8px">
-Zapisz swoje dane, aby szybciej składać zamówienia.
-</p>
-
-<input id="accountName" placeholder="Imię i nazwisko">
-<input id="accountEmail" placeholder="E-mail">
-<input id="accountPhone" placeholder="Telefon">
-
-<button onclick="saveAccount()">ZAPISZ DANE</button>
-
-<div id="accountMessage" class="muted" style="margin-top:15px"></div>
-
-</div>
-</div>
-
-
-<!-- MODEL UPLOAD -->
-
-<div class="overlay" id="uploadOverlay" onclick="closeIfBackground(event,'uploadOverlay')">
-
-<div class="modal account">
-
-<button class="close" onclick="closeUpload()">✕</button>
-
-<h2>🧊 Twój model 3D</h2>
-
-<p class="muted" style="margin-top:10px">
-Wybierz plik <b>.glb</b>, <b>.gltf</b> lub <b>.obj</b>.
-Model zostanie pokazany w podglądzie.
-</p>
-
-<input
-id="modelFile"
-type="file"
-accept=".glb,.gltf,.obj"
-style="margin-top:20px">
-
-<div id="uploadPreview" style="
-height:300px;
-margin-top:20px;
-border-radius:15px;
-overflow:hidden;
-background:#030912">
-</div>
-
-<button onclick="saveUploadedModel()">
-UŻYJ TEGO MODELU
-</button>
-
-</div>
-</div>
-
-
-<div id="toast" style="
-position:fixed;
-left:50%;
-bottom:25px;
-z-index:999;
-padding:13px 18px;
-border-radius:12px;
-background:#101d31;
-border:1px solid #ffffff18;
-font-size:10px;
-font-weight:1000;
-transform:translate(-50%,30px);
-opacity:0;
-pointer-events:none;
-transition:.25s">
-</div>
 
 
 <script>
 
-const products = [
+/* =========================
+   SCROLL ANIMATIONS
+========================= */
 
-{
-id:1,
-name:"Brelok FRIENDZ",
-category:"Breloki",
-price:15,
-oldPrice:20,
-icon:"🔑",
-description:"Stylowy brelok FRIENDZ przygotowany do druku 3D. Lekki, wytrzymały i idealny do kluczy lub plecaka.",
-material:"PLA",
-model:""
-},
+const animationObserver =
+    new IntersectionObserver(
 
-{
-id:2,
-name:"Brelok Printerlase3D",
-category:"Breloki",
-price:18,
-oldPrice:25,
-icon:"🧊",
-description:"Brelok z logo Printerlase3D. Minimalistyczny projekt wykonany z materiału PLA.",
-material:"PLA",
-model:""
-},
+        (entries) => {
 
-{
-id:3,
-name:"Stojak na telefon",
-category:"Dodatki",
-price:29,
-oldPrice:35,
-icon:"📱",
-description:"Praktyczny stojak na telefon wykonany w technologii druku 3D. Stabilny i wygodny podczas oglądania filmów.",
-material:"PLA+",
-model:""
-},
+            entries.forEach(entry => {
 
-{
-id:4,
-name:"Dekoracja 3D",
-category:"Dekoracje",
-price:39,
-oldPrice:49,
-icon:"⭐",
-description:"Dekoracyjny model 3D do pokoju, biurka lub półki. Możliwość prezentacji własnego modelu 3D.",
-material:"PLA",
-model:""
-},
+                if (
+                    entry.isIntersecting
+                ) {
 
-{
-id:5,
-name:"Uchwyt na kabel",
-category:"Dodatki",
-price:9,
-oldPrice:12,
-icon:"🔌",
-description:"Mały organizer na kabel. Prosty, tani i praktyczny dodatek do biurka.",
-material:"PLA",
-model:""
-},
+                    entry.target
+                        .classList
+                        .add("show");
 
-{
-id:6,
-name:"Custom 3D",
-category:"Dekoracje",
-price:49,
-oldPrice:65,
-icon:"🚀",
-description:"Indywidualny projekt 3D przygotowany pod klienta. Wgraj własny model i wykorzystaj go jako wizualizację produktu.",
-material:"PLA / PETG",
-model:""
-}
+                    /*
+                     * Animacja odpala się tylko raz.
+                     * Dzięki temu strona nie będzie
+                     * cały czas animowała elementów.
+                     */
 
-];
+                    animationObserver
+                        .unobserve(entry.target);
 
-let category="Wszystko";
-let cart=JSON.parse(localStorage.getItem("printerlase_cart")||"[]");
-let coupon="";
-let currentProduct=null;
-let uploadedModel="";
+                }
+
+            });
+
+        },
+
+        {
+            threshold: 0.12,
+
+            rootMargin:
+                "0px 0px -50px 0px"
+        }
+
+    );
 
 
-function money(n){
-return Number(n||0).toFixed(2).replace(".",",")+" zł";
+/* =========================
+   PRODUKTY
+========================= */
+
+function initProductAnimations() {
+
+    document
+        .querySelectorAll(".product-card")
+        .forEach((card, index) => {
+
+            /*
+             * Delikatne opóźnienie każdego produktu.
+             */
+
+            card.style.transitionDelay =
+                Math.min(index * 0.07, 0.5)
+                + "s";
+
+            animationObserver.observe(card);
+
+        });
+
 }
 
 
-function setCategory(c,button){
-category=c;
-document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));
-button.classList.add("active");
-renderProducts();
+/* =========================
+   SEKCJE
+========================= */
+
+function initScrollAnimations() {
+
+    document
+        .querySelectorAll(".scroll-animation")
+        .forEach(element => {
+
+            animationObserver
+                .observe(element);
+
+        });
+
 }
 
 
-function renderProducts(){
+/* =========================
+   START
+========================= */
 
-const search=document.getElementById("search").value.toLowerCase();
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-const list=products.filter(p=>
-(category==="Wszystko"||p.category===category) &&
-(p.name.toLowerCase().includes(search)||p.description.toLowerCase().includes(search))
+        initProductAnimations();
+
+        initScrollAnimations();
+
+    }
 );
 
-document.getElementById("productsGrid").innerHTML=list.map((p,i)=>`
 
-<article class="product" style="animation-delay:${i*70}ms">
+/* =========================
+   DODAWANIE PRODUKTÓW
+   JEŚLI PRODUKTY ŁADUJESZ
+   DYNAMICZNIE Z API
+========================= */
 
-<div class="productVisual">
+const productContainer =
+    document.querySelector(
+        "#products"
+    );
 
-${p.model
-?`<model-viewer src="${p.model}" camera-controls auto-rotate style="width:100%;height:100%"></model-viewer>`
-:`<div class="fakeModel">${p.icon}</div>`}
+if (productContainer) {
 
-<div class="sale">PROMOCJA</div>
+    const productObserver =
+        new MutationObserver(() => {
 
-</div>
+            document
+                .querySelectorAll(
+                    ".product-card:not([data-animation-ready])"
+                )
+                .forEach((card,index) => {
 
-<div class="productInfo">
+                    card.dataset
+                        .animationReady = "1";
 
-<h3>${escapeHTML(p.name)}</h3>
+                    card.style.transitionDelay =
+                        Math.min(index * .07,.5)
+                        + "s";
 
-<p>${escapeHTML(p.description)}</p>
+                    animationObserver
+                        .observe(card);
 
-<div class="priceRow">
+                });
 
-<div>
-<span class="oldPrice">${money(p.oldPrice)}</span>
-<div class="price">${money(p.price)}</div>
-</div>
+        });
 
-<div class="discount">
--${Math.round((1-p.price/p.oldPrice)*100)}%
-</div>
-
-</div>
-
-<div class="productBtns">
-
-<button onclick="showProduct(${p.id})">
-👀 ZOBACZ
-</button>
-
-<button class="add" onclick="addToCart(${p.id})">
-🛒 DODAJ
-</button>
-
-</div>
-
-</div>
-
-</article>
-
-`).join("")||`
-<div style="grid-column:1/-1;text-align:center;padding:60px;color:#718096">
-Nie znaleziono produktów.
-</div>`;
+    productObserver.observe(
+        productContainer,
+        {
+            childList: true,
+            subtree: true
+        }
+    );
 
 }
 
 
-function showProduct(id){
+/* =========================
+   ESC → ZAMKNIJ MODALE
+========================= */
 
-currentProduct=products.find(p=>p.id===id);
+document.addEventListener(
+    "keydown",
+    event => {
 
-if(!currentProduct)return;
+        if(event.key !== "Escape")
+            return;
 
-document.getElementById("modalName").textContent=currentProduct.name;
-document.getElementById("modalCategory").textContent=currentProduct.category;
-document.getElementById("modalPrice").textContent=money(currentProduct.price);
-document.getElementById("modalOldPrice").innerHTML=
-`<span class="oldPrice">${money(currentProduct.oldPrice)}</span>
-<span class="discount">PROMOCJA -${Math.round((1-currentProduct.price/currentProduct.oldPrice)*100)}%</span>`;
-document.getElementById("modalDescription").textContent=currentProduct.description;
-document.getElementById("modalMaterial").textContent=currentProduct.material;
+        document
+            .querySelectorAll(
+                ".cart-panel.open"
+            )
+            .forEach(el => {
 
-const viewer=document.getElementById("productModel");
+                el.classList
+                    .remove("open");
 
-if(currentProduct.model){
-viewer.src=currentProduct.model;
-}else{
-viewer.removeAttribute("src");
-}
+            });
 
-document.getElementById("productOverlay").classList.add("show");
+        document
+            .querySelectorAll(
+                ".product-modal.open"
+            )
+            .forEach(el => {
 
-}
+                el.classList
+                    .remove("open");
 
+            });
 
-function closeProduct(){
-document.getElementById("productOverlay").classList.remove("show");
-}
-
-
-function addCurrentProduct(){
-if(currentProduct)addToCart(currentProduct.id);
-}
-
-
-function addToCart(id){
-
-const p=products.find(x=>x.id===id);
-if(!p)return;
-
-const found=cart.find(x=>x.id===id);
-
-if(found)found.qty++;
-else cart.push({id:p.id,qty:1});
-
-saveCart();
-
-showToast("✓ Dodano do koszyka: "+p.name);
-
-}
-
-
-function removeFromCart(id){
-cart=cart.filter(x=>x.id!==id);
-saveCart();
-}
-
-
-function saveCart(){
-localStorage.setItem("printerlase_cart",JSON.stringify(cart));
-renderCart();
-updateCartCount();
-}
-
-
-function updateCartCount(){
-document.getElementById("cartCount").textContent=
-cart.reduce((a,b)=>a+b.qty,0);
-}
-
-
-function renderCart(){
-
-const box=document.getElementById("cartItems");
-
-if(!cart.length){
-box.innerHTML=`
-<div style="text-align:center;padding:70px 10px;color:#68768b">
-<div style="font-size:45px">🛒</div>
-<br>
-Koszyk jest pusty.
-</div>`;
-}else{
-
-box.innerHTML=cart.map(item=>{
-
-const p=products.find(x=>x.id===item.id);
-
-if(!p)return"";
-
-return`
-<div class="cartItem">
-
-<div class="cartIcon">${p.icon}</div>
-
-<div>
-<h4>${escapeHTML(p.name)}</h4>
-<small>${item.qty} × ${money(p.price)}</small>
-<br>
-<button class="remove" onclick="removeFromCart(${p.id})">
-USUŃ
-</button>
-</div>
-
-<strong>${money(p.price*item.qty)}</strong>
-
-</div>`;
-
-}).join("");
-
-}
-
-updateSummary();
-
-}
-
-
-function applyCoupon(){
-
-const value=document.getElementById("couponInput").value.trim().toUpperCase();
-
-if(value==="START10"){
-coupon="START10";
-document.getElementById("couponMessage").textContent="✓ START10 aktywny — 10% rabatu";
-}else{
-coupon="";
-document.getElementById("couponMessage").textContent="❌ Nieprawidłowy kod.";
-}
-
-updateSummary();
-}
-
-
-function updateSummary(){
-
-let subtotal=0;
-
-cart.forEach(item=>{
-const p=products.find(x=>x.id===item.id);
-if(p)subtotal+=p.price*item.qty;
-});
-
-const discount=coupon==="START10"?subtotal*.10:0;
-const after=subtotal-discount;
-const shipping=after>=50||after===0?0:9.99;
-const total=after+shipping;
-
-document.getElementById("subtotal").textContent=money(subtotal);
-document.getElementById("discount").textContent="-"+money(discount);
-document.getElementById("shipping").textContent=
-shipping===0?"GRATIS":money(shipping);
-document.getElementById("total").textContent=money(total);
-
-}
-
-
-function openCart(){
-document.getElementById("cartSide").classList.add("open");
-renderCart();
-}
-
-
-function closeCart(){
-document.getElementById("cartSide").classList.remove("open");
-}
-
-
-function openAccount(){
-
-const account=JSON.parse(localStorage.getItem("printerlase_account")||"{}");
-
-document.getElementById("accountName").value=account.name||"";
-document.getElementById("accountEmail").value=account.email||"";
-document.getElementById("accountPhone").value=account.phone||"";
-
-document.getElementById("accountOverlay").classList.add("show");
-
-}
-
-
-function closeAccount(){
-document.getElementById("accountOverlay").classList.remove("show");
-}
-
-
-function saveAccount(){
-
-const account={
-name:document.getElementById("accountName").value,
-email:document.getElementById("accountEmail").value,
-phone:document.getElementById("accountPhone").value
-};
-
-localStorage.setItem("printerlase_account",JSON.stringify(account));
-
-document.getElementById("accountMessage").textContent=
-"✓ Dane zapisane na tym urządzeniu.";
-
-showToast("✓ Konto zapisane");
-
-}
-
-
-function checkout(){
-
-if(!cart.length){
-showToast("❌ Koszyk jest pusty.");
-return;
-}
-
-/*
-Tutaj można później podłączyć
-obecny endpoint zamówień z server.js.
-Nie zmieniamy backendu w tym index.html.
-*/
-
-showToast("✓ Koszyk jest gotowy do zamówienia.");
-
-}
-
-
-function openModelUpload(){
-document.getElementById("uploadOverlay").classList.add("show");
-}
-
-
-function closeUpload(){
-document.getElementById("uploadOverlay").classList.remove("show");
-}
-
-
-document.getElementById("modelFile").addEventListener("change",function(){
-
-const file=this.files[0];
-
-if(!file)return;
-
-if(!/\.(glb|gltf|obj)$/i.test(file.name)){
-showToast("❌ Wybierz .GLB, .GLTF albo .OBJ");
-return;
-}
-
-uploadedModel=URL.createObjectURL(file);
-
-document.getElementById("uploadPreview").innerHTML=`
-<model-viewer
-src="${uploadedModel}"
-camera-controls
-auto-rotate
-shadow-intensity="1"
-style="width:100%;height:100%">
-</model-viewer>`;
-
-});
-
-
-function saveUploadedModel(){
-
-if(!uploadedModel){
-showToast("❌ Najpierw wybierz model.");
-return;
-}
-
-document.getElementById("heroModel").src=uploadedModel;
-document.getElementById("heroPlaceholder").style.display="none";
-
-localStorage.setItem("printerlase_uploaded_model",uploadedModel);
-
-closeUpload();
-
-showToast("✓ Model 3D ustawiony.");
-
-}
-
-
-function checkout(){
-
-if(!cart.length){
-showToast("❌ Koszyk jest pusty.");
-return;
-}
-
-const items=cart.map(item=>{
-const p=products.find(x=>x.id===item.id);
-return{
-id:p.id,
-name:p.name,
-qty:item.qty,
-price:p.price
-};
-});
-
-const subtotal=items.reduce((s,x)=>s+x.price*x.qty,0);
-const discount=coupon==="START10"?subtotal*.1:0;
-const after=subtotal-discount;
-const shipping=after>=50?0:9.99;
-const total=after+shipping;
-
-const order={
-items,
-subtotal,
-discount,
-shipping,
-total,
-coupon,
-createdAt:new Date().toISOString()
-};
-
-localStorage.setItem(
-"printerlase_last_order",
-JSON.stringify(order)
+    }
 );
-
-showToast("✓ Zamówienie przygotowane: "+money(total));
-
-}
-
-
-function closeIfBackground(event,id){
-if(event.target.id===id){
-document.getElementById(id).classList.remove("show");
-}
-}
-
-
-function showToast(text){
-
-const t=document.getElementById("toast");
-
-t.textContent=text;
-t.style.opacity="1";
-t.style.transform="translate(-50%,0)";
-
-clearTimeout(window.toastTimeout);
-
-window.toastTimeout=setTimeout(()=>{
-t.style.opacity="0";
-t.style.transform="translate(-50%,30px)";
-},2600);
-
-}
-
-
-function escapeHTML(value){
-
-return String(value??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-document.addEventListener("keydown",e=>{
-
-if(e.key==="Escape"){
-closeProduct();
-closeAccount();
-closeUpload();
-closeCart();
-}
-
-});
-
-
-/* Przywrócenie modelu z bieżącej sesji */
-
-const savedModel=localStorage.getItem("printerlase_uploaded_model");
-
-if(savedModel){
-
-document.getElementById("heroModel").src=savedModel;
-document.getElementById("heroPlaceholder").style.display="none";
-
-}
-
-
-renderProducts();
-renderCart();
-updateCartCount();
 
 </script>
-
-</body>
-</html>
-```
