@@ -1,1103 +1,650 @@
-```html
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Printerlase3D — Admin</title>
+```js
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-body {
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    color: white;
-    background:
-        radial-gradient(circle at 10% 0%, #008cff22, transparent 30%),
-        radial-gradient(circle at 90% 10%, #713cff22, transparent 30%),
-        #030712;
-}
+// ==========================================
+// KONFIGURACJA
+// ==========================================
 
-button,
-input,
-select {
-    font: inherit;
-}
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname));
 
-button {
-    cursor: pointer;
-}
+const DATA_FILE = path.join(__dirname, "data.json");
 
-.top {
-    height: 70px;
-    padding: 0 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ffffff12;
-    background: #030712dd;
-    backdrop-filter: blur(15px);
-}
+// ==========================================
+// HASŁO ADMINA
+// ==========================================
 
-.logo {
-    font-size: 20px;
-    font-weight: 900;
-}
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Admin2137!";
 
-.logo span {
-    color: #00c8ff;
-}
+// ==========================================
+// BAZA DANYCH
+// ==========================================
 
-.back {
-    padding: 10px 15px;
-    color: white;
-    text-decoration: none;
-    border: 1px solid #ffffff15;
-    border-radius: 10px;
-    background: #091527;
-}
+function loadData() {
+    try {
+        if (!fs.existsSync(DATA_FILE)) {
+            const data = {
+                orders: [],
+                withdrawals: []
+            };
 
-.login {
-    width: min(420px, 90%);
-    margin: 100px auto;
-    padding: 30px;
-    border: 1px solid #ffffff12;
-    border-radius: 22px;
-    background: #071120;
-    box-shadow: 0 30px 100px #0008;
-}
+            fs.writeFileSync(
+                DATA_FILE,
+                JSON.stringify(data, null, 2),
+                "utf8"
+            );
 
-.login h1 {
-    margin-bottom: 10px;
-}
+            return data;
+        }
 
-.muted {
-    color: #8190a5;
-    font-size: 12px;
-    line-height: 1.6;
-}
+        const data = JSON.parse(
+            fs.readFileSync(DATA_FILE, "utf8")
+        );
 
-.field {
-    margin-top: 18px;
-}
+        return {
+            orders: Array.isArray(data.orders)
+                ? data.orders
+                : [],
 
-.field label {
-    display: block;
-    margin-bottom: 7px;
-    color: #9aa8ba;
-    font-size: 10px;
-    font-weight: 900;
-}
+            withdrawals: Array.isArray(data.withdrawals)
+                ? data.withdrawals
+                : []
+        };
 
-.field input,
-.field select {
-    width: 100%;
-    padding: 13px;
-    color: white;
-    outline: none;
-    background: #030a14;
-    border: 1px solid #ffffff15;
-    border-radius: 10px;
-}
+    } catch (error) {
+        console.error("Błąd data.json:", error);
 
-.btn {
-    padding: 13px 18px;
-    color: white;
-    border: 0;
-    border-radius: 10px;
-    background: linear-gradient(100deg, #008cff, #713cff);
-    font-size: 11px;
-    font-weight: 900;
-}
-
-.login .btn {
-    width: 100%;
-    margin-top: 20px;
-}
-
-.error {
-    margin-top: 12px;
-    color: #ff5577;
-    font-size: 11px;
-}
-
-.dashboard {
-    display: none;
-}
-
-.container {
-    width: min(1200px, 92%);
-    margin: 35px auto 80px;
-}
-
-.heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.heading h1 {
-    font-size: 34px;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-
-.card {
-    padding: 22px;
-    border: 1px solid #ffffff10;
-    border-radius: 18px;
-    background: linear-gradient(145deg, #081426, #050c18);
-}
-
-.card small {
-    color: #8190a5;
-    font-size: 10px;
-    font-weight: 900;
-}
-
-.card strong {
-    display: block;
-    margin-top: 10px;
-    font-size: 25px;
-}
-
-.green {
-    color: #42e6a4;
-}
-
-.blue {
-    color: #00c8ff;
-}
-
-.red {
-    color: #ff5577;
-}
-
-.withdrawBox {
-    margin-top: 22px;
-    padding: 25px;
-    border: 1px solid #42e6a422;
-    border-radius: 20px;
-    background: #071120;
-}
-
-.withdrawBox h2 {
-    margin-bottom: 5px;
-}
-
-.withdrawGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 12px;
-    align-items: end;
-    margin-top: 18px;
-}
-
-.withdrawGrid .field {
-    margin: 0;
-}
-
-.orders {
-    margin-top: 25px;
-    overflow: hidden;
-    border: 1px solid #ffffff12;
-    border-radius: 18px;
-    background: #071120;
-}
-
-.ordersHeader {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ffffff12;
-}
-
-.order {
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr 150px 120px 260px;
-    gap: 15px;
-    align-items: center;
-    border-bottom: 1px solid #ffffff10;
-}
-
-.order:last-child {
-    border-bottom: 0;
-}
-
-.order strong {
-    font-size: 12px;
-}
-
-.order span {
-    display: block;
-    margin-top: 5px;
-    color: #8190a5;
-    font-size: 10px;
-}
-
-.status {
-    display: inline-block;
-    padding: 7px 9px;
-    border-radius: 8px;
-    background: #132238;
-    color: #9eafc5;
-    font-size: 9px;
-    font-weight: 900;
-}
-
-.status.PAID {
-    color: #42e6a4;
-    background: #42e6a415;
-}
-
-.status.NEW {
-    color: #5edcff;
-    background: #00c8ff12;
-}
-
-.status.CANCELLED {
-    color: #ff6c85;
-    background: #ff557712;
-}
-
-.actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.smallBtn {
-    padding: 8px 10px;
-    color: white;
-    background: #0b182a;
-    border: 1px solid #ffffff15;
-    border-radius: 8px;
-    font-size: 9px;
-    font-weight: 900;
-}
-
-.smallBtn:hover {
-    background: #14243b;
-}
-
-.empty {
-    padding: 50px;
-    text-align: center;
-    color: #8190a5;
-}
-
-.toast {
-    position: fixed;
-    left: 50%;
-    bottom: 25px;
-    padding: 14px 20px;
-    color: white;
-    background: #102038;
-    border: 1px solid #00c8ff33;
-    border-radius: 12px;
-    transform: translate(-50%, 30px);
-    opacity: 0;
-    pointer-events: none;
-    transition: .25s;
-    z-index: 100;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
-
-@media(max-width: 950px) {
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .order {
-        grid-template-columns: 1fr;
-    }
-
-    .withdrawGrid {
-        grid-template-columns: 1fr;
+        return {
+            orders: [],
+            withdrawals: []
+        };
     }
 }
 
-@media(max-width: 500px) {
-    .cards {
-        grid-template-columns: 1fr;
-    }
-
-    .heading {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<header class="top">
-    <div class="logo">
-        Printerlase<span>3D</span> ADMIN
-    </div>
-
-    <a href="/" class="back">← SKLEP</a>
-</header>
-
-<div id="loginScreen" class="login">
-
-    <h1>🔐 Panel Admin</h1>
-
-    <p class="muted">
-        Zaloguj się do panelu administratora.
-    </p>
-
-    <div class="field">
-        <label>HASŁO</label>
-
-        <input
-            id="adminPassword"
-            type="password"
-            placeholder="Hasło administratora"
-            autocomplete="current-password"
-        >
-    </div>
-
-    <button class="btn" onclick="login()">
-        ZALOGUJ
-    </button>
-
-    <div id="loginError" class="error"></div>
-
-</div>
-
-<main id="dashboard" class="dashboard">
-
-<div class="container">
-
-    <div class="heading">
-
-        <div>
-            <h1>📊 Dashboard</h1>
-
-            <p class="muted">
-                Zarządzanie Printerlase3D
-            </p>
-        </div>
-
-        <button class="btn" onclick="loadDashboard()">
-            ↻ ODŚWIEŻ
-        </button>
-
-    </div>
-
-    <section class="cards">
-
-        <div class="card">
-            <small>💰 SALDO</small>
-            <strong id="balance" class="green">0,00 zł</strong>
-        </div>
-
-        <div class="card">
-            <small>📦 ZAMÓWIENIA</small>
-            <strong id="ordersCount">0</strong>
-        </div>
-
-        <div class="card">
-            <small>💵 ZAROBIONE</small>
-            <strong id="earned" class="blue">0,00 zł</strong>
-        </div>
-
-        <div class="card">
-            <small>💸 WYPŁACONO</small>
-            <strong id="withdrawn" class="red">0,00 zł</strong>
-        </div>
-
-    </section>
-
-    <section class="withdrawBox">
-
-        <h2>💸 Wypłata</h2>
-
-        <p class="muted">
-            Utwórz żądanie wypłaty środków.
-        </p>
-
-        <div class="withdrawGrid">
-
-            <div class="field">
-                <label>KWOTA</label>
-
-                <input
-                    id="withdrawAmount"
-                    type="number"
-                    min="1"
-                    step="0.01"
-                    placeholder="25.00"
-                >
-            </div>
-
-            <div class="field">
-                <label>METODA</label>
-
-                <select id="withdrawMethod">
-                    <option value="bank">🏦 Konto bankowe</option>
-                    <option value="blik">📱 BLIK</option>
-                </select>
-            </div>
-
-            <button class="btn" onclick="withdraw()">
-                💸 WYPŁAĆ
-            </button>
-
-        </div>
-
-    </section>
-
-    <section class="orders">
-
-        <div class="ordersHeader">
-
-            <h2>📦 Zamówienia</h2>
-
-            <span id="lastUpdate" class="muted"></span>
-
-        </div>
-
-        <div id="ordersList"></div>
-
-    </section>
-
-</div>
-
-</main>
-
-<div id="toast" class="toast"></div>
-
-<script>
-
-let adminPassword = "";
-
-function money(value) {
-    return Number(value || 0)
-        .toFixed(2)
-        .replace(".", ",") + " zł";
+function saveData(data) {
+    fs.writeFileSync(
+        DATA_FILE,
+        JSON.stringify(data, null, 2),
+        "utf8"
+    );
 }
 
-function escapeHTML(value) {
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
+// ==========================================
+// ADMIN AUTH
+// ==========================================
 
-async function login() {
+function adminAuth(req, res, next) {
 
     const password =
-        document.getElementById("adminPassword").value.trim();
+        req.headers["x-admin-password"];
 
-    if (!password) {
-        document.getElementById("loginError").textContent =
-            "Podaj hasło.";
-        return;
+    if (!password || password !== ADMIN_PASSWORD) {
+        return res.status(401).json({
+            error: "Nieprawidłowe hasło administratora."
+        });
     }
 
-    adminPassword = password;
+    next();
+}
 
-    try {
+// ==========================================
+// STRONA GŁÓWNA
+// ==========================================
 
-        const response = await fetch("/api/admin/dashboard", {
-            headers: {
-                "x-admin-password": adminPassword
-            }
+app.get("/", (req, res) => {
+
+    res.sendFile(
+        path.join(__dirname, "index.html")
+    );
+
+});
+
+// ==========================================
+// PANEL ADMINA
+// /admin
+// ==========================================
+
+app.get("/admin", (req, res) => {
+
+    const adminFile =
+        path.join(__dirname, "admin.html");
+
+    if (!fs.existsSync(adminFile)) {
+        return res.status(500).send(`
+            <h1>Błąd</h1>
+            <p>Nie znaleziono pliku admin.html.</p>
+        `);
+    }
+
+    res.sendFile(adminFile);
+
+});
+
+// ==========================================
+// ADMIN DASHBOARD
+// ==========================================
+
+app.get(
+    "/api/admin/dashboard",
+    adminAuth,
+    (req, res) => {
+
+        const data = loadData();
+
+        const orders = data.orders;
+        const withdrawals = data.withdrawals;
+
+        const earned = orders
+            .filter(order => order.status === "PAID")
+            .reduce(
+                (sum, order) =>
+                    sum + Number(order.total || 0),
+                0
+            );
+
+        const withdrawn = withdrawals
+            .filter(item => item.status === "COMPLETED")
+            .reduce(
+                (sum, item) =>
+                    sum + Number(item.amount || 0),
+                0
+            );
+
+        const pendingWithdrawals = withdrawals
+            .filter(item => item.status === "PENDING")
+            .reduce(
+                (sum, item) =>
+                    sum + Number(item.amount || 0),
+                0
+            );
+
+        const balance =
+            Math.max(
+                0,
+                earned -
+                withdrawn -
+                pendingWithdrawals
+            );
+
+        res.json({
+            success: true,
+
+            balance: Number(
+                balance.toFixed(2)
+            ),
+
+            earned: Number(
+                earned.toFixed(2)
+            ),
+
+            withdrawn: Number(
+                withdrawn.toFixed(2)
+            ),
+
+            pendingWithdrawals: Number(
+                pendingWithdrawals.toFixed(2)
+            ),
+
+            orders,
+            withdrawals
         });
 
-        if (!response.ok) {
-            throw new Error("Błędne hasło");
+    }
+);
+
+// ==========================================
+// ZMIANA STATUSU ZAMÓWIENIA
+// ==========================================
+
+app.post(
+    "/api/admin/order-status",
+    adminAuth,
+    (req, res) => {
+
+        const { id, status } = req.body;
+
+        const allowedStatuses = [
+            "NEW",
+            "PAID",
+            "CANCELLED"
+        ];
+
+        if (!id || !status) {
+            return res.status(400).json({
+                error: "Brak ID lub statusu."
+            });
         }
 
-        document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).json({
+                error: "Nieprawidłowy status."
+            });
+        }
 
-        renderDashboard(await response.json());
+        const data = loadData();
 
-    } catch {
+        const order =
+            data.orders.find(
+                item => item.id === id
+            );
 
-        adminPassword = "";
+        if (!order) {
+            return res.status(404).json({
+                error: "Nie znaleziono zamówienia."
+            });
+        }
 
-        document.getElementById("loginError").textContent =
-            "❌ Błędne hasło administratora.";
+        order.status = status;
+        order.updatedAt =
+            new Date().toISOString();
 
-    }
-}
+        saveData(data);
 
-async function loadDashboard() {
-
-    try {
-
-        const response = await fetch("/api/admin/dashboard", {
-            headers: {
-                "x-admin-password": adminPassword
-            }
+        res.json({
+            success: true,
+            order
         });
 
-        if (response.status === 401) {
-            location.reload();
-            return;
+    }
+);
+
+// ==========================================
+// UTWORZENIE WYPŁATY
+// ==========================================
+
+app.post(
+    "/api/admin/withdraw",
+    adminAuth,
+    (req, res) => {
+
+        const amount =
+            Number(req.body.amount);
+
+        const method =
+            req.body.method;
+
+        if (
+            !Number.isFinite(amount) ||
+            amount <= 0
+        ) {
+            return res.status(400).json({
+                error: "Nieprawidłowa kwota."
+            });
         }
 
-        if (!response.ok) {
-            throw new Error();
+        const allowedMethods = [
+            "bank",
+            "blik"
+        ];
+
+        if (!allowedMethods.includes(method)) {
+            return res.status(400).json({
+                error: "Nieprawidłowa metoda."
+            });
         }
 
-        renderDashboard(await response.json());
+        const data = loadData();
 
-    } catch {
+        const earned =
+            data.orders
+                .filter(
+                    order =>
+                        order.status === "PAID"
+                )
+                .reduce(
+                    (sum, order) =>
+                        sum +
+                        Number(order.total || 0),
+                    0
+                );
 
-        showToast("❌ Nie udało się pobrać danych.");
+        const withdrawn =
+            data.withdrawals
+                .filter(
+                    item =>
+                        item.status === "COMPLETED"
+                )
+                .reduce(
+                    (sum, item) =>
+                        sum +
+                        Number(item.amount || 0),
+                    0
+                );
+
+        const pending =
+            data.withdrawals
+                .filter(
+                    item =>
+                        item.status === "PENDING"
+                )
+                .reduce(
+                    (sum, item) =>
+                        sum +
+                        Number(item.amount || 0),
+                    0
+                );
+
+        const balance =
+            earned -
+            withdrawn -
+            pending;
+
+        if (amount > balance) {
+            return res.status(400).json({
+                error:
+                    `Brak środków. Dostępne: ` +
+                    `${balance.toFixed(2)} zł`
+            });
+        }
+
+        const withdrawal = {
+
+            id:
+                "WD-" +
+                Date.now(),
+
+            amount:
+                Number(
+                    amount.toFixed(2)
+                ),
+
+            method,
+
+            status:
+                "PENDING",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+        data.withdrawals.push(
+            withdrawal
+        );
+
+        saveData(data);
+
+        res.json({
+            success: true,
+            withdrawal
+        });
 
     }
-}
+);
 
-function renderDashboard(data) {
+// ==========================================
+// ZATWIERDZENIE WYPŁATY
+// ==========================================
 
-    const orders = Array.isArray(data.orders)
-        ? data.orders
-        : [];
+app.post(
+    "/api/admin/withdraw/:id/complete",
+    adminAuth,
+    (req, res) => {
 
-    document.getElementById("balance").textContent =
-        money(data.balance);
+        const data = loadData();
 
-    document.getElementById("ordersCount").textContent =
-        orders.length;
+        const withdrawal =
+            data.withdrawals.find(
+                item =>
+                    item.id === req.params.id
+            );
 
-    document.getElementById("earned").textContent =
-        money(data.earned);
+        if (!withdrawal) {
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono wypłaty."
+            });
+        }
 
-    document.getElementById("withdrawn").textContent =
-        money(data.withdrawn);
+        withdrawal.status =
+            "COMPLETED";
 
-    document.getElementById("lastUpdate").textContent =
-        "Aktualizacja: " +
-        new Date().toLocaleTimeString("pl-PL");
+        withdrawal.completedAt =
+            new Date().toISOString();
 
-    renderOrders(orders);
-}
+        saveData(data);
 
-function renderOrders(orders) {
+        res.json({
+            success: true,
+            withdrawal
+        });
 
-    const box = document.getElementById("ordersList");
-
-    if (!orders.length) {
-
-        box.innerHTML = `
-            <div class="empty">
-                📦 Brak zamówień.
-            </div>
-        `;
-
-        return;
     }
+);
 
-    box.innerHTML = orders
-        .slice()
-        .reverse()
-        .map(order => {
+// ==========================================
+// ANULOWANIE WYPŁATY
+// ==========================================
 
-            const status = order.status || "NEW";
+app.post(
+    "/api/admin/withdraw/:id/cancel",
+    adminAuth,
+    (req, res) => {
 
-            return `
-                <div class="order">
+        const data = loadData();
 
-                    <div>
+        const withdrawal =
+            data.withdrawals.find(
+                item =>
+                    item.id === req.params.id
+            );
 
-                        <strong>
-                            ${escapeHTML(order.id)}
-                        </strong>
+        if (!withdrawal) {
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono wypłaty."
+            });
+        }
 
-                        <span>
-                            👤 ${escapeHTML(order.name)}
-                        </span>
+        withdrawal.status =
+            "CANCELLED";
 
-                        <span>
-                            ✉️ ${escapeHTML(order.email)}
-                        </span>
+        withdrawal.cancelledAt =
+            new Date().toISOString();
 
-                        ${
-                            order.address
-                            ? `
-                            <span>
-                                📍 ${escapeHTML(order.address)}
-                            </span>
-                            `
-                            : ""
-                        }
+        saveData(data);
 
-                    </div>
+        res.json({
+            success: true,
+            withdrawal
+        });
 
-                    <div>
+    }
+);
 
-                        <strong>
-                            ${money(order.total)}
-                        </strong>
+// ==========================================
+// NOWE ZAMÓWIENIE ZE SKLEPU
+// ==========================================
 
-                        <span>
-                            ${
-                                order.createdAt
-                                ? new Date(order.createdAt)
-                                    .toLocaleString("pl-PL")
-                                : ""
-                            }
-                        </span>
+app.post(
+    "/api/orders",
+    (req, res) => {
 
-                    </div>
+        const order =
+            req.body;
 
-                    <div>
+        if (!order) {
+            return res.status(400).json({
+                error:
+                    "Brak danych zamówienia."
+            });
+        }
 
-                        <span class="status ${escapeHTML(status)}">
-                            ${escapeHTML(status)}
-                        </span>
+        if (
+            !order.name ||
+            !order.email ||
+            order.total === undefined
+        ) {
+            return res.status(400).json({
+                error:
+                    "Brakuje danych zamówienia."
+            });
+        }
 
-                    </div>
+        const data = loadData();
 
-                    <div class="actions">
+        const newOrder = {
 
-                        ${
-                            status !== "PAID"
-                            ? `
-                            <button
-                                class="smallBtn"
-                                onclick="setOrderStatus('${escapeHTML(order.id)}','PAID')"
-                            >
-                                ✓ OPŁACONE
-                            </button>
-                            `
-                            : ""
-                        }
+            ...order,
 
-                        ${
-                            status !== "CANCELLED"
-                            ? `
-                            <button
-                                class="smallBtn"
-                                onclick="setOrderStatus('${escapeHTML(order.id)}','CANCELLED')"
-                            >
-                                ✕ ANULUJ
-                            </button>
-                            `
-                            : ""
-                        }
+            id:
+                order.id ||
+                "PL-" +
+                Date.now(),
 
-                        <button
-                            class="smallBtn"
-                            onclick="generateLabel('${escapeHTML(order.id)}')"
-                        >
-                            🏷️ ETYKIETA
-                        </button>
+            status:
+                "NEW",
 
-                    </div>
+            createdAt:
+                order.createdAt ||
+                new Date().toISOString()
 
+        };
+
+        data.orders.push(
+            newOrder
+        );
+
+        saveData(data);
+
+        console.log(
+            "NOWE ZAMÓWIENIE:",
+            newOrder.id,
+            newOrder.total,
+            "zł"
+        );
+
+        res.json({
+            success: true,
+            order: newOrder
+        });
+
+    }
+);
+
+// ==========================================
+// SPRAWDZENIE ZAMÓWIENIA
+// ==========================================
+
+app.get(
+    "/api/orders/:id",
+    (req, res) => {
+
+        const data =
+            loadData();
+
+        const order =
+            data.orders.find(
+                item =>
+                    item.id ===
+                    req.params.id
+            );
+
+        if (!order) {
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono zamówienia."
+            });
+        }
+
+        res.json(order);
+
+    }
+);
+
+// ==========================================
+// 404
+// ==========================================
+
+app.use(
+    (req, res) => {
+
+        res.status(404).send(`
+            <!DOCTYPE html>
+            <html lang="pl">
+            <head>
+                <meta charset="UTF-8">
+                <title>404 — Printerlase3D</title>
+                <style>
+                    body{
+                        margin:0;
+                        min-height:100vh;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:#050914;
+                        color:white;
+                        font-family:Arial;
+                        text-align:center;
+                    }
+
+                    a{
+                        color:#00c8ff;
+                        text-decoration:none;
+                    }
+                </style>
+            </head>
+
+            <body>
+                <div>
+                    <h1>404</h1>
+                    <p>Nie znaleziono strony.</p>
+                    <a href="/">← Wróć do sklepu</a>
                 </div>
-            `;
+            </body>
+            </html>
+        `);
 
-        })
-        .join("");
-}
+    }
+);
 
-async function setOrderStatus(id, status) {
+// ==========================================
+// START
+// ==========================================
 
-    try {
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
 
-        const response = await fetch(
-            "/api/admin/order-status",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-admin-password": adminPassword
-                },
-
-                body: JSON.stringify({
-                    id,
-                    status
-                })
-            }
+        console.log(
+            "================================="
         );
 
-        if (!response.ok) {
-            throw new Error();
-        }
-
-        showToast(
-            status === "PAID"
-                ? "✓ Zamówienie opłacone."
-                : "✓ Zamówienie anulowane."
+        console.log(
+            "       PRINTERLASE3D"
         );
 
-        loadDashboard();
+        console.log(
+            "================================="
+        );
 
-    } catch {
+        console.log(
+            `Serwer działa na porcie ${PORT}`
+        );
 
-        showToast(
-            "❌ Nie udało się zmienić statusu."
+        console.log(
+            `Admin: /admin`
+        );
+
+        console.log(
+            `Hasło admina: ${
+                ADMIN_PASSWORD
+                    ? "ustawione"
+                    : "brak"
+            }`
+        );
+
+        console.log(
+            "================================="
         );
 
     }
-}
-
-async function withdraw() {
-
-    const amount = Number(
-        document.getElementById("withdrawAmount").value
-    );
-
-    const method =
-        document.getElementById("withdrawMethod").value;
-
-    if (!amount || amount <= 0) {
-
-        showToast("❌ Podaj prawidłową kwotę.");
-
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            "/api/admin/withdraw",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-admin-password": adminPassword
-                },
-
-                body: JSON.stringify({
-                    amount,
-                    method
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(
-                data.error || "Błąd wypłaty"
-            );
-        }
-
-        document.getElementById("withdrawAmount").value = "";
-
-        showToast(
-            "✓ Żądanie wypłaty utworzone."
-        );
-
-        loadDashboard();
-
-    } catch (error) {
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-}
-
-async function generateLabel(orderId) {
-
-    try {
-
-        const response = await fetch(
-            "/api/orders/" +
-            encodeURIComponent(orderId)
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                "Nie znaleziono zamówienia."
-            );
-        }
-
-        const order = await response.json();
-
-        const label = `
-
-<!DOCTYPE html>
-<html lang="pl">
-
-<head>
-
-<meta charset="UTF-8">
-
-<title>
-Etykieta ${escapeHTML(order.id)}
-</title>
-
-<style>
-
-body {
-    margin: 0;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background: white;
-    color: black;
-}
-
-.label {
-
-    width: 100mm;
-    min-height: 150mm;
-
-    padding: 10mm;
-
-    box-sizing: border-box;
-
-    border: 2px solid black;
-
-}
-
-.logo {
-
-    font-size: 25px;
-    font-weight: 900;
-    margin-bottom: 20px;
-
-}
-
-.logo span {
-    color: #008cff;
-}
-
-.line {
-
-    border-top: 1px solid black;
-    margin: 15px 0;
-
-}
-
-.title {
-
-    font-size: 18px;
-    font-weight: 900;
-    margin-bottom: 10px;
-
-}
-
-.info {
-
-    font-size: 14px;
-    line-height: 1.7;
-
-}
-
-.orderNumber {
-
-    margin-top: 20px;
-
-    font-size: 20px;
-
-    font-weight: 900;
-
-}
-
-.barcode {
-
-    margin-top: 25px;
-
-    height: 45px;
-
-    border: 3px solid black;
-
-    background:
-        repeating-linear-gradient(
-            90deg,
-            black 0,
-            black 2px,
-            white 2px,
-            white 5px
-        );
-
-}
-
-@media print {
-
-    body {
-        padding: 0;
-    }
-
-    .label {
-        border: 2px solid black;
-    }
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="label">
-
-    <div class="logo">
-        Printerlase<span>3D</span>
-    </div>
-
-    <div class="line"></div>
-
-    <div class="title">
-        ODBIORCA
-    </div>
-
-    <div class="info">
-
-        <strong>
-            ${escapeHTML(order.name)}
-        </strong>
-
-        <br>
-
-        ${escapeHTML(order.address || "")}
-
-        <br>
-
-        ${escapeHTML(order.postalCode || "")}
-        ${escapeHTML(order.city || "")}
-
-        <br>
-
-        ${escapeHTML(order.email)}
-
-    </div>
-
-    <div class="line"></div>
-
-    <div class="title">
-        ZAMÓWIENIE
-    </div>
-
-    <div class="info">
-
-        Numer:
-        ${escapeHTML(order.id)}
-
-        <br>
-
-        Kwota:
-        ${money(order.total)}
-
-        <br>
-
-        Status:
-        ${escapeHTML(order.status || "NEW")}
-
-    </div>
-
-    <div class="orderNumber">
-
-        📦 PRZESYŁKA
-
-    </div>
-
-    <div class="barcode"></div>
-
-</div>
-
-<script>
-
-window.onload = function() {
-    window.print();
-};
-
-<\/script>
-
-</body>
-
-</html>
-
-`;
-
-        const win = window.open(
-            "",
-            "_blank",
-            "width=800,height=900"
-        );
-
-        if (!win) {
-
-            showToast(
-                "❌ Przeglądarka zablokowała okno."
-            );
-
-            return;
-        }
-
-        win.document.open();
-
-        win.document.write(label);
-
-        win.document.close();
-
-    } catch (error) {
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-}
-
-function showToast(text) {
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent = text;
-
-    toast.classList.add("show");
-
-    clearTimeout(window.toastTimer);
-
-    window.toastTimer =
-        setTimeout(
-            () => toast.classList.remove("show"),
-            3000
-        );
-}
-
-document
-    .getElementById("adminPassword")
-    .addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key === "Enter") {
-                login();
-            }
-
-        }
-    );
-
-</script>
-
-</body>
-</html>
+);
 ```
