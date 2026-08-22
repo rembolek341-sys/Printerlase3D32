@@ -5,11 +5,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Printerlase3D — Sklep 3D</title>
+<title>Printerlase3D — Druk 3D na zamówienie</title>
 
-<meta name="description" content="Printerlase3D — breloki, dodatki i produkty drukowane w 3D.">
+<meta name="description" content="Printerlase3D — breloki, dodatki i druk 3D na zamówienie. Wyślij własny model 3D i zamów wydruk.">
 
 <style>
+:root{
+    --bg:#030712;
+    --panel:#071120;
+    --panel2:#0a1729;
+    --text:#fff;
+    --muted:#7e8ca3;
+    --blue:#00c8ff;
+    --blue2:#087cff;
+    --purple:#713cff;
+    --green:#42e6a4;
+    --red:#ff4f70;
+    --border:rgba(255,255,255,.08);
+}
+
 *{
     margin:0;
     padding:0;
@@ -21,58 +35,49 @@ html{
 }
 
 body{
-    font-family:Inter,Arial,sans-serif;
-    background:#030712;
-    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    color:var(--text);
+    background:var(--bg);
     overflow-x:hidden;
-}
-
-button,
-input,
-select{
-    font:inherit;
-}
-
-button,
-a{
-    -webkit-tap-highlight-color:transparent;
 }
 
 body::before{
     content:"";
     position:fixed;
     inset:0;
-    z-index:-3;
+    z-index:-5;
     background:
-        radial-gradient(circle at 15% 10%,rgba(0,174,255,.16),transparent 28%),
-        radial-gradient(circle at 85% 15%,rgba(111,61,255,.16),transparent 30%),
-        radial-gradient(circle at 50% 100%,rgba(0,102,255,.08),transparent 35%);
+        radial-gradient(circle at 10% 5%,rgba(0,200,255,.14),transparent 30%),
+        radial-gradient(circle at 90% 15%,rgba(112,60,255,.15),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(0,100,255,.08),transparent 35%);
 }
 
 body::after{
     content:"";
     position:fixed;
     inset:0;
-    z-index:-2;
+    z-index:-4;
     pointer-events:none;
-    opacity:.15;
+    opacity:.13;
     background-image:
         linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
         linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
     background-size:45px 45px;
 }
 
-::-webkit-scrollbar{
-    width:8px;
+button,
+input,
+select,
+textarea{
+    font:inherit;
 }
 
-::-webkit-scrollbar-track{
-    background:#020611;
+button{
+    cursor:pointer;
 }
 
-::-webkit-scrollbar-thumb{
-    background:linear-gradient(#00d9ff,#703cff);
-    border-radius:20px;
+a{
+    color:inherit;
 }
 
 /* =========================
@@ -80,38 +85,33 @@ body::after{
 ========================= */
 
 .promo{
-    min-height:42px;
-    padding:8px 15px;
-
+    min-height:44px;
+    padding:9px 15px;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     flex-wrap:wrap;
-    gap:7px;
-
-    text-align:center;
-
+    gap:8px;
     background:linear-gradient(
         100deg,
         #006eff,
-        #00cfff,
-        #673cff,
+        #00d9ff,
+        #633cff,
         #006eff
     );
-
     background-size:300% 100%;
     animation:promo 8s linear infinite;
-
     font-size:11px;
     font-weight:900;
+    text-align:center;
 }
 
 @keyframes promo{
-    from{background-position:0;}
-    to{background-position:300%;}
+    from{background-position:0}
+    to{background-position:300%}
 }
 
-.promoCode{
+.code{
     padding:6px 10px;
     border-radius:7px;
     background:rgba(0,0,0,.25);
@@ -119,127 +119,86 @@ body::after{
 }
 
 /* =========================
-   NAVBAR
+   NAV
 ========================= */
 
 .nav{
     position:sticky;
     top:0;
     z-index:100;
-
-    min-height:74px;
+    min-height:72px;
     padding:12px 5%;
-
     display:flex;
     align-items:center;
     justify-content:space-between;
-
-    background:rgba(2,7,17,.78);
-    backdrop-filter:blur(20px);
-
-    border-bottom:1px solid rgba(255,255,255,.07);
+    gap:20px;
+    background:rgba(3,7,18,.82);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
 }
 
 .logo{
     display:flex;
     align-items:center;
     gap:10px;
-
-    color:white;
     text-decoration:none;
-
-    font-size:20px;
+    font-size:19px;
     font-weight:1000;
 }
 
 .logoIcon{
-    width:43px;
-    height:43px;
-
+    width:42px;
+    height:42px;
     display:grid;
     place-items:center;
-
     border-radius:13px;
-
-    background:linear-gradient(
-        135deg,
-        #00ddff,
-        #087dff,
-        #783cff
-    );
-
-    box-shadow:0 0 35px rgba(0,180,255,.25);
+    background:linear-gradient(135deg,var(--blue),var(--blue2),var(--purple));
+    box-shadow:0 0 35px rgba(0,190,255,.2);
 }
 
 .logo span{
-    color:#28ddff;
+    color:#2cdbff;
 }
 
 .navLinks{
     display:flex;
-    gap:8px;
+    gap:7px;
 }
 
-.navButton{
+.navBtn{
     position:relative;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
     padding:11px 14px;
-
+    border:1px solid var(--border);
     border-radius:10px;
-
+    background:#0a1729;
     color:#fff;
     text-decoration:none;
-
-    border:1px solid rgba(255,255,255,.07);
-
-    background:#0a1729;
-
-    cursor:pointer;
-
     font-size:10px;
     font-weight:900;
-
     transition:.2s;
 }
 
-.navButton:hover{
+.navBtn:hover{
     transform:translateY(-2px);
     background:#12243c;
 }
 
-.account{
-    background:linear-gradient(100deg,#007dff,#6340ff);
-}
-
-.admin{
-    background:linear-gradient(100deg,#512cff,#008cff);
-}
-
-.cartButton{
+.cartBtn{
+    border:0;
     background:linear-gradient(100deg,#008cff,#703cff);
 }
 
 .cartCount{
     position:absolute;
-    top:-7px;
     right:-7px;
-
+    top:-7px;
     min-width:20px;
     height:20px;
-
-    padding:0 5px;
-
     display:grid;
     place-items:center;
-
+    padding:0 5px;
     border-radius:50%;
-
-    background:#ff3d63;
-
+    background:#ff4168;
     font-size:9px;
 }
 
@@ -248,131 +207,94 @@ body::after{
 ========================= */
 
 .hero{
-    min-height:610px;
-
+    min-height:650px;
+    padding:90px 5%;
     display:flex;
     align-items:center;
     justify-content:center;
-
-    padding:80px 5%;
-
     text-align:center;
 }
 
 .heroContent{
-    width:min(900px,100%);
+    width:min(950px,100%);
 }
 
 .badge{
     display:inline-flex;
     align-items:center;
     gap:8px;
-
     padding:8px 13px;
-
+    border:1px solid rgba(0,200,255,.2);
     border-radius:999px;
-
-    color:#62e5ff;
-
-    background:rgba(0,190,255,.07);
-
-    border:1px solid rgba(0,190,255,.18);
-
+    color:#64e6ff;
+    background:rgba(0,200,255,.06);
     font-size:9px;
-    font-weight:900;
+    font-weight:1000;
 }
 
 .dot{
     width:7px;
     height:7px;
-
     border-radius:50%;
-
-    background:#3fe6ff;
-    box-shadow:0 0 15px #3fe6ff;
+    background:#41e5ff;
+    box-shadow:0 0 15px #41e5ff;
 }
 
 .hero h1{
     margin-top:25px;
-
     font-size:clamp(48px,8vw,92px);
-
-    line-height:.95;
-
+    line-height:.94;
     letter-spacing:-5px;
-
     font-weight:1000;
 }
 
 .gradient{
-    background:linear-gradient(
-        100deg,
-        #fff,
-        #2ee1ff,
-        #6578ff
-    );
-
+    background:linear-gradient(100deg,#fff,#2ee1ff,#6578ff);
     -webkit-background-clip:text;
     background-clip:text;
-
     color:transparent;
 }
 
 .heroText{
-    max-width:650px;
-
+    max-width:680px;
     margin:25px auto 0;
-
-    color:#8995a8;
-
+    color:var(--muted);
     font-size:14px;
     line-height:1.7;
 }
 
 .heroButtons{
     margin-top:30px;
-
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
     gap:12px;
 }
 
-.heroButton{
-    padding:15px 22px;
-
+.btn{
+    padding:15px 21px;
     border-radius:12px;
-
+    border:0;
     text-decoration:none;
-
     font-size:10px;
     font-weight:1000;
-
     transition:.2s;
 }
 
-.primary{
-    color:#fff;
-
-    background:linear-gradient(
-        100deg,
-        #008cff,
-        #703cff
-    );
-
-    box-shadow:0 15px 45px rgba(0,120,255,.18);
-}
-
-.secondary{
-    color:#fff;
-
-    background:#091527;
-
-    border:1px solid rgba(255,255,255,.08);
-}
-
-.heroButton:hover{
+.btn:hover{
     transform:translateY(-3px);
+}
+
+.btnPrimary{
+    color:white;
+    background:linear-gradient(100deg,#008cff,#703cff);
+    box-shadow:0 15px 40px rgba(0,120,255,.2);
+}
+
+.btnSecondary{
+    color:white;
+    background:#091527;
+    border:1px solid var(--border);
 }
 
 /* =========================
@@ -380,32 +302,25 @@ body::after{
 ========================= */
 
 .stats{
-    width:min(900px,90%);
-    margin:-25px auto 0;
-
+    width:min(950px,90%);
+    margin:-35px auto 0;
     display:grid;
     grid-template-columns:repeat(3,1fr);
-
     overflow:hidden;
-
+    border:1px solid var(--border);
     border-radius:18px;
-
-    background:rgba(7,17,32,.85);
-
-    border:1px solid rgba(255,255,255,.07);
-
+    background:rgba(7,17,32,.8);
     backdrop-filter:blur(15px);
 }
 
 .stat{
     padding:22px;
     text-align:center;
-
-    border-right:1px solid rgba(255,255,255,.06);
+    border-right:1px solid var(--border);
 }
 
 .stat:last-child{
-    border-right:0;
+    border:0;
 }
 
 .stat strong{
@@ -416,9 +331,7 @@ body::after{
 .stat span{
     display:block;
     margin-top:6px;
-
-    color:#718096;
-
+    color:var(--muted);
     font-size:9px;
 }
 
@@ -428,19 +341,17 @@ body::after{
 
 .section{
     width:min(1150px,90%);
-    margin:110px auto 0;
+    margin:120px auto 0;
 }
 
-.sectionTitle{
+.title{
     font-size:31px;
     letter-spacing:-1px;
 }
 
-.sectionDescription{
+.subtitle{
     margin-top:7px;
-
-    color:#718096;
-
+    color:var(--muted);
     font-size:11px;
 }
 
@@ -450,82 +361,36 @@ body::after{
 
 .products{
     margin-top:25px;
-
     display:grid;
     grid-template-columns:repeat(3,1fr);
-
     gap:18px;
 }
 
 .product{
     overflow:hidden;
-
+    border:1px solid var(--border);
     border-radius:20px;
-
-    background:linear-gradient(
-        145deg,
-        #081426,
-        #050d1b
-    );
-
-    border:1px solid rgba(255,255,255,.07);
-
+    background:linear-gradient(145deg,#081426,#050d1b);
     transition:.25s;
 }
 
 .product:hover{
     transform:translateY(-7px);
-
     border-color:rgba(0,190,255,.3);
-
     box-shadow:0 30px 80px rgba(0,0,0,.35);
 }
 
-.productImage{
+.productVisual{
     height:220px;
-
-    position:relative;
-
     display:grid;
     place-items:center;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(0,180,255,.14),
-            transparent 62%
-        );
-}
-
-.productImage::after{
-    content:"";
-
-    position:absolute;
-
-    width:145px;
-    height:145px;
-
-    border-radius:50%;
-
-    border:1px solid rgba(0,200,255,.09);
-
-    animation:spin 12s linear infinite;
-}
-
-@keyframes spin{
-    to{transform:rotate(360deg);}
+    position:relative;
+    background:radial-gradient(circle,rgba(0,180,255,.14),transparent 65%);
 }
 
 .productEmoji{
-    position:relative;
-    z-index:2;
-
     font-size:78px;
-
-    filter:drop-shadow(
-        0 20px 25px rgba(0,0,0,.5)
-    );
-
+    filter:drop-shadow(0 20px 25px rgba(0,0,0,.5));
     transition:.3s;
 }
 
@@ -535,21 +400,11 @@ body::after{
 
 .productBadge{
     position:absolute;
-    z-index:5;
-
     top:13px;
     left:13px;
-
     padding:6px 8px;
-
     border-radius:7px;
-
-    background:linear-gradient(
-        100deg,
-        #008cff,
-        #703cff
-    );
-
+    background:linear-gradient(100deg,#008cff,#703cff);
     font-size:8px;
     font-weight:1000;
 }
@@ -564,18 +419,14 @@ body::after{
 
 .productInfo p{
     min-height:34px;
-
     margin-top:7px;
-
-    color:#718096;
-
+    color:var(--muted);
     font-size:10px;
     line-height:1.5;
 }
 
 .productBottom{
     margin-top:18px;
-
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -586,30 +437,229 @@ body::after{
     font-weight:1000;
 }
 
-.addButton{
-    padding:10px 14px;
-
+.add{
+    padding:10px 13px;
     border:0;
     border-radius:9px;
-
-    color:white;
-
-    background:linear-gradient(
-        100deg,
-        #008cff,
-        #703cff
-    );
-
-    cursor:pointer;
-
+    color:#fff;
+    background:linear-gradient(100deg,#008cff,#703cff);
     font-size:9px;
     font-weight:1000;
+}
 
+/* =========================
+   CUSTOM MODEL
+========================= */
+
+.customBox{
+    margin-top:30px;
+    padding:32px;
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(0,200,255,.16);
+    border-radius:25px;
+    background:
+        radial-gradient(circle at 100% 0,rgba(113,60,255,.15),transparent 35%),
+        radial-gradient(circle at 0 100%,rgba(0,200,255,.1),transparent 35%),
+        #071120;
+}
+
+.customTop{
+    display:grid;
+    grid-template-columns:1fr 300px;
+    gap:35px;
+    align-items:center;
+}
+
+.customTitle{
+    font-size:32px;
+    letter-spacing:-1px;
+}
+
+.customTitle span{
+    color:#2bdcff;
+}
+
+.customDescription{
+    max-width:700px;
+    margin-top:12px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.7;
+}
+
+.steps{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.step{
+    padding:15px;
+    border-radius:13px;
+    background:rgba(255,255,255,.025);
+    border:1px solid var(--border);
+}
+
+.stepNum{
+    color:#39ddff;
+    font-size:10px;
+    font-weight:1000;
+}
+
+.step strong{
+    display:block;
+    margin-top:8px;
+    font-size:11px;
+}
+
+.step p{
+    margin-top:5px;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+.uploadButton{
+    min-height:220px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+    border:1px dashed rgba(0,200,255,.35);
+    border-radius:20px;
+    background:rgba(0,150,255,.035);
+    text-align:center;
     transition:.2s;
 }
 
-.addButton:hover{
-    transform:scale(1.05);
+.uploadButton:hover,
+.uploadButton.drag{
+    border-color:#28dfff;
+    background:rgba(0,200,255,.08);
+    transform:scale(1.01);
+}
+
+.uploadIcon{
+    font-size:48px;
+}
+
+.uploadButton strong{
+    margin-top:12px;
+    font-size:14px;
+}
+
+.uploadButton span{
+    margin-top:7px;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.5;
+}
+
+#modelFile{
+    display:none;
+}
+
+/* =========================
+   CUSTOM FORM
+========================= */
+
+.customForm{
+    display:none;
+    margin-top:25px;
+    padding:25px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:#050d1a;
+}
+
+.customForm.show{
+    display:block;
+}
+
+.fileInfo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px;
+    border-radius:12px;
+    background:#09182a;
+}
+
+.fileIcon{
+    font-size:25px;
+}
+
+.fileInfo strong{
+    display:block;
+    font-size:11px;
+}
+
+.fileInfo span{
+    display:block;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+.formGrid{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:7px;
+    color:#9aa7b9;
+    font-size:9px;
+    font-weight:900;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    padding:12px;
+    outline:none;
+    resize:vertical;
+    color:#fff;
+    background:#030a14;
+    border:1px solid var(--border);
+    border-radius:9px;
+    font-size:10px;
+}
+
+.field textarea{
+    min-height:85px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.customActions{
+    margin-top:18px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.customPrice{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#4fe6aa;
+    font-size:11px;
+    font-weight:900;
+}
+
+.customPrice strong{
+    color:#fff;
+    font-size:19px;
 }
 
 /* =========================
@@ -618,28 +668,16 @@ body::after{
 
 .benefits{
     margin-top:25px;
-
     display:grid;
     grid-template-columns:repeat(4,1fr);
-
     gap:14px;
 }
 
 .benefit{
     padding:21px;
-
+    border:1px solid var(--border);
     border-radius:16px;
-
     background:#071120;
-
-    border:1px solid rgba(255,255,255,.07);
-
-    transition:.2s;
-}
-
-.benefit:hover{
-    transform:translateY(-4px);
-    border-color:rgba(0,190,255,.2);
 }
 
 .benefitIcon{
@@ -653,9 +691,7 @@ body::after{
 
 .benefit p{
     margin-top:6px;
-
-    color:#718096;
-
+    color:var(--muted);
     font-size:10px;
     line-height:1.5;
 }
@@ -667,13 +703,9 @@ body::after{
 .overlay{
     position:fixed;
     inset:0;
-
-    z-index:500;
-
+    z-index:300;
     display:none;
-
     background:rgba(0,0,0,.7);
-
     backdrop-filter:blur(7px);
 }
 
@@ -683,37 +715,26 @@ body::after{
 
 .cart{
     position:absolute;
-
-    right:0;
     top:0;
-
-    width:min(470px,100%);
+    right:0;
+    width:min(480px,100%);
     height:100%;
-
     overflow-y:auto;
-
     padding:25px;
-
     background:#050c18;
-
-    border-left:1px solid rgba(255,255,255,.08);
-
-    animation:cartIn .3s ease;
+    border-left:1px solid var(--border);
+    animation:cartIn .25s ease;
 }
 
 @keyframes cartIn{
-    from{transform:translateX(100%);}
-    to{transform:translateX(0);}
+    from{transform:translateX(100%)}
+    to{transform:translateX(0)}
 }
 
 .cartHeader{
     display:flex;
     align-items:center;
     justify-content:space-between;
-
-    padding-bottom:18px;
-
-    border-bottom:1px solid rgba(255,255,255,.07);
 }
 
 .cartHeader h2{
@@ -721,40 +742,30 @@ body::after{
 }
 
 .close{
-    width:37px;
-    height:37px;
-
+    width:36px;
+    height:36px;
     border:0;
     border-radius:10px;
-
-    color:white;
+    color:#fff;
     background:#101d30;
-
-    cursor:pointer;
 }
 
 .cartItem{
     display:flex;
     align-items:center;
     gap:12px;
-
     padding:15px 0;
-
-    border-bottom:1px solid rgba(255,255,255,.06);
+    border-bottom:1px solid var(--border);
 }
 
 .cartIcon{
-    width:52px;
-    height:52px;
-
+    width:50px;
+    height:50px;
     display:grid;
     place-items:center;
-
     border-radius:12px;
-
     background:#0b182a;
-
-    font-size:25px;
+    font-size:24px;
 }
 
 .cartInfo{
@@ -769,71 +780,30 @@ body::after{
 .cartInfo span{
     display:block;
     margin-top:4px;
-
-    color:#718096;
-
+    color:var(--muted);
     font-size:9px;
 }
 
-.qty{
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-
-.qty button{
-    width:25px;
-    height:25px;
-
-    border:0;
-    border-radius:6px;
-
-    color:#fff;
-    background:#12243c;
-
-    cursor:pointer;
-}
-
-.qty span{
-    min-width:15px;
-    text-align:center;
-
-    color:#fff;
-}
-
-.removeButton{
+.remove{
     padding:7px;
-
     border:0;
     border-radius:7px;
-
     color:#ff7184;
-
     background:rgba(255,60,90,.08);
-
-    cursor:pointer;
 }
 
 .summary{
-    margin-top:20px;
-
+    margin-top:25px;
     padding:18px;
-
     border-radius:15px;
-
     background:#091426;
-
-    border:1px solid rgba(255,255,255,.06);
 }
 
 .line{
     display:flex;
     justify-content:space-between;
-
-    margin-top:11px;
-
+    margin-top:10px;
     color:#8d9caf;
-
     font-size:11px;
 }
 
@@ -845,177 +815,94 @@ body::after{
     color:#fff;
 }
 
-.discount{
-    color:#4fe6aa !important;
+.green{
+    color:var(--green)!important;
 }
 
-.totalLine{
+.total{
     margin-top:17px;
     padding-top:15px;
-
-    border-top:1px solid rgba(255,255,255,.07);
-
+    border-top:1px solid var(--border);
     color:#fff;
-
-    font-size:18px;
+    font-size:17px;
     font-weight:1000;
 }
 
-/* =========================
-   COUPON
-========================= */
-
-.coupon{
-    margin-top:15px;
+.empty{
+    padding:70px 10px;
+    text-align:center;
+    color:#718096;
+    font-size:11px;
 }
 
-.couponTitle{
-    color:#8d9caf;
-
-    font-size:9px;
-    font-weight:900;
+.emptyIcon{
+    font-size:45px;
+    opacity:.5;
+    margin-bottom:15px;
 }
-
-.couponRow{
-    display:flex;
-    gap:7px;
-
-    margin-top:7px;
-}
-
-.couponRow input{
-    flex:1;
-
-    min-width:0;
-
-    padding:11px;
-
-    outline:none;
-
-    border-radius:9px;
-
-    color:white;
-    background:#040b16;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    text-transform:uppercase;
-}
-
-.couponRow button{
-    padding:0 14px;
-
-    border:0;
-    border-radius:9px;
-
-    color:white;
-
-    background:#122b4a;
-
-    cursor:pointer;
-
-    font-size:9px;
-    font-weight:1000;
-}
-
-.couponMessage{
-    min-height:14px;
-
-    margin-top:7px;
-
-    font-size:9px;
-}
-
-.success{
-    color:#4fe6aa;
-}
-
-.error{
-    color:#ff7184;
-}
-
-/* =========================
-   CHECKOUT
-========================= */
 
 .checkout{
     margin-top:18px;
 }
 
+.checkout input,
+.checkout select{
+    width:100%;
+    margin-top:10px;
+    padding:12px;
+    outline:none;
+    color:#fff;
+    background:#040b16;
+    border:1px solid var(--border);
+    border-radius:9px;
+    font-size:10px;
+}
+
 .checkout label{
     display:block;
-
     margin-top:13px;
-
     color:#718096;
-
     font-size:9px;
     font-weight:900;
 }
 
-.checkout input,
-.checkout select{
-    width:100%;
-
-    margin-top:7px;
-
-    padding:12px;
-
-    outline:none;
-
-    border-radius:9px;
-
-    color:white;
-    background:#040b16;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    font-size:10px;
-}
-
-.checkout select option{
-    color:#000;
-}
-
 .checkoutButton{
     width:100%;
-
     margin-top:15px;
-
     padding:14px;
-
     border:0;
     border-radius:10px;
-
-    color:white;
-
-    background:linear-gradient(
-        100deg,
-        #008cff,
-        #703cff
-    );
-
-    cursor:pointer;
-
+    color:#fff;
+    background:linear-gradient(100deg,#008cff,#703cff);
     font-size:10px;
     font-weight:1000;
-
-    transition:.2s;
 }
 
-.checkoutButton:hover{
-    transform:translateY(-2px);
-    box-shadow:0 12px 30px rgba(0,120,255,.2);
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    z-index:500;
+    padding:13px 18px;
+    border-radius:12px;
+    background:#0c1b2e;
+    border:1px solid rgba(0,200,255,.2);
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+    transform:translate(-50%,30px);
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+    font-size:10px;
+    font-weight:900;
 }
 
-.empty{
-    padding:45px 10px;
-
-    text-align:center;
-
-    color:#718096;
-
-    font-size:11px;
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
 }
 
 /* =========================
@@ -1024,12 +911,9 @@ body::after{
 
 footer{
     margin-top:120px;
-
     padding:45px 5%;
-
     text-align:center;
-
-    border-top:1px solid rgba(255,255,255,.06);
+    border-top:1px solid var(--border);
 }
 
 footer strong{
@@ -1042,51 +926,8 @@ footer span{
 
 footer p{
     margin-top:8px;
-
     color:#718096;
-
     font-size:9px;
-}
-
-/* =========================
-   TOAST
-========================= */
-
-.toast{
-    position:fixed;
-
-    left:50%;
-    bottom:25px;
-
-    z-index:1000;
-
-    padding:13px 18px;
-
-    border-radius:12px;
-
-    color:white;
-
-    background:#0c1b2e;
-
-    border:1px solid rgba(0,200,255,.2);
-
-    box-shadow:0 20px 50px rgba(0,0,0,.4);
-
-    transform:translate(-50%,30px);
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:.3s;
-
-    font-size:10px;
-    font-weight:900;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
 }
 
 /* =========================
@@ -1102,6 +943,11 @@ footer p{
     .benefits{
         grid-template-columns:repeat(2,1fr);
     }
+
+    .customTop{
+        grid-template-columns:1fr;
+    }
+
 }
 
 @media(max-width:700px){
@@ -1110,16 +956,12 @@ footer p{
         min-height:66px;
     }
 
-    .navButton{
+    .navBtn{
         padding:9px 10px;
     }
 
-    .navButton span{
-        display:none;
-    }
-
     .hero{
-        min-height:550px;
+        min-height:580px;
         padding-top:60px;
     }
 
@@ -1133,12 +975,25 @@ footer p{
 
     .stat{
         border-right:0;
-        border-bottom:1px solid rgba(255,255,255,.06);
+        border-bottom:1px solid var(--border);
     }
 
     .stat:last-child{
         border-bottom:0;
     }
+
+    .steps{
+        grid-template-columns:1fr;
+    }
+
+    .formGrid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
 }
 
 @media(max-width:550px){
@@ -1152,7 +1007,7 @@ footer p{
         height:36px;
     }
 
-    .admin{
+    .navLinks .admin{
         display:none;
     }
 
@@ -1168,17 +1023,26 @@ footer p{
     .hero h1{
         font-size:48px;
     }
+
+    .customBox{
+        padding:20px;
+    }
+
+    .customTitle{
+        font-size:25px;
+    }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- PROMOCJA -->
+<!-- PROMO -->
 
 <div class="promo">
     🎟️ KOD RABATOWY
-    <span class="promoCode">START10</span>
+    <span class="code">START10</span>
     — 10% RABATU
     • 🚚 DARMOWA DOSTAWA OD 50 ZŁ
 </div>
@@ -1195,15 +1059,15 @@ footer p{
 
     <div class="navLinks">
 
-        <a href="konto.html" class="navButton account">
+        <a href="konto.html" class="navBtn">
             👤 Konto
         </a>
 
-        <a href="admin.html" class="navButton admin">
+        <a href="admin.html" class="navBtn admin">
             🔐 Admin
         </a>
 
-        <button class="navButton cartButton" onclick="openCart()">
+        <button class="navBtn cartBtn" onclick="openCart()">
             🛒 Koszyk
             <span id="cartCount" class="cartCount">0</span>
         </button>
@@ -1221,7 +1085,7 @@ footer p{
 
         <div class="badge">
             <span class="dot"></span>
-            PRINTERLASE3D • DRUK 3D
+            PRINTERLASE3D • DRUK 3D NA ZAMÓWIENIE
         </div>
 
         <h1>
@@ -1231,20 +1095,20 @@ footer p{
         </h1>
 
         <p class="heroText">
-            Breloki, dodatki, figurki i personalizowane
-            projekty 3D. Wybierz produkt, dodaj go
-            do koszyka i zamów.
+            Breloki, dodatki, figurki i własne modele 3D.
+            Zamów gotowy produkt albo prześlij swój plik
+            i zleć nam jego wydruk.
         </p>
 
         <div class="heroButtons">
 
-            <a href="#produkty" class="heroButton primary">
+            <a href="#produkty" class="btn btnPrimary">
                 🛒 ZOBACZ PRODUKTY
             </a>
 
-            <button class="heroButton secondary" onclick="openCart()">
-                🛍️ OTWÓRZ KOSZYK
-            </button>
+            <a href="#wlasny-model" class="btn btnSecondary">
+                🧩 MAM WŁASNY MODEL
+            </a>
 
         </div>
 
@@ -1259,32 +1123,30 @@ footer p{
 
     <div class="stat">
         <strong>🖨️ Druk 3D</strong>
-        <span>Produkty wykonywane na zamówienie</span>
+        <span>Produkty i własne modele</span>
     </div>
 
     <div class="stat">
         <strong>🎟️ START10</strong>
-        <span>10% rabatu na zamówienie</span>
+        <span>10% rabatu</span>
     </div>
 
     <div class="stat">
         <strong>🚚 50 zł</strong>
-        <span>Darmowa dostawa od 50 zł</span>
+        <span>Darmowa dostawa</span>
     </div>
 
 </section>
 
 
-<!-- PRODUKTY -->
+<!-- PRODUCTS -->
 
 <section id="produkty" class="section">
 
-    <h2 class="sectionTitle">
-        🔥 Produkty
-    </h2>
+    <h2 class="title">🔥 Produkty</h2>
 
-    <p class="sectionDescription">
-        Wybierz coś dla siebie i wrzuć do koszyka.
+    <p class="subtitle">
+        Wybierz gotowy produkt i dodaj go do koszyka.
     </p>
 
     <div id="products" class="products"></div>
@@ -1292,15 +1154,239 @@ footer p{
 </section>
 
 
-<!-- DLACZEGO -->
+<!-- CUSTOM MODEL -->
+
+<section id="wlasny-model" class="section">
+
+    <div class="customBox">
+
+        <div class="customTop">
+
+            <div>
+
+                <div class="badge">
+                    🧩 DRUK WŁASNEGO MODELU
+                </div>
+
+                <h2 class="customTitle">
+                    Masz własny <span>model 3D?</span>
+                </h2>
+
+                <p class="customDescription">
+                    Masz plik STL, 3MF albo OBJ?
+                    Wrzuć go tutaj, wybierz kolor i ilość,
+                    dodaj informacje dla nas i prześlij
+                    zamówienie do koszyka.
+                </p>
+
+                <div class="steps">
+
+                    <div class="step">
+                        <div class="stepNum">01</div>
+                        <strong>Wrzuć plik</strong>
+                        <p>STL, 3MF lub OBJ.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="stepNum">02</div>
+                        <strong>Wybierz parametry</strong>
+                        <p>Kolor, materiał i ilość.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="stepNum">03</div>
+                        <strong>Zamów</strong>
+                        <p>Dodaj projekt do koszyka.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <label
+                class="uploadButton"
+                id="dropZone"
+                for="modelFile"
+            >
+
+                <div class="uploadIcon">
+                    📁
+                </div>
+
+                <strong>
+                    Wybierz plik 3D
+                </strong>
+
+                <span>
+                    Kliknij albo przeciągnij plik tutaj
+                    <br>
+                    STL • 3MF • OBJ
+                </span>
+
+                <input
+                    id="modelFile"
+                    type="file"
+                    accept=".stl,.3mf,.obj"
+                    onchange="handleFile(this.files[0])"
+                >
+
+            </label>
+
+        </div>
+
+
+        <div id="customForm" class="customForm">
+
+            <div class="fileInfo">
+
+                <div class="fileIcon">📄</div>
+
+                <div>
+                    <strong id="fileName">
+                        model.stl
+                    </strong>
+
+                    <span id="fileSize">
+                        0 KB
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="formGrid">
+
+                <div class="field">
+
+                    <label>
+                        Kolor wydruku
+                    </label>
+
+                    <select id="customColor">
+
+                        <option>Czarny</option>
+                        <option>Biały</option>
+                        <option>Czerwony</option>
+                        <option>Niebieski</option>
+                        <option>Zielony</option>
+                        <option>Żółty</option>
+                        <option>Fioletowy</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Materiał
+                    </label>
+
+                    <select id="customMaterial">
+
+                        <option>PLA</option>
+                        <option>PETG</option>
+                        <option>ABS</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Ilość
+                    </label>
+
+                    <input
+                        id="customQuantity"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value="1"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Rozmiar
+                    </label>
+
+                    <select id="customSize">
+
+                        <option>Standardowy</option>
+                        <option>Mały</option>
+                        <option>Duży</option>
+                        <option>Nie wiem — wyceńcie</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field full">
+
+                    <label>
+                        Informacje dla nas
+                    </label>
+
+                    <textarea
+                        id="customDescription"
+                        placeholder="Np. chcę wydruk 10 cm, czarny, możliwie mocny..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <div class="customActions">
+
+                <div class="customPrice">
+                    Wycena:
+                    <strong>
+                        od 15 zł
+                    </strong>
+                </div>
+
+                <button
+                    class="btn btnPrimary"
+                    onclick="addCustomToCart()"
+                >
+                    🛒 DODAJ MODEL DO KOSZYKA
+                </button>
+
+                <button
+                    class="btn btnSecondary"
+                    onclick="resetCustom()"
+                >
+                    ✕ Anuluj
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- BENEFITS -->
 
 <section class="section">
 
-    <h2 class="sectionTitle">
+    <h2 class="title">
         💙 Dlaczego Printerlase3D?
     </h2>
 
-    <p class="sectionDescription">
+    <p class="subtitle">
         Mały sklep, ale robimy to porządnie.
     </p>
 
@@ -1309,25 +1395,36 @@ footer p{
         <div class="benefit">
             <div class="benefitIcon">🖨️</div>
             <h3>Druk 3D</h3>
-            <p>Produkty wykonywane technologią druku 3D.</p>
+            <p>
+                Gotowe produkty oraz wydruki
+                z przesłanych przez Ciebie modeli.
+            </p>
         </div>
 
         <div class="benefit">
             <div class="benefitIcon">🎨</div>
             <h3>Personalizacja</h3>
-            <p>Własne napisy, kolory i projekty.</p>
+            <p>
+                Wybierz kolor, materiał,
+                rozmiar i ilość.
+            </p>
         </div>
 
         <div class="benefit">
             <div class="benefitIcon">📦</div>
             <h3>Darmowa dostawa</h3>
-            <p>Od wartości zamówienia 50 zł.</p>
+            <p>
+                Przy zamówieniu od 50 zł.
+            </p>
         </div>
 
         <div class="benefit">
             <div class="benefitIcon">⚡</div>
             <h3>Szybka realizacja</h3>
-            <p>Zamówienie trafia prosto do realizacji.</p>
+            <p>
+                Projekt trafia do wyceny
+                i realizacji.
+            </p>
         </div>
 
     </div>
@@ -1350,17 +1447,29 @@ footer p{
 </footer>
 
 
-<!-- KOSZYK -->
+<!-- CART -->
 
-<div id="overlay" class="overlay" onclick="outsideCart(event)">
+<div
+    id="overlay"
+    class="overlay"
+    onclick="outsideCart(event)"
+>
 
-    <aside class="cart" onclick="event.stopPropagation()">
+    <aside
+        class="cart"
+        onclick="event.stopPropagation()"
+    >
 
         <div class="cartHeader">
 
-            <h2>🛒 Koszyk</h2>
+            <h2>
+                🛒 Koszyk
+            </h2>
 
-            <button class="close" onclick="closeCart()">
+            <button
+                class="close"
+                onclick="closeCart()"
+            >
                 ✕
             </button>
 
@@ -1380,9 +1489,9 @@ footer p{
 
 <script>
 
-/* =========================
-   PRODUKTY
-========================= */
+/* ==========================================================
+   GOTOWE PRODUKTY
+========================================================== */
 
 const products = [
 
@@ -1443,9 +1552,9 @@ const products = [
 ];
 
 
-/* =========================
+/* ==========================================================
    KOSZYK
-========================= */
+========================================================== */
 
 let cart =
     JSON.parse(
@@ -1453,101 +1562,89 @@ let cart =
     ) || [];
 
 
-/* =========================
-   KOD RABATOWY
-========================= */
+/* ==========================================================
+   PLIKI CUSTOM
+========================================================== */
 
-const COUPON = "START10";
-
-let couponActive =
-    localStorage.getItem("printerlase_coupon") === "true";
+let customFile = null;
 
 
-/* =========================
+/* ==========================================================
    PRODUKTY
-========================= */
+========================================================== */
 
 function renderProducts(){
 
     const box =
         document.getElementById("products");
 
-    box.innerHTML =
-        products.map(product => `
+    box.innerHTML = products.map(product => `
 
-            <article class="product">
+        <article class="product">
 
-                <div class="productImage">
+            <div class="productVisual">
 
-                    <div class="productBadge">
-                        ${product.badge}
+                <div class="productBadge">
+                    ${product.badge}
+                </div>
+
+                <div class="productEmoji">
+                    ${product.emoji}
+                </div>
+
+            </div>
+
+            <div class="productInfo">
+
+                <h3>
+                    ${escapeHTML(product.name)}
+                </h3>
+
+                <p>
+                    ${escapeHTML(product.description)}
+                </p>
+
+                <div class="productBottom">
+
+                    <div class="price">
+                        ${money(product.price)}
                     </div>
 
-                    <div class="productEmoji">
-                        ${product.emoji}
-                    </div>
+                    <button
+                        class="add"
+                        onclick="addToCart(${product.id})"
+                    >
+                        + DODAJ
+                    </button>
 
                 </div>
 
-                <div class="productInfo">
+            </div>
 
-                    <h3>
-                        ${product.name}
-                    </h3>
+        </article>
 
-                    <p>
-                        ${product.description}
-                    </p>
+    `).join("");
 
-                    <div class="productBottom">
-
-                        <div class="price">
-                            ${money(product.price)}
-                        </div>
-
-                        <button
-                            class="addButton"
-                            onclick="addToCart(${product.id})"
-                        >
-                            + DODAJ
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-        `).join("");
 }
 
 
-/* =========================
-   DODAWANIE
-========================= */
+/* ==========================================================
+   DODAJ PRODUKT
+========================================================== */
 
 function addToCart(id){
 
     const product =
-        products.find(p => p.id === id);
+        products.find(
+            p => p.id === id
+        );
 
     if(!product) return;
 
-    const existing =
-        cart.find(item => item.id === id);
-
-    if(existing){
-
-        existing.quantity++;
-
-    }else{
-
-        cart.push({
-            ...product,
-            quantity:1
-        });
-
-    }
+    cart.push({
+        type:"product",
+        ...product
+    });
 
     saveCart();
     renderCart();
@@ -1558,31 +1655,249 @@ function addToCart(id){
 }
 
 
-/* =========================
-   ZMIANA ILOŚCI
-========================= */
+/* ==========================================================
+   UPLOAD PLIKU
+========================================================== */
 
-function changeQuantity(index, amount){
+function handleFile(file){
 
-    if(!cart[index]) return;
+    if(!file){
+        return;
+    }
 
-    cart[index].quantity += amount;
+    const allowed =
+        ["stl","obj","3mf"];
 
-    if(cart[index].quantity <= 0){
+    const extension =
+        file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
 
-        cart.splice(index,1);
+    if(!allowed.includes(extension)){
+
+        showToast(
+            "❌ Dozwolone: STL, OBJ, 3MF"
+        );
+
+        return;
 
     }
 
-    saveCart();
-    renderCart();
-    updateCartCount();
+    /*
+       Limit 25 MB dla front-endu.
+    */
+
+    if(file.size > 25 * 1024 * 1024){
+
+        showToast(
+            "❌ Plik jest za duży. Maks. 25 MB."
+        );
+
+        return;
+
+    }
+
+    customFile = file;
+
+    document.getElementById("fileName")
+        .textContent = file.name;
+
+    document.getElementById("fileSize")
+        .textContent = formatBytes(file.size);
+
+    document.getElementById("customForm")
+        .classList.add("show");
+
+    document.getElementById("customForm")
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
 }
 
 
-/* =========================
+/* ==========================================================
+   DRAG & DROP
+========================================================== */
+
+const dropZone =
+    document.getElementById("dropZone");
+
+dropZone.addEventListener(
+    "dragover",
+    event => {
+
+        event.preventDefault();
+
+        dropZone.classList.add("drag");
+
+    }
+);
+
+dropZone.addEventListener(
+    "dragleave",
+    () => {
+
+        dropZone.classList.remove("drag");
+
+    }
+);
+
+dropZone.addEventListener(
+    "drop",
+    event => {
+
+        event.preventDefault();
+
+        dropZone.classList.remove("drag");
+
+        const file =
+            event.dataTransfer.files[0];
+
+        handleFile(file);
+
+    }
+);
+
+
+/* ==========================================================
+   DODAJ WŁASNY MODEL
+========================================================== */
+
+function addCustomToCart(){
+
+    if(!customFile){
+
+        showToast(
+            "❌ Najpierw wrzuć plik 3D."
+        );
+
+        return;
+
+    }
+
+    const color =
+        document.getElementById(
+            "customColor"
+        ).value;
+
+    const material =
+        document.getElementById(
+            "customMaterial"
+        ).value;
+
+    const quantity =
+        Math.max(
+            1,
+            Number(
+                document.getElementById(
+                    "customQuantity"
+                ).value
+            ) || 1
+        );
+
+    const size =
+        document.getElementById(
+            "customSize"
+        ).value;
+
+    const description =
+        document.getElementById(
+            "customDescription"
+        ).value.trim();
+
+
+    /*
+       Na tym etapie jest to cena
+       orientacyjna. Prawdziwą wycenę
+       można później zrobić na backendzie.
+    */
+
+    const estimatedPrice =
+        15 * quantity;
+
+
+    cart.push({
+
+        type:"custom",
+
+        id:
+            "custom-" +
+            Date.now(),
+
+        name:
+            "Własny model 3D",
+
+        description:
+            description ||
+            "Model przesłany przez klienta",
+
+        price:
+            estimatedPrice,
+
+        emoji:"🧩",
+
+        badge:"CUSTOM",
+
+        fileName:
+            customFile.name,
+
+        fileSize:
+            customFile.size,
+
+        color,
+        material,
+        quantity,
+        size
+
+    });
+
+
+    saveCart();
+
+    renderCart();
+
+    updateCartCount();
+
+    resetCustom();
+
+    openCart();
+
+    showToast(
+        "✓ Własny model dodany do koszyka"
+    );
+
+}
+
+
+/* ==========================================================
+   RESET CUSTOM
+========================================================== */
+
+function resetCustom(){
+
+    customFile = null;
+
+    document.getElementById(
+        "customForm"
+    ).classList.remove("show");
+
+    document.getElementById(
+        "modelFile"
+    ).value = "";
+
+    document.getElementById(
+        "customDescription"
+    ).value = "";
+
+}
+
+
+/* ==========================================================
    USUWANIE
-========================= */
+========================================================== */
 
 function removeFromCart(index){
 
@@ -1595,9 +1910,9 @@ function removeFromCart(index){
 }
 
 
-/* =========================
+/* ==========================================================
    ZAPIS
-========================= */
+========================================================== */
 
 function saveCart(){
 
@@ -1609,41 +1924,39 @@ function saveCart(){
 }
 
 
-/* =========================
+/* ==========================================================
    SUMA
-========================= */
+========================================================== */
 
 function subtotal(){
 
     return cart.reduce(
         (total,item) =>
-            total +
-            Number(item.price) *
-            Number(item.quantity || 1),
+            total + Number(item.price || 0),
         0
     );
 
 }
 
 
-/* =========================
+/* ==========================================================
    RABAT
-========================= */
+========================================================== */
 
 function discount(){
 
-    if(!couponActive){
-        return 0;
-    }
+    /*
+       START10 = 10%
+    */
 
     return subtotal() * 0.10;
 
 }
 
 
-/* =========================
+/* ==========================================================
    DOSTAWA
-========================= */
+========================================================== */
 
 function shipping(){
 
@@ -1654,107 +1967,111 @@ function shipping(){
 }
 
 
-/* =========================
-   ŁĄCZNA CENA
-========================= */
-
-function totalPrice(){
-
-    return Math.max(
-        0,
-        subtotal() -
-        discount() +
-        shipping()
-    );
-
-}
-
-
-/* =========================
+/* ==========================================================
    KOSZYK
-========================= */
+========================================================== */
 
 function renderCart(){
 
     const items =
-        document.getElementById("cartItems");
+        document.getElementById(
+            "cartItems"
+        );
 
     const summary =
-        document.getElementById("cartSummary");
+        document.getElementById(
+            "cartSummary"
+        );
 
 
     if(cart.length === 0){
 
         items.innerHTML = `
+
             <div class="empty">
-                🛒<br><br>
+
+                <div class="emptyIcon">
+                    🛒
+                </div>
+
                 Koszyk jest pusty.
+
             </div>
+
         `;
 
         summary.innerHTML = "";
 
         return;
+
     }
 
 
     items.innerHTML =
-        cart.map((item,index) => `
+        cart.map(
+            (item,index) => `
 
-            <div class="cartItem">
+                <div class="cartItem">
 
-                <div class="cartIcon">
-                    ${item.emoji}
-                </div>
+                    <div class="cartIcon">
+                        ${item.emoji || "📦"}
+                    </div>
 
-                <div class="cartInfo">
+                    <div class="cartInfo">
 
-                    <strong>
-                        ${item.name}
-                    </strong>
+                        <strong>
+                            ${escapeHTML(item.name)}
+                        </strong>
 
-                    <span>
-                        ${money(item.price)}
-                    </span>
+                        <span>
+                            ${money(item.price)}
+                        </span>
 
-                </div>
+                        ${
+                            item.type === "custom"
+                            ?
 
-                <div class="qty">
+                            `
+                            <span>
+                                📄 ${escapeHTML(item.fileName)}
+                                • ${escapeHTML(item.color)}
+                                • ${escapeHTML(item.material)}
+                            </span>
+                            `
+
+                            : ""
+                        }
+
+                    </div>
 
                     <button
-                        onclick="changeQuantity(${index},-1)"
+                        class="remove"
+                        onclick="removeFromCart(${index})"
                     >
-                        −
-                    </button>
-
-                    <span>
-                        ${item.quantity}
-                    </span>
-
-                    <button
-                        onclick="changeQuantity(${index},1)"
-                    >
-                        +
+                        ✕
                     </button>
 
                 </div>
 
-                <button
-                    class="removeButton"
-                    onclick="removeFromCart(${index})"
-                >
-                    ✕
-                </button>
-
-            </div>
-
-        `).join("");
+            `
+        )
+        .join("");
 
 
-    const sub = subtotal();
-    const disc = discount();
-    const ship = shipping();
-    const total = totalPrice();
+    const sub =
+        subtotal();
+
+    const disc =
+        discount();
+
+    const ship =
+        shipping();
+
+    const total =
+        Math.max(
+            0,
+            sub - disc + ship
+        );
 
 
     summary.innerHTML = `
@@ -1762,67 +2079,49 @@ function renderCart(){
         <div class="summary">
 
             <div class="line">
-                <span>Produkty</span>
-                <strong>${money(sub)}</strong>
-            </div>
 
-            <div class="line">
-                <span>Rabat START10</span>
-                <strong class="discount">
-                    ${disc > 0 ? "-" + money(disc) : "—"}
+                <span>
+                    Produkty
+                </span>
+
+                <strong>
+                    ${money(sub)}
                 </strong>
+
             </div>
 
             <div class="line">
-                <span>Dostawa</span>
 
-                <strong class="${ship === 0 ? "discount" : ""}">
+                <span>
+                    START10 (-10%)
+                </span>
+
+                <strong class="green">
+                    -${money(disc)}
+                </strong>
+
+            </div>
+
+            <div class="line">
+
+                <span>
+                    Dostawa
+                </span>
+
+                <strong class="${ship === 0 ? "green" : ""}">
+
                     ${
                         ship === 0
                         ? "DARMOWA"
                         : money(ship)
                     }
+
                 </strong>
-            </div>
-
-
-            <div class="coupon">
-
-                <div class="couponTitle">
-                    🎟️ MASZ KOD RABATOWY?
-                </div>
-
-                <div class="couponRow">
-
-                    <input
-                        id="couponInput"
-                        placeholder="START10"
-                        value="${couponActive ? "START10" : ""}"
-                    >
-
-                    <button onclick="applyCoupon()">
-                        ZASTOSUJ
-                    </button>
-
-                </div>
-
-                <div
-                    id="couponMessage"
-                    class="couponMessage ${
-                        couponActive ? "success" : ""
-                    }"
-                >
-                    ${
-                        couponActive
-                        ? "✓ Kod START10 aktywny — 10% rabatu"
-                        : ""
-                    }
-                </div>
 
             </div>
 
 
-            <div class="line totalLine">
+            <div class="line total">
 
                 <span>
                     Razem
@@ -1860,21 +2159,21 @@ function renderCart(){
 
 
                 <label>
-                    Metoda dostawy
+                    Dostawa
                 </label>
 
                 <select id="shippingMethod">
 
-                    <option value="InPost">
-                        📦 InPost
+                    <option>
+                        InPost
                     </option>
 
-                    <option value="ORLEN Paczka">
-                        📦 ORLEN Paczka
+                    <option>
+                        ORLEN Paczka
                     </option>
 
-                    <option value="DPD">
-                        🚚 DPD
+                    <option>
+                        DPD
                     </option>
 
                 </select>
@@ -1882,9 +2181,9 @@ function renderCart(){
 
                 <button
                     class="checkoutButton"
-                    onclick="goToCheckout()"
+                    onclick="placeOrder()"
                 >
-                    💳 PRZEJDŹ DO PŁATNOŚCI
+                    🛒 PRZEJDŹ DO ZAMÓWIENIA
                 </button>
 
             </div>
@@ -1892,78 +2191,36 @@ function renderCart(){
         </div>
 
     `;
+
 }
 
 
-/* =========================
-   KUPON
-========================= */
+/* ==========================================================
+   ZAMÓWIENIE
+========================================================== */
 
-function applyCoupon(){
+function placeOrder(){
 
-    const input =
-        document.getElementById("couponInput");
-
-    const message =
-        document.getElementById("couponMessage");
-
-    if(!input || !message) return;
-
-    const code =
-        input.value.trim().toUpperCase();
-
-
-    if(code === COUPON){
-
-        couponActive = true;
-
-        localStorage.setItem(
-            "printerlase_coupon",
-            "true"
-        );
-
-        renderCart();
+    if(cart.length === 0){
 
         showToast(
-            "✓ START10 aktywny — 10% rabatu"
+            "❌ Koszyk jest pusty."
         );
 
-    }else{
-
-        couponActive = false;
-
-        localStorage.removeItem(
-            "printerlase_coupon"
-        );
-
-        message.className =
-            "couponMessage error";
-
-        message.textContent =
-            "❌ Nieprawidłowy kod rabatowy.";
+        return;
 
     }
 
-}
-
-
-/* =========================
-   CHECKOUT
-========================= */
-
-function goToCheckout(){
 
     const name =
         document
         .getElementById("customerName")
-        .value
-        .trim();
+        .value.trim();
 
     const email =
         document
         .getElementById("customerEmail")
-        .value
-        .trim()
+        .value.trim()
         .toLowerCase();
 
     const method =
@@ -1979,60 +2236,65 @@ function goToCheckout(){
         );
 
         return;
+
     }
 
 
     if(
         !email ||
-        !email.includes("@") ||
-        !email.includes(".")
+        !email.includes("@")
     ){
 
         showToast(
-            "❌ Podaj poprawny e-mail."
+            "❌ Podaj prawidłowy e-mail."
         );
 
         return;
+
     }
 
 
-    if(cart.length === 0){
+    const order = {
 
-        showToast(
-            "❌ Koszyk jest pusty."
-        );
-
-        return;
-    }
-
-
-    /*
-        Dane zostają zapisane,
-        żeby checkout.html mógł
-        je później wykorzystać.
-    */
-
-    const checkoutData = {
+        id:
+            "PL-" +
+            Date.now(),
 
         name,
+
         email,
 
-        shippingMethod:method,
+        shippingMethod:
+            method,
 
-        products:cart,
+        products:
+            cart,
 
-        subtotal:subtotal(),
+        subtotal:
+            Number(
+                subtotal().toFixed(2)
+            ),
 
-        discount:discount(),
+        discount:
+            Number(
+                discount().toFixed(2)
+            ),
 
-        shipping:shipping(),
+        shipping:
+            shipping(),
 
-        total:totalPrice(),
+        total:
+            Number(
+                Math.max(
+                    0,
+                    subtotal() -
+                    discount() +
+                    shipping()
+                ).toFixed(2)
+            ),
 
-        coupon:
-            couponActive
-            ? COUPON
-            : null,
+        status:
+            "NOWE",
 
         createdAt:
             new Date().toISOString()
@@ -2040,26 +2302,53 @@ function goToCheckout(){
     };
 
 
+    const orders =
+        JSON.parse(
+            localStorage.getItem(
+                "printerlase_orders"
+            )
+        ) || [];
+
+
+    orders.push(order);
+
+
     localStorage.setItem(
-        "printerlase_checkout",
-        JSON.stringify(checkoutData)
+        "printerlase_orders",
+        JSON.stringify(orders)
     );
 
 
-    /*
-        Jeśli masz checkout.html,
-        przejdziemy właśnie tam.
-    */
+    localStorage.setItem(
+        "printerlase_last_order",
+        JSON.stringify(order)
+    );
 
-    window.location.href =
-        "checkout.html";
+
+    cart = [];
+
+    saveCart();
+
+    renderCart();
+
+    updateCartCount();
+
+    showToast(
+        "✓ Zamówienie zapisane!"
+    );
+
+
+    setTimeout(
+        closeCart,
+        800
+    );
 
 }
 
 
-/* =========================
-   OTWIERANIE
-========================= */
+/* ==========================================================
+   CART OPEN
+========================================================== */
 
 function openCart(){
 
@@ -2081,37 +2370,35 @@ function closeCart(){
 
 function outsideCart(event){
 
-    if(event.target.id === "overlay"){
+    if(
+        event.target.id ===
+        "overlay"
+    ){
+
         closeCart();
+
     }
 
 }
 
 
-/* =========================
-   LICZNIK
-========================= */
+/* ==========================================================
+   COUNT
+========================================================== */
 
 function updateCartCount(){
 
-    const count =
-        cart.reduce(
-            (sum,item) =>
-                sum +
-                Number(item.quantity || 1),
-            0
-        );
-
     document
         .getElementById("cartCount")
-        .textContent = count;
+        .textContent =
+        cart.length;
 
 }
 
 
-/* =========================
-   CENA
-========================= */
+/* ==========================================================
+   MONEY
+========================================================== */
 
 function money(value){
 
@@ -2123,16 +2410,63 @@ function money(value){
 }
 
 
-/* =========================
+/* ==========================================================
+   FILE SIZE
+========================================================== */
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+        return "0 B";
+    }
+
+    const units =
+        ["B","KB","MB","GB"];
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+    return (
+        bytes /
+        Math.pow(1024,i)
+    ).toFixed(2)
+    + " "
+    + units[i];
+
+}
+
+
+/* ==========================================================
+   SECURITY
+========================================================== */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* ==========================================================
    TOAST
-========================= */
+========================================================== */
 
 let toastTimer;
 
 function showToast(text){
 
     const toast =
-        document.getElementById("toast");
+        document.getElementById(
+            "toast"
+        );
 
     toast.textContent = text;
 
@@ -2145,22 +2479,15 @@ function showToast(text){
             () => {
                 toast.classList.remove("show");
             },
-            2600
+            2500
         );
 
 }
 
 
-/* =========================
-   START
-========================= */
-
-renderProducts();
-renderCart();
-updateCartCount();
-
-
-/* ESC */
+/* ==========================================================
+   ESC
+========================================================== */
 
 document.addEventListener(
     "keydown",
@@ -2172,6 +2499,17 @@ document.addEventListener(
 
     }
 );
+
+
+/* ==========================================================
+   START
+========================================================== */
+
+renderProducts();
+
+renderCart();
+
+updateCartCount();
 
 </script>
 
