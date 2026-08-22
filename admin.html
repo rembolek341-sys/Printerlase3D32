@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Printerlase3D — Admin</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#030712;
+    color:#fff;
+    min-height:100vh;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:
+        radial-gradient(circle at 10% 10%,#006eff25,transparent 30%),
+        radial-gradient(circle at 90% 20%,#713cff25,transparent 30%);
+}
+
+header{
+    height:75px;
+    padding:0 5%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#050c18dd;
+    border-bottom:1px solid #ffffff12;
+    backdrop-filter:blur(15px);
+}
+
+.logo{
+    font-size:20px;
+    font-weight:900;
+}
+
+.logo span{
+    color:#20dfff;
+}
+
+.back{
+    padding:11px 15px;
+    border-radius:10px;
+    color:white;
+    background:#0b182b;
+    border:1px solid #ffffff12;
+    text-decoration:none;
+    font-size:11px;
+    font-weight:bold;
+}
+
+main{
+    width:min(1200px,92%);
+    margin:40px auto;
+}
+
+h1{
+    font-size:38px;
+}
+
+.subtitle{
+    margin-top:8px;
+    color:#718096;
+    font-size:12px;
+}
+
+.stats{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.stat{
+    padding:22px;
+    border:1px solid #ffffff10;
+    border-radius:17px;
+    background:#071120;
+}
+
+.stat span{
+    color:#718096;
+    font-size:10px;
+}
+
+.stat strong{
+    display:block;
+    margin-top:8px;
+    font-size:25px;
+}
+
+.money{
+    color:#42e6a4;
+}
+
+.orders{
+    margin-top:30px;
+    border:1px solid #ffffff10;
+    border-radius:18px;
+    overflow:hidden;
+    background:#071120;
+}
+
+.ordersHeader{
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ffffff10;
+}
+
+.ordersHeader h2{
+    font-size:18px;
+}
+
+.clear{
+    padding:9px 12px;
+    border:0;
+    border-radius:8px;
+    color:#ff7184;
+    background:#ff416815;
+    cursor:pointer;
+    font-size:9px;
+    font-weight:bold;
+}
+
+.order{
+    padding:20px;
+    border-bottom:1px solid #ffffff0d;
+}
+
+.order:last-child{
+    border-bottom:0;
+}
+
+.orderTop{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.orderId{
+    color:#36dcff;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.orderDate{
+    color:#718096;
+    font-size:9px;
+}
+
+.orderCustomer{
+    margin-top:10px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.orderEmail{
+    margin-top:4px;
+    color:#718096;
+    font-size:10px;
+}
+
+.items{
+    margin-top:15px;
+    display:grid;
+    gap:7px;
+}
+
+.item{
+    padding:10px;
+    border-radius:9px;
+    background:#040b16;
+    color:#aeb9c9;
+    font-size:10px;
+}
+
+.orderBottom{
+    margin-top:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.total{
+    font-size:18px;
+    font-weight:900;
+}
+
+.status{
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #ffffff10;
+    background:#101d30;
+    color:#ffd166;
+    font-size:9px;
+    font-weight:bold;
+}
+
+.status.done{
+    color:#42e6a4;
+}
+
+.status.cancel{
+    color:#ff7184;
+}
+
+.actions{
+    margin-top:12px;
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+}
+
+.actions button{
+    padding:8px 10px;
+    border:0;
+    border-radius:7px;
+    cursor:pointer;
+    color:#fff;
+    background:#10223a;
+    font-size:9px;
+}
+
+.empty{
+    padding:60px 20px;
+    text-align:center;
+    color:#718096;
+    font-size:12px;
+}
+
+@media(max-width:800px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:500px){
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    h1{
+        font-size:30px;
+    }
+
+    .orderTop,
+    .orderBottom{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        Printerlase<span>3D</span> • ADMIN
+    </div>
+
+    <a href="index.html" class="back">
+        ← WRÓĆ DO SKLEPU
+    </a>
+</header>
+
+<main>
+
+    <h1>Panel Admin 🛠️</h1>
+
+    <p class="subtitle">
+        Zarządzanie zamówieniami Printerlase3D
+    </p>
+
+    <section class="stats">
+
+        <div class="stat">
+            <span>ZAMÓWIENIA</span>
+            <strong id="ordersCount">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>SPRZEDAŻ</span>
+            <strong class="money" id="sales">0 zł</strong>
+        </div>
+
+        <div class="stat">
+            <span>NOWE</span>
+            <strong id="newOrders">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>ŚREDNIA</span>
+            <strong id="average">0 zł</strong>
+        </div>
+
+    </section>
+
+    <section class="orders">
+
+        <div class="ordersHeader">
+            <h2>📦 Zamówienia</h2>
+
+            <button class="clear" onclick="clearOrders()">
+                USUŃ WSZYSTKIE
+            </button>
+        </div>
+
+        <div id="ordersList"></div>
+
+    </section>
+
+</main>
+
+<script>
+
+let orders =
+    JSON.parse(
+        localStorage.getItem("printerlase_orders")
+    ) || [];
+
+
+function money(value){
+    return Number(value || 0)
+        .toFixed(2)
+        .replace(".",",") + " zł";
+}
+
+
+function render(){
+
+    const list =
+        document.getElementById("ordersList");
+
+    const ordersCount =
+        document.getElementById("ordersCount");
+
+    const sales =
+        document.getElementById("sales");
+
+    const newOrders =
+        document.getElementById("newOrders");
+
+    const average =
+        document.getElementById("average");
+
+
+    ordersCount.textContent =
+        orders.length;
+
+
+    const total =
+        orders.reduce(
+            (sum,order) =>
+                sum + Number(order.total || 0),
+            0
+        );
+
+
+    sales.textContent =
+        money(total);
+
+
+    const newCount =
+        orders.filter(
+            order => order.status === "NOWE"
+        ).length;
+
+
+    newOrders.textContent =
+        newCount;
+
+
+    average.textContent =
+        money(
+            orders.length
+            ? total / orders.length
+            : 0
+        );
+
+
+    if(!orders.length){
+
+        list.innerHTML = `
+            <div class="empty">
+                📦<br><br>
+                Brak zamówień.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        orders
+        .slice()
+        .reverse()
+        .map(
+            (order,reverseIndex) => {
+
+                const realIndex =
+                    orders.length -
+                    1 -
+                    reverseIndex;
+
+
+                const items =
+                    (order.products || [])
+                    .map(
+                        item => `
+                            <div class="item">
+                                ${item.emoji || "📦"}
+                                ${escapeHTML(item.name)}
+                                — ${money(item.price)}
+                                ${
+                                    item.type === "custom"
+                                    ? `
+                                        <br>
+                                        📄 ${escapeHTML(item.fileName || "")}
+                                        • ${escapeHTML(item.color || "")}
+                                        • ${escapeHTML(item.material || "")}
+                                    `
+                                    : ""
+                                }
+                            </div>
+                        `
+                    )
+                    .join("");
+
+
+                const statusClass =
+                    order.status === "ZREALIZOWANE"
+                    ? "done"
+                    : order.status === "ANULOWANE"
+                    ? "cancel"
+                    : "";
+
+
+                return `
+
+                    <article class="order">
+
+                        <div class="orderTop">
+
+                            <div>
+                                <div class="orderId">
+                                    ${escapeHTML(order.id)}
+                                </div>
+
+                                <div class="orderCustomer">
+                                    ${escapeHTML(order.name)}
+                                </div>
+
+                                <div class="orderEmail">
+                                    ${escapeHTML(order.email)}
+                                </div>
+                            </div>
+
+                            <div class="orderDate">
+                                ${new Date(order.createdAt)
+                                    .toLocaleString("pl-PL")}
+                            </div>
+
+                        </div>
+
+
+                        <div class="items">
+                            ${items}
+                        </div>
+
+
+                        <div class="orderBottom">
+
+                            <div class="total">
+                                ${money(order.total)}
+                            </div>
+
+                            <div class="status ${statusClass}">
+                                ${escapeHTML(order.status)}
+                            </div>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button onclick="setStatus(${realIndex},'W REALIZACJI')">
+                                🔧 W REALIZACJI
+                            </button>
+
+                            <button onclick="setStatus(${realIndex},'ZREALIZOWANE')">
+                                ✅ ZREALIZOWANE
+                            </button>
+
+                            <button onclick="setStatus(${realIndex},'ANULOWANE')">
+                                ❌ ANULUJ
+                            </button>
+
+                            <button onclick="deleteOrder(${realIndex})">
+                                🗑️ USUŃ
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                `;
+            }
+        )
+        .join("");
+}
+
+
+function setStatus(index,status){
+
+    orders[index].status =
+        status;
+
+    save();
+
+}
+
+
+function deleteOrder(index){
+
+    if(
+        !confirm(
+            "Na pewno usunąć to zamówienie?"
+        )
+    ){
+        return;
+    }
+
+    orders.splice(index,1);
+
+    save();
+
+}
+
+
+function clearOrders(){
+
+    if(!orders.length){
+        return;
+    }
+
+    if(
+        !confirm(
+            "Na pewno usunąć WSZYSTKIE zamówienia?"
+        )
+    ){
+        return;
+    }
+
+    orders = [];
+
+    save();
+
+}
+
+
+function save(){
+
+    localStorage.setItem(
+        "printerlase_orders",
+        JSON.stringify(orders)
+    );
+
+    render();
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+render();
+
+setInterval(() => {
+
+    const updated =
+        JSON.parse(
+            localStorage.getItem("printerlase_orders")
+        ) || [];
+
+    if(
+        JSON.stringify(updated) !==
+        JSON.stringify(orders)
+    ){
+        orders = updated;
+        render();
+    }
+
+},1000);
+
+</script>
+
+</body>
+</html>
+```
