@@ -1,1227 +1,946 @@
 ```html
 <!DOCTYPE html>
 <html lang="pl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Printerlase3D — Panel Admina</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Printerlase3D — Admin</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+
+* {
+    box-sizing: border-box;
 }
 
-body{
-    min-height:100vh;
-    font-family:Arial,Helvetica,sans-serif;
-    color:#fff;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
     background:
-        radial-gradient(circle at 10% 0%,#003d5c 0,transparent 30%),
-        radial-gradient(circle at 100% 0%,#371052 0,transparent 28%),
+        radial-gradient(
+            circle at 20% 0%,
+            #004d6e,
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 100% 0%,
+            #32105b,
+            transparent 30%
+        ),
         #020611;
 }
 
 button,
 input,
-select{
-    font:inherit;
+select {
+    font: inherit;
 }
 
-button{
-    cursor:pointer;
+button {
+    cursor: pointer;
 }
 
-.hidden{
-    display:none!important;
+.hidden {
+    display: none !important;
 }
 
+/* LOGIN */
 
-/* ==============================
-   LOGIN
-============================== */
-
-#loginScreen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
+#loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-.loginBox{
-    width:100%;
-    max-width:390px;
-    padding:32px;
-    border:1px solid #1d3d56;
-    border-radius:22px;
-    background:#061020e8;
+.login {
+    width: 100%;
+    max-width: 390px;
+    padding: 32px;
+    border: 1px solid #1b3c55;
+    border-radius: 24px;
+    background: #061020ee;
     box-shadow:
         0 30px 100px #0008,
-        0 0 60px #00c8ff0d;
-    backdrop-filter:blur(20px);
-    animation:show .5s ease;
+        0 0 70px #00c8ff15;
+    animation: appear .5s ease;
 }
 
-.logo{
-    margin-bottom:8px;
-    font-size:30px;
-    font-weight:1000;
+.logo {
+    font-size: 31px;
+    font-weight: 1000;
 }
 
-.logo span{
-    color:#00c8ff;
+.logo span {
+    color: #00c8ff;
 }
 
-.loginSubtitle{
-    margin-bottom:25px;
-    color:#71859a;
-    font-size:12px;
+.subtitle {
+    margin-top: 7px;
+    margin-bottom: 25px;
+    color: #71859a;
+    font-size: 12px;
 }
 
-.inputGroup{
-    margin-bottom:15px;
-}
-
-.inputGroup label{
-    display:block;
-    margin-bottom:7px;
-    color:#91a3b7;
-    font-size:11px;
-    font-weight:800;
+label {
+    display: block;
+    margin-bottom: 7px;
+    color: #8396aa;
+    font-size: 10px;
+    font-weight: bold;
 }
 
 input,
-select,
-textarea{
-    width:100%;
-    border:1px solid #203c55;
-    border-radius:11px;
-    outline:none;
-    color:#fff;
-    background:#030a15;
-    padding:13px;
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #203c55;
+    border-radius: 11px;
+    outline: none;
+    color: white;
+    background: #030914;
 }
 
 input:focus,
-select:focus,
-textarea:focus{
-    border-color:#00c8ff;
-    box-shadow:0 0 20px #00c8ff12;
+select:focus {
+    border-color: #00c8ff;
 }
 
-.loginButton{
-    width:100%;
-    margin-top:8px;
-    padding:14px;
-    border:0;
-    border-radius:11px;
-    color:#001018;
-    background:#00c8ff;
-    font-weight:1000;
+.group {
+    margin-bottom: 15px;
 }
 
-.loginButton:hover{
-    box-shadow:0 10px 35px #00c8ff25;
-    transform:translateY(-2px);
+.loginButton {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 11px;
+    color: #001018;
+    background: #00c8ff;
+    font-weight: 1000;
 }
 
-.loginError{
-    min-height:18px;
-    margin-top:12px;
-    color:#ff6577;
-    font-size:11px;
-    text-align:center;
+.error {
+    min-height: 20px;
+    margin-top: 12px;
+    color: #ff6679;
+    text-align: center;
+    font-size: 11px;
 }
 
+/* APP */
 
-/* ==============================
-   APP
-============================== */
-
-#adminApp{
-    display:none;
-    min-height:100vh;
+#app {
+    display: none;
 }
 
-#adminApp.active{
-    display:block;
+#app.active {
+    display: block;
 }
 
-.topbar{
-    position:sticky;
-    top:0;
-    z-index:100;
-    border-bottom:1px solid #18334a;
-    background:#020611dd;
-    backdrop-filter:blur(20px);
+header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid #19344a;
+    background: #020611ee;
+    backdrop-filter: blur(20px);
 }
 
-.topbarInner{
-    max-width:1400px;
-    margin:auto;
-    padding:14px 22px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
+.headerInner {
+    max-width: 1400px;
+    margin: auto;
+    padding: 15px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
 }
 
-.brand{
-    font-size:20px;
-    font-weight:1000;
+.brand {
+    font-size: 20px;
+    font-weight: 1000;
 }
 
-.brand span{
-    color:#00c8ff;
+.brand span {
+    color: #00c8ff;
 }
 
-.topActions{
-    display:flex;
-    gap:8px;
+.actions {
+    display: flex;
+    gap: 8px;
 }
 
-.topButton{
-    padding:10px 13px;
-    border:1px solid #24445d;
-    border-radius:9px;
-    color:#fff;
-    background:#071222;
-    font-size:11px;
-    font-weight:900;
+.btn {
+    padding: 10px 13px;
+    border: 1px solid #25465f;
+    border-radius: 9px;
+    color: white;
+    background: #071222;
+    font-size: 10px;
+    font-weight: bold;
 }
 
-.topButton:hover{
-    border-color:#00c8ff;
+.btn:hover {
+    border-color: #00c8ff;
 }
 
-.logout{
-    color:#ff7d8b;
+.logout {
+    color: #ff7180;
 }
 
+/* CONTENT */
 
-/* ==============================
-   CONTENT
-============================== */
-
-.container{
-    max-width:1400px;
-    margin:auto;
-    padding:30px 22px 70px;
+.container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 30px 22px 70px;
 }
 
-.pageTitle{
-    margin-bottom:6px;
-    font-size:34px;
-    font-weight:1000;
+h1 {
+    margin: 0;
+    font-size: 34px;
 }
 
-.pageDescription{
-    margin-bottom:25px;
-    color:#72859a;
-    font-size:12px;
+.description {
+    margin-top: 7px;
+    color: #71859a;
+    font-size: 12px;
 }
 
+/* STATS */
 
-/* ==============================
-   STATS
-============================== */
-
-.stats{
-    display:grid;
+.stats {
+    margin-top: 25px;
+    display: grid;
     grid-template-columns:
-        repeat(4,1fr);
-    gap:12px;
-    margin-bottom:25px;
+        repeat(4, 1fr);
+    gap: 12px;
 }
 
-.stat{
-    padding:20px;
-    border:1px solid #18344b;
-    border-radius:17px;
-    background:#061020d9;
-    transition:.2s;
+.stat {
+    padding: 20px;
+    border: 1px solid #19354b;
+    border-radius: 17px;
+    background: #061020dd;
 }
 
-.stat:hover{
-    transform:translateY(-3px);
-    border-color:#00c8ff55;
+.statTitle {
+    color: #71859a;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-.statTitle{
-    margin-bottom:9px;
-    color:#71859a;
-    font-size:10px;
-    font-weight:900;
-    text-transform:uppercase;
+.statValue {
+    margin-top: 8px;
+    font-size: 28px;
+    font-weight: 1000;
 }
 
-.statValue{
-    font-size:29px;
-    font-weight:1000;
+.blue {
+    color: #00c8ff;
 }
 
-.blue{
-    color:#00c8ff;
+.green {
+    color: #45e49d;
 }
 
-.green{
-    color:#43e49b;
+.purple {
+    color: #bf8cff;
 }
 
-.purple{
-    color:#bd8cff;
+.orange {
+    color: #ffbd5d;
 }
 
-.orange{
-    color:#ffb85c;
+/* SECTION */
+
+.section {
+    margin-top: 22px;
+    overflow: hidden;
+    border: 1px solid #19354b;
+    border-radius: 18px;
+    background: #061020dd;
 }
 
-
-/* ==============================
-   SECTIONS
-============================== */
-
-.section{
-    margin-top:22px;
-    overflow:hidden;
-    border:1px solid #18344b;
-    border-radius:18px;
-    background:#061020d9;
+.sectionHeader {
+    padding: 17px 19px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #173047;
 }
 
-.sectionHeader{
-    padding:17px 19px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
-    border-bottom:1px solid #173047;
+.sectionTitle {
+    font-size: 17px;
+    font-weight: 1000;
 }
 
-.sectionTitle{
-    font-size:17px;
-    font-weight:1000;
+.count {
+    padding: 5px 10px;
+    border-radius: 99px;
+    color: #001018;
+    background: #00c8ff;
+    font-size: 9px;
+    font-weight: 1000;
 }
 
-.sectionCount{
-    padding:5px 9px;
-    border-radius:999px;
-    color:#001018;
-    background:#00c8ff;
-    font-size:9px;
-    font-weight:1000;
+/* ORDERS */
+
+.order {
+    padding: 18px;
+    border-bottom: 1px solid #142d40;
+    animation: appear .35s ease;
 }
 
-
-/* ==============================
-   ORDERS
-============================== */
-
-.orders{
-    display:flex;
-    flex-direction:column;
+.order:hover {
+    background: #081525;
 }
 
-.order{
-    padding:18px;
-    border-bottom:1px solid #132a3c;
-    transition:.2s;
+.orderTop {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
 }
 
-.order:last-child{
-    border-bottom:0;
+.id {
+    color: #00c8ff;
+    font-size: 11px;
+    font-weight: 1000;
 }
 
-.order:hover{
-    background:#081525;
+.date {
+    margin-top: 4px;
+    color: #65788c;
+    font-size: 9px;
 }
 
-.orderTop{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:15px;
+.customer {
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-.orderId{
-    margin-bottom:5px;
-    color:#00c8ff;
-    font-size:12px;
-    font-weight:1000;
+.contact {
+    margin-top: 5px;
+    color: #8092a4;
+    font-size: 10px;
+    line-height: 1.7;
 }
 
-.orderDate{
-    color:#627589;
-    font-size:9px;
+.items {
+    margin-top: 13px;
+    display: grid;
+    gap: 6px;
 }
 
-.orderCustomer{
-    margin-top:14px;
-    font-size:14px;
-    font-weight:900;
+.item {
+    padding: 9px 11px;
+    border: 1px solid #173249;
+    border-radius: 9px;
+    color: #9eafbf;
+    background: #030914;
+    font-size: 10px;
 }
 
-.orderContact{
-    margin-top:5px;
-    color:#7e91a5;
-    font-size:10px;
-    line-height:1.6;
+.bottom {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.orderItems{
-    margin-top:14px;
-    display:grid;
-    gap:6px;
+.price {
+    font-size: 23px;
+    font-weight: 1000;
 }
 
-.item{
-    padding:9px 11px;
-    border:1px solid #173149;
-    border-radius:9px;
-    color:#a9b8c7;
-    background:#030914;
-    font-size:10px;
+.meta {
+    margin-top: 4px;
+    color: #71859a;
+    font-size: 9px;
 }
 
-.item strong{
-    color:#fff;
+.statusArea {
+    display: flex;
+    gap: 7px;
+    align-items: center;
 }
 
-.orderBottom{
-    margin-top:15px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
+.status {
+    padding: 7px 9px;
+    border: 1px solid #24445c;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: bold;
 }
 
-.orderPrice{
-    font-size:23px;
-    font-weight:1000;
+.statusSelect {
+    width: auto;
+    padding: 8px;
+    font-size: 9px;
 }
 
-.orderMeta{
-    color:#73869a;
-    font-size:9px;
+.delete {
+    padding: 8px 10px;
+    border: 1px solid #5a2530;
+    border-radius: 8px;
+    color: #ff7585;
+    background: #230b10;
+    font-size: 9px;
+    font-weight: bold;
 }
 
-.statusArea{
-    display:flex;
-    align-items:center;
-    gap:7px;
-}
+/* MODELS */
 
-.status{
-    padding:7px 9px;
-    border-radius:8px;
-    border:1px solid #24445c;
-    font-size:9px;
-    font-weight:1000;
-}
-
-.status.NEW{
-    color:#00c8ff;
-}
-
-.status.IN_PROGRESS{
-    color:#ffbd5c;
-}
-
-.status.READY{
-    color:#bd8cff;
-}
-
-.status.COMPLETED{
-    color:#43e49b;
-}
-
-.status.CANCELLED{
-    color:#ff6679;
-}
-
-.statusSelect{
-    width:auto;
-    padding:8px;
-    font-size:9px;
-}
-
-.deleteButton{
-    padding:8px 10px;
-    border:1px solid #5b2530;
-    border-radius:8px;
-    color:#ff7585;
-    background:#230b10;
-    font-size:9px;
-    font-weight:900;
-}
-
-.deleteButton:hover{
-    background:#3a0d15;
-}
-
-
-/* ==============================
-   CUSTOM MODELS
-============================== */
-
-.customGrid{
-    display:grid;
+.models {
+    padding: 15px;
+    display: grid;
     grid-template-columns:
-        repeat(2,1fr);
-    gap:12px;
-    padding:15px;
+        repeat(2, 1fr);
+    gap: 12px;
 }
 
-.customCard{
-    padding:16px;
-    border:1px solid #19364e;
-    border-radius:15px;
-    background:#040b16;
-    transition:.25s;
+.model {
+    padding: 16px;
+    border: 1px solid #19364e;
+    border-radius: 15px;
+    background: #040b16;
+    animation: appear .35s ease;
 }
 
-.customCard:hover{
-    transform:translateY(-3px);
-    border-color:#00c8ff55;
+.modelName {
+    font-weight: 1000;
 }
 
-.modelName{
-    font-size:15px;
-    font-weight:1000;
+.modelId {
+    margin-top: 4px;
+    color: #00c8ff;
+    font-size: 9px;
 }
 
-.modelId{
-    margin-top:4px;
-    color:#00c8ff;
-    font-size:9px;
-    font-weight:900;
+.modelInfo {
+    margin-top: 14px;
+    display: grid;
+    gap: 7px;
 }
 
-.modelInfo{
-    margin-top:14px;
-    display:grid;
-    gap:7px;
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: #71859a;
+    font-size: 10px;
 }
 
-.infoRow{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    color:#71859a;
-    font-size:10px;
+.row strong {
+    color: white;
+    text-align: right;
 }
 
-.infoRow strong{
-    color:#d7e1ea;
-    text-align:right;
+.modelDescription {
+    margin-top: 13px;
+    padding: 10px;
+    border-radius: 9px;
+    color: #9badbd;
+    background: #08111e;
+    font-size: 10px;
+    line-height: 1.5;
 }
 
-.description{
-    margin-top:13px;
-    padding:10px;
-    border-radius:9px;
-    color:#9cadbd;
-    background:#08111e;
-    font-size:10px;
-    line-height:1.5;
+.modelActions {
+    margin-top: 14px;
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
 }
 
-.modelActions{
-    margin-top:14px;
-    display:flex;
-    gap:7px;
-    flex-wrap:wrap;
+.empty {
+    padding: 45px 20px;
+    color: #617489;
+    text-align: center;
+    font-size: 12px;
 }
 
-
-/* ==============================
-   EMPTY
-============================== */
-
-.empty{
-    padding:45px 20px;
-    color:#617489;
-    text-align:center;
-    font-size:12px;
+.emptyIcon {
+    margin-bottom: 10px;
+    font-size: 30px;
 }
 
-.emptyIcon{
-    margin-bottom:10px;
-    font-size:30px;
+/* TOAST */
+
+#toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    padding: 13px 16px;
+    border: 1px solid #254963;
+    border-radius: 11px;
+    opacity: 0;
+    transform: translateY(20px);
+    background: #071424;
+    transition: .25s;
+    pointer-events: none;
+    font-size: 11px;
+    font-weight: bold;
 }
 
-
-/* ==============================
-   TOAST
-============================== */
-
-#toast{
-    position:fixed;
-    right:20px;
-    bottom:20px;
-    z-index:9999;
-    max-width:320px;
-    padding:13px 16px;
-    border:1px solid #254963;
-    border-radius:11px;
-    opacity:0;
-    transform:translateY(20px);
-    pointer-events:none;
-    background:#071424;
-    box-shadow:0 15px 50px #0007;
-    transition:.25s;
-    font-size:11px;
-    font-weight:800;
+#toast.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-#toast.show{
-    opacity:1;
-    transform:none;
-}
-
-
-/* ==============================
-   ANIMATION
-============================== */
-
-@keyframes show{
-    from{
-        opacity:0;
-        transform:translateY(20px) scale(.98);
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform:
+            translateY(15px)
+            scale(.98);
     }
-    to{
-        opacity:1;
-        transform:none;
+
+    to {
+        opacity: 1;
+        transform: none;
     }
 }
 
-.fade{
-    animation:show .4s ease;
-}
-
-
-/* ==============================
-   RESPONSIVE
-============================== */
-
-@media(max-width:900px){
-
-    .stats{
+@media (max-width: 900px) {
+    .stats {
         grid-template-columns:
-            repeat(2,1fr);
+            repeat(2, 1fr);
     }
 
-    .customGrid{
-        grid-template-columns:1fr;
+    .models {
+        grid-template-columns: 1fr;
     }
-
 }
 
-@media(max-width:600px){
-
-    .topbarInner{
-        align-items:flex-start;
-        flex-direction:column;
+@media (max-width: 600px) {
+    .headerInner {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    .topActions{
-        width:100%;
+    .actions {
+        width: 100%;
     }
 
-    .topButton{
-        flex:1;
+    .actions .btn {
+        flex: 1;
     }
 
-    .container{
+    .container {
         padding:
             22px 12px 50px;
     }
 
-    .pageTitle{
-        font-size:27px;
+    .stats {
+        gap: 8px;
     }
 
-    .stats{
-        grid-template-columns:1fr 1fr;
-        gap:8px;
+    .stat {
+        padding: 14px;
     }
 
-    .stat{
-        padding:14px;
+    .statValue {
+        font-size: 21px;
     }
 
-    .statValue{
-        font-size:21px;
+    .orderTop {
+        flex-direction: column;
     }
-
-    .orderTop{
-        flex-direction:column;
-    }
-
-    .orderBottom{
-        align-items:flex-start;
-        flex-direction:column;
-    }
-
 }
+
 </style>
+
 </head>
 
 <body>
 
-
-<!-- ==================================================
-     LOGIN
-================================================== -->
-
 <div id="loginScreen">
 
-    <div class="loginBox">
+    <div class="login">
 
         <div class="logo">
             Printerlase<span>3D</span>
         </div>
 
-        <div class="loginSubtitle">
+        <div class="subtitle">
             Panel administratora sklepu
         </div>
 
+        <div class="group">
 
-        <div class="inputGroup">
-
-            <label>
-                LOGIN
-            </label>
+            <label>LOGIN</label>
 
             <input
                 id="login"
                 type="text"
-                autocomplete="username"
                 placeholder="admin"
             >
 
         </div>
 
+        <div class="group">
 
-        <div class="inputGroup">
-
-            <label>
-                HASŁO
-            </label>
+            <label>HASŁO</label>
 
             <input
                 id="password"
                 type="password"
-                autocomplete="current-password"
-                placeholder="Hasło administratora"
+                placeholder="Hasło"
             >
 
         </div>
-
 
         <button
             class="loginButton"
             onclick="login()"
         >
-            ZALOGUJ DO PANELU
+            ZALOGUJ
         </button>
-
 
         <div
             id="loginError"
-            class="loginError"
+            class="error"
         ></div>
 
     </div>
 
 </div>
 
+<div id="app">
 
-<!-- ==================================================
-     PANEL
-================================================== -->
+<header>
 
-<div id="adminApp">
+    <div class="headerInner">
 
-    <header class="topbar">
+        <div class="brand">
+            Printerlase<span>3D</span>
+            — ADMIN
+        </div>
 
-        <div class="topbarInner">
+        <div class="actions">
 
-            <div class="brand">
-                Printerlase<span>3D</span>
-                <small>ADMIN PANEL</small>
+            <button
+                class="btn"
+                onclick="loadData()"
+            >
+                ↻ ODŚWIEŻ
+            </button>
+
+            <button
+                class="btn logout"
+                onclick="logout()"
+            >
+                WYLOGUJ
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <h1>
+        Panel administratora
+    </h1>
+
+    <div class="description">
+        Zamówienia, własne modele 3D,
+        statusy i przychody.
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="statTitle">
+                Zamówienia
             </div>
 
+            <div
+                id="ordersStat"
+                class="statValue blue"
+            >
+                0
+            </div>
+        </div>
 
-            <div class="topActions">
+        <div class="stat">
+            <div class="statTitle">
+                Modele 3D
+            </div>
 
-                <button
-                    class="topButton"
-                    onclick="loadData()"
-                >
-                    ↻ ODŚWIEŻ
-                </button>
+            <div
+                id="modelsStat"
+                class="statValue purple"
+            >
+                0
+            </div>
+        </div>
 
-                <button
-                    class="topButton logout"
-                    onclick="logout()"
-                >
-                    WYLOGUJ
-                </button>
+        <div class="stat">
+            <div class="statTitle">
+                Przychód
+            </div>
 
+            <div
+                id="revenueStat"
+                class="statValue green"
+            >
+                0,00 zł
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="statTitle">
+                Nowe
+            </div>
+
+            <div
+                id="newStat"
+                class="statValue orange"
+            >
+                0
+            </div>
+        </div>
+
+    </div>
+
+    <section class="section">
+
+        <div class="sectionHeader">
+
+            <div class="sectionTitle">
+                🛒 Zamówienia
+            </div>
+
+            <div
+                id="ordersCount"
+                class="count"
+            >
+                0
             </div>
 
         </div>
 
-    </header>
+        <div id="orders"></div>
 
+    </section>
 
-    <main class="container">
+    <section class="section">
 
-        <h1 class="pageTitle">
-            Panel administratora
-        </h1>
+        <div class="sectionHeader">
 
-        <p class="pageDescription">
-            Zarządzaj zamówieniami i własnymi modelami 3D.
-        </p>
-
-
-        <!-- =========================
-             STATS
-        ========================== -->
-
-        <div class="stats">
-
-            <div class="stat">
-
-                <div class="statTitle">
-                    Zamówienia
-                </div>
-
-                <div
-                    id="statOrders"
-                    class="statValue blue"
-                >
-                    0
-                </div>
-
+            <div class="sectionTitle">
+                🧩 Własne modele 3D
             </div>
 
-
-            <div class="stat">
-
-                <div class="statTitle">
-                    Własne modele
-                </div>
-
-                <div
-                    id="statModels"
-                    class="statValue purple"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="statTitle">
-                    Przychód
-                </div>
-
-                <div
-                    id="statRevenue"
-                    class="statValue green"
-                >
-                    0,00 zł
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="statTitle">
-                    Nowe
-                </div>
-
-                <div
-                    id="statNew"
-                    class="statValue orange"
-                >
-                    0
-                </div>
-
+            <div
+                id="modelsCount"
+                class="count"
+            >
+                0
             </div>
 
         </div>
 
+        <div
+            id="models"
+            class="models"
+        ></div>
 
-        <!-- =========================
-             ORDERS
-        ========================== -->
+    </section>
 
-        <section class="section">
-
-            <div class="sectionHeader">
-
-                <div class="sectionTitle">
-                    🛒 Zamówienia
-                </div>
-
-                <div
-                    id="ordersCount"
-                    class="sectionCount"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div
-                id="orders"
-                class="orders"
-            ></div>
-
-        </section>
-
-
-        <!-- =========================
-             CUSTOM MODELS
-        ========================== -->
-
-        <section class="section">
-
-            <div class="sectionHeader">
-
-                <div class="sectionTitle">
-                    🧩 Własne modele 3D
-                </div>
-
-                <div
-                    id="modelsCount"
-                    class="sectionCount"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div
-                id="customModels"
-                class="customGrid"
-            ></div>
-
-        </section>
-
-    </main>
+</main>
 
 </div>
 
-
 <div id="toast"></div>
-
 
 <script>
 
 let token =
     localStorage.getItem(
-        "printerlase_admin_token"
+        "printerlase_token"
     );
 
+function login() {
 
-/* ==================================================
-   LOGIN
-================================================== */
-
-async function login(){
-
-    const loginValue =
-        document
-            .getElementById("login")
-            .value
-            .trim();
-
-    const passwordValue =
-        document
-            .getElementById("password")
-            .value;
-
-
-    const error =
+    const login =
         document.getElementById(
-            "loginError"
-        );
+            "login"
+        ).value.trim();
 
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
 
-    error.textContent =
-        "Logowanie...";
+    fetch(
+        "/api/admin/login",
+        {
+            method: "POST",
 
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
 
-    try{
+            body: JSON.stringify({
+                login: login,
+                password: password
+            })
+        }
+    )
+    .then(function (response) {
+        return response.json()
+            .then(function (data) {
+                return {
+                    ok: response.ok,
+                    data: data
+                };
+            });
+    })
+    .then(function (result) {
 
-        const response =
-            await fetch(
-                "/api/admin/login",
-                {
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:JSON.stringify({
-
-                        login:
-                            loginValue,
-
-                        password:
-                            passwordValue
-
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
+        if (!result.ok) {
             throw new Error(
-                data.error ||
+                result.data.error ||
                 "Błąd logowania."
             );
-
         }
 
-
         token =
-            data.token;
-
+            result.data.token;
 
         localStorage.setItem(
-            "printerlase_admin_token",
+            "printerlase_token",
             token
         );
 
+        showPanel();
+    })
+    .catch(function (error) {
 
-        showAdmin();
-
-    }
-    catch(error){
-
-        errorElement(
-            error.message
-        );
-
-    }
-
-}
-
-
-function errorElement(
-    message
-){
-
-    document
-        .getElementById(
+        document.getElementById(
             "loginError"
-        )
-        .textContent =
-        message;
-
+        ).textContent =
+            error.message;
+    });
 }
 
+document.getElementById(
+    "password"
+).addEventListener(
+    "keydown",
+    function (event) {
 
-/* Enter = login */
-
-document
-    .getElementById("password")
-    .addEventListener(
-        "keydown",
-        event => {
-
-            if(
-                event.key === "Enter"
-            ){
-
-                login();
-
-            }
-
+        if (
+            event.key === "Enter"
+        ) {
+            login();
         }
-    );
+    }
+);
 
+function showPanel() {
 
-/* ==================================================
-   SHOW ADMIN
-================================================== */
+    document.getElementById(
+        "loginScreen"
+    ).style.display = "none";
 
-async function showAdmin(){
+    document.getElementById(
+        "app"
+    ).classList.add("active");
 
-    document
-        .getElementById(
-            "loginScreen"
-        )
-        .style.display =
-        "none";
-
-
-    document
-        .getElementById(
-            "adminApp"
-        )
-        .classList.add(
-            "active"
-        );
-
-
-    await loadData();
-
+    loadData();
 }
 
+function api(url, options) {
 
-/* ==================================================
-   API
-================================================== */
-
-async function api(
-    url,
-    options={}
-){
+    options =
+        options || {};
 
     options.headers =
         options.headers || {};
 
-
     options.headers.Authorization =
-        "Bearer " +
-        token;
+        "Bearer " + token;
 
+    return fetch(
+        url,
+        options
+    )
+    .then(function (response) {
 
-    if(
-        options.body &&
-        typeof options.body !==
-        "string"
-    ){
+        if (
+            response.status === 401
+        ) {
 
-        options.headers[
-            "Content-Type"
-        ] =
-            "application/json";
+            logout();
 
-
-        options.body =
-            JSON.stringify(
-                options.body
+            throw new Error(
+                "Sesja wygasła."
             );
+        }
 
-    }
+        return response.json()
+            .then(function (data) {
 
+                if (!response.ok) {
+                    throw new Error(
+                        data.error ||
+                        "Błąd API."
+                    );
+                }
 
-    const response =
-        await fetch(
-            url,
-            options
-        );
-
-
-    if(
-        response.status === 401
-    ){
-
-        logout();
-
-        throw new Error(
-            "Sesja wygasła."
-        );
-
-    }
-
-
-    const data =
-        await response.json();
-
-
-    if(!response.ok){
-
-        throw new Error(
-            data.error ||
-            "Błąd serwera."
-        );
-
-    }
-
-
-    return data;
-
+                return data;
+            });
+    });
 }
 
+function loadData() {
 
-/* ==================================================
-   LOAD
-================================================== */
-
-async function loadData(){
-
-    if(!token){
-
+    if (!token) {
         return;
-
     }
 
+    api("/api/admin/data")
+        .then(function (data) {
 
-    try{
-
-        const data =
-            await api(
-                "/api/admin/data"
+            renderStats(data);
+            renderOrders(
+                data.orders || []
+            );
+            renderModels(
+                data.customOrders || []
             );
 
+        })
+        .catch(function (error) {
 
-        renderStats(
-            data
-        );
-
-        renderOrders(
-            data.orders || []
-        );
-
-        renderCustomModels(
-            data.customOrders || []
-        );
-
-    }
-    catch(error){
-
-        toast(
-            error.message
-        );
-
-    }
-
+            toast(
+                error.message
+            );
+        });
 }
 
-
-/* ==================================================
-   STATS
-================================================== */
-
-function renderStats(
-    data
-){
+function renderStats(data) {
 
     const orders =
         data.orders || [];
@@ -1229,1106 +948,736 @@ function renderStats(
     const models =
         data.customOrders || [];
 
+    let revenue = 0;
+    let newOrders = 0;
 
-    const newOrders =
-        orders.filter(
-            order =>
-                order.status ===
-                "NEW"
-        ).length;
+    orders.forEach(
+        function (order) {
 
+            revenue += Number(
+                order.total || 0
+            );
 
-    const revenue =
-        orders.reduce(
-            (
-                sum,
-                order
-            ) =>
-                sum +
-                Number(
-                    order.total || 0
-                ),
-            0
-        );
+            if (
+                order.status === "NEW"
+            ) {
+                newOrders++;
+            }
+        }
+    );
 
-
-    document
-        .getElementById(
-            "statOrders"
-        )
-        .textContent =
+    document.getElementById(
+        "ordersStat"
+    ).textContent =
         orders.length;
 
-
-    document
-        .getElementById(
-            "statModels"
-        )
-        .textContent =
+    document.getElementById(
+        "modelsStat"
+    ).textContent =
         models.length;
 
+    document.getElementById(
+        "revenueStat"
+    ).textContent =
+        money(revenue);
 
-    document
-        .getElementById(
-            "statRevenue"
-        )
-        .textContent =
-        money(
-            revenue
-        );
-
-
-    document
-        .getElementById(
-            "statNew"
-        )
-        .textContent =
+    document.getElementById(
+        "newStat"
+    ).textContent =
         newOrders;
-
 }
 
+function renderOrders(orders) {
 
-/* ==================================================
-   ORDERS
-================================================== */
+    document.getElementById(
+        "ordersCount"
+    ).textContent =
+        orders.length;
 
-function renderOrders(
-    orders
-){
-
-    const container =
+    const box =
         document.getElementById(
             "orders"
         );
 
+    if (!orders.length) {
 
-    document
-        .getElementById(
-            "ordersCount"
-        )
-        .textContent =
-        orders.length;
-
-
-    if(!orders.length){
-
-        container.innerHTML = `
-
-            <div class="empty">
-
-                <div class="emptyIcon">
-                    🛒
-                </div>
-
-                Brak zamówień.
-
-            </div>
-
-        `;
+        box.innerHTML =
+            '<div class="empty">' +
+            '<div class="emptyIcon">🛒</div>' +
+            'Brak zamówień.' +
+            '</div>';
 
         return;
-
     }
 
-
-    container.innerHTML =
-        orders
-            .map(
-                order =>
-                    orderHTML(
-                        order
-                    )
-            )
-            .join("");
-
+    box.innerHTML =
+        orders.map(
+            orderHTML
+        ).join("");
 }
 
+function orderHTML(order) {
 
-function orderHTML(
-    order
-){
+    let itemsHTML = "";
 
-    const items =
+    if (
         Array.isArray(
             order.items
-        )
-            ? order.items
-            : [];
-
-
-    const itemsHTML =
-        items.length
-            ? items
-                .map(
-                    item => `
-
-                        <div class="item">
-
-                            <strong>
-                                ${escapeHTML(
-                                    item.name
-                                )}
-                            </strong>
-
-                            ×
-                            ${Number(
-                                item.quantity ||
-                                item.qty ||
-                                1
-                            )}
-
-                            —
-                            ${money(
-                                item.total ||
-                                (
-                                    Number(
-                                        item.price ||
-                                        0
-                                    ) *
-                                    Number(
-                                        item.quantity ||
-                                        item.qty ||
-                                        1
-                                    )
-                                )
-                            )}
-
-                        </div>
-
-                    `
-                )
-                .join("")
-            : `
-                <div class="item">
-                    Brak produktów
-                </div>
-            `;
-
-
-    return `
-
-        <article class="order fade">
-
-            <div class="orderTop">
-
-                <div>
-
-                    <div class="orderId">
-                        ${escapeHTML(
-                            order.id
-                        )}
-                    </div>
-
-                    <div class="orderDate">
-                        ${formatDate(
-                            order.createdAt
-                        )}
-                    </div>
-
-                </div>
-
-
-                <div class="statusArea">
-
-                    <span
-                        class="status ${escapeHTML(
-                            order.status ||
-                            "NEW"
-                        )}"
-                    >
-                        ${statusName(
-                            order.status
-                        )}
-                    </span>
-
-
-                    <select
-                        class="statusSelect"
-                        onchange="changeOrderStatus(
-                            '${escapeJS(order.id)}',
-                            this.value
-                        )"
-                    >
-
-                        ${statusOptions(
-                            order.status
-                        )}
-
-                    </select>
-
-                </div>
-
-            </div>
-
-
-            <div class="orderCustomer">
-
-                👤
-                ${escapeHTML(
-                    order.name ||
-                    "Brak nazwy"
-                )}
-
-            </div>
-
-
-            <div class="orderContact">
-
-                📧
-                ${escapeHTML(
-                    order.email ||
-                    "-"
-                )}
-
-                <br>
-
-                📞
-                ${escapeHTML(
-                    order.phone ||
-                    "-"
-                )}
-
-                <br>
-
-                📍
-                ${escapeHTML(
-                    order.address ||
-                    "-"
-                )}
-
-            </div>
-
-
-            <div class="orderItems">
-
-                ${itemsHTML}
-
-            </div>
-
-
-            <div class="orderBottom">
-
-                <div>
-
-                    <div class="orderPrice">
-
-                        ${money(
-                            order.total
-                        )}
-
-                    </div>
-
-                    <div class="orderMeta">
-
-                        ${order.discount
-                            ? `Rabat: -${money(
-                                order.discount
-                            )}`
-                            : "Bez rabatu"
-                        }
-
-                        ·
-
-                        ${escapeHTML(
-                            order.delivery ||
-                            "Dostawa"
-                        )}
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    class="deleteButton"
-                    onclick="deleteOrder(
-                        '${escapeJS(order.id)}'
-                    )"
-                >
-                    🗑 Usuń
-                </button>
-
-            </div>
-
-        </article>
-
-    `;
-
-}
-
-
-/* ==================================================
-   CUSTOM MODELS
-================================================== */
-
-function renderCustomModels(
-    models
-){
-
-    const container =
-        document.getElementById(
-            "customModels"
-        );
-
-
-    document
-        .getElementById(
-            "modelsCount"
-        )
-        .textContent =
-        models.length;
-
-
-    if(!models.length){
-
-        container.innerHTML = `
-
-            <div
-                class="empty"
-                style="grid-column:1/-1"
-            >
-
-                <div class="emptyIcon">
-                    🧩
-                </div>
-
-                Nikt jeszcze nie wysłał
-                własnego modelu 3D.
-
-            </div>
-
-        `;
-
-        return;
-
+        ) &&
+        order.items.length
+    ) {
+
+        itemsHTML =
+            order.items.map(
+                function (item) {
+
+                    return (
+                        '<div class="item">' +
+                        '<strong>' +
+                        escapeHTML(
+                            item.name
+                        ) +
+                        '</strong> × ' +
+                        Number(
+                            item.quantity ||
+                            1
+                        ) +
+                        ' — ' +
+                        money(
+                            item.total ||
+                            0
+                        ) +
+                        '</div>'
+                    );
+                }
+            ).join("");
+
+    } else {
+
+        itemsHTML =
+            '<div class="item">' +
+            'Brak produktów' +
+            '</div>';
     }
 
-
-    container.innerHTML =
-        models
-            .map(
-                model =>
-                    customModelHTML(
-                        model
-                    )
-            )
-            .join("");
-
-}
-
-
-function customModelHTML(
-    model
-){
-
-    return `
-
-        <article class="customCard fade">
-
-            <div class="modelName">
-
-                🧩
-                ${escapeHTML(
-                    model.fileName ||
-                    model.name ||
-                    "Własny model"
-                )}
-
-            </div>
-
-
-            <div class="modelId">
-
-                ${escapeHTML(
-                    model.id
-                )}
-
-            </div>
-
-
-            <div class="modelInfo">
-
-                <div class="infoRow">
-
-                    <span>Klient</span>
-
-                    <strong>
-                        ${escapeHTML(
-                            model.name ||
-                            "-"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>E-mail</span>
-
-                    <strong>
-                        ${escapeHTML(
-                            model.email ||
-                            "-"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>Materiał</span>
-
-                    <strong>
-                        ${escapeHTML(
-                            model.material ||
-                            "PLA"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>Kolor</span>
-
-                    <strong>
-                        ${escapeHTML(
-                            model.color ||
-                            "-"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>Ilość</span>
-
-                    <strong>
-                        ${Number(
-                            model.quantity ||
-                            1
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>Wymiary</span>
-
-                    <strong>
-                        ${escapeHTML(
-                            model.dimensions ||
-                            "-"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>Szacowana cena</span>
-
-                    <strong>
-                        ${money(
-                            model.estimatedPrice ||
-                            0
-                        )}
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            ${
-                model.description
-                    ? `
-                        <div class="description">
-
-                            ${escapeHTML(
-                                model.description
-                            )}
-
-                        </div>
-                    `
-                    : ""
-            }
-
-
-            <div class="modelActions">
-
-                <select
-                    class="statusSelect"
-                    onchange="changeModelStatus(
-                        '${escapeJS(model.id)}',
-                        this.value
-                    )"
-                >
-
-                    ${statusOptions(
-                        model.status
-                    )}
-
-                </select>
-
-
-                ${
-                    model.fileUrl
-                        ? `
-                            <button
-                                class="topButton"
-                                onclick="window.open(
-                                    '${escapeJS(model.fileUrl)}',
-                                    '_blank'
-                                )"
-                            >
-                                👁 Zobacz model
-                            </button>
-                        `
-                        : ""
-                }
-
-
-                <button
-                    class="deleteButton"
-                    onclick="deleteModel(
-                        '${escapeJS(model.id)}'
-                    )"
-                >
-                    🗑 Usuń
-                </button>
-
-            </div>
-
-        </article>
-
-    `;
-
-}
-
-
-/* ==================================================
-   STATUS
-================================================== */
-
-function statusOptions(
-    current
-){
-
-    const options = [
-
-        ["NEW","NOWE"],
-
-        ["IN_PROGRESS","W REALIZACJI"],
-
-        ["READY","GOTOWE"],
-
-        ["COMPLETED","ZAKOŃCZONE"],
-
-        ["CANCELLED","ANULOWANE"]
-
-    ];
-
-
-    return options
-        .map(
-            option => `
-
-                <option
-                    value="${option[0]}"
-                    ${
-                        option[0] ===
-                        current
-                            ? "selected"
-                            : ""
-                    }
-                >
-                    ${option[1]}
-                </option>
-
-            `
-        )
-        .join("");
-
-}
-
-
-function statusName(
-    status
-){
-
-    const names = {
-
-        NEW:
-            "NOWE",
-
-        IN_PROGRESS:
-            "W REALIZACJI",
-
-        READY:
-            "GOTOWE",
-
-        COMPLETED:
-            "ZAKOŃCZONE",
-
-        CANCELLED:
-            "ANULOWANE"
-
-    };
-
-
     return (
-        names[status] ||
-        "NOWE"
-    );
+        '<article class="order">' +
 
+        '<div class="orderTop">' +
+
+        '<div>' +
+
+        '<div class="id">' +
+        escapeHTML(order.id) +
+        '</div>' +
+
+        '<div class="date">' +
+        formatDate(
+            order.createdAt
+        ) +
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="statusArea">' +
+
+        '<select class="statusSelect" ' +
+        'onchange="changeOrderStatus(\'' +
+        escapeJS(order.id) +
+        '\', this.value)">' +
+
+        statusOptions(
+            order.status
+        ) +
+
+        '</select>' +
+
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="customer">' +
+        '👤 ' +
+        escapeHTML(
+            order.name ||
+            "Brak danych"
+        ) +
+        '</div>' +
+
+        '<div class="contact">' +
+        '📧 ' +
+        escapeHTML(
+            order.email || "-"
+        ) +
+        '<br>' +
+        '📞 ' +
+        escapeHTML(
+            order.phone || "-"
+        ) +
+        '<br>' +
+        '📍 ' +
+        escapeHTML(
+            order.address || "-"
+        ) +
+        '</div>' +
+
+        '<div class="items">' +
+        itemsHTML +
+        '</div>' +
+
+        '<div class="bottom">' +
+
+        '<div>' +
+
+        '<div class="price">' +
+        money(order.total) +
+        '</div>' +
+
+        '<div class="meta">' +
+        (
+            order.discount
+                ? "Rabat: -" +
+                  money(
+                      order.discount
+                  )
+                : "Bez rabatu"
+        ) +
+        ' · ' +
+        escapeHTML(
+            order.delivery ||
+            "Dostawa"
+        ) +
+        '</div>' +
+
+        '</div>' +
+
+        '<button class="delete" ' +
+        'onclick="deleteOrder(\'' +
+        escapeJS(order.id) +
+        '\')">' +
+        '🗑 Usuń' +
+        '</button>' +
+
+        '</div>' +
+
+        '</article>'
+    );
 }
 
+function renderModels(models) {
 
-/* ==================================================
-   CHANGE ORDER STATUS
-================================================== */
+    document.getElementById(
+        "modelsCount"
+    ).textContent =
+        models.length;
 
-async function changeOrderStatus(
-    id,
-    status
-){
-
-    try{
-
-        await api(
-            `/api/admin/orders/${encodeURIComponent(
-                id
-            )}/status`,
-            {
-                method:"PATCH",
-                body:{
-                    status
-                }
-            }
+    const box =
+        document.getElementById(
+            "models"
         );
 
+    if (!models.length) {
+
+        box.innerHTML =
+            '<div class="empty">' +
+            '<div class="emptyIcon">🧩</div>' +
+            'Brak własnych modeli 3D.' +
+            '</div>';
+
+        return;
+    }
+
+    box.innerHTML =
+        models.map(
+            modelHTML
+        ).join("");
+}
+
+function modelHTML(model) {
+
+    let fileButton = "";
+
+    if (model.fileUrl) {
+
+        fileButton =
+            '<button class="btn" ' +
+            'onclick="window.open(\'' +
+            escapeJS(
+                model.fileUrl
+            ) +
+            '\', \'_blank\')">' +
+            '👁 Otwórz plik' +
+            '</button>';
+    }
+
+    return (
+        '<article class="model">' +
+
+        '<div class="modelName">' +
+        '🧩 ' +
+        escapeHTML(
+            model.fileName ||
+            "Własny model 3D"
+        ) +
+        '</div>' +
+
+        '<div class="modelId">' +
+        escapeHTML(
+            model.id
+        ) +
+        '</div>' +
+
+        '<div class="modelInfo">' +
+
+        row(
+            "Klient",
+            model.name
+        ) +
+
+        row(
+            "E-mail",
+            model.email
+        ) +
+
+        row(
+            "Telefon",
+            model.phone
+        ) +
+
+        row(
+            "Materiał",
+            model.material
+        ) +
+
+        row(
+            "Kolor",
+            model.color
+        ) +
+
+        row(
+            "Ilość",
+            model.quantity
+        ) +
+
+        row(
+            "Wymiary",
+            model.dimensions
+        ) +
+
+        row(
+            "Cena",
+            money(
+                model.estimatedPrice
+            )
+        ) +
+
+        '</div>' +
+
+        (
+            model.description
+                ? '<div class="modelDescription">' +
+                  escapeHTML(
+                      model.description
+                  ) +
+                  '</div>'
+                : ""
+        ) +
+
+        '<div class="modelActions">' +
+
+        '<select class="statusSelect" ' +
+        'onchange="changeModelStatus(\'' +
+        escapeJS(model.id) +
+        '\', this.value)">' +
+
+        statusOptions(
+            model.status
+        ) +
+
+        '</select>' +
+
+        fileButton +
+
+        '<button class="delete" ' +
+        'onclick="deleteModel(\'' +
+        escapeJS(model.id) +
+        '\')">' +
+        '🗑 Usuń' +
+        '</button>' +
+
+        '</div>' +
+
+        '</article>'
+    );
+}
+
+function row(label, value) {
+
+    return (
+        '<div class="row">' +
+        '<span>' +
+        escapeHTML(label) +
+        '</span>' +
+        '<strong>' +
+        escapeHTML(
+            value === undefined ||
+            value === null ||
+            value === ""
+                ? "-"
+                : value
+        ) +
+        '</strong>' +
+        '</div>'
+    );
+}
+
+function statusOptions(current) {
+
+    const options = [
+        ["NEW", "NOWE"],
+        ["IN_PROGRESS", "W REALIZACJI"],
+        ["READY", "GOTOWE"],
+        ["COMPLETED", "ZAKOŃCZONE"],
+        ["CANCELLED", "ANULOWANE"]
+    ];
+
+    return options.map(
+        function (option) {
+
+            return (
+                '<option value="' +
+                option[0] +
+                '"' +
+                (
+                    option[0] === current
+                        ? " selected"
+                        : ""
+                ) +
+                '>' +
+                option[1] +
+                '</option>'
+            );
+        }
+    ).join("");
+}
+
+function changeOrderStatus(
+    id,
+    status
+) {
+
+    api(
+        "/api/admin/orders/" +
+        encodeURIComponent(id) +
+        "/status",
+        {
+            method: "PATCH",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+                status: status
+            })
+        }
+    )
+    .then(function () {
 
         toast(
             "Status zamówienia zmieniony."
         );
 
-
-        await loadData();
-
-    }
-    catch(error){
+        loadData();
+    })
+    .catch(function (error) {
 
         toast(
             error.message
         );
-
-    }
-
+    });
 }
 
-
-/* ==================================================
-   CHANGE MODEL STATUS
-================================================== */
-
-async function changeModelStatus(
+function changeModelStatus(
     id,
     status
-){
+) {
 
-    try{
+    api(
+        "/api/admin/custom/" +
+        encodeURIComponent(id) +
+        "/status",
+        {
+            method: "PATCH",
 
-        await api(
-            `/api/admin/custom/${encodeURIComponent(
-                id
-            )}/status`,
-            {
-                method:"PATCH",
-                body:{
-                    status
-                }
-            }
-        );
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
 
+            body: JSON.stringify({
+                status: status
+            })
+        }
+    )
+    .then(function () {
 
         toast(
             "Status modelu zmieniony."
         );
 
-
-        await loadData();
-
-    }
-    catch(error){
+        loadData();
+    })
+    .catch(function (error) {
 
         toast(
             error.message
         );
-
-    }
-
+    });
 }
 
+function deleteOrder(id) {
 
-/* ==================================================
-   DELETE ORDER
-================================================== */
-
-async function deleteOrder(
-    id
-){
-
-    if(
+    if (
         !confirm(
-            "Na pewno usunąć to zamówienie?"
+            "Usunąć zamówienie?"
         )
-    ){
-
+    ) {
         return;
-
     }
 
-
-    try{
-
-        await api(
-            `/api/admin/orders/${encodeURIComponent(
-                id
-            )}`,
-            {
-                method:"DELETE"
-            }
-        );
-
+    api(
+        "/api/admin/orders/" +
+        encodeURIComponent(id),
+        {
+            method: "DELETE"
+        }
+    )
+    .then(function () {
 
         toast(
             "Zamówienie usunięte."
         );
 
-
-        await loadData();
-
-    }
-    catch(error){
+        loadData();
+    })
+    .catch(function (error) {
 
         toast(
             error.message
         );
-
-    }
-
+    });
 }
 
+function deleteModel(id) {
 
-/* ==================================================
-   DELETE MODEL
-================================================== */
-
-async function deleteModel(
-    id
-){
-
-    if(
+    if (
         !confirm(
-            "Na pewno usunąć ten model?"
+            "Usunąć model?"
         )
-    ){
-
+    ) {
         return;
-
     }
 
-
-    try{
-
-        await api(
-            `/api/admin/custom/${encodeURIComponent(
-                id
-            )}`,
-            {
-                method:"DELETE"
-            }
-        );
-
+    api(
+        "/api/admin/custom/" +
+        encodeURIComponent(id),
+        {
+            method: "DELETE"
+        }
+    )
+    .then(function () {
 
         toast(
             "Model usunięty."
         );
 
-
-        await loadData();
-
-    }
-    catch(error){
+        loadData();
+    })
+    .catch(function (error) {
 
         toast(
             error.message
         );
-
-    }
-
+    });
 }
 
+function logout() {
 
-/* ==================================================
-   LOGOUT
-================================================== */
+    if (token) {
 
-async function logout(){
+        fetch(
+            "/api/admin/logout",
+            {
+                method: "POST",
 
-    try{
-
-        if(token){
-
-            await fetch(
-                "/api/admin/logout",
-                {
-                    method:"POST",
-
-                    headers:{
-                        Authorization:
-                            "Bearer " +
-                            token
-                    }
+                headers: {
+                    Authorization:
+                        "Bearer " +
+                        token
                 }
-            );
-
-        }
-
+            }
+        ).catch(
+            function () {}
+        );
     }
-    catch(error){
-
-        console.log(error);
-
-    }
-
 
     token = null;
 
     localStorage.removeItem(
-        "printerlase_admin_token"
+        "printerlase_token"
     );
 
+    document.getElementById(
+        "app"
+    ).classList.remove(
+        "active"
+    );
 
-    document
-        .getElementById(
-            "adminApp"
-        )
-        .classList.remove(
-            "active"
-        );
-
-
-    document
-        .getElementById(
-            "loginScreen"
-        )
-        .style.display =
+    document.getElementById(
+        "loginScreen"
+    ).style.display =
         "flex";
-
 }
 
-
-/* ==================================================
-   TOAST
-================================================== */
-
-let toastTimer;
-
-
-function toast(
-    message
-){
-
-    const element =
-        document.getElementById(
-            "toast"
-        );
-
-
-    element.textContent =
-        message;
-
-
-    element.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                element.classList.remove(
-                    "show"
-                );
-
-            },
-            2500
-        );
-
-}
-
-
-/* ==================================================
-   HELPERS
-================================================== */
-
-function money(
-    value
-){
+function money(value) {
 
     return Number(
         value || 0
-    )
-    .toLocaleString(
+    ).toLocaleString(
         "pl-PL",
         {
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
         }
     ) + " zł";
-
 }
 
+function formatDate(value) {
 
-function formatDate(
-    value
-){
-
-    if(!value){
+    if (!value) {
         return "-";
     }
-
 
     const date =
         new Date(value);
 
-
-    if(
+    if (
         Number.isNaN(
             date.getTime()
         )
-    ){
-
+    ) {
         return "-";
-
     }
 
-
     return date.toLocaleString(
-        "pl-PL",
-        {
-            dateStyle:"medium",
-            timeStyle:"short"
-        }
+        "pl-PL"
     );
-
 }
 
-
-function escapeHTML(
-    value
-){
+function escapeHTML(value) {
 
     return String(
-        value ?? ""
+        value === undefined ||
+        value === null
+            ? ""
+            : value
     )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 
-
-function escapeJS(
-    value
-){
+function escapeJS(value) {
 
     return String(
-        value ?? ""
+        value === undefined ||
+        value === null
+            ? ""
+            : value
     )
-    .replace(
-        /\\/g,
-        "\\\\"
-    )
-    .replace(
-        /'/g,
-        "\\'"
-    )
-    .replace(
-        /\n/g,
-        "\\n"
-    )
-    .replace(
-        /\r/g,
-        "\\r"
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        )
+        .replace(
+            /\n/g,
+            "\\n"
+        )
+        .replace(
+            /\r/g,
+            "\\r"
+        );
+}
+
+let toastTimeout;
+
+function toast(message) {
+
+    const box =
+        document.getElementById(
+            "toast"
+        );
+
+    box.textContent =
+        message;
+
+    box.classList.add(
+        "show"
     );
 
+    clearTimeout(
+        toastTimeout
+    );
+
+    toastTimeout =
+        setTimeout(
+            function () {
+                box.classList.remove(
+                    "show"
+                );
+            },
+            2500
+        );
 }
 
-
-/* ==================================================
-   AUTO LOGIN
-================================================== */
-
-if(token){
-
-    showAdmin();
-
+if (token) {
+    showPanel();
 }
-
-
-/* ==================================================
-   AUTO REFRESH
-================================================== */
 
 setInterval(
-    () => {
+    function () {
 
-        if(
+        if (
             token &&
             document
-                .getElementById(
-                    "adminApp"
-                )
+                .getElementById("app")
                 .classList
                 .contains("active")
-        ){
-
+        ) {
             loadData();
-
         }
 
     },
@@ -2338,5 +1687,6 @@ setInterval(
 </script>
 
 </body>
+
 </html>
 ```
