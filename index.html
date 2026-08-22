@@ -33,6 +33,76 @@ a{text-decoration:none;color:inherit}
     border-radius:20px
 }
 
+/* =========================
+   GÓRNY PASEK
+========================= */
+
+.topPromo{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:10000;
+
+    height:34px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:0 15px;
+
+    color:#dffaff;
+
+    background:
+        linear-gradient(
+            90deg,
+            #006eff,
+            #713cff,
+            #df54ff,
+            #006eff
+        );
+
+    background-size:300% 100%;
+
+    animation:promoMove 7s linear infinite;
+
+    border-bottom:1px solid #ffffff25;
+
+    box-shadow:
+        0 5px 30px #006eff35;
+
+    font-size:10px;
+    font-weight:800;
+}
+
+.topPromo strong{
+    color:#fff;
+}
+
+.topPromo b{
+    padding:3px 8px;
+
+    border:1px solid #ffffff40;
+    border-radius:6px;
+
+    color:#fff;
+    background:#ffffff18;
+
+    letter-spacing:1px;
+}
+
+.topPromo span{
+    opacity:.55;
+}
+
+@keyframes promoMove{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
 /* LOADER */
 
 #loader{
@@ -104,7 +174,7 @@ a{text-decoration:none;color:inherit}
 
 .nav{
     position:fixed;
-    top:0;
+    top:34px;
     left:0;
     right:0;
     z-index:5000;
@@ -181,7 +251,7 @@ a{text-decoration:none;color:inherit}
 
 .hero{
     min-height:900px;
-    padding:150px 6% 100px;
+    padding:190px 6% 100px;
     display:grid;
     grid-template-columns:1fr 1fr;
     align-items:center;
@@ -1187,10 +1257,6 @@ footer a:hover{color:#00c8ff}
         grid-template-columns:1fr;
     }
 
-    .heroVisual{
-        min-height:450px;
-    }
-
     .products{
         grid-template-columns:repeat(2,1fr);
     }
@@ -1214,6 +1280,17 @@ footer a:hover{color:#00c8ff}
 
 @media(max-width:700px){
 
+    .topPromo{
+        height:34px;
+        font-size:8px;
+        gap:5px;
+        white-space:nowrap;
+    }
+
+    .nav{
+        top:34px;
+    }
+
     .navLinks{
         position:absolute;
         top:76px;
@@ -1236,7 +1313,7 @@ footer a:hover{color:#00c8ff}
     }
 
     .hero{
-        padding-top:125px;
+        padding-top:145px;
     }
 
     .hero h1{
@@ -1272,13 +1349,19 @@ footer a:hover{color:#00c8ff}
 
 @media(max-width:500px){
 
+    .topPromo{
+        height:32px;
+        gap:4px;
+        padding:0 5px;
+        font-size:7px;
+    }
+
     .nav{
-        padding:0 4%;
+        top:32px;
     }
 
     .hero{
-        padding-left:5%;
-        padding-right:5%;
+        padding-top:140px;
     }
 
     .heroStats{
@@ -1308,6 +1391,16 @@ footer a:hover{color:#00c8ff}
 </head>
 
 <body>
+
+<!-- GÓRNY PASEK -->
+
+<div class="topPromo">
+    🚚 <strong>DOSTAWA 0 ZŁ</strong> od 50 zł
+    <span>•</span>
+    🎁 <strong>-10%</strong> kod <b>START10</b>
+    <span>•</span>
+    ⚡ Realizacja 24–72h
+</div>
 
 <div id="loader">
     <div class="loaderInner">
@@ -1354,9 +1447,6 @@ footer a:hover{color:#00c8ff}
     <button class="menu" onclick="toggleMenu()">☰</button>
 
 </nav>
-
-
-<!-- HERO -->
 
 <section class="hero" id="home">
 
@@ -1413,7 +1503,6 @@ footer a:hover{color:#00c8ff}
 
     </div>
 
-
     <div class="heroVisual" id="heroModel">
 
         <div class="glow"></div>
@@ -1440,9 +1529,6 @@ footer a:hover{color:#00c8ff}
 
 </section>
 
-
-<!-- FEATURES -->
-
 <section class="section reveal">
 
     <div class="sectionTitle">
@@ -1457,7 +1543,6 @@ footer a:hover{color:#00c8ff}
         </p>
 
     </div>
-
 
     <div class="features">
 
@@ -1501,9 +1586,6 @@ footer a:hover{color:#00c8ff}
 
 </section>
 
-
-<!-- PRODUCTS -->
-
 <section class="section reveal" id="products">
 
     <div class="sectionTitle">
@@ -1520,13 +1602,9 @@ footer a:hover{color:#00c8ff}
 
     </div>
 
-
     <div class="products" id="productsGrid"></div>
 
 </section>
-
-
-<!-- CUSTOM MODEL -->
 
 <section class="section reveal" id="custom">
 
@@ -1543,99 +1621,52 @@ footer a:hover{color:#00c8ff}
             przekazane do panelu administratora.
         </p>
 
-
         <div class="customGrid">
 
             <div>
 
                 <div class="field">
-
-                    <label>
-                        IMIĘ
-                    </label>
-
-                    <input
-                        id="customName"
-                        type="text"
-                        placeholder="Twoje imię"
-                    >
-
+                    <label>IMIĘ</label>
+                    <input id="customName" type="text" placeholder="Twoje imię">
                 </div>
 
-
                 <div class="field">
-
-                    <label>
-                        E-MAIL
-                    </label>
-
-                    <input
-                        id="customEmail"
-                        type="email"
-                        placeholder="twoj@email.pl"
-                    >
-
+                    <label>E-MAIL</label>
+                    <input id="customEmail" type="email" placeholder="twoj@email.pl">
                 </div>
 
-
                 <div class="field">
-
-                    <label>
-                        TELEFON
-                    </label>
-
-                    <input
-                        id="customPhone"
-                        type="tel"
-                        placeholder="Numer telefonu"
-                    >
-
+                    <label>TELEFON</label>
+                    <input id="customPhone" type="tel" placeholder="Numer telefonu">
                 </div>
 
-
                 <div class="field">
-
-                    <label>
-                        MATERIAŁ
-                    </label>
+                    <label>MATERIAŁ</label>
 
                     <select id="customMaterial">
-
                         <option>PLA</option>
                         <option>PETG</option>
                         <option>TPU</option>
                         <option>ABS</option>
-
                     </select>
-
                 </div>
 
-
                 <div class="field">
-
-                    <label>
-                        KOLOR
-                    </label>
+                    <label>KOLOR</label>
 
                     <select id="customColor">
-
                         <option>Czarny</option>
                         <option>Biały</option>
                         <option>Niebieski</option>
                         <option>Czerwony</option>
                         <option>Fioletowy</option>
                         <option>Inny</option>
-
                     </select>
-
                 </div>
-
 
                 <div class="field">
 
-                    <label>
-                        OPIS
-                    </label>
+                    <label>OPIS</label>
 
                     <textarea
                         id="customDescription"
@@ -1646,14 +1677,11 @@ footer a:hover{color:#00c8ff}
 
             </div>
 
-
             <div>
 
                 <div class="upload">
 
-                    <div class="uploadIcon">
-                        📁
-                    </div>
+                    <div class="uploadIcon">📁</div>
 
                     <strong>
                         WYŚLIJ MODEL 3D
@@ -1672,51 +1700,32 @@ footer a:hover{color:#00c8ff}
 
                 </div>
 
-
                 <div class="customSide">
 
                     <div class="customCard">
-
-                        <strong>
-                            📐 Wycena
-                        </strong>
-
+                        <strong>📐 Wycena</strong>
                         <span>
                             Po otrzymaniu modelu
                             sprawdzimy jego rozmiar,
                             czas druku i materiał.
                         </span>
-
                     </div>
 
-
                     <div class="customCard">
-
-                        <strong>
-                            ⏱️ Czas pracy
-                        </strong>
-
+                        <strong>⏱️ Czas pracy</strong>
                         <span>
                             Zależy od wielkości modelu,
                             materiału i ustawień druku.
                         </span>
-
                     </div>
 
-
                     <div class="customCard">
-
-                        <strong>
-                            📦 Dostawa
-                        </strong>
-
+                        <strong>📦 Dostawa</strong>
                         <span>
                             Od 50 zł zamówienia
                             dostawa jest darmowa.
                         </span>
-
                     </div>
-
 
                     <button
                         class="primary"
@@ -1736,18 +1745,13 @@ footer a:hover{color:#00c8ff}
 
 </section>
 
-
-<!-- PROMO -->
-
 <section class="section reveal">
 
     <div class="promo">
 
         <div class="promoBox">
 
-            <h3>
-                🎟️ -10% na start
-            </h3>
+            <h3>🎟️ -10% na start</h3>
 
             <p>
                 Użyj kodu rabatowego podczas
@@ -1760,12 +1764,9 @@ footer a:hover{color:#00c8ff}
 
         </div>
 
-
         <div class="promoBox">
 
-            <h3>
-                🚚 Darmowa dostawa
-            </h3>
+            <h3>🚚 Darmowa dostawa</h3>
 
             <p>
                 Zrób większe zamówienie i nie płać
@@ -1782,16 +1783,11 @@ footer a:hover{color:#00c8ff}
 
 </section>
 
-
-<!-- REVIEWS -->
-
 <section class="section reveal" id="reviews">
 
     <div class="sectionTitle">
 
-        <h2>
-            ⭐ Opinie
-        </h2>
+        <h2>⭐ Opinie</h2>
 
         <p>
             Przykładowe opinie klientów Printerlase3D.
@@ -1799,14 +1795,10 @@ footer a:hover{color:#00c8ff}
 
     </div>
 
-
     <div class="reviews">
 
         <div class="review">
-
-            <div class="stars">
-                ★★★★★
-            </div>
+            <div class="stars">★★★★★</div>
 
             <div class="reviewText">
                 Brelok wygląda dużo lepiej niż się
@@ -1817,15 +1809,10 @@ footer a:hover{color:#00c8ff}
             <div class="reviewUser">
                 — Kuba
             </div>
-
         </div>
 
-
         <div class="review">
-
-            <div class="stars">
-                ★★★★★
-            </div>
+            <div class="stars">★★★★★</div>
 
             <div class="reviewText">
                 Zamówiłem własny model i wszystko
@@ -1835,15 +1822,10 @@ footer a:hover{color:#00c8ff}
             <div class="reviewUser">
                 — Bartek
             </div>
-
         </div>
 
-
         <div class="review">
-
-            <div class="stars">
-                ★★★★★
-            </div>
+            <div class="stars">★★★★★</div>
 
             <div class="reviewText">
                 Szybka realizacja i fajne kolory.
@@ -1853,15 +1835,11 @@ footer a:hover{color:#00c8ff}
             <div class="reviewUser">
                 — Michał
             </div>
-
         </div>
 
     </div>
 
 </section>
-
-
-<!-- ABOUT -->
 
 <section class="section reveal" id="about">
 
@@ -1881,9 +1859,6 @@ footer a:hover{color:#00c8ff}
 
 </section>
 
-
-<!-- FOOTER -->
-
 <footer>
 
     <div class="footerGrid">
@@ -1901,7 +1876,6 @@ footer a:hover{color:#00c8ff}
 
         </div>
 
-
         <div>
 
             <div class="footerTitle">
@@ -1914,7 +1888,6 @@ footer a:hover{color:#00c8ff}
 
         </div>
 
-
         <div>
 
             <div class="footerTitle">
@@ -1925,7 +1898,6 @@ footer a:hover{color:#00c8ff}
             <a href="#custom">Kontakt</a>
 
         </div>
-
 
         <div>
 
@@ -1943,18 +1915,13 @@ footer a:hover{color:#00c8ff}
 
 </footer>
 
-
-<!-- CART -->
-
 <div id="cartOverlay">
 
     <div class="cartPanel">
 
         <div class="cartHeader">
 
-            <h2>
-                🛒 Koszyk
-            </h2>
+            <h2>🛒 Koszyk</h2>
 
             <button
                 class="closeBtn"
@@ -1965,63 +1932,29 @@ footer a:hover{color:#00c8ff}
 
         </div>
 
-
         <div id="cartItems"></div>
-
 
         <div class="cartSummary">
 
             <div class="summaryRow">
-
-                <span>
-                    Produkty
-                </span>
-
-                <strong id="cartSubtotal">
-                    0,00 zł
-                </strong>
-
+                <span>Produkty</span>
+                <strong id="cartSubtotal">0,00 zł</strong>
             </div>
-
 
             <div class="summaryRow">
-
-                <span>
-                    Dostawa
-                </span>
-
-                <strong id="cartDelivery">
-                    9,99 zł
-                </strong>
-
+                <span>Dostawa</span>
+                <strong id="cartDelivery">9,99 zł</strong>
             </div>
-
 
             <div class="summaryRow">
-
-                <span>
-                    Rabat
-                </span>
-
-                <strong id="cartDiscount">
-                    0,00 zł
-                </strong>
-
+                <span>Rabat</span>
+                <strong id="cartDiscount">0,00 zł</strong>
             </div>
-
 
             <div class="summaryTotal">
-
-                <span>
-                    Razem
-                </span>
-
-                <strong id="cartTotal">
-                    0,00 zł
-                </strong>
-
+                <span>Razem</span>
+                <strong id="cartTotal">0,00 zł</strong>
             </div>
-
 
             <div class="discountInput">
 
@@ -2036,7 +1969,6 @@ footer a:hover{color:#00c8ff}
 
             </div>
 
-
             <button
                 class="checkout"
                 onclick="checkout()"
@@ -2049,9 +1981,6 @@ footer a:hover{color:#00c8ff}
     </div>
 
 </div>
-
-
-<!-- PRODUCT MODAL -->
 
 <div
     class="modal"
@@ -2081,7 +2010,6 @@ footer a:hover{color:#00c8ff}
 
             </div>
 
-
             <div class="modalInfo">
 
                 <h2 id="modalTitle">
@@ -2092,7 +2020,6 @@ footer a:hover{color:#00c8ff}
                     Opis produktu.
                 </p>
 
-
                 <div
                     id="modalPrice"
                     class="modalPrice"
@@ -2100,38 +2027,24 @@ footer a:hover{color:#00c8ff}
                     0 zł
                 </div>
 
-
                 <div class="details">
 
                     <div class="detail">
-                        <span>
-                            ⏱️ Czas pracy
-                        </span>
-                        <strong id="modalTime">
-                            —
-                        </strong>
+                        <span>⏱️ Czas pracy</span>
+                        <strong id="modalTime">—</strong>
                     </div>
 
                     <div class="detail">
-                        <span>
-                            🎨 Materiał
-                        </span>
-                        <strong id="modalMaterial">
-                            —
-                        </strong>
+                        <span>🎨 Materiał</span>
+                        <strong id="modalMaterial">—</strong>
                     </div>
 
                     <div class="detail">
-                        <span>
-                            📏 Rozmiar
-                        </span>
-                        <strong id="modalSize">
-                            —
-                        </strong>
+                        <span>📏 Rozmiar</span>
+                        <strong id="modalSize">—</strong>
                     </div>
 
                 </div>
-
 
                 <button
                     id="modalAdd"
@@ -2149,9 +2062,6 @@ footer a:hover{color:#00c8ff}
 
 </div>
 
-
-<!-- ACCOUNT MODAL -->
-
 <div class="modal" id="accountModal">
 
     <div class="modalBox accountBox">
@@ -2163,9 +2073,7 @@ footer a:hover{color:#00c8ff}
             ✕
         </button>
 
-        <h2>
-            👤 Konto
-        </h2>
+        <h2>👤 Konto</h2>
 
         <p style="
             color:#8495aa;
@@ -2178,9 +2086,7 @@ footer a:hover{color:#00c8ff}
 
         <div class="field">
 
-            <label>
-                E-MAIL
-            </label>
+            <label>E-MAIL</label>
 
             <input
                 id="accountEmail"
@@ -2192,9 +2098,7 @@ footer a:hover{color:#00c8ff}
 
         <div class="field">
 
-            <label>
-                HASŁO
-            </label>
+            <label>HASŁO</label>
 
             <input
                 id="accountPassword"
@@ -2216,15 +2120,9 @@ footer a:hover{color:#00c8ff}
 
 </div>
 
-
 <div id="toast"></div>
 
-
 <script>
-
-/* =========================
-   PRODUCTS
-========================= */
 
 const products = [
 
@@ -2266,7 +2164,7 @@ const products = [
 
     {
         id:4,
-        name:"Organizator kabli",
+        name:"Organizer kabli",
         price:18,
         emoji:"🔌",
         tag:"PRAKTYCZNY",
@@ -2374,19 +2272,9 @@ const products = [
 
 ];
 
-
-/* =========================
-   STATE
-========================= */
-
 let cart = [];
 let discount = 0;
 let selectedProduct = null;
-
-
-/* =========================
-   HELPERS
-========================= */
 
 function money(value){
     return Number(value || 0)
@@ -2402,11 +2290,6 @@ function escapeHTML(value){
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
 }
-
-
-/* =========================
-   PRODUCTS RENDER
-========================= */
 
 function renderProducts(){
 
@@ -2485,11 +2368,6 @@ function renderProducts(){
 
 }
 
-
-/* =========================
-   PRODUCT MODAL
-========================= */
-
 function showProduct(id){
 
     const product =
@@ -2540,11 +2418,6 @@ function modalOutside(e){
         closeProduct();
     }
 }
-
-
-/* =========================
-   CART
-========================= */
 
 function addToCart(id){
 
@@ -2700,11 +2573,6 @@ function closeCart(){
         .style.display = "none";
 }
 
-
-/* =========================
-   DISCOUNT
-========================= */
-
 function applyDiscount(){
 
     const input =
@@ -2733,11 +2601,6 @@ function applyDiscount(){
 
     updateCart();
 }
-
-
-/* =========================
-   CHECKOUT
-========================= */
 
 function checkout(){
 
@@ -2867,11 +2730,6 @@ function checkout(){
 
 }
 
-
-/* =========================
-   CUSTOM MODEL
-========================= */
-
 async function sendCustomModel(){
 
     const name =
@@ -2994,11 +2852,6 @@ async function sendCustomModel(){
 
 }
 
-
-/* =========================
-   ACCOUNT
-========================= */
-
 function openAccount(){
 
     document.getElementById("accountModal")
@@ -3041,22 +2894,12 @@ function accountLogin(){
 
 }
 
-
-/* =========================
-   MOBILE MENU
-========================= */
-
 function toggleMenu(){
 
     document.getElementById("navLinks")
         .classList.toggle("open");
 
 }
-
-
-/* =========================
-   TOAST
-========================= */
 
 function showToast(text){
 
@@ -3079,11 +2922,6 @@ function showToast(text){
         },3000);
 
 }
-
-
-/* =========================
-   PARTICLES
-========================= */
 
 function createParticles(){
 
@@ -3114,11 +2952,6 @@ function createParticles(){
     }
 
 }
-
-
-/* =========================
-   SCROLL REVEAL
-========================= */
 
 function setupReveal(){
 
@@ -3151,11 +2984,6 @@ function setupReveal(){
         );
 
 }
-
-
-/* =========================
-   MOUSE 3D HERO
-========================= */
 
 function setup3DMouse(){
 
@@ -3210,11 +3038,6 @@ function setup3DMouse(){
 
 }
 
-
-/* =========================
-   ESC
-========================= */
-
 document.addEventListener(
     "keydown",
     event => {
@@ -3230,11 +3053,6 @@ document.addEventListener(
     }
 );
 
-
-/* =========================
-   CLOSE CART OUTSIDE
-========================= */
-
 document.getElementById("cartOverlay")
     .addEventListener(
         "click",
@@ -3248,11 +3066,6 @@ document.getElementById("cartOverlay")
 
         }
     );
-
-
-/* =========================
-   START
-========================= */
 
 window.addEventListener(
     "load",
