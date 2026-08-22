@@ -1,836 +1,317 @@
+```js
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const multer = require("multer");
 
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
-/*
-|--------------------------------------------------------------------------
-| KONFIGURACJA
-|--------------------------------------------------------------------------
-*/
+const DATA_DIR = path.join(__dirname, "data");
+const UPLOAD_DIR = path.join(DATA_DIR, "models");
 
-const ADMIN_PASSWORD = "Admin2137!";
+fs.mkdirSync(DATA_DIR, { recursive: true });
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
-const DATA_FILE = path.join(__dirname, "data.json");
+const CUSTOM_FILE =
+    path.join(DATA_DIR, "custom-models.json");
 
-/*
-|--------------------------------------------------------------------------
-| MIDDLEWARE
-|--------------------------------------------------------------------------
-*/
+if (!fs.existsSync(CUSTOM_FILE)) {
+    fs.writeFileSync(
+        CUSTOM_FILE,
+        "[]",
+        "utf8"
+    );
+}
 
-app.use(express.json({ limit: "10mb" }));
+const storage = multer.diskStorage({
 
-app.use(express.urlencoded({
-    extended: true
-}));
+    destination(req, file, cb) {
 
-app.use(express.static(__dirname));
+        cb(null, UPLOAD_DIR);
 
-/*
-|--------------------------------------------------------------------------
-| BAZA DANYCH
-|--------------------------------------------------------------------------
-*/
+    },
 
-function loadData() {
+    filename(req, file, cb) {
 
-    try {
+        const safe =
+            file.originalname
+                .replace(/[^a-zA-Z0-9._-]/g, "_");
 
-        if (!fs.existsSync(DATA_FILE)) {
+        cb(
+            null,
+            Date.now() + "-" + safe
+        );
 
-            const initialData = {
-                orders: [],
-                withdrawals: []
+    }
+
+});
+
+const upload = multer({
+
+    storage,
+
+    limits:{
+        fileSize:50 * 1024 * 1024
+    },
+
+    fileFilter(req,file,cb){
+
+        const allowed = [
+            ".stl",
+            ".obj",
+            ".3mf"
+        ];
+
+        const ext =
+            path.extname(
+                file.originalname
+            ).toLowerCase();
+
+        if(allowed.includes(ext)){
+
+            cb(null,true);
+
+        }else{
+
+            cb(
+                new Error(
+                    "Dozwolone są tylko STL, OBJ i 3MF."
+                )
+            );
+
+        }
+
+    }
+
+});
+
+
+app.use(express.json());
+
+app.use(
+    express.urlencoded({
+        extended:true
+    })
+);
+
+app.use(
+    express.static(__dirname)
+);
+
+
+/* =========================
+   WŁASNY MODEL 3D
+========================= */
+
+app.post(
+    "/api/custom-model",
+    upload.single("model"),
+    (req,res) => {
+
+        try{
+
+            const {
+                name,
+                email,
+                title,
+                description,
+                quantity
+            } = req.body;
+
+            if(
+                !name ||
+                !email ||
+                !title ||
+                !description
+            ){
+
+                return res.status(400).json({
+                    error:
+                        "Uzupełnij wymagane pola."
+                });
+
+            }
+
+            let requests = [];
+
+            try{
+
+                requests =
+                    JSON.parse(
+                        fs.readFileSync(
+                            CUSTOM_FILE,
+                            "utf8"
+                        )
+                    );
+
+            }catch{
+
+                requests = [];
+
+            }
+
+            const request = {
+
+                id:
+                    "CUSTOM-" +
+                    Date.now(),
+
+                name:
+                    String(name),
+
+                email:
+                    String(email),
+
+                title:
+                    String(title),
+
+                description:
+                    String(description),
+
+                quantity:
+                    Number(quantity) || 1,
+
+                status:
+                    "NOWE",
+
+                createdAt:
+                    new Date().toISOString(),
+
+                file:
+                    req.file
+                        ? {
+                            originalName:
+                                req.file.originalname,
+
+                            filename:
+                                req.file.filename,
+
+                            size:
+                                req.file.size
+                        }
+                        : null
+
             };
 
+            requests.push(request);
+
             fs.writeFileSync(
-                DATA_FILE,
-                JSON.stringify(initialData, null, 2),
+                CUSTOM_FILE,
+                JSON.stringify(
+                    requests,
+                    null,
+                    2
+                ),
                 "utf8"
             );
 
-            return initialData;
-        }
+            return res.json({
 
-        const raw = fs.readFileSync(
-            DATA_FILE,
-            "utf8"
-        );
+                success:true,
 
-        if (!raw.trim()) {
+                message:
+                    "Projekt został wysłany.",
 
-            return {
-                orders: [],
-                withdrawals: []
-            };
-        }
-
-        const data = JSON.parse(raw);
-
-        return {
-            orders: Array.isArray(data.orders)
-                ? data.orders
-                : [],
-
-            withdrawals: Array.isArray(data.withdrawals)
-                ? data.withdrawals
-                : []
-        };
-
-    } catch (error) {
-
-        console.error(
-            "❌ Błąd data.json:",
-            error
-        );
-
-        return {
-            orders: [],
-            withdrawals: []
-        };
-    }
-}
-
-
-function saveData(data) {
-
-    try {
-
-        fs.writeFileSync(
-            DATA_FILE,
-            JSON.stringify(data, null, 2),
-            "utf8"
-        );
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "❌ Nie można zapisać data.json:",
-            error
-        );
-
-        return false;
-    }
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN AUTH
-|--------------------------------------------------------------------------
-*/
-
-function adminAuth(req, res, next) {
-
-    const password =
-        req.headers["x-admin-password"];
-
-    if (
-        !password ||
-        password !== ADMIN_PASSWORD
-    ) {
-
-        return res.status(401).json({
-            error:
-                "Nieprawidłowe hasło administratora."
-        });
-    }
-
-    next();
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| STRONA GŁÓWNA
-|--------------------------------------------------------------------------
-*/
-
-app.get("/", (req, res) => {
-
-    res.sendFile(
-        path.join(
-            __dirname,
-            "index.html"
-        )
-    );
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN
-|--------------------------------------------------------------------------
-*/
-
-app.get("/admin", (req, res) => {
-
-    res.sendFile(
-        path.join(
-            __dirname,
-            "admin.html"
-        )
-    );
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN DASHBOARD
-|--------------------------------------------------------------------------
-*/
-
-app.get(
-    "/api/admin/dashboard",
-    adminAuth,
-    (req, res) => {
-
-        const data = loadData();
-
-        const orders = data.orders;
-
-        const withdrawals =
-            data.withdrawals;
-
-
-        const earned =
-            orders
-                .filter(
-                    order =>
-                        order.status === "PAID"
-                )
-                .reduce(
-                    (sum, order) =>
-                        sum +
-                        Number(
-                            order.total || 0
-                        ),
-                    0
-                );
-
-
-        const withdrawn =
-            withdrawals
-                .filter(
-                    item =>
-                        item.status === "COMPLETED"
-                )
-                .reduce(
-                    (sum, item) =>
-                        sum +
-                        Number(
-                            item.amount || 0
-                        ),
-                    0
-                );
-
-
-        const balance =
-            Math.max(
-                0,
-                earned - withdrawn
-            );
-
-
-        res.json({
-
-            success: true,
-
-            balance:
-                Number(
-                    balance.toFixed(2)
-                ),
-
-            earned:
-                Number(
-                    earned.toFixed(2)
-                ),
-
-            withdrawn:
-                Number(
-                    withdrawn.toFixed(2)
-                ),
-
-            orders,
-
-            withdrawals
-
-        });
-
-    }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| ZMIANA STATUSU ZAMÓWIENIA
-|--------------------------------------------------------------------------
-*/
-
-app.post(
-    "/api/admin/order-status",
-    adminAuth,
-    (req, res) => {
-
-        const {
-            id,
-            status
-        } = req.body;
-
-
-        const allowedStatuses = [
-            "NEW",
-            "PAID",
-            "CANCELLED"
-        ];
-
-
-        if (!id || !status) {
-
-            return res.status(400).json({
-
-                error:
-                    "Brak ID lub statusu."
+                id:
+                    request.id
 
             });
 
-        }
+        }catch(error){
 
-
-        if (
-            !allowedStatuses.includes(status)
-        ) {
-
-            return res.status(400).json({
-
-                error:
-                    "Nieprawidłowy status."
-
-            });
-
-        }
-
-
-        const data = loadData();
-
-
-        const order =
-            data.orders.find(
-                item =>
-                    String(item.id) ===
-                    String(id)
-            );
-
-
-        if (!order) {
-
-            return res.status(404).json({
-
-                error:
-                    "Nie znaleziono zamówienia."
-
-            });
-
-        }
-
-
-        order.status = status;
-
-        order.updatedAt =
-            new Date().toISOString();
-
-
-        if (!saveData(data)) {
+            console.error(error);
 
             return res.status(500).json({
 
                 error:
-                    "Nie udało się zapisać zamówienia."
+                    error.message ||
+                    "Błąd serwera."
 
             });
 
         }
-
-
-        res.json({
-
-            success: true,
-
-            order
-
-        });
 
     }
 );
 
 
-/*
-|--------------------------------------------------------------------------
-| WYŁATA
-|--------------------------------------------------------------------------
-*/
-
-app.post(
-    "/api/admin/withdraw",
-    adminAuth,
-    (req, res) => {
-
-        const amount =
-            Number(req.body.amount);
-
-        const method =
-            req.body.method;
-
-
-        if (
-            !Number.isFinite(amount) ||
-            amount <= 0
-        ) {
-
-            return res.status(400).json({
-
-                error:
-                    "Nieprawidłowa kwota."
-
-            });
-
-        }
-
-
-        const allowedMethods = [
-            "bank",
-            "blik"
-        ];
-
-
-        if (
-            !allowedMethods.includes(method)
-        ) {
-
-            return res.status(400).json({
-
-                error:
-                    "Nieprawidłowa metoda wypłaty."
-
-            });
-
-        }
-
-
-        const data = loadData();
-
-
-        const earned =
-            data.orders
-                .filter(
-                    order =>
-                        order.status === "PAID"
-                )
-                .reduce(
-                    (sum, order) =>
-                        sum +
-                        Number(
-                            order.total || 0
-                        ),
-                    0
-                );
-
-
-        const withdrawn =
-            data.withdrawals
-                .filter(
-                    item =>
-                        item.status === "COMPLETED"
-                )
-                .reduce(
-                    (sum, item) =>
-                        sum +
-                        Number(
-                            item.amount || 0
-                        ),
-                    0
-                );
-
-
-        const balance =
-            earned - withdrawn;
-
-
-        if (amount > balance) {
-
-            return res.status(400).json({
-
-                error:
-                    `Brak wystarczających środków. Dostępne: ${balance.toFixed(2)} zł`
-
-            });
-
-        }
-
-
-        const withdrawal = {
-
-            id:
-                "WD-" +
-                Date.now(),
-
-            amount:
-                Number(
-                    amount.toFixed(2)
-                ),
-
-            method,
-
-            status:
-                "PENDING",
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-
-        data.withdrawals.push(
-            withdrawal
-        );
-
-
-        if (!saveData(data)) {
-
-            return res.status(500).json({
-
-                error:
-                    "Nie udało się zapisać wypłaty."
-
-            });
-
-        }
-
-
-        res.json({
-
-            success: true,
-
-            message:
-                "Żądanie wypłaty zostało utworzone.",
-
-            withdrawal
-
-        });
-
-    }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| UTWORZENIE ZAMÓWIENIA
-|--------------------------------------------------------------------------
-*/
-
-app.post(
-    "/api/orders",
-    (req, res) => {
-
-        const order =
-            req.body;
-
-
-        if (
-            !order ||
-            typeof order !== "object"
-        ) {
-
-            return res.status(400).json({
-
-                error:
-                    "Brak danych zamówienia."
-
-            });
-
-        }
-
-
-        if (
-            !order.name ||
-            !order.email ||
-            order.total === undefined ||
-            order.total === null
-        ) {
-
-            return res.status(400).json({
-
-                error:
-                    "Brakuje danych zamówienia."
-
-            });
-
-        }
-
-
-        const total =
-            Number(order.total);
-
-
-        if (
-            !Number.isFinite(total) ||
-            total <= 0
-        ) {
-
-            return res.status(400).json({
-
-                error:
-                    "Nieprawidłowa kwota zamówienia."
-
-            });
-
-        }
-
-
-        const data =
-            loadData();
-
-
-        const newOrder = {
-
-            ...order,
-
-            id:
-                order.id ||
-                "PL-" +
-                Date.now(),
-
-            total:
-                Number(
-                    total.toFixed(2)
-                ),
-
-            status:
-                "NEW",
-
-            createdAt:
-                order.createdAt ||
-                new Date().toISOString()
-
-        };
-
-
-        data.orders.push(
-            newOrder
-        );
-
-
-        if (!saveData(data)) {
-
-            return res.status(500).json({
-
-                error:
-                    "Nie udało się zapisać zamówienia."
-
-            });
-
-        }
-
-
-        console.log(
-            "📦 NOWE ZAMÓWIENIE:",
-            newOrder.id,
-            newOrder.total,
-            "zł"
-        );
-
-
-        res.status(201).json({
-
-            success: true,
-
-            order:
-                newOrder
-
-        });
-
-    }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| SPRAWDZANIE ZAMÓWIENIA
-|--------------------------------------------------------------------------
-*/
+/* =========================
+   API DLA ADMINA
+========================= */
 
 app.get(
-    "/api/orders/:id",
-    (req, res) => {
+    "/api/admin/custom-models",
+    (req,res) => {
 
-        const data =
-            loadData();
+        try{
+
+            const requests =
+                JSON.parse(
+                    fs.readFileSync(
+                        CUSTOM_FILE,
+                        "utf8"
+                    )
+                );
+
+            res.json(requests);
+
+        }catch{
+
+            res.json([]);
+
+        }
+
+    }
+);
 
 
-        const order =
-            data.orders.find(
-                item =>
-                    String(item.id) ===
-                    String(req.params.id)
+/* =========================
+   PLIK MODELU
+========================= */
+
+app.get(
+    "/api/admin/custom-model/:filename",
+    (req,res) => {
+
+        const filename =
+            path.basename(
+                req.params.filename
             );
 
+        const filePath =
+            path.join(
+                UPLOAD_DIR,
+                filename
+            );
 
-        if (!order) {
+        if(!fs.existsSync(filePath)){
 
-            return res.status(404).json({
-
-                error:
-                    "Nie znaleziono zamówienia."
-
-            });
+            return res
+                .status(404)
+                .send("Nie znaleziono pliku.");
 
         }
 
-
-        res.json(order);
-
-    }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| HEALTH CHECK
-|--------------------------------------------------------------------------
-*/
-
-app.get(
-    "/api/health",
-    (req, res) => {
-
-        res.json({
-
-            status:
-                "ok",
-
-            service:
-                "Printerlase3D",
-
-            time:
-                new Date().toISOString()
-
-        });
+        res.download(filePath);
 
     }
 );
 
 
-/*
-|--------------------------------------------------------------------------
-| 404
-|--------------------------------------------------------------------------
-*/
-
-app.use(
-    (req, res) => {
-
-        res.status(404).send(`
-
-            <!DOCTYPE html>
-
-            <html lang="pl">
-
-            <head>
-
-                <meta charset="UTF-8">
-
-                <title>404 — Printerlase3D</title>
-
-                <style>
-
-                    body{
-                        margin:0;
-                        min-height:100vh;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        background:#030712;
-                        color:white;
-                        font-family:Arial;
-                        text-align:center;
-                    }
-
-                    a{
-                        color:#00c8ff;
-                    }
-
-                </style>
-
-            </head>
-
-            <body>
-
-                <div>
-
-                    <h1>404</h1>
-
-                    <p>
-                        Nie znaleziono strony.
-                    </p>
-
-                    <a href="/">
-                        ← Wróć do Printerlase3D
-                    </a>
-
-                </div>
-
-            </body>
-
-            </html>
-
-        `);
-
-    }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| START
-|--------------------------------------------------------------------------
-*/
+/* =========================
+   START
+========================= */
 
 app.listen(
     PORT,
-    "0.0.0.0",
     () => {
 
-        console.log("");
         console.log(
-            "================================="
+            `Printerlase3D działa na porcie ${PORT}`
         );
-        console.log(
-            "        PRINTERLASE3D"
-        );
-        console.log(
-            "================================="
-        );
-
-        console.log(
-            `🚀 Serwer działa na porcie ${PORT}`
-        );
-
-        console.log(
-            "🔐 Panel admin: /admin"
-        );
-
-        console.log(
-            "🔑 Hasło admina: ustawione"
-        );
-
-        console.log("");
 
     }
 );
+```
