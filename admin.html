@@ -1,1976 +1,640 @@
+```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Printerlase3D — Panel Admin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Printerlase3D — Admin</title>
 
 <style>
-:root{
-    --bg:#050816;
-    --panel:#0a1122;
-    --panel2:#0d172b;
-    --line:rgba(255,255,255,.09);
-    --text:#f5f7ff;
-    --muted:#8290a8;
-    --blue:#00c8ff;
-    --purple:#7047ff;
-    --green:#38e6a1;
-    --red:#ff5577;
-    --yellow:#ffd34d;
-}
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-    min-height:100vh;
-    color:var(--text);
-    font-family:Inter,Arial,sans-serif;
-    background:
-        radial-gradient(circle at 10% 0%,rgba(0,200,255,.13),transparent 28%),
-        radial-gradient(circle at 90% 0%,rgba(112,71,255,.16),transparent 30%),
-        var(--bg);
+    font-family:Arial,sans-serif;
+    background:#050914;
+    color:#fff;
 }
+button,input,select{font:inherit}
+button{cursor:pointer}
 
-button,input,select{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-.hidden{
-    display:none!important;
-}
-
-/* LOGIN */
-
-.loginPage{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:25px;
-}
-
-.loginBox{
-    width:100%;
-    max-width:430px;
-    padding:35px;
-    border:1px solid var(--line);
-    border-radius:25px;
-    background:rgba(10,17,34,.92);
-    box-shadow:0 30px 100px rgba(0,0,0,.5);
-}
-
-.logo{
-    font-size:24px;
-    font-weight:1000;
-}
-
-.logo span{
-    color:var(--blue);
-}
-
-.loginLogo{
-    margin-bottom:30px;
-}
-
-.loginBox h1{
-    margin-bottom:8px;
-    font-size:30px;
-}
-
-.muted{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.6;
-}
-
-.field{
-    margin-top:18px;
-}
-
-.field label{
-    display:block;
-    margin-bottom:7px;
-    color:#9ca9bd;
-    font-size:10px;
-    font-weight:900;
-}
-
-.field input,
-.field select{
-    width:100%;
-    padding:13px 14px;
-    outline:none;
-    color:white;
-    background:#050b17;
-    border:1px solid var(--line);
-    border-radius:11px;
-}
-
-.field input:focus,
-.field select:focus{
-    border-color:var(--blue);
-    box-shadow:0 0 0 3px rgba(0,200,255,.08);
-}
-
-.mainBtn{
-    width:100%;
-    margin-top:20px;
-    padding:14px;
-    border:0;
-    border-radius:12px;
-    color:white;
-    background:linear-gradient(100deg,var(--blue),var(--purple));
-    font-size:11px;
-    font-weight:1000;
-}
-
-.error{
-    min-height:18px;
-    margin-top:12px;
-    color:var(--red);
-    font-size:11px;
-}
-
-/* APP */
-
-.app{
-    min-height:100vh;
-}
-
-.topbar{
-    position:sticky;
-    top:0;
-    z-index:20;
+header{
     height:70px;
-    padding:0 4%;
+    padding:0 30px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    background:rgba(5,8,22,.86);
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid var(--line);
+    background:#080f1d;
+    border-bottom:1px solid #17243a;
 }
-
-.topRight{
-    display:flex;
-    gap:8px;
-    align-items:center;
-}
-
-.topBtn{
-    padding:9px 13px;
-    color:white;
-    background:#0b1629;
-    border:1px solid var(--line);
-    border-radius:9px;
-    font-size:10px;
-    font-weight:900;
-}
-
-.topBtn:hover{
-    border-color:var(--blue);
-}
+.logo{font-size:22px;font-weight:900}
+.logo span{color:#00c8ff}
 
 .container{
-    width:min(1400px,94%);
-    margin:35px auto 80px;
+    width:min(1250px,94%);
+    margin:30px auto;
 }
 
-/* HEADER */
+.login{
+    width:min(400px,94%);
+    margin:100px auto;
+    padding:30px;
+    background:#091222;
+    border:1px solid #17243a;
+    border-radius:20px;
+}
+.login h1{margin-bottom:10px}
+input,select{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
+    background:#030812;
+    color:white;
+    border:1px solid #20304a;
+    border-radius:10px;
+    outline:none;
+}
+label{
+    display:block;
+    margin-top:18px;
+    font-size:11px;
+    font-weight:bold;
+    color:#91a1b8;
+}
+.btn{
+    border:0;
+    border-radius:10px;
+    padding:12px 17px;
+    color:white;
+    background:linear-gradient(100deg,#008cff,#713cff);
+    font-weight:900;
+}
+.login .btn{
+    width:100%;
+    margin-top:18px;
+}
+.error{color:#ff5473;margin-top:12px;font-size:12px}
 
-.pageHeader{
+#dashboard{display:none}
+
+.topbar{
     display:flex;
     justify-content:space-between;
-    align-items:flex-end;
-    gap:20px;
+    align-items:center;
     margin-bottom:25px;
 }
-
-.pageHeader h1{
-    font-size:36px;
-}
-
-.headerActions{
-    display:flex;
-    gap:8px;
-}
-
-/* CARDS */
+.topbar h1{font-size:32px}
 
 .cards{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:15px;
 }
-
 .card{
     padding:22px;
-    border:1px solid var(--line);
-    border-radius:18px;
-    background:linear-gradient(145deg,#0b1629,#070d1c);
-}
-
-.cardLabel{
-    color:var(--muted);
-    font-size:10px;
-    font-weight:900;
-}
-
-.cardValue{
-    margin-top:10px;
-    font-size:27px;
-    font-weight:1000;
-}
-
-.green{
-    color:var(--green);
-}
-
-.blue{
-    color:var(--blue);
-}
-
-.red{
-    color:var(--red);
-}
-
-.yellow{
-    color:var(--yellow);
-}
-
-/* TOOLBAR */
-
-.toolbar{
-    margin-top:25px;
-    padding:15px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    border:1px solid var(--line);
+    background:#091222;
+    border:1px solid #17243a;
     border-radius:17px;
-    background:var(--panel);
 }
-
-.search{
-    flex:1;
-    min-width:220px;
+.card small{
+    color:#8291a8;
+    font-weight:bold;
+    font-size:10px;
 }
-
-.search input,
-.filter{
-    width:100%;
-    padding:12px;
-    color:white;
-    background:#050b17;
-    border:1px solid var(--line);
-    border-radius:10px;
-    outline:none;
+.card strong{
+    display:block;
+    margin-top:10px;
+    font-size:25px;
 }
+.green{color:#42e6a4}
+.blue{color:#00c8ff}
+.red{color:#ff5877}
 
-.filter{
-    width:170px;
-}
-
-/* ORDERS */
-
-.orders{
-    margin-top:20px;
+.panel{
+    margin-top:25px;
+    background:#091222;
+    border:1px solid #17243a;
+    border-radius:18px;
     overflow:hidden;
-    border:1px solid var(--line);
-    border-radius:20px;
-    background:var(--panel);
 }
-
-.ordersHead{
+.panelHead{
     padding:20px;
+    border-bottom:1px solid #17243a;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    border-bottom:1px solid var(--line);
 }
-
-.ordersHead h2{
-    font-size:18px;
-}
+.orders{padding:0}
 
 .order{
     padding:20px;
+    border-bottom:1px solid #17243a;
     display:grid;
-    grid-template-columns:minmax(220px,1.5fr) 150px 120px minmax(230px,1fr);
-    gap:18px;
+    grid-template-columns:2fr 1fr 1fr 2fr;
+    gap:15px;
     align-items:center;
-    border-bottom:1px solid var(--line);
 }
-
-.order:last-child{
-    border-bottom:0;
-}
+.order:last-child{border-bottom:0}
 
 .orderId{
-    font-weight:1000;
-    font-size:12px;
+    font-weight:900;
+    color:#00c8ff;
 }
-
-.orderInfo{
-    margin-top:6px;
-    color:var(--muted);
-    font-size:10px;
-    line-height:1.7;
+.info{
+    color:#8291a8;
+    font-size:11px;
+    margin-top:5px;
 }
-
-.price{
-    font-size:14px;
-    font-weight:1000;
-}
-
 .status{
     display:inline-block;
     padding:7px 10px;
     border-radius:8px;
-    font-size:8px;
-    font-weight:1000;
+    background:#17243a;
+    font-size:10px;
+    font-weight:bold;
 }
-
-.status.NEW{
-    color:#54dfff;
-    background:rgba(0,200,255,.1);
+.PAID{
+    color:#42e6a4;
+    background:#0c2b25;
 }
-
-.status.PAID{
-    color:var(--green);
-    background:rgba(56,230,161,.1);
+.NEW{
+    color:#00c8ff;
+    background:#082535;
 }
-
-.status.CANCELLED{
-    color:var(--red);
-    background:rgba(255,85,119,.1);
+.CANCELLED{
+    color:#ff5877;
+    background:#30121b;
 }
 
 .actions{
     display:flex;
+    gap:7px;
     flex-wrap:wrap;
-    gap:6px;
 }
-
-.action{
+.small{
     padding:8px 10px;
+    background:#101d31;
     color:white;
-    background:#0d1a2f;
-    border:1px solid var(--line);
+    border:1px solid #20304a;
     border-radius:8px;
-    font-size:8px;
-    font-weight:1000;
+    font-size:10px;
+    font-weight:bold;
+}
+.small:hover{background:#182a43}
+
+.empty{
+    padding:50px;
+    text-align:center;
+    color:#718098;
 }
 
-.action:hover{
-    border-color:var(--blue);
-}
-
-.action.greenBtn:hover{
-    border-color:var(--green);
-}
-
-.action.redBtn:hover{
-    border-color:var(--red);
-}
-
-.action.blueBtn:hover{
-    border-color:var(--blue);
-}
-
-/* WITHDRAW */
-
-.withdraw{
-    margin-top:22px;
-    padding:25px;
-    border:1px solid rgba(56,230,161,.15);
-    border-radius:20px;
-    background:
-        radial-gradient(circle at 100% 0,rgba(56,230,161,.08),transparent 35%),
-        var(--panel);
-}
-
-.withdraw h2{
-    font-size:19px;
-}
-
-.withdrawGrid{
-    margin-top:15px;
-    display:grid;
-    grid-template-columns:1fr 220px 150px;
-    gap:10px;
-    align-items:end;
-}
-
-.withdrawGrid .field{
+.search{
+    width:250px;
     margin:0;
 }
 
-.withdrawBtn{
-    padding:13px;
-    border:0;
-    border-radius:10px;
-    color:white;
-    background:linear-gradient(100deg,#00b889,#0bbdff);
-    font-size:10px;
-    font-weight:1000;
-}
-
-/* EMPTY */
-
-.empty{
-    padding:60px 20px;
-    text-align:center;
-    color:var(--muted);
-}
-
-/* MODAL */
-
-.modalBg{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(0,0,0,.72);
-    backdrop-filter:blur(8px);
-}
-
-.modalBg.show{
-    display:flex;
-}
-
-.modal{
-    width:min(650px,100%);
-    max-height:90vh;
-    overflow:auto;
-    padding:25px;
-    border:1px solid var(--line);
-    border-radius:20px;
-    background:#091222;
-    box-shadow:0 30px 100px #000;
-}
-
-.modalHead{
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.close{
-    width:35px;
-    height:35px;
-    border:1px solid var(--line);
-    border-radius:9px;
-    color:white;
-    background:#101d32;
-}
-
-.detail{
-    padding:15px;
-    margin-bottom:10px;
-    border:1px solid var(--line);
-    border-radius:12px;
-    background:#060d1a;
-}
-
-.detailTitle{
-    margin-bottom:5px;
-    color:var(--muted);
-    font-size:9px;
-    font-weight:900;
-}
-
-.detailValue{
-    font-size:12px;
-    line-height:1.6;
-}
-
-/* TOAST */
-
 .toast{
     position:fixed;
-    left:50%;
     bottom:25px;
-    z-index:200;
-    padding:13px 18px;
-    border:1px solid rgba(0,200,255,.2);
-    border-radius:12px;
-    color:white;
-    background:#10213a;
-    box-shadow:0 15px 40px rgba(0,0,0,.4);
+    left:50%;
     transform:translate(-50%,30px);
     opacity:0;
-    pointer-events:none;
-    transition:.25s;
-    font-size:10px;
-    font-weight:900;
+    padding:14px 20px;
+    background:#102038;
+    border:1px solid #263b59;
+    border-radius:10px;
+    transition:.2s;
+    z-index:99;
 }
-
 .toast.show{
     opacity:1;
     transform:translate(-50%,0);
 }
 
-/* MOBILE */
-
-@media(max-width:1000px){
-
-    .cards{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .order{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .actions{
-        grid-column:1/-1;
-    }
-
+@media(max-width:900px){
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .order{grid-template-columns:1fr}
+}
+@media(max-width:550px){
+    .cards{grid-template-columns:1fr}
+    .search{width:100%}
+    .topbar{align-items:flex-start;gap:15px;flex-direction:column}
 }
 
-@media(max-width:650px){
-
-    .topbar{
-        padding:0 18px;
-    }
-
-    .logo{
-        font-size:17px;
-    }
-
-    .container{
-        width:92%;
-    }
-
-    .pageHeader{
-        align-items:flex-start;
-        flex-direction:column;
-    }
-
-    .pageHeader h1{
-        font-size:28px;
-    }
-
-    .cards{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .withdrawGrid{
-        grid-template-columns:1fr;
-    }
-
-    .order{
-        grid-template-columns:1fr;
-    }
-
-    .actions{
-        grid-column:auto;
-    }
-
+/* ETYKIETA */
+#printLabel{
+    display:none;
 }
 
-@media(max-width:430px){
+.label{
+    width:100mm;
+    min-height:150mm;
+    padding:8mm;
+    background:white;
+    color:black;
+    font-family:Arial,sans-serif;
+}
+.label h1{
+    font-size:25px;
+    margin-bottom:8mm;
+}
+.label .line{
+    border-bottom:2px solid #000;
+    padding:4mm 0;
+}
+.label .big{
+    font-size:22px;
+    font-weight:bold;
+}
+.label .smallText{
+    font-size:12px;
+    margin-top:2mm;
+}
+.label .barcode{
+    margin-top:10mm;
+    border:3px solid #000;
+    padding:8px;
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+    letter-spacing:3px;
+}
 
-    .cards{
-        grid-template-columns:1fr;
+@media print{
+    body>*{display:none!important}
+    #printLabel{
+        display:block!important;
     }
-
-    .topRight .topBtn:first-child{
-        display:none;
+    @page{
+        size:100mm 150mm;
+        margin:0;
     }
-
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
-
-<section id="loginPage" class="loginPage">
-
-    <div class="loginBox">
-
-        <div class="logo loginLogo">
-            Printerlase<span>3D</span>
-        </div>
-
-        <h1>🔐 Panel Admin</h1>
-
-        <p class="muted">
-            Zaloguj się do zarządzania sklepem.
-        </p>
-
-        <div class="field">
-
-            <label>HASŁO ADMINISTRATORA</label>
-
-            <input
-                id="password"
-                type="password"
-                placeholder="Wpisz hasło..."
-                autocomplete="current-password"
-            >
-
-        </div>
-
-        <button class="mainBtn" onclick="login()">
-            ZALOGUJ DO PANELU
-        </button>
-
-        <div id="loginError" class="error"></div>
-
-    </div>
-
-</section>
-
-
-<!-- ================= APP ================= -->
-
-<section id="app" class="app hidden">
-
-    <header class="topbar">
-
-        <div class="logo">
-            Printerlase<span>3D</span> ADMIN
-        </div>
-
-        <div class="topRight">
-
-            <button class="topBtn" onclick="loadDashboard()">
-                ↻ ODŚWIEŻ
-            </button>
-
-            <button class="topBtn" onclick="logout()">
-                WYLOGUJ
-            </button>
-
-            <a class="topBtn" href="/">
-                SKLEP
-            </a>
-
-        </div>
-
-    </header>
-
-
-    <main class="container">
-
-        <div class="pageHeader">
-
-            <div>
-
-                <h1>📊 Dashboard</h1>
-
-                <p class="muted">
-                    Zarządzaj Printerlase3D z jednego miejsca.
-                </p>
-
-            </div>
-
-            <div class="headerActions">
-
-                <button class="topBtn" onclick="loadDashboard()">
-                    🔄 Aktualizuj dane
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- STATISTICS -->
-
-        <section class="cards">
-
-            <div class="card">
-
-                <div class="cardLabel">
-                    💰 SALDO
-                </div>
-
-                <div
-                    id="balance"
-                    class="cardValue green"
-                >
-                    0,00 zł
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="cardLabel">
-                    📦 ZAMÓWIENIA
-                </div>
-
-                <div
-                    id="ordersCount"
-                    class="cardValue"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="cardLabel">
-                    💵 ZAROBIONE
-                </div>
-
-                <div
-                    id="earned"
-                    class="cardValue blue"
-                >
-                    0,00 zł
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="cardLabel">
-                    💸 WYPŁACONO
-                </div>
-
-                <div
-                    id="withdrawn"
-                    class="cardValue red"
-                >
-                    0,00 zł
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- SEARCH -->
-
-        <section class="toolbar">
-
-            <div class="search">
-
-                <input
-                    id="search"
-                    type="text"
-                    placeholder="🔎 Szukaj po ID, imieniu lub emailu..."
-                    oninput="renderOrders()"
-                >
-
-            </div>
-
-            <select
-                id="statusFilter"
-                class="filter"
-                onchange="renderOrders()"
-            >
-
-                <option value="ALL">
-                    Wszystkie statusy
-                </option>
-
-                <option value="NEW">
-                    Nowe
-                </option>
-
-                <option value="PAID">
-                    Opłacone
-                </option>
-
-                <option value="CANCELLED">
-                    Anulowane
-                </option>
-
-            </select>
-
-        </section>
-
-
-        <!-- ORDERS -->
-
-        <section class="orders">
-
-            <div class="ordersHead">
-
-                <h2>
-                    📦 Zamówienia
-                </h2>
-
-                <span
-                    id="lastUpdate"
-                    class="muted"
-                >
-                </span>
-
-            </div>
-
-            <div id="ordersList"></div>
-
-        </section>
-
-
-        <!-- WITHDRAW -->
-
-        <section class="withdraw">
-
-            <h2>
-                💸 Wypłata środków
-            </h2>
-
-            <p class="muted">
-                Tworzy żądanie wypłaty. Sam panel nie wysyła automatycznie pieniędzy.
+<header>
+    <div class="logo">Printerlase<span>3D</span> ADMIN</div>
+    <a href="/" style="color:white;text-decoration:none">← SKLEP</a>
+</header>
+
+<div id="loginScreen" class="login">
+    <h1>🔐 Panel Admin</h1>
+    <p style="color:#8291a8;font-size:12px">
+        Zaloguj się do panelu.
+    </p>
+
+    <label>HASŁO</label>
+    <input id="password" type="password" placeholder="Hasło administratora">
+
+    <button class="btn" onclick="login()">ZALOGUJ</button>
+
+    <div id="error" class="error"></div>
+</div>
+
+<main id="dashboard">
+<div class="container">
+
+    <div class="topbar">
+        <div>
+            <h1>📊 Dashboard</h1>
+            <p style="color:#8291a8;font-size:12px">
+                Printerlase3D — panel administracyjny
             </p>
-
-
-            <div class="withdrawGrid">
-
-                <div class="field">
-
-                    <label>
-                        KWOTA
-                    </label>
-
-                    <input
-                        id="withdrawAmount"
-                        type="number"
-                        min="1"
-                        step="0.01"
-                        placeholder="np. 50.00"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        METODA
-                    </label>
-
-                    <select id="withdrawMethod">
-
-                        <option value="bank">
-                            🏦 Konto bankowe
-                        </option>
-
-                        <option value="blik">
-                            📱 BLIK
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <button
-                    class="withdrawBtn"
-                    onclick="withdraw()"
-                >
-                    💸 WYPŁAĆ
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</section>
-
-
-<!-- ================= ORDER MODAL ================= -->
-
-<div
-    id="modalBg"
-    class="modalBg"
-    onclick="closeModal(event)"
->
-
-    <div class="modal">
-
-        <div class="modalHead">
-
-            <div>
-
-                <h2>
-                    📦 Szczegóły zamówienia
-                </h2>
-
-                <p
-                    id="modalSubtitle"
-                    class="muted"
-                >
-                </p>
-
-            </div>
-
-            <button
-                class="close"
-                onclick="closeModal()"
-            >
-                ✕
-            </button>
-
         </div>
 
-        <div id="modalContent"></div>
-
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input
+                id="search"
+                class="search"
+                placeholder="🔎 Szukaj zamówienia..."
+                oninput="renderOrders()"
+            >
+            <button class="btn" onclick="loadDashboard()">↻ ODŚWIEŻ</button>
+        </div>
     </div>
 
+    <section class="cards">
+
+        <div class="card">
+            <small>💰 SALDO</small>
+            <strong id="balance" class="green">0,00 zł</strong>
+        </div>
+
+        <div class="card">
+            <small>📦 ZAMÓWIENIA</small>
+            <strong id="count">0</strong>
+        </div>
+
+        <div class="card">
+            <small>💵 ZAROBIONE</small>
+            <strong id="earned" class="blue">0,00 zł</strong>
+        </div>
+
+        <div class="card">
+            <small>💸 WYPŁACONO</small>
+            <strong id="withdrawn" class="red">0,00 zł</strong>
+        </div>
+
+    </section>
+
+    <section class="panel">
+        <div class="panelHead">
+            <h2>📦 Zamówienia</h2>
+            <span id="update" style="color:#718098;font-size:11px"></span>
+        </div>
+
+        <div id="orders" class="orders"></div>
+    </section>
+
 </div>
+</main>
 
+<div id="toast" class="toast"></div>
 
-<!-- ================= TOAST ================= -->
-
-<div
-    id="toast"
-    class="toast"
->
-</div>
-
+<div id="printLabel"></div>
 
 <script>
 
-let adminPassword = "";
+let password = "";
 let orders = [];
 
-
-/* ================= UTIL ================= */
-
-function money(value){
-
-    return Number(value || 0)
-        .toFixed(2)
-        .replace(".",",") + " zł";
-
+function money(n){
+    return Number(n || 0).toFixed(2).replace(".",",")+" zł";
 }
 
-
-function escapeHTML(value){
-
-    return String(value ?? "")
+function esc(v){
+    return String(v ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
-
 }
-
-
-function showToast(message){
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    clearTimeout(window.toastTimer);
-
-    window.toastTimer =
-        setTimeout(
-            () => toast.classList.remove("show"),
-            3000
-        );
-
-}
-
-
-/* ================= LOGIN ================= */
 
 async function login(){
 
-    const password =
-        document
-        .getElementById("password")
-        .value
-        .trim();
+    const p=document.getElementById("password").value.trim();
 
-    if(!password){
-
-        document
-        .getElementById("loginError")
-        .textContent =
-        "Podaj hasło.";
-
+    if(!p){
+        document.getElementById("error").textContent="Podaj hasło.";
         return;
-
     }
 
-    adminPassword = password;
+    password=p;
 
     try{
 
-        const response =
-            await fetch(
-                "/api/admin/dashboard",
-                {
-                    headers:{
-                        "x-admin-password":
-                            adminPassword
-                    }
-                }
-            );
+        const r=await fetch("/api/admin/dashboard",{
+            headers:{
+                "x-admin-password":password
+            }
+        });
 
-        if(response.status === 401){
+        if(!r.ok) throw new Error();
 
-            throw new Error(
-                "Błędne hasło administratora."
-            );
+        const data=await r.json();
 
-        }
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("dashboard").style.display="block";
 
-        if(!response.ok){
+        update(data);
 
-            throw new Error(
-                "Błąd serwera."
-            );
+    }catch{
 
-        }
-
-        const data =
-            await response.json();
-
-        document
-        .getElementById("loginPage")
-        .classList.add("hidden");
-
-        document
-        .getElementById("app")
-        .classList.remove("hidden");
-
-        renderDashboard(data);
-
-        showToast("✓ Zalogowano.");
-
-    }catch(error){
-
-        adminPassword = "";
-
-        document
-        .getElementById("loginError")
-        .textContent =
-            "❌ " + error.message;
+        password="";
+        document.getElementById("error").textContent=
+            "❌ Błędne hasło administratora.";
 
     }
-
 }
-
-
-function logout(){
-
-    adminPassword = "";
-
-    orders = [];
-
-    document
-    .getElementById("app")
-    .classList.add("hidden");
-
-    document
-    .getElementById("loginPage")
-    .classList.remove("hidden");
-
-    document
-    .getElementById("password")
-    .value = "";
-
-}
-
-
-/* ================= DASHBOARD ================= */
 
 async function loadDashboard(){
 
     try{
 
-        const response =
-            await fetch(
-                "/api/admin/dashboard",
-                {
-                    headers:{
-                        "x-admin-password":
-                            adminPassword
-                    }
-                }
-            );
+        const r=await fetch("/api/admin/dashboard",{
+            headers:{
+                "x-admin-password":password
+            }
+        });
 
-        if(response.status === 401){
-
-            logout();
-
-            showToast(
-                "❌ Sesja wygasła."
-            );
-
+        if(r.status===401){
+            location.reload();
             return;
-
         }
 
-        if(!response.ok){
+        if(!r.ok) throw new Error();
 
-            throw new Error(
-                "Nie udało się pobrać danych."
-            );
+        update(await r.json());
 
-        }
-
-        const data =
-            await response.json();
-
-        renderDashboard(data);
-
-        showToast(
-            "✓ Dane zaktualizowane."
-        );
-
-    }catch(error){
-
-        showToast(
-            "❌ " + error.message
-        );
-
+    }catch{
+        toast("❌ Nie udało się pobrać danych.");
     }
-
 }
 
+function update(data){
 
-function renderDashboard(data){
+    orders=Array.isArray(data.orders)?data.orders:[];
 
-    orders =
-        Array.isArray(data.orders)
-            ? data.orders
-            : [];
+    document.getElementById("balance").textContent=money(data.balance);
+    document.getElementById("count").textContent=orders.length;
+    document.getElementById("earned").textContent=money(data.earned);
+    document.getElementById("withdrawn").textContent=money(data.withdrawn);
 
-    document
-    .getElementById("balance")
-    .textContent =
-        money(data.balance);
-
-    document
-    .getElementById("ordersCount")
-    .textContent =
-        orders.length;
-
-    document
-    .getElementById("earned")
-    .textContent =
-        money(data.earned);
-
-    document
-    .getElementById("withdrawn")
-    .textContent =
-        money(data.withdrawn);
-
-    document
-    .getElementById("lastUpdate")
-    .textContent =
-        "Aktualizacja: " +
-        new Date()
-        .toLocaleTimeString("pl-PL");
+    document.getElementById("update").textContent=
+        "Aktualizacja: "+new Date().toLocaleTimeString("pl-PL");
 
     renderOrders();
-
 }
-
-
-/* ================= ORDERS ================= */
 
 function renderOrders(){
 
-    const box =
-        document
-        .getElementById("ordersList");
+    const box=document.getElementById("orders");
 
-    const search =
-        document
-        .getElementById("search")
-        .value
-        .toLowerCase()
-        .trim();
+    const query=
+        document.getElementById("search").value.toLowerCase();
 
-    const filter =
-        document
-        .getElementById("statusFilter")
-        .value;
-
-    let filtered =
-        orders.filter(order => {
-
-            const text =
-                [
-                    order.id,
-                    order.name,
-                    order.email,
-                    order.address,
-                    order.city,
-                    order.postcode
-                ]
-                .filter(Boolean)
-                .join(" ")
-                .toLowerCase();
-
-            const matchesSearch =
-                !search ||
-                text.includes(search);
-
-            const status =
-                order.status || "NEW";
-
-            const matchesStatus =
-                filter === "ALL" ||
-                status === filter;
-
-            return (
-                matchesSearch &&
-                matchesStatus
-            );
-
-        });
-
-
-    if(!filtered.length){
-
-        box.innerHTML = `
-            <div class="empty">
-                🔍 Nie znaleziono zamówień.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    filtered =
-        filtered
-        .slice()
-        .reverse();
-
-
-    box.innerHTML =
-        filtered
-        .map(order => {
-
-            const status =
-                order.status || "NEW";
-
-            return `
-
-                <div class="order">
-
-                    <div>
-
-                        <div class="orderId">
-                            ${escapeHTML(order.id)}
-                        </div>
-
-                        <div class="orderInfo">
-
-                            👤 ${escapeHTML(
-                                order.name ||
-                                "Brak danych"
-                            )}
-
-                            <br>
-
-                            ✉️ ${escapeHTML(
-                                order.email ||
-                                "Brak email"
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="price">
-                            ${money(order.total)}
-                        </div>
-
-                        <div class="orderInfo">
-                            ${
-                                order.createdAt
-                                ?
-                                new Date(
-                                    order.createdAt
-                                )
-                                .toLocaleString(
-                                    "pl-PL"
-                                )
-                                :
-                                "Brak daty"
-                            }
-                        </div>
-
-                    </div>
-
-
-                    <div>
-
-                        <span
-                            class="status ${escapeHTML(status)}"
-                        >
-                            ${escapeHTML(status)}
-                        </span>
-
-                    </div>
-
-
-                    <div class="actions">
-
-                        <button
-                            class="action blueBtn"
-                            onclick="showOrder('${encodeURIComponent(order.id)}')"
-                        >
-                            👁 PODGLĄD
-                        </button>
-
-
-                        <button
-                            class="action blueBtn"
-                            onclick="generateLabel('${encodeURIComponent(order.id)}')"
-                        >
-                            🏷️ ETYKIETA
-                        </button>
-
-
-                        ${
-                            status !== "PAID"
-                            ?
-                            `
-                            <button
-                                class="action greenBtn"
-                                onclick="setOrderStatus('${encodeURIComponent(order.id)}','PAID')"
-                            >
-                                ✓ OPŁACONE
-                            </button>
-                            `
-                            :
-                            ""
-                        }
-
-
-                        ${
-                            status !== "CANCELLED"
-                            ?
-                            `
-                            <button
-                                class="action redBtn"
-                                onclick="setOrderStatus('${encodeURIComponent(order.id)}','CANCELLED')"
-                            >
-                                ✕ ANULUJ
-                            </button>
-                            `
-                            :
-                            ""
-                        }
-
-                    </div>
-
-                </div>
-
-            `;
-
-        })
-        .join("");
-
-}
-
-
-/* ================= ORDER DETAILS ================= */
-
-function findOrder(id){
-
-    return orders.find(
-        order =>
-            String(order.id) === String(id)
+    const filtered=orders.filter(o=>
+        JSON.stringify(o).toLowerCase().includes(query)
     );
 
-}
-
-
-function showOrder(encodedId){
-
-    const id =
-        decodeURIComponent(encodedId);
-
-    const order =
-        findOrder(id);
-
-    if(!order){
-
-        showToast(
-            "❌ Nie znaleziono zamówienia."
-        );
-
+    if(!filtered.length){
+        box.innerHTML='<div class="empty">Brak zamówień.</div>';
         return;
-
     }
 
+    box.innerHTML=filtered.slice().reverse().map(o=>{
+
+        const status=o.status||"NEW";
+
+        return `
+        <div class="order">
+
+            <div>
+                <div class="orderId">${esc(o.id)}</div>
+                <div class="info">👤 ${esc(o.name)}</div>
+                <div class="info">✉️ ${esc(o.email)}</div>
+            </div>
+
+            <div>
+                <b>${money(o.total)}</b>
+                <div class="info">
+                    ${o.createdAt
+                    ?new Date(o.createdAt).toLocaleString("pl-PL")
+                    :"—"}
+                </div>
+            </div>
+
+            <div>
+                <span class="status ${esc(status)}">
+                    ${esc(status)}
+                </span>
+            </div>
+
+            <div class="actions">
+
+                <button class="small"
+                    onclick="changeStatus('${esc(o.id)}','PAID')">
+                    ✓ OPŁACONE
+                </button>
+
+                <button class="small"
+                    onclick="changeStatus('${esc(o.id)}','CANCELLED')">
+                    ✕ ANULUJ
+                </button>
+
+                <button class="small"
+                    onclick='generateLabel(${JSON.stringify(o)})'>
+                    🏷️ GENERUJ ETYKIETĘ
+                </button>
+
+            </div>
+
+        </div>
+        `;
+
+    }).join("");
+}
+
+async function changeStatus(id,status){
+
+    try{
+
+        const r=await fetch("/api/admin/order-status",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "x-admin-password":password
+            },
+            body:JSON.stringify({id,status})
+        });
+
+        if(!r.ok) throw new Error();
+
+        toast(
+            status==="PAID"
+            ?"✓ Zamówienie opłacone."
+            :"✓ Zamówienie anulowane."
+        );
+
+        loadDashboard();
+
+    }catch{
+        toast("❌ Nie udało się zmienić statusu.");
+    }
+}
+
+function generateLabel(order){
+
+    const recipient =
+        order.name ||
+        order.customerName ||
+        "Brak danych";
+
+    const email =
+        order.email ||
+        "Brak danych";
 
     const address =
-        [
-            order.address,
-            order.postcode,
-            order.city
-        ]
-        .filter(Boolean)
-        .join(", ");
+        order.address ||
+        order.shippingAddress ||
+        order.deliveryAddress ||
+        "";
 
+    const city =
+        order.city ||
+        "";
 
-    document
-    .getElementById("modalSubtitle")
-    .textContent =
-        order.id;
+    const postal =
+        order.postalCode ||
+        order.zip ||
+        "";
 
+    document.getElementById("printLabel").innerHTML=`
 
-    document
-    .getElementById("modalContent")
-    .innerHTML = `
+        <div class="label">
 
-        <div class="detail">
+            <h1>PRINTERLASE3D</h1>
 
-            <div class="detailTitle">
-                KLIENT
+            <div class="line">
+                <b>ODBIORCA</b>
+                <div class="big">${esc(recipient)}</div>
             </div>
 
-            <div class="detailValue">
-                ${escapeHTML(order.name || "—")}
+            <div class="line">
+                <b>ADRES</b>
+                <div class="big">${esc(address)}</div>
+                <div class="big">
+                    ${esc(postal)} ${esc(city)}
+                </div>
             </div>
 
-        </div>
-
-
-        <div class="detail">
-
-            <div class="detailTitle">
-                EMAIL
+            <div class="line">
+                <b>E-MAIL</b>
+                <div class="smallText">${esc(email)}</div>
             </div>
 
-            <div class="detailValue">
-                ${escapeHTML(order.email || "—")}
+            <div class="line">
+                <b>ZAMÓWIENIE</b>
+                <div class="big">${esc(order.id)}</div>
             </div>
 
-        </div>
-
-
-        <div class="detail">
-
-            <div class="detailTitle">
-                ADRES WYSYŁKI
+            <div class="line">
+                <b>KWOTA</b>
+                <div class="big">${money(order.total)}</div>
             </div>
 
-            <div class="detailValue">
-                ${escapeHTML(address || "Brak adresu")}
+            <div class="barcode">
+                ${esc(order.id)}
             </div>
 
         </div>
-
-
-        <div class="detail">
-
-            <div class="detailTitle">
-                KWOTA
-            </div>
-
-            <div class="detailValue">
-                <strong>
-                    ${money(order.total)}
-                </strong>
-            </div>
-
-        </div>
-
-
-        <div class="detail">
-
-            <div class="detailTitle">
-                STATUS
-            </div>
-
-            <div class="detailValue">
-                ${escapeHTML(order.status || "NEW")}
-            </div>
-
-        </div>
-
-
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px;">
-
-            <button
-                class="action blueBtn"
-                onclick="generateLabel('${encodeURIComponent(order.id)}')"
-            >
-                🏷️ GENERUJ ETYKIETĘ
-            </button>
-
-            ${
-                order.status !== "PAID"
-                ?
-                `
-                <button
-                    class="action greenBtn"
-                    onclick="setOrderStatus('${encodeURIComponent(order.id)}','PAID')"
-                >
-                    ✓ OZNACZ JAKO OPŁACONE
-                </button>
-                `
-                :
-                ""
-            }
-
-        </div>
-
     `;
 
-
-    document
-    .getElementById("modalBg")
-    .classList.add("show");
-
+    window.print();
 }
 
+function toast(text){
 
-function closeModal(event){
+    const t=document.getElementById("toast");
 
-    if(
-        event &&
-        event.target !==
-        document.getElementById("modalBg")
-    ){
+    t.textContent=text;
+    t.classList.add("show");
 
-        return;
+    clearTimeout(window.toastTimer);
 
-    }
-
-    document
-    .getElementById("modalBg")
-    .classList.remove("show");
-
+    window.toastTimer=setTimeout(()=>{
+        t.classList.remove("show");
+    },3000);
 }
 
-
-/* ================= STATUS ================= */
-
-async function setOrderStatus(
-    encodedId,
-    status
-){
-
-    const id =
-        decodeURIComponent(encodedId);
-
-    try{
-
-        const response =
-            await fetch(
-                "/api/admin/order-status",
-                {
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json",
-
-                        "x-admin-password":
-                            adminPassword
-                    },
-
-                    body:JSON.stringify({
-                        id,
-                        status
-                    })
-
-                }
-            );
-
-        const data =
-            await response.json();
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "Nie udało się zmienić statusu."
-            );
-
-        }
-
-        showToast(
-            status === "PAID"
-                ? "✓ Zamówienie opłacone."
-                : "✓ Zamówienie anulowane."
-        );
-
-        closeModal();
-
-        await loadDashboard();
-
-    }catch(error){
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-
-}
-
-
-/* ================= LABEL ================= */
-
-function generateLabel(encodedId){
-
-    const id =
-        decodeURIComponent(encodedId);
-
-    const order =
-        findOrder(id);
-
-    if(!order){
-
-        showToast(
-            "❌ Nie znaleziono zamówienia."
-        );
-
-        return;
-
-    }
-
-
-    const address =
-        [
-            order.address,
-            order.postcode,
-            order.city
-        ]
-        .filter(Boolean)
-        .join("<br>");
-
-
-    const labelWindow =
-        window.open(
-            "",
-            "_blank",
-            "width=800,height=600"
-        );
-
-
-    if(!labelWindow){
-
-        showToast(
-            "❌ Przeglądarka zablokowała okno."
-        );
-
-        return;
-
-    }
-
-
-    labelWindow.document.write(`
-
-        <!DOCTYPE html>
-
-        <html lang="pl">
-
-        <head>
-
-            <meta charset="UTF-8">
-
-            <title>
-                Etykieta ${escapeHTML(order.id)}
-            </title>
-
-            <style>
-
-                *{
-                    box-sizing:border-box;
-                }
-
-                body{
-                    margin:0;
-                    padding:30px;
-                    font-family:Arial,sans-serif;
-                    background:#eee;
-                    color:#111;
-                }
-
-                .label{
-                    width:100%;
-                    max-width:700px;
-                    margin:auto;
-                    padding:35px;
-                    background:white;
-                    border:2px solid #111;
-                }
-
-                .brand{
-                    font-size:25px;
-                    font-weight:900;
-                    margin-bottom:30px;
-                }
-
-                .brand span{
-                    color:#007bff;
-                }
-
-                .title{
-                    font-size:14px;
-                    font-weight:900;
-                    margin-bottom:8px;
-                }
-
-                .address{
-                    min-height:120px;
-                    padding:20px;
-                    border:2px solid #111;
-                    font-size:22px;
-                    line-height:1.5;
-                    font-weight:700;
-                }
-
-                .order{
-                    margin-top:20px;
-                    padding-top:15px;
-                    border-top:1px solid #aaa;
-                    font-size:13px;
-                }
-
-                .print{
-                    margin-top:25px;
-                    padding:12px 20px;
-                    border:0;
-                    background:#111;
-                    color:white;
-                    cursor:pointer;
-                }
-
-                @media print{
-
-                    body{
-                        padding:0;
-                        background:white;
-                    }
-
-                    .label{
-                        border:2px solid #111;
-                    }
-
-                    .print{
-                        display:none;
-                    }
-
-                }
-
-            </style>
-
-        </head>
-
-        <body>
-
-            <div class="label">
-
-                <div class="brand">
-                    Printerlase<span>3D</span>
-                </div>
-
-                <div class="title">
-                    ADRES ODBIORCY
-                </div>
-
-                <div class="address">
-                    ${escapeHTML(
-                        address ||
-                        "BRAK ADRESU"
-                    )}
-                </div>
-
-                <div class="order">
-
-                    <strong>
-                        Zamówienie:
-                    </strong>
-
-                    ${escapeHTML(order.id)}
-
-                    <br>
-
-                    <strong>
-                        Klient:
-                    </strong>
-
-                    ${escapeHTML(
-                        order.name || "—"
-                    )}
-
-                    <br>
-
-                    <strong>
-                        Email:
-                    </strong>
-
-                    ${escapeHTML(
-                        order.email || "—"
-                    )}
-
-                </div>
-
-                <button
-                    class="print"
-                    onclick="window.print()"
-                >
-                    🖨️ DRUKUJ ETYKIETĘ
-                </button>
-
-            </div>
-
-        </body>
-
-        </html>
-
-    `);
-
-    labelWindow.document.close();
-
-}
-
-
-/* ================= WITHDRAW ================= */
-
-async function withdraw(){
-
-    const amount =
-        Number(
-            document
-            .getElementById("withdrawAmount")
-            .value
-        );
-
-    const method =
-        document
-        .getElementById("withdrawMethod")
-        .value;
-
-
-    if(
-        !Number.isFinite(amount) ||
-        amount <= 0
-    ){
-
-        showToast(
-            "❌ Podaj prawidłową kwotę."
-        );
-
-        return;
-
-    }
-
-
-    try{
-
-        const response =
-            await fetch(
-                "/api/admin/withdraw",
-                {
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json",
-
-                        "x-admin-password":
-                            adminPassword
-                    },
-
-                    body:JSON.stringify({
-                        amount,
-                        method
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "Błąd wypłaty."
-            );
-
-        }
-
-
-        document
-        .getElementById("withdrawAmount")
-        .value = "";
-
-
-        showToast(
-            "✓ Żądanie wypłaty utworzone."
-        );
-
-
-        await loadDashboard();
-
-
-    }catch(error){
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-
-}
-
-
-/* ================= ENTER LOGIN ================= */
-
-document
-.getElementById("password")
-.addEventListener(
-    "keydown",
-    event => {
-
-        if(event.key === "Enter"){
-            login();
-        }
-
-    }
-);
+document.getElementById("password").addEventListener("keydown",e=>{
+    if(e.key==="Enter") login();
+});
 
 </script>
 
 </body>
 </html>
+```
