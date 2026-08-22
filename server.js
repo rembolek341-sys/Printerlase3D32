@@ -6,9 +6,9 @@ const crypto = require("crypto");
 
 const app = express();
 
-// ======================================================
-// KONFIGURACJA
-// ======================================================
+/* =====================================================
+   KONFIGURACJA
+===================================================== */
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,9 +19,9 @@ const FREE_DELIVERY_FROM = 50;
 const DISCOUNT_CODE = "START10";
 const DISCOUNT_PERCENT = 10;
 
-// ======================================================
-// PLIKI DANYCH
-// ======================================================
+/* =====================================================
+   PLIKI
+===================================================== */
 
 const DATA_DIR = path.join(__dirname, "data");
 
@@ -34,9 +34,9 @@ const CUSTOM_MODELS_FILE =
 const TOKENS_FILE =
     path.join(DATA_DIR, "tokens.json");
 
-// ======================================================
-// TWORZENIE FOLDERU DATA
-// ======================================================
+/* =====================================================
+   DATA
+===================================================== */
 
 if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, {
@@ -44,59 +44,50 @@ if (!fs.existsSync(DATA_DIR)) {
     });
 }
 
-// ======================================================
-// TWORZENIE PLIKÓW
-// ======================================================
-
-function createFileIfMissing(file, data) {
+function createFile(file, defaultData) {
     if (!fs.existsSync(file)) {
         fs.writeFileSync(
             file,
-            JSON.stringify(data, null, 2),
+            JSON.stringify(
+                defaultData,
+                null,
+                2
+            ),
             "utf8"
         );
     }
 }
 
-createFileIfMissing(
-    ORDERS_FILE,
-    []
-);
+createFile(ORDERS_FILE, []);
+createFile(CUSTOM_MODELS_FILE, []);
+createFile(TOKENS_FILE, []);
 
-createFileIfMissing(
-    CUSTOM_MODELS_FILE,
-    []
-);
+/* =====================================================
+   JSON
+===================================================== */
 
-createFileIfMissing(
-    TOKENS_FILE,
-    []
-);
-
-// ======================================================
-// JSON
-// ======================================================
-
-function readJSON(file, fallback = []) {
+function readJSON(file, fallback) {
     try {
         if (!fs.existsSync(file)) {
             return fallback;
         }
 
-        const content =
+        const text =
             fs.readFileSync(
                 file,
                 "utf8"
             );
 
-        if (!content.trim()) {
+        if (!text.trim()) {
             return fallback;
         }
 
-        return JSON.parse(content);
+        return JSON.parse(text);
+
     } catch (error) {
+
         console.error(
-            "Błąd odczytu:",
+            "Błąd odczytu pliku:",
             file,
             error.message
         );
@@ -117,9 +108,9 @@ function writeJSON(file, data) {
     );
 }
 
-// ======================================================
-// MIDDLEWARE
-// ======================================================
+/* =====================================================
+   MIDDLEWARE
+===================================================== */
 
 app.use(
     express.json({
@@ -134,17 +125,13 @@ app.use(
     })
 );
 
-// ======================================================
-// FRONTEND
-// ======================================================
-
 app.use(
     express.static(__dirname)
 );
 
-// ======================================================
-// ID
-// ======================================================
+/* =====================================================
+   ID
+===================================================== */
 
 function generateId(prefix) {
     return (
@@ -158,9 +145,9 @@ function generateId(prefix) {
     ).toUpperCase();
 }
 
-// ======================================================
-// TOKEN ADMINA
-// ======================================================
+/* =====================================================
+   TOKENY
+===================================================== */
 
 function generateToken() {
     return crypto
@@ -169,29 +156,29 @@ function generateToken() {
 }
 
 function getToken(req) {
-    const header =
+    const authorization =
         req.headers.authorization || "";
 
     if (
-        !header.startsWith(
+        !authorization.startsWith(
             "Bearer "
         )
     ) {
         return null;
     }
 
-    return header.slice(7);
+    return authorization.substring(7);
 }
 
 function requireAdmin(req, res, next) {
+
     const token =
         getToken(req);
 
     if (!token) {
         return res.status(401).json({
             success: false,
-            error:
-                "Brak tokenu administratora."
+            error: "Brak tokenu."
         });
     }
 
@@ -201,39 +188,39 @@ function requireAdmin(req, res, next) {
             []
         );
 
-    const found =
+    const session =
         tokens.find(
-            item =>
-                item.token === token
+            function (item) {
+                return item.token === token;
+            }
         );
 
-    if (!found) {
+    if (!session) {
         return res.status(401).json({
             success: false,
-            error:
-                "Sesja administratora wygasła."
+            error: "Sesja wygasła."
         });
     }
 
     next();
 }
 
-// ======================================================
-// LOGOWANIE ADMINA
-// ======================================================
+/* =====================================================
+   LOGIN
+===================================================== */
 
 app.post(
     "/api/admin/login",
-    (req, res) => {
+    function (req, res) {
 
         const login =
             String(
-                req.body?.login || ""
+                req.body.login || ""
             ).trim();
 
         const password =
             String(
-                req.body?.password || ""
+                req.body.password || ""
             );
 
         if (
@@ -257,23 +244,18 @@ app.post(
             );
 
         tokens.push({
-            token,
+            token: token,
             createdAt:
                 new Date().toISOString()
         });
 
-        // Tokeny starsze niż 7 dni
-        const sevenDaysAgo =
+        const weekAgo =
             Date.now() -
-            7 *
-                24 *
-                60 *
-                60 *
-                1000;
+            7 * 24 * 60 * 60 * 1000;
 
         tokens =
             tokens.filter(
-                item => {
+                function (item) {
 
                     const time =
                         new Date(
@@ -281,11 +263,8 @@ app.post(
                         ).getTime();
 
                     return (
-                        !Number.isNaN(
-                            time
-                        ) &&
-                        time >
-                            sevenDaysAgo
+                        !Number.isNaN(time) &&
+                        time > weekAgo
                     );
                 }
             );
@@ -296,24 +275,24 @@ app.post(
         );
 
         console.log(
-            "[ADMIN] Zalogowano"
+            "[ADMIN] Logowanie OK"
         );
 
         res.json({
             success: true,
-            token
+            token: token
         });
     }
 );
 
-// ======================================================
-// WYLOGOWANIE
-// ======================================================
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 app.post(
     "/api/admin/logout",
     requireAdmin,
-    (req, res) => {
+    function (req, res) {
 
         const token =
             getToken(req);
@@ -326,8 +305,9 @@ app.post(
 
         tokens =
             tokens.filter(
-                item =>
-                    item.token !== token
+                function (item) {
+                    return item.token !== token;
+                }
             );
 
         writeJSON(
@@ -341,35 +321,33 @@ app.post(
     }
 );
 
-// ======================================================
-// HEALTH CHECK — RENDER
-// ======================================================
+/* =====================================================
+   HEALTH CHECK
+===================================================== */
 
 app.get(
     "/api/health",
-    (req, res) => {
+    function (req, res) {
 
         res.json({
             success: true,
             online: true,
-            service:
-                "Printerlase3D",
-            node:
-                process.version,
+            service: "Printerlase3D",
+            node: process.version,
             time:
                 new Date().toISOString()
         });
     }
 );
 
-// ======================================================
-// ADMIN DATA
-// ======================================================
+/* =====================================================
+   ADMIN DATA
+===================================================== */
 
 app.get(
     "/api/admin/data",
     requireAdmin,
-    (req, res) => {
+    function (req, res) {
 
         let orders =
             readJSON(
@@ -384,42 +362,45 @@ app.get(
             );
 
         orders.sort(
-            (a, b) =>
-                new Date(
-                    b.createdAt
-                ) -
-                new Date(
-                    a.createdAt
-                )
+            function (a, b) {
+                return (
+                    new Date(
+                        b.createdAt
+                    ) -
+                    new Date(
+                        a.createdAt
+                    )
+                );
+            }
         );
 
         customModels.sort(
-            (a, b) =>
-                new Date(
-                    b.createdAt
-                ) -
-                new Date(
-                    a.createdAt
-                )
+            function (a, b) {
+                return (
+                    new Date(
+                        b.createdAt
+                    ) -
+                    new Date(
+                        a.createdAt
+                    )
+                );
+            }
         );
 
-        const revenue =
-            orders.reduce(
-                (
-                    total,
-                    order
-                ) =>
-                    total +
-                    Number(
-                        order.total || 0
-                    ),
-                0
-            );
+        let revenue = 0;
+
+        orders.forEach(
+            function (order) {
+                revenue += Number(
+                    order.total || 0
+                );
+            }
+        );
 
         res.json({
             success: true,
 
-            orders,
+            orders: orders,
 
             customOrders:
                 customModels,
@@ -433,18 +414,16 @@ app.get(
 
                 revenue:
                     Number(
-                        revenue.toFixed(
-                            2
-                        )
+                        revenue.toFixed(2)
                     )
             }
         });
     }
 );
 
-// ======================================================
-// KALKULACJA ZAMÓWIENIA
-// ======================================================
+/* =====================================================
+   KALKULATOR CENY
+===================================================== */
 
 function calculateOrder(
     items,
@@ -452,66 +431,63 @@ function calculateOrder(
     delivery
 ) {
 
-    if (
-        !Array.isArray(items)
-    ) {
+    if (!Array.isArray(items)) {
         items = [];
     }
 
     let subtotal = 0;
 
     const normalizedItems =
-        items.map(item => {
+        items.map(
+            function (item) {
 
-            const price =
-                Math.max(
-                    0,
-                    Number(
-                        item.price || 0
-                    )
-                );
-
-            const quantity =
-                Math.max(
-                    1,
-                    Number(
-                        item.quantity ||
-                        item.qty ||
-                        1
-                    )
-                );
-
-            const total =
-                price * quantity;
-
-            subtotal += total;
-
-            return {
-                name:
-                    String(
-                        item.name ||
-                        "Produkt"
-                    ),
-
-                price:
-                    Number(
-                        price.toFixed(
-                            2
+                const price =
+                    Math.max(
+                        0,
+                        Number(
+                            item.price || 0
                         )
-                    ),
+                    );
 
-                quantity,
-
-                total:
-                    Number(
-                        total.toFixed(
-                            2
+                const quantity =
+                    Math.max(
+                        1,
+                        Number(
+                            item.quantity ||
+                            item.qty ||
+                            1
                         )
-                    )
-            };
-        });
+                    );
 
-    const normalizedCode =
+                const total =
+                    price * quantity;
+
+                subtotal += total;
+
+                return {
+                    name:
+                        String(
+                            item.name ||
+                            "Produkt"
+                        ),
+
+                    price:
+                        Number(
+                            price.toFixed(2)
+                        ),
+
+                    quantity:
+                        quantity,
+
+                    total:
+                        Number(
+                            total.toFixed(2)
+                        )
+                };
+            }
+        );
+
+    const code =
         String(
             discountCode || ""
         )
@@ -521,15 +497,12 @@ function calculateOrder(
     let discount = 0;
 
     if (
-        normalizedCode ===
-        DISCOUNT_CODE
+        code === DISCOUNT_CODE
     ) {
         discount =
             subtotal *
-            (
-                DISCOUNT_PERCENT /
-                100
-            );
+            DISCOUNT_PERCENT /
+            100;
     }
 
     const afterDiscount =
@@ -538,20 +511,25 @@ function calculateOrder(
             subtotal - discount
         );
 
-    let deliveryPrice;
+    let deliveryPrice = 0;
 
     if (
-        delivery ===
-        "pickup"
+        delivery === "pickup"
     ) {
+
         deliveryPrice = 0;
+
     } else if (
         afterDiscount >=
         FREE_DELIVERY_FROM
     ) {
+
         deliveryPrice = 0;
+
     } else {
+
         deliveryPrice = 9.99;
+
     }
 
     const total =
@@ -559,35 +537,28 @@ function calculateOrder(
         deliveryPrice;
 
     return {
+
         items:
             normalizedItems,
 
         subtotal:
             Number(
-                subtotal.toFixed(
-                    2
-                )
+                subtotal.toFixed(2)
             ),
 
         discount:
             Number(
-                discount.toFixed(
-                    2
-                )
+                discount.toFixed(2)
             ),
 
         deliveryPrice:
             Number(
-                deliveryPrice.toFixed(
-                    2
-                )
+                deliveryPrice.toFixed(2)
             ),
 
         total:
             Number(
-                total.toFixed(
-                    2
-                )
+                total.toFixed(2)
             ),
 
         freeDelivery:
@@ -595,19 +566,19 @@ function calculateOrder(
     };
 }
 
-// ======================================================
-// API — KALKULATOR
-// ======================================================
+/* =====================================================
+   API KALKULATORA
+===================================================== */
 
 app.post(
     "/api/calculate",
-    (req, res) => {
+    function (req, res) {
 
         const result =
             calculateOrder(
-                req.body?.items,
-                req.body?.discountCode,
-                req.body?.delivery
+                req.body.items,
+                req.body.discountCode,
+                req.body.delivery
             );
 
         res.json({
@@ -617,13 +588,13 @@ app.post(
     }
 );
 
-// ======================================================
-// NOWE ZAMÓWIENIE
-// ======================================================
+/* =====================================================
+   NOWE ZAMÓWIENIE
+===================================================== */
 
 app.post(
     "/api/orders",
-    (req, res) => {
+    function (req, res) {
 
         const body =
             req.body || {};
@@ -649,9 +620,7 @@ app.post(
         const order = {
 
             id:
-                generateId(
-                    "ORD"
-                ),
+                generateId("ORD"),
 
             name:
                 String(
@@ -690,8 +659,7 @@ app.post(
 
             discountCode:
                 String(
-                    body.discountCode ||
-                    ""
+                    body.discountCode || ""
                 )
                 .trim()
                 .toUpperCase(),
@@ -720,9 +688,7 @@ app.post(
                 []
             );
 
-        orders.unshift(
-            order
-        );
+        orders.unshift(order);
 
         writeJSON(
             ORDERS_FILE,
@@ -730,23 +696,27 @@ app.post(
         );
 
         console.log(
-            `[ORDER] ${order.id} | ${order.total} PLN`
+            "[ORDER] " +
+            order.id +
+            " | " +
+            order.total +
+            " PLN"
         );
 
         res.status(201).json({
             success: true,
-            order
+            order: order
         });
     }
 );
 
-// ======================================================
-// WŁASNY MODEL 3D
-// ======================================================
+/* =====================================================
+   WŁASNY MODEL 3D
+===================================================== */
 
 app.post(
     "/api/custom-model",
-    (req, res) => {
+    function (req, res) {
 
         const body =
             req.body || {};
@@ -765,9 +735,7 @@ app.post(
         const model = {
 
             id:
-                generateId(
-                    "MODEL"
-                ),
+                generateId("MODEL"),
 
             name:
                 String(
@@ -853,9 +821,7 @@ app.post(
                 []
             );
 
-        models.unshift(
-            model
-        );
+        models.unshift(model);
 
         writeJSON(
             CUSTOM_MODELS_FILE,
@@ -863,28 +829,34 @@ app.post(
         );
 
         console.log(
-            `[MODEL] ${model.id} | ${model.fileName || "brak pliku"}`
+            "[MODEL] " +
+            model.id +
+            " | " +
+            (
+                model.fileName ||
+                "brak pliku"
+            )
         );
 
         res.status(201).json({
             success: true,
-            model
+            model: model
         });
     }
 );
 
-// ======================================================
-// ZMIANA STATUSU ZAMÓWIENIA
-// ======================================================
+/* =====================================================
+   STATUS ZAMÓWIENIA
+===================================================== */
 
 app.patch(
     "/api/admin/orders/:id/status",
     requireAdmin,
-    (req, res) => {
+    function (req, res) {
 
         const status =
             String(
-                req.body?.status || ""
+                req.body.status || ""
             )
             .trim()
             .toUpperCase();
@@ -898,9 +870,7 @@ app.patch(
         ];
 
         if (
-            !allowed.includes(
-                status
-            )
+            !allowed.includes(status)
         ) {
             return res.status(400).json({
                 success: false,
@@ -917,13 +887,12 @@ app.patch(
 
         const order =
             orders.find(
-                item =>
-                    String(
-                        item.id
-                    ) ===
-                    String(
-                        req.params.id
-                    )
+                function (item) {
+                    return (
+                        String(item.id) ===
+                        String(req.params.id)
+                    );
+                }
             );
 
         if (!order) {
@@ -947,23 +916,23 @@ app.patch(
 
         res.json({
             success: true,
-            order
+            order: order
         });
     }
 );
 
-// ======================================================
-// ZMIANA STATUSU MODELU
-// ======================================================
+/* =====================================================
+   STATUS WŁASNEGO MODELU
+===================================================== */
 
 app.patch(
     "/api/admin/custom/:id/status",
     requireAdmin,
-    (req, res) => {
+    function (req, res) {
 
         const status =
             String(
-                req.body?.status || ""
+                req.body.status || ""
             )
             .trim()
             .toUpperCase();
@@ -977,9 +946,7 @@ app.patch(
         ];
 
         if (
-            !allowed.includes(
-                status
-            )
+            !allowed.includes(status)
         ) {
             return res.status(400).json({
                 success: false,
@@ -996,13 +963,12 @@ app.patch(
 
         const model =
             models.find(
-                item =>
-                    String(
-                        item.id
-                    ) ===
-                    String(
-                        req.params.id
-                    )
+                function (item) {
+                    return (
+                        String(item.id) ===
+                        String(req.params.id)
+                    );
+                }
             );
 
         if (!model) {
@@ -1026,19 +992,19 @@ app.patch(
 
         res.json({
             success: true,
-            model
+            model: model
         });
     }
 );
 
-// ======================================================
-// USUWANIE ZAMÓWIENIA
-// ======================================================
+/* =====================================================
+   USUWANIE ZAMÓWIENIA
+===================================================== */
 
 app.delete(
     "/api/admin/orders/:id",
     requireAdmin,
-    (req, res) => {
+    function (req, res) {
 
         const orders =
             readJSON(
@@ -1048,13 +1014,12 @@ app.delete(
 
         const filtered =
             orders.filter(
-                order =>
-                    String(
-                        order.id
-                    ) !==
-                    String(
-                        req.params.id
-                    )
+                function (order) {
+                    return (
+                        String(order.id) !==
+                        String(req.params.id)
+                    );
+                }
             );
 
         if (
@@ -1079,14 +1044,14 @@ app.delete(
     }
 );
 
-// ======================================================
-// USUWANIE MODELU
-// ======================================================
+/* =====================================================
+   USUWANIE MODELU
+===================================================== */
 
 app.delete(
     "/api/admin/custom/:id",
     requireAdmin,
-    (req, res) => {
+    function (req, res) {
 
         const models =
             readJSON(
@@ -1096,13 +1061,12 @@ app.delete(
 
         const filtered =
             models.filter(
-                model =>
-                    String(
-                        model.id
-                    ) !==
-                    String(
-                        req.params.id
-                    )
+                function (model) {
+                    return (
+                        String(model.id) !==
+                        String(req.params.id)
+                    );
+                }
             );
 
         if (
@@ -1127,13 +1091,13 @@ app.delete(
     }
 );
 
-// ======================================================
-// ADMIN
-// ======================================================
+/* =====================================================
+   ADMIN.HTML
+===================================================== */
 
 app.get(
     "/admin",
-    (req, res) => {
+    function (req, res) {
 
         res.sendFile(
             path.join(
@@ -1144,13 +1108,30 @@ app.get(
     }
 );
 
-// ======================================================
-// API 404
-// ======================================================
+/* =====================================================
+   INDEX.HTML
+===================================================== */
+
+app.get(
+    "/",
+    function (req, res) {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "index.html"
+            )
+        );
+    }
+);
+
+/* =====================================================
+   API 404
+===================================================== */
 
 app.use(
     "/api",
-    (req, res) => {
+    function (req, res) {
 
         res.status(404).json({
             success: false,
@@ -1160,12 +1141,12 @@ app.use(
     }
 );
 
-// ======================================================
-// BŁĘDY
-// ======================================================
+/* =====================================================
+   BŁĘDY
+===================================================== */
 
 app.use(
-    (error, req, res, next) => {
+    function (error, req, res, next) {
 
         console.error(
             "SERVER ERROR:",
@@ -1180,14 +1161,14 @@ app.use(
     }
 );
 
-// ======================================================
-// START SERWERA
-// ======================================================
+/* =====================================================
+   START
+===================================================== */
 
 app.listen(
     PORT,
     "0.0.0.0",
-    () => {
+    function () {
 
         console.log("");
         console.log(
@@ -1199,27 +1180,29 @@ app.listen(
         console.log(
             "========================================"
         );
-
         console.log(
-            `Port: ${PORT}`
+            "PORT: " + PORT
         );
-
         console.log(
-            `Darmowa dostawa od: ${FREE_DELIVERY_FROM} PLN`
+            "DARMOWA DOSTAWA OD: " +
+            FREE_DELIVERY_FROM +
+            " PLN"
         );
-
         console.log(
-            `Kod rabatowy: ${DISCOUNT_CODE}`
+            "KOD: " +
+            DISCOUNT_CODE
         );
-
         console.log(
-            `Rabat: ${DISCOUNT_PERCENT}%`
+            "RABAT: " +
+            DISCOUNT_PERCENT +
+            "%"
         );
-
+        console.log(
+            "ADMIN: /admin"
+        );
         console.log(
             "========================================"
         );
-
     }
 );
 ```
