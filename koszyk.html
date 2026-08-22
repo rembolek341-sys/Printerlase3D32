@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Koszyk — Printerlase3D</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(0, 190, 255, .12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 50%,
+            rgba(120, 70, 255, .12),
+            transparent 30%
+        ),
+        #050914;
+
+    min-height: 100vh;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+    height: 76px;
+
+    padding: 0 6%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background: rgba(5,9,20,.84);
+    backdrop-filter: blur(20px);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+    text-decoration: none;
+
+    font-weight: 900;
+    font-size: 19px;
+}
+
+
+.logo-mark {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00d9ff,
+            #684cff
+        );
+
+    box-shadow:
+        0 0 25px rgba(0,190,255,.3);
+}
+
+
+.logo-mark span {
+    font-size: 17px;
+}
+
+
+.logo-name span {
+    color: #27d9ff;
+}
+
+
+.nav {
+    display: flex;
+    gap: 25px;
+}
+
+
+.nav a {
+    color: #8592a5;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: .2s;
+}
+
+
+.nav a:hover {
+    color: white;
+}
+
+
+.nav-right {
+    display: flex;
+    gap: 9px;
+}
+
+
+.nav-button {
+    position: relative;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    background: rgba(255,255,255,.04);
+
+    color: white;
+
+    padding: 10px 14px;
+
+    border-radius: 11px;
+
+    cursor: pointer;
+}
+
+
+.cart-number {
+    position: absolute;
+
+    top: -7px;
+    right: -7px;
+
+    min-width: 19px;
+    height: 19px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #754cff;
+
+    border-radius: 50%;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    border: 2px solid #050914;
+}
+
+
+/* ================= CONTAINER ================= */
+
+.container {
+    width: min(1250px, 92%);
+
+    margin: auto;
+}
+
+
+/* ================= HEADER ================= */
+
+.cart-header {
+    padding: 65px 0 35px;
+}
+
+
+.cart-header small {
+    color: #2fd9ff;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 3px;
+}
+
+
+.cart-header h1 {
+    margin-top: 12px;
+
+    font-size: clamp(38px, 6vw, 58px);
+
+    letter-spacing: -2px;
+}
+
+
+.cart-header p {
+    margin-top: 12px;
+
+    color: #718095;
+
+    font-size: 14px;
+}
+
+
+/* ================= GRID ================= */
+
+.cart-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        .7fr;
+
+    gap: 25px;
+
+    padding-bottom: 80px;
+}
+
+
+/* ================= PRODUKTY ================= */
+
+.cart-items {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+.cart-item {
+
+    display: grid;
+
+    grid-template-columns:
+        110px
+        1fr
+        auto;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 18px;
+
+    border-radius: 19px;
+
+    background: #08111f;
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    transition: .2s;
+}
+
+
+.cart-item:hover {
+    border-color: rgba(0,200,255,.25);
+}
+
+
+/* PRODUKT IMAGE */
+
+.item-image {
+
+    width: 110px;
+    height: 110px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,180,255,.15),
+            transparent 70%
+        );
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    color: #34d9ff;
+
+    font-size: 34px;
+
+    font-weight: 900;
+}
+
+
+/* INFO */
+
+.item-info h3 {
+
+    font-size: 16px;
+
+    margin-bottom: 8px;
+}
+
+
+.item-info p {
+
+    color: #69788c;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+.item-color {
+
+    display: inline-block;
+
+    margin-top: 8px;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    background: rgba(255,255,255,.05);
+
+    color: #9aa8ba;
+
+    font-size: 10px;
+}
+
+
+/* ================= ILOŚĆ ================= */
+
+.item-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+.quantity {
+
+    display: flex;
+
+    align-items: center;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    border-radius: 9px;
+
+    overflow: hidden;
+}
+
+
+.quantity button {
+
+    width: 32px;
+    height: 34px;
+
+    border: 0;
+
+    background: rgba(255,255,255,.04);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 17px;
+}
+
+
+.quantity button:hover {
+
+    background: rgba(0,170,255,.15);
+
+}
+
+
+.quantity span {
+
+    width: 35px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+/* CENA */
+
+.item-price {
+
+    min-width: 75px;
+
+    text-align: right;
+
+    font-size: 16px;
+
+    font-weight: 900;
+}
+
+
+/* USUWANIE */
+
+.remove {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #617084;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    transition: .2s;
+}
+
+
+.remove:hover {
+
+    color: #ff4563;
+
+}
+
+
+/* ================= PODSUMOWANIE ================= */
+
+.summary {
+
+    position: sticky;
+
+    top: 100px;
+
+    padding: 25px;
+
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0a1627,
+            #080d1c
+        );
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.35);
+}
+
+
+.summary h2 {
+
+    font-size: 21px;
+
+    margin-bottom: 25px;
+}
+
+
+.summary-line {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+
+    color: #7e8b9e;
+
+    font-size: 13px;
+}
+
+
+.summary-line strong {
+
+    color: white;
+}
+
+
+.divider {
+
+    height: 1px;
+
+    background: rgba(255,255,255,.07);
+
+    margin: 22px 0;
+}
+
+
+.total {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+
+.total span {
+
+    color: #8a98aa;
+
+    font-size: 14px;
+}
+
+
+.total strong {
+
+    font-size: 27px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #36dcff
+        );
+
+    -webkit-background-clip: text;
+
+    color: transparent;
+}
+
+
+/* ================= DOSTAWA ================= */
+
+.delivery {
+
+    margin: 20px 0;
+}
+
+
+.delivery-title {
+
+    color: #8794a7;
+
+    font-size: 12px;
+
+    margin-bottom: 10px;
+}
+
+
+.delivery-option {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 12px;
+
+    margin-bottom: 8px;
+
+    border-radius: 11px;
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    background: rgba(255,255,255,.025);
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+
+.delivery-option:hover {
+
+    border-color: rgba(0,200,255,.3);
+
+}
+
+
+.delivery-option.active {
+
+    border-color: #00cfff;
+
+    background: rgba(0,200,255,.08);
+
+}
+
+
+.delivery-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-size: 11px;
+
+}
+
+
+.delivery-left input {
+
+    accent-color: #00bfff;
+}
+
+
+.delivery-price {
+
+    font-weight: 900;
+
+    font-size: 11px;
+}
+
+
+/* ================= KOD ================= */
+
+.coupon {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+
+.coupon input {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    background: rgba(255,255,255,.04);
+
+    color: white;
+
+    outline: none;
+}
+
+
+.coupon input:focus {
+
+    border-color: #00cfff;
+}
+
+
+.coupon button {
+
+    border: 1px solid rgba(0,200,255,.25);
+
+    background: rgba(0,180,255,.1);
+
+    color: #42dcff;
+
+    border-radius: 10px;
+
+    padding: 0 14px;
+
+    cursor: pointer;
+
+    font-weight: 800;
+}
+
+
+/* ================= CHECKOUT ================= */
+
+.checkout {
+
+    width: 100%;
+
+    padding: 16px;
+
+    margin-top: 22px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #704cff
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+    box-shadow:
+        0 15px 35px rgba(0,130,255,.2);
+}
+
+
+.checkout:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 20px 45px rgba(0,130,255,.35);
+}
+
+
+.security {
+
+    margin-top: 12px;
+
+    text-align: center;
+
+    color: #536176;
+
+    font-size: 9px;
+}
+
+
+/* ================= PUSTY KOSZYK ================= */
+
+.empty {
+
+    padding: 80px 30px;
+
+    text-align: center;
+
+    border-radius: 22px;
+
+    background: #08111f;
+
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+
+.empty-icon {
+
+    font-size: 65px;
+
+    margin-bottom: 20px;
+}
+
+
+.empty h2 {
+
+    font-size: 25px;
+
+    margin-bottom: 10px;
+}
+
+
+.empty p {
+
+    color: #718095;
+
+    margin-bottom: 25px;
+
+    font-size: 13px;
+}
+
+
+.shop-button {
+
+    display: inline-flex;
+
+    padding: 13px 20px;
+
+    border-radius: 11px;
+
+    text-decoration: none;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #704cff
+        );
+}
+
+
+/* ================= TOAST ================= */
+
+.toast {
+
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    background: #0c1828;
+
+    border: 1px solid #00cfff55;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+
+    transform: translateY(120px);
+
+    opacity: 0;
+
+    transition: .3s;
+
+    z-index: 3000;
+
+    font-size: 12px;
+}
+
+
+.toast.show {
+
+    transform: translateY(0);
+
+    opacity: 1;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:900px) {
+
+    .nav {
+        display: none;
+    }
+
+    .cart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary {
+        position: static;
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    .navbar {
+        padding: 0 18px;
+    }
+
+    .cart-header {
+        padding-top: 40px;
+    }
+
+    .cart-item {
+        grid-template-columns: 80px 1fr;
+    }
+
+    .item-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .item-controls {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+    }
+
+    .item-price {
+        text-align: left;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <a href="index.html" class="logo">
+
+        <div class="logo-mark">
+            <span>P3D</span>
+        </div>
+
+        <div class="logo-name">
+            Printerlase<span>3D</span>
+        </div>
+
+    </a>
+
+
+    <nav class="nav">
+
+        <a href="index.html">
+            Strona główna
+        </a>
+
+        <a href="index.html#breloki">
+            Breloki
+        </a>
+
+        <a href="index.html#dodatki">
+            Dodatki
+        </a>
+
+        <a href="index.html#figurki">
+            Figurki
+        </a>
+
+        <a href="index.html#dekoracje">
+            Dekoracje
+        </a>
+
+        <a href="index.html#custom">
+            Custom
+        </a>
+
+    </nav>
+
+
+    <div class="nav-right">
+
+        <button class="nav-button">
+            Konto
+        </button>
+
+        <button class="nav-button">
+
+            🛒
+
+            <span
+                class="cart-number"
+                id="cartNumber"
+            >
+                0
+            </span>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ================= TREŚĆ ================= -->
+
+<main>
+
+<section class="cart-header">
+
+<div class="container">
+
+    <small>
+        PRINTERLASE3D
+    </small>
+
+    <h1>
+        Twój koszyk
+    </h1>
+
+    <p>
+        Sprawdź produkty przed przejściem do zamówienia.
+    </p>
+
+</div>
+
+</section>
+
+
+<div class="container">
+
+<div
+    class="cart-grid"
+    id="cartGrid"
+>
+
+
+    <!-- ================= LEWA ================= -->
+
+    <div>
+
+        <div
+            class="cart-items"
+            id="cartItems"
+        ></div>
+
+    </div>
+
+
+    <!-- ================= PRAWA ================= -->
+
+    <aside
+        class="summary"
+        id="summary"
+    >
+
+        <h2>
+            Podsumowanie
+        </h2>
+
+
+        <div class="summary-line">
+
+            <span>
+                Produkty
+            </span>
+
+            <strong id="productsTotal">
+                0,00 zł
+            </strong>
+
+        </div>
+
+
+        <div class="summary-line">
+
+            <span>
+                Dostawa
+            </span>
+
+            <strong id="deliveryTotal">
+                0,00 zł
+            </strong>
+
+        </div>
+
+
+        <div class="delivery">
+
+            <div class="delivery-title">
+                Sposób dostawy
+            </div>
+
+
+            <label
+                class="delivery-option active"
+                onclick="setDelivery(this, 10)"
+            >
+
+                <div class="delivery-left">
+
+                    <input
+                        type="radio"
+                        name="delivery"
+                        checked
+                    >
+
+                    <span>
+                        Paczkomat
+                    </span>
+
+                </div>
+
+                <span class="delivery-price">
+                    10,00 zł
+                </span>
+
+            </label>
+
+
+            <label
+                class="delivery-option"
+                onclick="setDelivery(this, 15)"
+            >
+
+                <div class="delivery-left">
+
+                    <input
+                        type="radio"
+                        name="delivery"
+                    >
+
+                    <span>
+                        Kurier
+                    </span>
+
+                </div>
+
+                <span class="delivery-price">
+                    15,00 zł
+                </span>
+
+            </label>
+
+
+            <label
+                class="delivery-option"
+                onclick="setDelivery(this, 0)"
+            >
+
+                <div class="delivery-left">
+
+                    <input
+                        type="radio"
+                        name="delivery"
+                    >
+
+                    <span>
+                        Odbiór osobisty
+                    </span>
+
+                </div>
+
+                <span class="delivery-price">
+                    0,00 zł
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <div class="divider"></div>
+
+
+        <div class="total">
+
+            <span>
+                Razem
+            </span>
+
+            <strong id="grandTotal">
+                0,00 zł
+            </strong>
+
+        </div>
+
+
+        <div class="coupon">
+
+            <input
+                id="couponInput"
+                placeholder="Kod rabatowy"
+            >
+
+            <button onclick="applyCoupon()">
+                OK
+            </button>
+
+        </div>
+
+
+        <button
+            class="checkout"
+            onclick="goToCheckout()"
+        >
+            Przejdź do płatności
+        </button>
+
+
+        <div class="security">
+            🔒 Bezpieczne składanie zamówienia
+        </div>
+
+    </aside>
+
+
+</div>
+
+</div>
+
+</main>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =========================================
+   USTAWIENIA
+========================================= */
+
+let deliveryPrice = 10;
+
+let discount = 0;
+
+
+/* =========================================
+   POBIERANIE KOSZYKA
+========================================= */
+
+function getCart() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "printerlase_cart"
+        )
+    ) || [];
+
+}
+
+
+/* =========================================
+   ZAPIS KOSZYKA
+========================================= */
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =========================================
+   FORMAT CENY
+========================================= */
+
+function price(value) {
+
+    return value
+        .toFixed(2)
+        .replace(".", ",") + " zł";
+
+}
+
+
+/* =========================================
+   RYSOWANIE KOSZYKA
+========================================= */
+
+function renderCart() {
+
+    const cart = getCart();
+
+    const items =
+        document.getElementById(
+            "cartItems"
+        );
+
+    const summary =
+        document.getElementById(
+            "summary"
+        );
+
+
+    items.innerHTML = "";
+
+
+    if(cart.length === 0) {
+
+        items.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🛒
+                </div>
+
+                <h2>
+                    Twój koszyk jest pusty
+                </h2>
+
+                <p>
+                    Dodaj coś fajnego z Printerlase3D.
+                </p>
+
+                <a
+                    href="index.html"
+                    class="shop-button"
+                >
+                    Przejdź do sklepu
+                </a>
+
+            </div>
+
+        `;
+
+        summary.style.display = "none";
+
+        updateCartNumber();
+
+        return;
+
+    }
+
+
+    summary.style.display = "block";
+
+
+    cart.forEach((item, index) => {
+
+        const total =
+            item.price *
+            item.quantity;
+
+
+        const element =
+            document.createElement("div");
+
+
+        element.className =
+            "cart-item";
+
+
+        element.innerHTML = `
+
+            <div class="item-image">
+                P3D
+            </div>
+
+
+            <div class="item-info">
+
+                <h3>
+                    ${escapeHTML(item.name)}
+                </h3>
+
+                <p>
+                    Materiał:
+                    ${escapeHTML(item.material || "PLA")}
+                    <br>
+
+                    Czas druku:
+                    ${escapeHTML(item.printTime || "—")}
+                </p>
+
+                <span class="item-color">
+                    Kolor: ${escapeHTML(item.color || "Czarny")}
+                </span>
+
+            </div>
+
+
+            <div class="item-controls">
+
+                <div class="quantity">
+
+                    <button
+                        onclick="changeItemQuantity(${index}, -1)"
+                    >
+                        −
+                    </button>
+
+                    <span>
+                        ${item.quantity}
+                    </span>
+
+                    <button
+                        onclick="changeItemQuantity(${index}, 1)"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <div class="item-price">
+                    ${price(total)}
+                </div>
+
+
+                <button
+                    class="remove"
+                    onclick="removeItem(${index})"
+                    title="Usuń"
+                >
+                    🗑
+                </button>
+
+            </div>
+
+        `;
+
+
+        items.appendChild(element);
+
+    });
+
+
+    updateSummary();
+
+    updateCartNumber();
+
+}
+
+
+/* =========================================
+   ZMIANA ILOŚCI
+========================================= */
+
+function changeItemQuantity(index, amount) {
+
+    const cart = getCart();
+
+
+    cart[index].quantity += amount;
+
+
+    if(cart[index].quantity <= 0) {
+
+        cart.splice(index, 1);
+
+        showToast(
+            "Produkt usunięty z koszyka."
+        );
+
+    }
+
+
+    saveCart(cart);
+
+    renderCart();
+
+}
+
+
+/* =========================================
+   USUWANIE
+========================================= */
+
+function removeItem(index) {
+
+    const cart = getCart();
+
+    cart.splice(index, 1);
+
+    saveCart(cart);
+
+    renderCart();
+
+    showToast(
+        "Produkt usunięty z koszyka."
+    );
+
+}
+
+
+/* =========================================
+   DOSTAWA
+========================================= */
+
+function setDelivery(element, priceValue) {
+
+    deliveryPrice = priceValue;
+
+
+    document
+        .querySelectorAll(
+            ".delivery-option"
+        )
+        .forEach(option => {
+
+            option.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    element.classList.add("active");
+
+
+    updateSummary();
+
+}
+
+
+/* =========================================
+   PODSUMOWANIE
+========================================= */
+
+function updateSummary() {
+
+    const cart = getCart();
+
+
+    const productsTotal =
+        cart.reduce(
+            (sum, item) =>
+                sum +
+                item.price *
+                item.quantity,
+            0
+        );
+
+
+    let discounted =
+        productsTotal -
+        discount;
+
+
+    if(discounted < 0) {
+        discounted = 0;
+    }
+
+
+    const total =
+        discounted +
+        deliveryPrice;
+
+
+    document.getElementById(
+        "productsTotal"
+    ).textContent =
+        price(productsTotal);
+
+
+    document.getElementById(
+        "deliveryTotal"
+    ).textContent =
+        price(deliveryPrice);
+
+
+    document.getElementById(
+        "grandTotal"
+    ).textContent =
+        price(total);
+
+}
+
+
+/* =========================================
+   KOD RABATOWY
+========================================= */
+
+function applyCoupon() {
+
+    const input =
+        document.getElementById(
+            "couponInput"
+        );
+
+
+    const code =
+        input.value
+            .trim()
+            .toUpperCase();
+
+
+    if(code === "PRINTER10") {
+
+        const cart = getCart();
+
+
+        const subtotal =
+            cart.reduce(
+                (sum,item) =>
+                    sum +
+                    item.price *
+                    item.quantity,
+                0
+            );
+
+
+        discount =
+            Math.round(
+                subtotal * 0.10 * 100
+            ) / 100;
+
+
+        showToast(
+            "Kod PRINTER10 aktywny — 10% rabatu!"
+        );
+
+
+        updateSummary();
+
+    }
+
+    else {
+
+        discount = 0;
+
+        showToast(
+            "Nieprawidłowy kod rabatowy."
+        );
+
+        updateSummary();
+
+    }
+
+}
+
+
+/* =========================================
+   LICZNIK
+========================================= */
+
+function updateCartNumber() {
+
+    const cart = getCart();
+
+
+    const count =
+        cart.reduce(
+            (sum,item) =>
+                sum + item.quantity,
+            0
+        );
+
+
+    document.getElementById(
+        "cartNumber"
+    ).textContent = count;
+
+}
+
+
+/* =========================================
+   CHECKOUT
+========================================= */
+
+function goToCheckout() {
+
+    const cart = getCart();
+
+
+    if(cart.length === 0) {
+
+        showToast(
+            "Koszyk jest pusty."
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "printerlase_discount",
+        discount
+    );
+
+
+    localStorage.setItem(
+        "printerlase_delivery",
+        deliveryPrice
+    );
+
+
+    window.location.href =
+        "checkout.html";
+
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+function showToast(text) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent = text;
+
+    toast.classList.add("show");
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 2500);
+
+}
+
+
+/* =========================================
+   OCHRONA HTML
+========================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+renderCart();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "printerlase3d-server",
+  "version": "1.0.0",
+  "description": "Backend sklepu Printerlase3D z Przelewy24",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0"
+  }
+}

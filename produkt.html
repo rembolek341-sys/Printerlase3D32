@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Produkt — Printerlase3D</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(0, 183, 255, .12), transparent 30%),
+        radial-gradient(circle at 90% 40%, rgba(125, 65, 255, .12), transparent 30%),
+        #050914;
+    color: #fff;
+    min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    height: 76px;
+    padding: 0 6%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(5, 9, 20, .82);
+    backdrop-filter: blur(20px);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    text-decoration: none;
+    color: white;
+
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.logo-mark {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(135deg, #00cfff, #674cff);
+
+    box-shadow:
+        0 0 25px rgba(0,180,255,.3);
+}
+
+.logo-mark span {
+    font-size: 20px;
+    font-weight: 1000;
+}
+
+.logo-name span {
+    color: #20d7ff;
+}
+
+.menu {
+    display: flex;
+    gap: 25px;
+}
+
+.menu a {
+    color: #8995a8;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: .25s;
+}
+
+.menu a:hover {
+    color: white;
+}
+
+.nav-right {
+    display: flex;
+    gap: 9px;
+}
+
+.nav-btn {
+    position: relative;
+
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.04);
+
+    color: white;
+
+    padding: 10px 13px;
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+.nav-btn:hover {
+    border-color: #00cfff66;
+    background: rgba(0,180,255,.1);
+}
+
+.cart-count {
+    position: absolute;
+
+    right: -7px;
+    top: -7px;
+
+    min-width: 19px;
+    height: 19px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #754cff;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    border: 2px solid #050914;
+}
+
+/* ===== GŁÓWNY PRODUKT ===== */
+
+.container {
+    width: min(1250px, 92%);
+    margin: auto;
+}
+
+.product-section {
+    padding: 70px 0 40px;
+}
+
+.breadcrumbs {
+    margin-bottom: 30px;
+
+    color: #66758a;
+    font-size: 12px;
+}
+
+.breadcrumbs a {
+    color: #39d7ff;
+    text-decoration: none;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 65px;
+    align-items: start;
+}
+
+/* ===== ZDJĘCIE ===== */
+
+.product-photo {
+    min-height: 560px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 28px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 180, 255, .14),
+            transparent 60%
+        ),
+        #08111f;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.product-photo::before {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+
+    background: #008cff;
+
+    filter: blur(120px);
+
+    opacity: .14;
+}
+
+.product-model {
+    position: relative;
+    z-index: 2;
+
+    width: 72%;
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 35px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111e34,
+            #080e1c
+        );
+
+    border: 1px solid rgba(0,200,255,.15);
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.55),
+        inset 0 0 60px rgba(0,180,255,.04);
+
+    font-size: 150px;
+
+    animation: floating 4s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+.photo-label {
+    position: absolute;
+
+    bottom: 20px;
+    left: 20px;
+
+    z-index: 4;
+
+    padding: 9px 13px;
+
+    border-radius: 10px;
+
+    background: rgba(0,0,0,.45);
+    border: 1px solid rgba(255,255,255,.1);
+
+    color: #9ca9bb;
+
+    font-size: 11px;
+}
+
+/* ===== INFORMACJE ===== */
+
+.category-label {
+    color: #35d8ff;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 13px;
+}
+
+.product-title {
+    font-size: clamp(35px, 5vw, 58px);
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+
+    margin-bottom: 17px;
+}
+
+.product-description {
+    color: #8795a8;
+
+    line-height: 1.8;
+
+    font-size: 15px;
+
+    margin-bottom: 25px;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 27px;
+}
+
+.stars {
+    color: #ffd43b;
+    letter-spacing: 2px;
+}
+
+.rating-text {
+    color: #7e8b9d;
+    font-size: 12px;
+}
+
+.price {
+    font-size: 35px;
+    font-weight: 1000;
+
+    margin-bottom: 28px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #41dfff
+        );
+
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* ===== OPCJE ===== */
+
+.option {
+    margin-bottom: 22px;
+}
+
+.option-title {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.option-value {
+    color: #718095;
+    font-weight: 500;
+}
+
+.colors {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.color-btn {
+    padding: 10px 14px;
+
+    border-radius: 10px;
+
+    background: #ffffff06;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    color: #b4c0d0;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.color-btn:hover,
+.color-btn.active {
+    border-color: #00cfff;
+    background: rgba(0,200,255,.1);
+    color: white;
+    box-shadow: 0 0 18px rgba(0,200,255,.12);
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+
+    width: fit-content;
+
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 11px;
+
+    overflow: hidden;
+}
+
+.quantity button {
+    width: 42px;
+    height: 42px;
+
+    border: 0;
+
+    background: #ffffff06;
+
+    color: white;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+.quantity button:hover {
+    background: #008cff22;
+}
+
+.quantity span {
+    width: 45px;
+
+    text-align: center;
+
+    font-weight: 900;
+}
+
+/* ===== INFO ===== */
+
+.info-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin: 28px 0;
+}
+
+.info-card {
+    padding: 16px;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.035);
+
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.info-card small {
+    display: block;
+
+    color: #66758a;
+
+    font-size: 10px;
+
+    margin-bottom: 7px;
+}
+
+.info-card strong {
+    font-size: 13px;
+}
+
+/* ===== KOSZYK ===== */
+
+.add-cart {
+    width: 100%;
+
+    padding: 17px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #704cff
+        );
+
+    box-shadow:
+        0 15px 35px rgba(0,130,255,.25);
+
+    transition: .25s;
+}
+
+.add-cart:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 20px 45px rgba(0,130,255,.4);
+}
+
+.buy-note {
+    text-align: center;
+
+    color: #5f6c7e;
+
+    font-size: 10px;
+
+    margin-top: 11px;
+}
+
+/* ===== SEKCJE ===== */
+
+.info-section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-size: 32px;
+
+    margin-bottom: 28px;
+
+    letter-spacing: -1px;
+}
+
+.how-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4,1fr);
+
+    gap: 16px;
+}
+
+.step {
+    padding: 25px;
+
+    border-radius: 18px;
+
+    background: #08111f;
+
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.step-number {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+
+    background: rgba(0,190,255,.1);
+
+    color: #36d9ff;
+
+    font-weight: 900;
+}
+
+.step h3 {
+    font-size: 15px;
+
+    margin-bottom: 9px;
+}
+
+.step p {
+    color: #738196;
+
+    line-height: 1.6;
+
+    font-size: 12px;
+}
+
+/* ===== OPINIE ===== */
+
+.reviews {
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 16px;
+}
+
+.review {
+    padding: 25px;
+
+    border-radius: 18px;
+
+    background: #08111f;
+
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.review-stars {
+    color: #ffd43b;
+
+    margin-bottom: 14px;
+}
+
+.review p {
+    color: #8996a8;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    margin-bottom: 18px;
+}
+
+.review strong {
+    font-size: 12px;
+}
+
+.review small {
+    display: block;
+
+    color: #566376;
+
+    margin-top: 5px;
+}
+
+/* ===== ALERT ===== */
+
+.cart-message {
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 3000;
+
+    padding: 15px 20px;
+
+    border-radius: 13px;
+
+    background: #0c1828;
+
+    border: 1px solid #00cfff55;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+
+    transform: translateY(130px);
+
+    opacity: 0;
+
+    transition: .3s;
+}
+
+.cart-message.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cart-message strong {
+    color: #35dcff;
+}
+
+footer {
+    padding: 40px 6%;
+
+    border-top: 1px solid rgba(255,255,255,.07);
+
+    color: #627084;
+
+    text-align: center;
+
+    font-size: 12px;
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:900px) {
+
+    .menu {
+        display: none;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .product-photo {
+        min-height: 430px;
+    }
+
+    .how-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .reviews {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:550px) {
+
+    .navbar {
+        padding: 0 18px;
+    }
+
+    .nav-btn:first-child {
+        display: none;
+    }
+
+    .product-section {
+        padding-top: 40px;
+    }
+
+    .product-photo {
+        min-height: 340px;
+    }
+
+    .product-model {
+        font-size: 90px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .how-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <a href="index.html" class="logo">
+
+        <div class="logo-mark">
+            <span>P3D</span>
+        </div>
+
+        <div class="logo-name">
+            Printerlase<span>3D</span>
+        </div>
+
+    </a>
+
+    <nav class="menu">
+
+        <a href="index.html">Strona główna</a>
+        <a href="index.html#breloki">Breloki</a>
+        <a href="index.html#dodatki">Dodatki</a>
+        <a href="index.html#figurki">Figurki</a>
+        <a href="index.html#dekoracje">Dekoracje</a>
+        <a href="index.html#custom">Custom</a>
+
+    </nav>
+
+    <div class="nav-right">
+
+        <button class="nav-btn">
+            Konto
+        </button>
+
+        <button
+            class="nav-btn"
+            onclick="location.href='koszyk.html'"
+        >
+            🛒
+
+            <span
+                class="cart-count"
+                id="cartCount"
+            >
+                0
+            </span>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ================= PRODUKT ================= -->
+
+<main>
+
+<section class="product-section">
+
+<div class="container">
+
+    <div class="breadcrumbs">
+
+        <a href="index.html">
+            Strona główna
+        </a>
+
+        &nbsp; / &nbsp;
+
+        Breloki
+
+        &nbsp; / &nbsp;
+
+        Brelok FRIENDZ
+
+    </div>
+
+
+    <div class="product-grid">
+
+
+        <!-- ZDJĘCIE -->
+
+        <div class="product-photo">
+
+            <div
+                class="product-model"
+                id="productVisual"
+            >
+                FRIENDZ
+            </div>
+
+            <div class="photo-label">
+                Wizualizacja produktu
+            </div>
+
+        </div>
+
+
+        <!-- INFORMACJE -->
+
+        <div>
+
+            <div class="category-label">
+                BRELOKI 3D
+            </div>
+
+            <h1 class="product-title">
+                Brelok FRIENDZ
+            </h1>
+
+            <p class="product-description">
+
+                Stylowy brelok wykonany
+                metodą druku 3D. Możesz wybrać
+                kolor i zamówić go jako
+                wyjątkowy dodatek do kluczy,
+                plecaka lub torby.
+
+            </p>
+
+
+            <div class="rating">
+
+                <span class="stars">
+                    ★★★★★
+                </span>
+
+                <span class="rating-text">
+                    5.0 / 5 • 24 opinie
+                </span>
+
+            </div>
+
+
+            <div class="price">
+                12,00 zł
+            </div>
+
+
+            <!-- KOLOR -->
+
+            <div class="option">
+
+                <div class="option-title">
+
+                    <span>
+                        Kolor
+                    </span>
+
+                    <span
+                        class="option-value"
+                        id="selectedColor"
+                    >
+                        Czarny
+                    </span>
+
+                </div>
+
+
+                <div class="colors">
+
+                    <button
+                        class="color-btn active"
+                        onclick="selectColor(this,'Czarny','#151922')"
+                    >
+                        Czarny
+                    </button>
+
+                    <button
+                        class="color-btn"
+                        onclick="selectColor(this,'Biały','#eeeeee')"
+                    >
+                        Biały
+                    </button>
+
+                    <button
+                        class="color-btn"
+                        onclick="selectColor(this,'Niebieski','#168cff')"
+                    >
+                        Niebieski
+                    </button>
+
+                    <button
+                        class="color-btn"
+                        onclick="selectColor(this,'Czerwony','#ff3150')"
+                    >
+                        Czerwony
+                    </button>
+
+                    <button
+                        class="color-btn"
+                        onclick="selectColor(this,'Fioletowy','#874cff')"
+                    >
+                        Fioletowy
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ILOŚĆ -->
+
+            <div class="option">
+
+                <div class="option-title">
+                    <span>
+                        Ilość
+                    </span>
+                </div>
+
+                <div class="quantity">
+
+                    <button onclick="changeQuantity(-1)">
+                        −
+                    </button>
+
+                    <span id="quantity">
+                        1
+                    </span>
+
+                    <button onclick="changeQuantity(1)">
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMACJE -->
+
+            <div class="info-grid">
+
+                <div class="info-card">
+
+                    <small>
+                        MATERIAŁ
+                    </small>
+
+                    <strong>
+                        PLA
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <small>
+                        CZAS DRUKU
+                    </small>
+
+                    <strong>
+                        około 35 minut
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <small>
+                        WYSYŁKA
+                    </small>
+
+                    <strong>
+                        1–3 dni robocze
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <small>
+                        WYMIARY
+                    </small>
+
+                    <strong>
+                        około 50 × 25 mm
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="add-cart"
+                onclick="addToCart()"
+            >
+                🛒 Dodaj do koszyka
+            </button>
+
+
+            <div class="buy-note">
+                Bezpieczne zamówienie • płatność online
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= JAK POWSTAJE ================= -->
+
+<section class="info-section">
+
+<div class="container">
+
+    <h2 class="section-title">
+        Jak powstaje Twój wydruk?
+    </h2>
+
+
+    <div class="how-grid">
+
+
+        <div class="step">
+
+            <div class="step-number">
+                01
+            </div>
+
+            <h3>
+                Projekt
+            </h3>
+
+            <p>
+                Przygotowujemy model
+                i ustawiamy go pod
+                konkretną drukarkę.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                02
+            </div>
+
+            <h3>
+                Przygotowanie
+            </h3>
+
+            <p>
+                Dobieramy materiał,
+                kolor oraz parametry
+                jakości wydruku.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                03
+            </div>
+
+            <h3>
+                Druk 3D
+            </h3>
+
+            <p>
+                Drukarka tworzy model
+                warstwa po warstwie.
+                Ten produkt drukuje się
+                około 35 minut.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                04
+            </div>
+
+            <h3>
+                Kontrola
+            </h3>
+
+            <p>
+                Sprawdzamy wydruk,
+                usuwamy podpory
+                i przygotowujemy
+                go do wysyłki.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= OPINIE ================= -->
+
+<section class="info-section">
+
+<div class="container">
+
+    <h2 class="section-title">
+        Opinie klientów
+    </h2>
+
+
+    <div class="reviews">
+
+
+        <div class="review">
+
+            <div class="review-stars">
+                ★★★★★
+            </div>
+
+            <p>
+                Bardzo fajny brelok, napis
+                wygląda dokładnie tak jak
+                na projekcie. Polecam.
+            </p>
+
+            <strong>
+                Kacper
+            </strong>
+
+            <small>
+                Zweryfikowany zakup
+            </small>
+
+        </div>
+
+
+        <div class="review">
+
+            <div class="review-stars">
+                ★★★★★
+            </div>
+
+            <p>
+                Dobra jakość i szybka realizacja.
+                Kolor wyszedł super.
+            </p>
+
+            <strong>
+                Bartek
+            </strong>
+
+            <small>
+                Zweryfikowany zakup
+            </small>
+
+        </div>
+
+
+        <div class="review">
+
+            <div class="review-stars">
+                ★★★★★
+            </div>
+
+            <p>
+                Kupiłem jako dodatek do plecaka.
+                Wygląda naprawdę dobrze.
+            </p>
+
+            <strong>
+                Michał
+            </strong>
+
+            <small>
+                Zweryfikowany zakup
+            </small>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- ================= POWIADOMIENIE ================= -->
+
+<div
+    class="cart-message"
+    id="cartMessage"
+>
+    ✓ <strong>Dodano do koszyka!</strong>
+</div>
+
+
+<footer>
+
+    © 2026 Printerlase3D
+    • Wydruki 3D
+
+</footer>
+
+
+<script>
+
+/* =========================================
+   DANE PRODUKTU
+========================================= */
+
+const product = {
+
+    id: "brelok-friendz",
+
+    name: "Brelok FRIENDZ",
+
+    price: 12,
+
+    material: "PLA",
+
+    printTime: "35 minut"
+
+};
+
+
+/* =========================================
+   KOLOR
+========================================= */
+
+let selectedColor = "Czarny";
+
+function selectColor(button, color, background) {
+
+    document
+        .querySelectorAll(".color-btn")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    button.classList.add("active");
+
+    selectedColor = color;
+
+    document.getElementById(
+        "selectedColor"
+    ).textContent = color;
+
+    const visual =
+        document.getElementById("productVisual");
+
+    visual.style.background =
+        `linear-gradient(145deg, ${background}, #080e1c)`;
+
+}
+
+
+/* =========================================
+   ILOŚĆ
+========================================= */
+
+let quantity = 1;
+
+function changeQuantity(amount) {
+
+    quantity += amount;
+
+    if(quantity < 1) {
+        quantity = 1;
+    }
+
+    if(quantity > 99) {
+        quantity = 99;
+    }
+
+    document.getElementById(
+        "quantity"
+    ).textContent = quantity;
+
+}
+
+
+/* =========================================
+   DODANIE DO KOSZYKA
+========================================= */
+
+function addToCart() {
+
+    let cart =
+        JSON.parse(
+            localStorage.getItem("printerlase_cart")
+        ) || [];
+
+
+    const item = {
+
+        id: product.id,
+
+        name: product.name,
+
+        price: product.price,
+
+        color: selectedColor,
+
+        quantity: quantity,
+
+        material: product.material,
+
+        printTime: product.printTime
+
+    };
+
+
+    const existing =
+        cart.find(
+            item =>
+                item.id === product.id &&
+                item.color === selectedColor
+        );
+
+
+    if(existing) {
+
+        existing.quantity += quantity;
+
+    } else {
+
+        cart.push(item);
+
+    }
+
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+
+    updateCartCount();
+
+    showMessage();
+
+}
+
+
+/* =========================================
+   LICZNIK KOSZYKA
+========================================= */
+
+function updateCartCount() {
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("printerlase_cart")
+        ) || [];
+
+
+    const count =
+        cart.reduce(
+            (sum,item) =>
+                sum + item.quantity,
+            0
+        );
+
+
+    document.getElementById(
+        "cartCount"
+    ).textContent = count;
+
+}
+
+
+updateCartCount();
+
+
+/* =========================================
+   POWIADOMIENIE
+========================================= */
+
+function showMessage() {
+
+    const message =
+        document.getElementById(
+            "cartMessage"
+        );
+
+    message.classList.add("show");
+
+
+    setTimeout(() => {
+
+        message.classList.remove("show");
+
+    }, 2200);
+
+}
+
+</script>
+
+</body>
+</html>

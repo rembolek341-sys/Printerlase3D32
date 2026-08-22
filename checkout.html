@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Checkout — Printerlase3D</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(0,170,255,.18), transparent 35%),
+        radial-gradient(circle at 80% 80%, rgba(130,70,255,.18), transparent 35%),
+        #030712;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+.checkout-page{
+    max-width:1100px;
+    margin:auto;
+    padding:120px 25px 60px;
+}
+
+.checkout-title{
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.checkout-title .small{
+    color:#35d8ff;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:3px;
+}
+
+.checkout-title h1{
+    font-size:48px;
+    margin:12px 0;
+}
+
+.checkout-title p{
+    color:#8190a5;
+}
+
+.checkout-grid{
+    display:grid;
+    grid-template-columns:1fr 380px;
+    gap:25px;
+}
+
+.box{
+    background:rgba(8,18,35,.82);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    padding:28px;
+    box-shadow:0 25px 80px rgba(0,0,0,.35);
+    backdrop-filter:blur(15px);
+}
+
+.box h2{
+    margin-top:0;
+    margin-bottom:25px;
+}
+
+.field{
+    margin-bottom:17px;
+}
+
+.field label{
+    display:block;
+    color:#aeb9c9;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.field input{
+    width:100%;
+    padding:14px;
+    box-sizing:border-box;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.1);
+    background:#050c18;
+    color:white;
+    outline:none;
+}
+
+.field input:focus{
+    border-color:#00bfff;
+    box-shadow:0 0 20px rgba(0,191,255,.12);
+}
+
+.payment-options{
+    display:grid;
+    gap:12px;
+}
+
+.payment-option{
+    position:relative;
+}
+
+.payment-option input{
+    position:absolute;
+    opacity:0;
+}
+
+.payment-option label{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:17px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.09);
+    background:#050c18;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.payment-option label:hover{
+    border-color:#00bfff66;
+    transform:translateY(-2px);
+}
+
+.payment-option input:checked + label{
+    border-color:#00cfff;
+    background:rgba(0,180,255,.09);
+    box-shadow:0 0 25px rgba(0,180,255,.1);
+}
+
+.payment-name{
+    font-weight:900;
+}
+
+.payment-desc{
+    color:#718096;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.payment-icon{
+    font-size:25px;
+}
+
+.order-item{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:13px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.order-item-name{
+    font-weight:bold;
+}
+
+.order-item-qty{
+    color:#718096;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.order-item-price{
+    font-weight:900;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    margin-top:22px;
+    font-size:21px;
+    font-weight:900;
+}
+
+.pay-button{
+    width:100%;
+    margin-top:25px;
+    padding:17px;
+    border:0;
+    border-radius:14px;
+    color:white;
+    font-weight:900;
+    font-size:15px;
+    cursor:pointer;
+    background:linear-gradient(100deg,#008cff,#7b4cff);
+    box-shadow:0 15px 40px rgba(0,140,255,.25);
+    transition:.25s;
+}
+
+.pay-button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 20px 50px rgba(0,140,255,.4);
+}
+
+.secure{
+    text-align:center;
+    color:#66758a;
+    font-size:11px;
+    margin-top:14px;
+}
+
+.success{
+    display:none;
+    text-align:center;
+    padding:80px 20px;
+}
+
+.success-icon{
+    width:90px;
+    height:90px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 25px;
+    border-radius:50%;
+    background:rgba(0,220,150,.12);
+    border:1px solid rgba(0,220,150,.4);
+    font-size:45px;
+}
+
+.success h1{
+    font-size:38px;
+}
+
+.success p{
+    color:#8190a5;
+    line-height:1.7;
+}
+
+.success-code{
+    display:inline-block;
+    padding:12px 18px;
+    margin-top:15px;
+    border-radius:10px;
+    background:#081525;
+    color:#35d8ff;
+    font-weight:bold;
+}
+
+.back-button{
+    display:inline-block;
+    margin-top:25px;
+    padding:13px 20px;
+    border-radius:12px;
+    color:white;
+    text-decoration:none;
+    background:#ffffff0c;
+    border:1px solid #ffffff12;
+}
+
+@media(max-width:800px){
+    .checkout-grid{
+        grid-template-columns:1fr;
+    }
+
+    .checkout-title h1{
+        font-size:36px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="checkout-page">
+
+    <div class="checkout-title">
+        <div class="small">PRINTERLASE3D</div>
+        <h1>Finalizacja zamówienia</h1>
+        <p>Uzupełnij dane i wybierz sposób płatności.</p>
+    </div>
+
+    <div id="checkoutContent">
+
+        <div class="checkout-grid">
+
+            <div class="box">
+
+                <h2>Dane zamawiającego</h2>
+
+                <div class="field">
+                    <label>Imię i nazwisko</label>
+                    <input id="name" type="text" placeholder="Jan Kowalski">
+                </div>
+
+                <div class="field">
+                    <label>E-mail</label>
+                    <input id="email" type="email" placeholder="jan@example.com">
+                </div>
+
+                <div class="field">
+                    <label>Telefon</label>
+                    <input id="phone" type="tel" placeholder="123 456 789">
+                </div>
+
+                <div class="field">
+                    <label>Adres dostawy</label>
+                    <input id="address" type="text" placeholder="ul. Przykładowa 10, 41-000 Miasto">
+                </div>
+
+                <h2 style="margin-top:35px;">
+                    Metoda płatności
+                </h2>
+
+                <div class="payment-options">
+
+                    <div class="payment-option">
+                        <input type="radio" name="payment" id="blik" value="BLIK" checked>
+                        <label for="blik">
+                            <div>
+                                <div class="payment-name">BLIK</div>
+                                <div class="payment-desc">
+                                    Płatność kodem BLIK
+                                </div>
+                            </div>
+                            <div class="payment-icon">📱</div>
+                        </label>
+                    </div>
+
+                    <div class="payment-option">
+                        <input type="radio" name="payment" id="card" value="Karta">
+                        <label for="card">
+                            <div>
+                                <div class="payment-name">Karta płatnicza</div>
+                                <div class="payment-desc">
+                                    Visa / Mastercard
+                                </div>
+                            </div>
+                            <div class="payment-icon">💳</div>
+                        </label>
+                    </div>
+
+                    <div class="payment-option">
+                        <input type="radio" name="payment" id="transfer" value="Przelew">
+                        <label for="transfer">
+                            <div>
+                                <div class="payment-name">Przelew online</div>
+                                <div class="payment-desc">
+                                    Szybki przelew bankowy
+                                </div>
+                            </div>
+                            <div class="payment-icon">🏦</div>
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="box">
+
+                <h2>Twoje zamówienie</h2>
+
+                <div id="orderItems"></div>
+
+                <div class="total">
+                    <span>Razem</span>
+                    <span id="total">0,00 zł</span>
+                </div>
+
+                <button
+                    class="pay-button"
+                    onclick="finishOrder()"
+                >
+                    Zapłać i zamów
+                </button>
+
+                <div class="secure">
+                    🔒 Bezpieczna realizacja zamówienia
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- EKRAN PO ZAMÓWIENIU -->
+
+    <div class="box success" id="success">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h1>Zamówienie przyjęte!</h1>
+
+        <p>
+            Dzięki za zamówienie w Printerlase3D.
+            <br>
+            Potwierdzenie zostanie wysłane na podany adres e-mail.
+        </p>
+
+        <div class="success-code" id="orderNumber"></div>
+
+        <br>
+
+        <a href="index.html" class="back-button">
+            ← Wróć do sklepu
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const cart =
+JSON.parse(localStorage.getItem("printerlase_cart") || "[]");
+
+const itemsContainer =
+document.getElementById("orderItems");
+
+const totalElement =
+document.getElementById("total");
+
+let total = 0;
+
+
+/* WYŚWIETLANIE KOSZYKA */
+
+if(cart.length === 0){
+
+    itemsContainer.innerHTML = `
+        <p style="color:#718096;">
+            Twój koszyk jest pusty.
+        </p>
+    `;
+
+}else{
+
+    cart.forEach(item => {
+
+        const quantity =
+            Number(item.quantity || item.qty || 1);
+
+        const price =
+            Number(item.price || 0);
+
+        total += price * quantity;
+
+        itemsContainer.innerHTML += `
+
+            <div class="order-item">
+
+                <div>
+
+                    <div class="order-item-name">
+                        ${item.name || "Produkt"}
+                    </div>
+
+                    <div class="order-item-qty">
+                        Ilość: ${quantity}
+                    </div>
+
+                </div>
+
+                <div class="order-item-price">
+                    ${(price * quantity)
+                        .toFixed(2)
+                        .replace(".", ",")} zł
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+totalElement.textContent =
+total.toFixed(2).replace(".", ",") + " zł";
+
+
+/* ZŁOŻENIE ZAMÓWIENIA */
+
+function finishOrder(){
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const address =
+        document.getElementById("address").value.trim();
+
+    const payment =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        ).value;
+
+
+    if(!name || !email || !phone || !address){
+
+        alert(
+            "Uzupełnij wszystkie dane zamówienia."
+        );
+
+        return;
+    }
+
+
+    if(cart.length === 0){
+
+        alert(
+            "Koszyk jest pusty."
+        );
+
+        return;
+    }
+
+
+    /*
+      TUTAJ PÓŹNIEJ PODŁĄCZYMY PRAWDZIWE
+      PRZELEWY24 / BLIK / KARTĘ.
+
+      Teraz nie pobieramy żadnych pieniędzy.
+    */
+
+
+    const orderNumber =
+        "PL3D-" +
+        Date.now().toString().slice(-8);
+
+
+    const order = {
+
+        number:orderNumber,
+
+        customer:{
+            name,
+            email,
+            phone,
+            address
+        },
+
+        payment,
+
+        products:cart,
+
+        total,
+
+        date:new Date().toISOString()
+
+    };
+
+
+    localStorage.setItem(
+        "printerlase_last_order",
+        JSON.stringify(order)
+    );
+
+
+    /* Czyścimy koszyk */
+
+    localStorage.removeItem(
+        "printerlase_cart"
+    );
+
+
+    /* Pokazujemy normalny ekran sukcesu */
+
+    document.getElementById(
+        "checkoutContent"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "success"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "orderNumber"
+    ).textContent =
+        "Numer zamówienia: " + orderNumber;
+
+}
+
+</script>
+
+</body>
+</html>

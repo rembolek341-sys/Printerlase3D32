@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Printerlase3D — Wydruki 3D</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ===== DODATKOWE STYLE INDEX ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #030712;
+    color: white;
+    font-family: Inter, Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* ANIMOWANE TŁO */
+
+.bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -10;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .35;
+    animation: floatOrb 10s infinite alternate ease-in-out;
+}
+
+.orb.one {
+    width: 420px;
+    height: 420px;
+    background: #008cff;
+    top: -180px;
+    left: -120px;
+}
+
+.orb.two {
+    width: 380px;
+    height: 380px;
+    background: #7c3cff;
+    right: -120px;
+    top: 350px;
+    animation-delay: 2s;
+}
+
+.orb.three {
+    width: 300px;
+    height: 300px;
+    background: #00d9ff;
+    left: 40%;
+    bottom: -180px;
+    animation-delay: 4s;
+}
+
+@keyframes floatOrb {
+    from {
+        transform: translate(0,0) scale(1);
+    }
+    to {
+        transform: translate(80px,60px) scale(1.15);
+    }
+}
+
+/* GRID */
+
+.grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -9;
+    opacity: .16;
+    background-image:
+        linear-gradient(#1b9cff18 1px, transparent 1px),
+        linear-gradient(90deg, #1b9cff18 1px, transparent 1px);
+    background-size: 55px 55px;
+    mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* NAVBAR */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    z-index: 999;
+    background: rgba(3,7,18,.72);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: white;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 19px;
+}
+
+.brand-logo {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background:
+        linear-gradient(135deg,#00d9ff,#187cff,#873cff);
+    box-shadow:
+        0 0 20px #008cff55,
+        inset 0 0 15px #ffffff22;
+    transform: rotate(-4deg);
+}
+
+.brand-logo span {
+    font-size: 23px;
+    font-weight: 1000;
+    transform: rotate(4deg);
+}
+
+.brand-name span {
+    background: linear-gradient(
+        90deg,
+        #ffffff,
+        #28d9ff,
+        #9161ff
+    );
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    gap: 24px;
+}
+
+.nav-links a {
+    color: #8996aa;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    transition: .25s;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.nav-btn {
+    color: white;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 10px 13px;
+    border-radius: 11px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    transition: .25s;
+}
+
+.nav-btn:hover {
+    border-color: #00bfff66;
+    background: #008cff18;
+    transform: translateY(-2px);
+}
+
+.cart {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    right: -7px;
+    top: -8px;
+    min-width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg,#00bfff,#7c3cff);
+    font-size: 10px;
+    border: 2px solid #030712;
+}
+
+/* HERO */
+
+.hero {
+    max-width: 1400px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 145px 6% 80px;
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 14px;
+    border-radius: 30px;
+    border: 1px solid #00cfff38;
+    background: #00cfff0b;
+    color: #42dfff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+}
+
+.badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #00d9ff;
+    box-shadow: 0 0 15px #00d9ff;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    50% {
+        transform: scale(1.5);
+        opacity: .5;
+    }
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: clamp(52px,7vw,92px);
+    line-height: .94;
+    letter-spacing: -5px;
+}
+
+.gradient-text {
+    background: linear-gradient(
+        90deg,
+        #00e5ff,
+        #238cff,
+        #974cff
+    );
+    -webkit-background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 25px #008cff44);
+}
+
+.hero-description {
+    max-width: 620px;
+    color: #8794a7;
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 30px 0;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.btn {
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 14px 20px;
+    border-radius: 13px;
+    font-weight: 900;
+    font-size: 13px;
+    transition: .3s;
+}
+
+.btn-primary {
+    color: white;
+    background: linear-gradient(100deg,#008cff,#754cff);
+    box-shadow: 0 12px 40px #008cff38;
+}
+
+.btn-primary:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 18px 55px #008cff55;
+}
+
+.btn-secondary {
+    color: white;
+    border: 1px solid #ffffff12;
+    background: #ffffff06;
+}
+
+.btn-secondary:hover {
+    border-color: #00cfff55;
+    background: #ffffff0d;
+    transform: translateY(-4px);
+}
+
+/* LOGO HERO */
+
+.hero-visual {
+    min-height: 500px;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.hero-logo {
+    width: 310px;
+    height: 310px;
+    border-radius: 75px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    z-index: 2;
+    background:
+        linear-gradient(145deg,#071a31,#090b20);
+    border: 1px solid #20cfff35;
+    box-shadow:
+        0 0 70px #008cff35,
+        inset 0 0 60px #008cff0c;
+    animation: logoFloat 4s ease-in-out infinite;
+}
+
+.hero-logo::before {
+    content: "";
+    position: absolute;
+    inset: -18px;
+    border-radius: 90px;
+    border: 1px solid #00cfff28;
+    animation: rotateRing 8s linear infinite;
+}
+
+.hero-logo::after {
+    content: "";
+    position: absolute;
+    inset: -45px;
+    border-radius: 110px;
+    border: 1px dashed #7c3cff22;
+    animation: rotateRing 14s linear infinite reverse;
+}
+
+.logo-symbol {
+    font-size: 110px;
+    font-weight: 1000;
+    background: linear-gradient(
+        135deg,
+        #00e5ff,
+        #147dff,
+        #9b4cff
+    );
+    -webkit-background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 30px #008cff88);
+}
+
+.logo-small {
+    position: absolute;
+    bottom: 45px;
+    font-size: 17px;
+    font-weight: 1000;
+    letter-spacing: 3px;
+}
+
+@keyframes logoFloat {
+    50% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+}
+
+@keyframes rotateRing {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* SEKCJE */
+
+.section {
+    max-width: 1320px;
+    margin: auto;
+    padding: 100px 30px;
+}
+
+.section-label {
+    color: #35d8ff;
+    font-size: 10px;
+    font-weight: 1000;
+    letter-spacing: 3px;
+}
+
+.section-title {
+    margin-bottom: 42px;
+}
+
+.section-title h2 {
+    margin: 10px 0 0;
+    font-size: 43px;
+    letter-spacing: -2px;
+}
+
+/* KATEGORIE */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 18px;
+}
+
+.category {
+    text-decoration: none;
+    color: white;
+    min-height: 240px;
+    padding: 27px;
+    border-radius: 22px;
+    border: 1px solid #ffffff0c;
+    background: linear-gradient(145deg,#0a192d,#050b16);
+    position: relative;
+    overflow: hidden;
+    transition: .4s;
+}
+
+.category:hover {
+    transform: translateY(-10px);
+    border-color: #00bfff4d;
+    box-shadow: 0 25px 70px #0009;
+}
+
+.category-icon {
+    font-size: 48px;
+    margin-bottom: 30px;
+    transition: .4s;
+}
+
+.category:hover .category-icon {
+    transform: scale(1.15) rotate(-6deg);
+}
+
+.category h3 {
+    margin: 0 0 9px;
+    font-size: 19px;
+}
+
+.category p {
+    margin: 0;
+    color: #738095;
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+/* PRODUKTY */
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 18px;
+}
+
+.product {
+    position: relative;
+    overflow: hidden;
+    border-radius: 21px;
+    border: 1px solid #ffffff0c;
+    background: #07101e;
+    transition: .35s;
+}
+
+.product:hover {
+    transform: translateY(-9px);
+    border-color: #00cfff45;
+    box-shadow: 0 25px 70px #0009;
+}
+
+.product-image {
+    height: 220px;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(circle,#008cff24,transparent 65%);
+    position: relative;
+}
+
+.product-image span {
+    font-size: 85px;
+    filter: drop-shadow(0 0 20px #008cff44);
+    transition: .4s;
+}
+
+.product:hover .product-image span {
+    transform: scale(1.12) rotate(-4deg);
+}
+
+.product-body {
+    padding: 20px;
+}
+
+.product-category {
+    color: #39d9ff;
+    font-size: 9px;
+    font-weight: 1000;
+    letter-spacing: 2px;
+}
+
+.product-body h3 {
+    margin: 7px 0;
+    font-size: 17px;
+}
+
+.product-body p {
+    margin: 0 0 16px;
+    color: #69778b;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 1000;
+}
+
+.time {
+    color: #738095;
+    font-size: 10px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.product-actions button,
+.product-actions a {
+    flex: 1;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 11px;
+}
+
+.details {
+    background: #ffffff08;
+    color: white;
+    border: 1px solid #ffffff10 !important;
+}
+
+.add-cart {
+    color: white;
+    background: linear-gradient(100deg,#008cff,#744cff);
+}
+
+/* JAK TO DZIAŁA */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 18px;
+}
+
+.step {
+    padding: 28px;
+    border: 1px solid #ffffff0b;
+    background: #07111f;
+    border-radius: 20px;
+    position: relative;
+    transition: .3s;
+}
+
+.step:hover {
+    transform: translateY(-7px);
+    border-color: #00bfff40;
+}
+
+.step-number {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg,#008cff,#7d43ff);
+    font-weight: 1000;
+    margin-bottom: 20px;
+}
+
+.step h3 {
+    margin: 0 0 9px;
+}
+
+.step p {
+    margin: 0;
+    color: #758398;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* OPINIE */
+
+.reviews {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 18px;
+}
+
+.review {
+    padding: 26px;
+    border: 1px solid #ffffff0b;
+    border-radius: 20px;
+    background: linear-gradient(145deg,#091526,#050a13);
+    transition: .3s;
+}
+
+.review:hover {
+    transform: translateY(-6px);
+    border-color: #00bfff35;
+}
+
+.stars {
+    color: #ffd34d;
+    letter-spacing: 2px;
+    margin-bottom: 17px;
+}
+
+.review p {
+    color: #9aa6b7;
+    line-height: 1.7;
+    font-size: 13px;
+}
+
+.review-user {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.avatar {
+    width: 37px;
+    height: 37px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#008cff,#743cff);
+    font-weight: 1000;
+}
+
+.review-user small {
+    color: #69778b;
+}
+
+/* CUSTOM */
+
+.custom {
+    padding: 65px;
+    border-radius: 30px;
+    border: 1px solid #00bfff22;
+    background:
+        linear-gradient(120deg,#061a31,#11103a);
+    position: relative;
+    overflow: hidden;
+}
+
+.custom h2 {
+    font-size: 42px;
+    margin: 10px 0 15px;
+}
+
+.custom p {
+    color: #8290a4;
+    max-width: 650px;
+    line-height: 1.8;
+    margin-bottom: 27px;
+}
+
+/* FOOTER */
+
+footer {
+    padding: 45px 6%;
+    border-top: 1px solid #ffffff09;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #647186;
+    font-size: 12px;
+}
+
+/* MOBILE */
+
+.mobile-menu {
+    display: none;
+}
+
+@media(max-width:1050px) {
+    .nav-links {
+        display: none;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .categories,
+    .products,
+    .steps {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .hero-visual {
+        min-height: 420px;
+    }
+}
+
+@media(max-width:700px) {
+    .navbar {
+        padding: 0 18px;
+    }
+
+    .account {
+        display: none;
+    }
+
+    .hero {
+        padding: 130px 20px 70px;
+    }
+
+    .hero h1 {
+        font-size: 52px;
+        letter-spacing: -3px;
+    }
+
+    .section {
+        padding: 75px 20px;
+    }
+
+    .section-title h2 {
+        font-size: 34px;
+    }
+
+    .categories,
+    .products,
+    .steps,
+    .reviews {
+        grid-template-columns: 1fr;
+    }
+
+    .custom {
+        padding: 40px 25px;
+    }
+
+    .custom h2 {
+        font-size: 32px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TŁO -->
+
+<div class="bg">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+</div>
+
+<div class="grid"></div>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <a href="index.html" class="brand">
+
+        <div class="brand-logo">
+            <span>P</span>
+        </div>
+
+        <div class="brand-name">
+            Printerlase<span>3D</span>
+        </div>
+
+    </a>
+
+
+    <nav class="nav-links">
+
+        <a href="index.html">Strona główna</a>
+        <a href="#produkty">Produkty</a>
+        <a href="#breloki">Breloki</a>
+        <a href="#dodatki">Dodatki</a>
+        <a href="#figurki">Figurki</a>
+        <a href="#jak-dziala">Jak to działa?</a>
+
+    </nav>
+
+
+    <div class="nav-right">
+
+        <a href="konto.html" class="nav-btn account">
+            👤 Konto
+        </a>
+
+        <a href="koszyk.html" class="nav-btn cart">
+            🛒 Koszyk
+            <span class="cart-count" id="cartCount">0</span>
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- HERO -->
+
+<main>
+
+<section class="hero">
+
+    <div>
+
+        <div class="badge">
+            <span class="badge-dot"></span>
+            DRUKUJEMY TWOJE POMYSŁY
+        </div>
+
+
+        <h1>
+            Twój pomysł.
+            <br>
+            <span class="gradient-text">
+                Nasza drukarka.
+            </span>
+        </h1>
+
+
+        <p class="hero-description">
+            Breloki, figurki, dodatki gamingowe,
+            dekoracje i projekty wykonywane
+            specjalnie dla Ciebie.
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a href="#produkty" class="btn btn-primary">
+                🛍️ Zobacz produkty
+            </a>
+
+            <a href="#custom" class="btn btn-secondary">
+                🖨️ Zamów własny projekt
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-visual">
+
+        <div class="hero-logo">
+
+            <div class="logo-symbol">
+                P
+            </div>
+
+            <div class="logo-small">
+                PRINTERLASE3D
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- KATEGORIE -->
+
+<section class="section" id="produkty">
+
+    <div class="section-title">
+
+        <span class="section-label">
+            SKLEP
+        </span>
+
+        <h2>
+            Co chcesz wydrukować?
+        </h2>
+
+    </div>
+
+
+    <div class="categories">
+
+
+        <a href="#breloki" class="category">
+
+            <div class="category-icon">🔑</div>
+
+            <h3>Breloki</h3>
+
+            <p>
+                Personalizowane breloki
+                z własnym napisem,
+                nazwą lub grafiką.
+            </p>
+
+        </a>
+
+
+        <a href="#dodatki" class="category">
+
+            <div class="category-icon">🎮</div>
+
+            <h3>Dodatki</h3>
+
+            <p>
+                Akcesoria gamingowe,
+                uchwyty i praktyczne
+                gadżety 3D.
+            </p>
+
+        </a>
+
+
+        <a href="#figurki" class="category">
+
+            <div class="category-icon">🗿</div>
+
+            <h3>Figurki</h3>
+
+            <p>
+                Figurki kolekcjonerskie,
+                postacie i modele 3D.
+            </p>
+
+        </a>
+
+
+        <a href="#dekoracje" class="category">
+
+            <div class="category-icon">✨</div>
+
+            <h3>Dekoracje</h3>
+
+            <p>
+                Napisy, ozdoby,
+                dekoracje pokoju
+                i własne projekty.
+            </p>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- PRODUKTY -->
+
+<section class="section" id="breloki">
+
+    <div class="section-title">
+
+        <span class="section-label">
+            BRELOKI
+        </span>
+
+        <h2>
+            Najlepsze breloki
+        </h2>
+
+    </div>
+
+
+    <div class="products">
+
+
+        <!-- 1 -->
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>🔑</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    BRELOK 3D
+                </div>
+
+                <h3>
+                    FRIENDZ
+                </h3>
+
+                <p>
+                    Personalizowany brelok
+                    z napisem FRIENDZ.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        12,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 35 min
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=friendz"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('friendz','Brelok FRIENDZ',12)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- 2 -->
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>⚡</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    BRELOK
+                </div>
+
+                <h3>
+                    Neon Logo
+                </h3>
+
+                <p>
+                    Mały brelok z neonowym
+                    symbolem Printerlase3D.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        14,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 40 min
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=neon"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('neon','Neon Logo',14)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- 3 -->
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>👾</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    GAMING
+                </div>
+
+                <h3>
+                    Creeper
+                </h3>
+
+                <p>
+                    Minecraftowy brelok
+                    do plecaka lub kluczy.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        10,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 30 min
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=creeper"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('creeper','Brelok Creeper',10)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- 4 -->
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>★</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    CUSTOM
+                </div>
+
+                <h3>
+                    Twój napis
+                </h3>
+
+                <p>
+                    Własny napis,
+                    nazwa lub pseudonim.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        od 12 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 30–60 min
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=custom"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('custom','Brelok Custom',12)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- DODATKI -->
+
+<section class="section" id="dodatki">
+
+    <div class="section-title">
+
+        <span class="section-label">
+            DODATKI
+        </span>
+
+        <h2>
+            Gadżety 3D
+        </h2>
+
+    </div>
+
+
+    <div class="products">
+
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>🎮</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    GAMING
+                </div>
+
+                <h3>
+                    Uchwyt na pada
+                </h3>
+
+                <p>
+                    Prosty stojak na
+                    kontroler gamingowy.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        25,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 2 h
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=pad"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('pad','Uchwyt na pada',25)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>📱</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    AKCESORIA
+                </div>
+
+                <h3>
+                    Stojak na telefon
+                </h3>
+
+                <p>
+                    Mały stojak na biurko
+                    wykonany z PLA.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        18,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 90 min
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=telefon"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('telefon','Stojak na telefon',18)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>🧩</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    ORGANIZER
+                </div>
+
+                <h3>
+                    Organizer biurkowy
+                </h3>
+
+                <p>
+                    Na kable, długopisy
+                    i małe rzeczy.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        22,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 2 h
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=organizer"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('organizer','Organizer biurkowy',22)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>🔧</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    PRAKTYCZNE
+                </div>
+
+                <h3>
+                    Uchwyt custom
+                </h3>
+
+                <p>
+                    Uchwyt dopasowany
+                    do Twojego projektu.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        od 20 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 2–4 h
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=uchwyt"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('uchwyt','Uchwyt Custom',20)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- FIGURKI -->
+
+<section class="section" id="figurki">
+
+    <div class="section-title">
+
+        <span class="section-label">
+            FIGURKI
+        </span>
+
+        <h2>
+            Modele 3D
+        </h2>
+
+    </div>
+
+
+    <div class="products">
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>🤖</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    FIGURKA
+                </div>
+
+                <h3>
+                    Robot Mini
+                </h3>
+
+                <p>
+                    Mała figurka dekoracyjna.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        25,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 3 h
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=robot"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('robot','Robot Mini',25)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="product">
+
+            <div class="product-image">
+                <span>🐉</span>
+            </div>
+
+            <div class="product-body">
+
+                <div class="product-category">
+                    FIGURKA
+                </div>
+
+                <h3>
+                    Smok 3D
+                </h3>
+
+                <p>
+                    Ozdobna figurka smoka.
+                </p>
+
+                <div class="product-meta">
+
+                    <span class="price">
+                        35,00 zł
+                    </span>
+
+                    <span class="time">
+                        ⏱ 5 h
+                    </span>
+
+                </div>
+
+                <div class="product-actions">
+
+                    <a
+                        href="produkt.html?id=smok"
+                        class="details"
+                    >
+                        Zobacz
+                    </a>
+
+                    <button
+                        class="add-cart"
+                        onclick="addProduct('smok','Smok 3D',35)"
+                    >
+                        + Koszyk
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+    </div>
+
+</section>
+
+
+<!-- DEKORACJE -->
+
+<section class="section" id="dekoracje">
+
+    <div class="section-title">
+
+        <span class="section-label">
+            DEKORACJE
+        </span>
+
+        <h2>
+            Zrób coś wyjątkowego
+        </h2>
+
+    </div>
+
+
+    <div class="custom">
+
+        <span class="section-label">
+            CUSTOM 3D
+        </span>
+
+        <h2>
+            Masz własny pomysł?
+        </h2>
+
+        <p>
+            Możemy przygotować dla Ciebie
+            własny napis, logo, figurkę,
+            uchwyt albo praktyczny element.
+            Podeślij model lub opisz pomysł.
+        </p>
+
+        <a href="checkout.html" class="btn btn-primary">
+            🖨️ Zamów własny projekt
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- JAK TO DZIAŁA -->
+
+<section class="section" id="jak-dziala">
+
+    <div class="section-title">
+
+        <span class="section-label">
+            PROCES
+        </span>
+
+        <h2>
+            Jak to działa?
+        </h2>
+
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3>Wybierasz produkt</h3>
+            <p>
+                Wybierz interesujący Cię
+                model z naszej oferty.
+            </p>
+        </div>
+
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3>Dodajesz do koszyka</h3>
+            <p>
+                Dodaj produkt i przejdź
+                do podsumowania zamówienia.
+            </p>
+        </div>
+
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3>Wybierasz płatność</h3>
+            <p>
+                W checkout możesz wybrać
+                dostępną metodę płatności.
+            </p>
+        </div>
+
+
+        <div class="step">
+            <div class="step-number">4</div>
+            <h3>Drukujemy</h3>
+            <p>
+                Po zamówieniu przygotowujemy
+                Twój wydruk i wysyłkę.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- OPINIE -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <span class="section-label">
+            OPINIE
+        </span>
+
+        <h2>
+            Co mówią klienci?
+        </h2>
+
+    </div>
+
+
+    <div class="reviews">
+
+
+        <div class="review">
+
+            <div class="stars">
+                ★★★★★
+            </div>
+
+            <p>
+                „Brelok wyszedł mega dobrze,
+                napis jest wyraźny i wygląda
+                dużo lepiej niż się spodziewałem.”
+            </p>
+
+            <div class="review-user">
+
+                <div class="avatar">
+                    K
+                </div>
+
+                <div>
+                    <b>Kacper</b><br>
+                    <small>Zweryfikowany zakup</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="review">
+
+            <div class="stars">
+                ★★★★★
+            </div>
+
+            <p>
+                „Bardzo fajna jakość wydruku.
+                Kolor dokładnie taki jak chciałem.
+                Na pewno zamówię jeszcze raz.”
+            </p>
+
+            <div class="review-user">
+
+                <div class="avatar">
+                    M
+                </div>
+
+                <div>
+                    <b>Michał</b><br>
+                    <small>Zweryfikowany zakup</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="review">
+
+            <div class="stars">
+                ★★★★★
+            </div>
+
+            <p>
+                „Zamówiłem własny projekt.
+                Wszystko wyglądało super,
+                a sam produkt jest bardzo solidny.”
+            </p>
+
+            <div class="review-user">
+
+                <div class="avatar">
+                    O
+                </div>
+
+                <div>
+                    <b>Olek</b><br>
+                    <small>Zweryfikowany zakup</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            <span>P</span>
+        </div>
+
+        <div class="brand-name">
+            Printerlase<span>3D</span>
+        </div>
+
+    </div>
+
+
+    <div>
+        © 2026 Printerlase3D
+    </div>
+
+
+    <div>
+        Wydruki 3D • Polska
+    </div>
+
+</footer>
+
+
+<script>
+
+/* ==========================================
+   KOSZYK
+========================================== */
+
+function getCart() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("printerlase_cart")
+        ) || [];
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+function updateCartCount() {
+
+    const cart = getCart();
+
+    const count = cart.reduce(
+        (sum, item) =>
+            sum + (Number(item.quantity) || 1),
+        0
+    );
+
+    const element =
+        document.getElementById("cartCount");
+
+    if(element) {
+
+        element.textContent = count;
+
+    }
+
+}
+
+
+function addProduct(id, name, price) {
+
+    const cart = getCart();
+
+    const existing =
+        cart.find(item => item.id === id);
+
+    if(existing) {
+
+        existing.quantity =
+            (existing.quantity || 1) + 1;
+
+    } else {
+
+        cart.push({
+
+            id: id,
+
+            name: name,
+
+            price: Number(price),
+
+            quantity: 1
+
+        });
+
+    }
+
+    saveCart(cart);
+
+    updateCartCount();
+
+    showAdded();
+
+}
+
+
+function showAdded() {
+
+    const notification =
+        document.createElement("div");
+
+    notification.innerHTML =
+        "✓ Produkt dodany do koszyka";
+
+    notification.style.position = "fixed";
+    notification.style.right = "25px";
+    notification.style.bottom = "25px";
+    notification.style.zIndex = "9999";
+    notification.style.padding = "15px 20px";
+    notification.style.borderRadius = "14px";
+    notification.style.background =
+        "linear-gradient(100deg,#008cff,#754cff)";
+    notification.style.color = "white";
+    notification.style.fontWeight = "900";
+    notification.style.boxShadow =
+        "0 15px 50px #0009";
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+
+        notification.style.opacity = "0";
+        notification.style.transform =
+            "translateY(15px)";
+
+        notification.style.transition =
+            ".3s";
+
+        setTimeout(
+            () => notification.remove(),
+            300
+        );
+
+    }, 1500);
+
+}
+
+
+/* START */
+
+updateCartCount();
+
+
+/* ==========================================
+   ANIMACJE ELEMENTÓW
+========================================== */
+
+const animated =
+    document.querySelectorAll(
+        ".category, .product, .step, .review, .custom"
+    );
+
+
+const observer =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if(entry.isIntersecting) {
+
+                    entry.target.style.opacity = "1";
+
+                    entry.target.style.transform =
+                        "translateY(0)";
+
+                }
+
+            });
+
+        },
+        {
+            threshold: .12
+        }
+    );
+
+
+animated.forEach((element, index) => {
+
+    element.style.opacity = "0";
+
+    element.style.transform =
+        "translateY(30px)";
+
+    element.style.transition =
+        `opacity .6s ease ${index * .04}s,
+         transform .6s ease ${index * .04}s`;
+
+    observer.observe(element);
+
+});
+
+</script>
+
+</body>
+</html>
