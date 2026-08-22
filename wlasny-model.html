@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Własny model 3D — Printerlase3D</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    color:white;
+    font-family:Inter,Arial,sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(0,180,255,.18),transparent 30%),
+        radial-gradient(circle at 90% 80%,rgba(125,60,255,.18),transparent 30%),
+        #030712;
+    overflow-x:hidden;
+}
+
+/* TŁO */
+
+.bg{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-5;
+    overflow:hidden;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.28;
+    animation:float 10s infinite alternate ease-in-out;
+}
+
+.orb1{
+    width:400px;
+    height:400px;
+    background:#008cff;
+    left:-150px;
+    top:-150px;
+}
+
+.orb2{
+    width:350px;
+    height:350px;
+    background:#743cff;
+    right:-130px;
+    bottom:-100px;
+    animation-delay:2s;
+}
+
+@keyframes float{
+    to{
+        transform:translate(70px,50px) scale(1.12);
+    }
+}
+
+/* NAVBAR */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:75px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 5%;
+    z-index:1000;
+    background:rgba(3,7,18,.75);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:white;
+    text-decoration:none;
+    font-weight:1000;
+    font-size:19px;
+}
+
+.brand-logo{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:linear-gradient(135deg,#00d9ff,#187cff,#873cff);
+    box-shadow:0 0 25px #008cff55;
+}
+
+.brand-logo span{
+    font-size:22px;
+    font-weight:1000;
+}
+
+.brand-name span{
+    background:linear-gradient(90deg,#fff,#28d9ff,#9161ff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.nav-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.nav-btn{
+    color:white;
+    text-decoration:none;
+    padding:10px 14px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.05);
+    font-size:13px;
+    font-weight:900;
+    transition:.25s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-2px);
+    border-color:#00bfff66;
+}
+
+/* MAIN */
+
+.page{
+    max-width:1200px;
+    margin:auto;
+    padding:125px 25px 70px;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.label{
+    color:#35d8ff;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:3px;
+}
+
+.header h1{
+    margin:12px 0;
+    font-size:clamp(40px,6vw,65px);
+    letter-spacing:-3px;
+}
+
+.gradient{
+    background:linear-gradient(90deg,#00e5ff,#238cff,#974cff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.header p{
+    max-width:650px;
+    margin:auto;
+    color:#8290a4;
+    line-height:1.7;
+}
+
+/* GRID */
+
+.content{
+    display:grid;
+    grid-template-columns:1fr 390px;
+    gap:22px;
+}
+
+.box{
+    background:rgba(7,17,31,.85);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:25px;
+    padding:28px;
+    box-shadow:0 25px 80px rgba(0,0,0,.35);
+    backdrop-filter:blur(15px);
+}
+
+.box h2{
+    margin:0 0 23px;
+}
+
+/* UPLOAD */
+
+.upload{
+    position:relative;
+    border:2px dashed rgba(0,191,255,.3);
+    border-radius:20px;
+    padding:45px 20px;
+    text-align:center;
+    background:rgba(0,140,255,.04);
+    transition:.3s;
+    cursor:pointer;
+}
+
+.upload:hover,
+.upload.drag{
+    border-color:#00d9ff;
+    background:rgba(0,180,255,.08);
+    transform:translateY(-2px);
+}
+
+.upload-icon{
+    font-size:55px;
+    margin-bottom:12px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+}
+
+.upload small{
+    display:block;
+    margin-top:9px;
+    color:#6f7d91;
+}
+
+#file{
+    display:none;
+}
+
+.file-name{
+    margin-top:15px;
+    color:#35d8ff;
+    font-size:13px;
+    font-weight:900;
+    word-break:break-word;
+}
+
+/* FORM */
+
+.field{
+    margin-top:22px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:8px;
+    color:#aeb9c9;
+    font-size:12px;
+    font-weight:900;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.1);
+    outline:none;
+    background:#050c18;
+    color:white;
+    font-family:inherit;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#00bfff;
+    box-shadow:0 0 20px rgba(0,191,255,.1);
+}
+
+/* COLOR */
+
+.colors{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:9px;
+}
+
+.color{
+    padding:12px 5px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:11px;
+    background:#050c18;
+    cursor:pointer;
+    font-size:11px;
+    transition:.2s;
+}
+
+.color:hover{
+    transform:translateY(-2px);
+}
+
+.color.active{
+    border-color:#00d9ff;
+    background:rgba(0,191,255,.1);
+    box-shadow:0 0 20px rgba(0,191,255,.1);
+}
+
+.dot{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    margin:0 auto 7px;
+    border:1px solid rgba(255,255,255,.2);
+}
+
+/* PRICE */
+
+.summary{
+    position:sticky;
+    top:100px;
+}
+
+.summary-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    color:#8996aa;
+    font-size:13px;
+}
+
+.summary-row strong{
+    color:white;
+}
+
+.total{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:22px;
+    font-size:25px;
+    font-weight:1000;
+}
+
+.price-note{
+    margin-top:12px;
+    color:#69778b;
+    font-size:11px;
+    line-height:1.6;
+}
+
+.add{
+    width:100%;
+    margin-top:25px;
+    padding:16px;
+    border:0;
+    border-radius:14px;
+    color:white;
+    font-size:14px;
+    font-weight:1000;
+    cursor:pointer;
+    background:linear-gradient(100deg,#008cff,#754cff);
+    box-shadow:0 15px 40px rgba(0,140,255,.25);
+    transition:.3s;
+}
+
+.add:hover{
+    transform:translateY(-4px);
+    box-shadow:0 20px 55px rgba(0,140,255,.4);
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:14px;
+    padding:13px;
+    border-radius:12px;
+    color:#aab5c5;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,.07);
+    background:#ffffff05;
+}
+
+/* INFO */
+
+.info{
+    margin-top:22px;
+    padding:17px;
+    border-radius:15px;
+    background:rgba(0,180,255,.05);
+    border:1px solid rgba(0,191,255,.12);
+    color:#8190a5;
+    font-size:11px;
+    line-height:1.7;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    z-index:9999;
+    padding:15px 20px;
+    border-radius:14px;
+    background:linear-gradient(100deg,#008cff,#754cff);
+    color:white;
+    font-weight:900;
+    box-shadow:0 15px 50px #0009;
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+    .content{
+        grid-template-columns:1fr;
+    }
+
+    .summary{
+        position:static;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:0 15px;
+    }
+
+    .nav-btn.account{
+        display:none;
+    }
+
+    .page{
+        padding:110px 15px 50px;
+    }
+
+    .box{
+        padding:20px;
+    }
+
+    .colors{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+</div>
+
+<header class="navbar">
+
+    <a href="index.html" class="brand">
+
+        <div class="brand-logo">
+            <span>P</span>
+        </div>
+
+        <div class="brand-name">
+            Printerlase<span>3D</span>
+        </div>
+
+    </a>
+
+    <div class="nav-buttons">
+
+        <a href="index.html" class="nav-btn">
+            🏠 Sklep
+        </a>
+
+        <a href="koszyk.html" class="nav-btn">
+            🛒 Koszyk
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <div class="header">
+
+        <div class="label">
+            CUSTOM 3D
+        </div>
+
+        <h1>
+            Twój <span class="gradient">własny model 3D</span>
+        </h1>
+
+        <p>
+            Masz własny plik STL, OBJ lub 3MF?
+            Prześlij go, wybierz parametry wydruku
+            i dodaj projekt do koszyka.
+        </p>
+
+    </div>
+
+
+    <div class="content">
+
+
+        <!-- LEWA STRONA -->
+
+        <div class="box">
+
+            <h2>🖨️ Konfiguracja wydruku</h2>
+
+
+            <!-- PLIK -->
+
+            <label class="upload" id="uploadBox">
+
+                <input
+                    id="file"
+                    type="file"
+                    accept=".stl,.obj,.3mf"
+                >
+
+                <div class="upload-icon">
+                    📁
+                </div>
+
+                <strong>
+                    Kliknij lub przeciągnij plik
+                </strong>
+
+                <small>
+                    STL • OBJ • 3MF • maks. 50 MB
+                </small>
+
+                <div
+                    class="file-name"
+                    id="fileName"
+                >
+                    Nie wybrano pliku
+                </div>
+
+            </label>
+
+
+            <!-- OPIS -->
+
+            <div class="field">
+
+                <label>
+                    Opis projektu
+                </label>
+
+                <textarea
+                    id="description"
+                    placeholder="Np. brelok z napisem Czat, 6 cm szerokości..."
+                ></textarea>
+
+            </div>
+
+
+            <!-- KOLOR -->
+
+            <div class="field">
+
+                <label>
+                    Kolor filamentu
+                </label>
+
+                <div class="colors">
+
+                    <div
+                        class="color active"
+                        data-color="Czarny"
+                    >
+                        <div
+                            class="dot"
+                            style="background:#111"
+                        ></div>
+                        Czarny
+                    </div>
+
+                    <div
+                        class="color"
+                        data-color="Biały"
+                    >
+                        <div
+                            class="dot"
+                            style="background:#fff"
+                        ></div>
+                        Biały
+                    </div>
+
+                    <div
+                        class="color"
+                        data-color="Niebieski"
+                    >
+                        <div
+                            class="dot"
+                            style="background:#1677ff"
+                        ></div>
+                        Niebieski
+                    </div>
+
+                    <div
+                        class="color"
+                        data-color="Czerwony"
+                    >
+                        <div
+                            class="dot"
+                            style="background:#e52d2d"
+                        ></div>
+                        Czerwony
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROZMIAR -->
+
+            <div class="field">
+
+                <label>
+                    Rozmiar
+                </label>
+
+                <select id="size">
+
+                    <option value="standard">
+                        Standardowy — 100%
+                    </option>
+
+                    <option value="small">
+                        Mały — 70%
+                    </option>
+
+                    <option value="large">
+                        Duży — 150%
+                    </option>
+
+                    <option value="custom">
+                        Własny rozmiar
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ILOŚĆ -->
+
+            <div class="field">
+
+                <label>
+                    Ilość
+                </label>
+
+                <input
+                    id="quantity"
+                    type="number"
+                    min="1"
+                    max="50"
+                    value="1"
+                >
+
+            </div>
+
+
+            <div class="info">
+                💡 <strong>Ważne:</strong>
+                Cena wyświetlana poniżej jest tylko
+                orientacyjna. Ostateczna cena może zależeć
+                od wielkości modelu, czasu druku i ilości filamentu.
+            </div>
+
+        </div>
+
+
+        <!-- PRAWA STRONA -->
+
+        <aside class="box summary">
+
+            <div class="summary-title">
+
+                <h2>📦 Podsumowanie</h2>
+
+            </div>
+
+
+            <div class="summary-row">
+                <span>Model</span>
+                <strong id="summaryFile">
+                    Brak pliku
+                </strong>
+            </div>
+
+
+            <div class="summary-row">
+                <span>Kolor</span>
+                <strong id="summaryColor">
+                    Czarny
+                </strong>
+            </div>
+
+
+            <div class="summary-row">
+                <span>Rozmiar</span>
+                <strong id="summarySize">
+                    Standard
+                </strong>
+            </div>
+
+
+            <div class="summary-row">
+                <span>Ilość</span>
+                <strong id="summaryQuantity">
+                    1
+                </strong>
+            </div>
+
+
+            <div class="total">
+
+                <span>
+                    Od
+                </span>
+
+                <span id="price">
+                    20,00 zł
+                </span>
+
+            </div>
+
+
+            <div class="price-note">
+                Cena jest orientacyjna. Po przesłaniu
+                projektu możemy skontaktować się w celu
+                potwierdzenia dokładnej ceny.
+            </div>
+
+
+            <button
+                class="add"
+                onclick="addCustomModel()"
+            >
+                🛒 Dodaj model do koszyka
+            </button>
+
+
+            <a
+                href="koszyk.html"
+                class="back"
+            >
+                Przejdź do koszyka →
+            </a>
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+<div
+    class="toast"
+    id="toast"
+>
+    ✓ Dodano własny model do koszyka
+</div>
+
+
+<script>
+
+/* =========================
+   ZMIENNE
+========================= */
+
+let selectedColor = "Czarny";
+
+const fileInput =
+    document.getElementById("file");
+
+const uploadBox =
+    document.getElementById("uploadBox");
+
+const fileName =
+    document.getElementById("fileName");
+
+const summaryFile =
+    document.getElementById("summaryFile");
+
+const quantityInput =
+    document.getElementById("quantity");
+
+const sizeInput =
+    document.getElementById("size");
+
+const priceElement =
+    document.getElementById("price");
+
+
+/* =========================
+   PLIK
+========================= */
+
+fileInput.addEventListener(
+    "change",
+    handleFile
+);
+
+
+function handleFile(){
+
+    const file = fileInput.files[0];
+
+    if(!file){
+
+        fileName.textContent =
+            "Nie wybrano pliku";
+
+        summaryFile.textContent =
+            "Brak pliku";
+
+        return;
+    }
+
+
+    const allowed = [
+        "stl",
+        "obj",
+        "3mf"
+    ];
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    if(
+        !allowed.includes(extension)
+    ){
+
+        alert(
+            "Dozwolone pliki: STL, OBJ oraz 3MF."
+        );
+
+        fileInput.value = "";
+
+        return;
+    }
+
+
+    if(
+        file.size > 50 * 1024 * 1024
+    ){
+
+        alert(
+            "Plik może mieć maksymalnie 50 MB."
+        );
+
+        fileInput.value = "";
+
+        return;
+    }
+
+
+    fileName.textContent =
+        "✓ " + file.name;
+
+    summaryFile.textContent =
+        file.name;
+
+}
+
+
+/* =========================
+   DRAG & DROP
+========================= */
+
+[
+    "dragenter",
+    "dragover"
+].forEach(eventName => {
+
+    uploadBox.addEventListener(
+        eventName,
+        event => {
+
+            event.preventDefault();
+
+            uploadBox.classList.add("drag");
+
+        }
+    );
+
+});
+
+
+[
+    "dragleave",
+    "drop"
+].forEach(eventName => {
+
+    uploadBox.addEventListener(
+        eventName,
+        event => {
+
+            event.preventDefault();
+
+            uploadBox.classList.remove("drag");
+
+        }
+    );
+
+});
+
+
+uploadBox.addEventListener(
+    "drop",
+    event => {
+
+        const files =
+            event.dataTransfer.files;
+
+        if(files.length){
+
+            fileInput.files = files;
+
+            handleFile();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   KOLOR
+========================= */
+
+document
+.querySelectorAll(".color")
+.forEach(element => {
+
+    element.addEventListener(
+        "click",
+        () => {
+
+            document
+            .querySelectorAll(".color")
+            .forEach(x =>
+                x.classList.remove("active")
+            );
+
+            element.classList.add("active");
+
+            selectedColor =
+                element.dataset.color;
+
+            document
+            .getElementById("summaryColor")
+            .textContent =
+                selectedColor;
+
+        }
+    );
+
+});
+
+
+/* =========================
+   CENA
+========================= */
+
+function calculatePrice(){
+
+    let base = 20;
+
+    const size =
+        sizeInput.value;
+
+    if(size === "small"){
+        base = 15;
+    }
+
+    if(size === "large"){
+        base = 35;
+    }
+
+    if(size === "custom"){
+        base = 25;
+    }
+
+
+    let quantity =
+        Number(quantityInput.value);
+
+    if(!quantity || quantity < 1){
+        quantity = 1;
+    }
+
+    if(quantity > 50){
+        quantity = 50;
+        quantityInput.value = 50;
+    }
+
+
+    const total =
+        base * quantity;
+
+
+    priceElement.textContent =
+        total
+        .toFixed(2)
+        .replace(".", ",")
+        + " zł";
+
+
+    document
+    .getElementById("summaryQuantity")
+    .textContent =
+        quantity;
+
+
+    let sizeText =
+        "Standard";
+
+    if(size === "small"){
+        sizeText = "Mały — 70%";
+    }
+
+    if(size === "large"){
+        sizeText = "Duży — 150%";
+    }
+
+    if(size === "custom"){
+        sizeText = "Własny";
+    }
+
+
+    document
+    .getElementById("summarySize")
+    .textContent =
+        sizeText;
+
+
+    return total;
+
+}
+
+
+sizeInput.addEventListener(
+    "change",
+    calculatePrice
+);
+
+quantityInput.addEventListener(
+    "input",
+    calculatePrice
+);
+
+
+/* =========================
+   KOSZYK
+========================= */
+
+function getCart(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                "printerlase_cart"
+            )
+        ) || [];
+
+    }catch{
+
+        return [];
+
+    }
+
+}
+
+
+function saveCart(cart){
+
+    localStorage.setItem(
+        "printerlase_cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =========================
+   DODAWANIE
+========================= */
+
+function addCustomModel(){
+
+    const file =
+        fileInput.files[0];
+
+    if(!file){
+
+        alert(
+            "Najpierw wybierz plik STL, OBJ lub 3MF."
+        );
+
+        return;
+
+    }
+
+
+    const description =
+        document
+        .getElementById("description")
+        .value
+        .trim();
+
+
+    const quantity =
+        Math.max(
+            1,
+            Math.min(
+                50,
+                Number(quantityInput.value) || 1
+            )
+        );
+
+
+    const size =
+        sizeInput.value;
+
+
+    const price =
+        calculatePrice();
+
+
+    const cart =
+        getCart();
+
+
+    const customId =
+        "custom-" +
+        Date.now();
+
+
+    cart.push({
+
+        id: customId,
+
+        name:
+            "Własny model 3D — " +
+            file.name,
+
+        price: price / quantity,
+
+        quantity: quantity,
+
+        custom: true,
+
+        fileName: file.name,
+
+        fileType:
+            file.name
+            .split(".")
+            .pop()
+            .toLowerCase(),
+
+        color: selectedColor,
+
+        size: size,
+
+        description: description,
+
+        /*
+         * UWAGA:
+         * Przeglądarka nie zapisuje samego
+         * pliku do localStorage.
+         * Zachowujemy nazwę pliku i dane
+         * konfiguracji.
+         */
+
+        date:
+            new Date().toISOString()
+
+    });
+
+
+    saveCart(cart);
+
+
+    showToast();
+
+
+    setTimeout(() => {
+
+        window.location.href =
+            "koszyk.html";
+
+    }, 800);
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.classList.add("show");
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 1800);
+
+}
+
+
+/* START */
+
+calculatePrice();
+
+</script>
+
+</body>
+</html>
