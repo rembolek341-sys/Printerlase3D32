@@ -6,26 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Printerlase3D — Sklep 3D</title>
-<meta name="description" content="Printerlase3D — nowoczesny sklep z produktami drukowanymi w 3D.">
+
+<meta name="description" content="Printerlase3D — breloki, dodatki i produkty drukowane w 3D.">
 
 <style>
-:root{
-    --bg:#020711;
-    --panel:#071222;
-    --panel2:#0b1729;
-    --line:rgba(255,255,255,.08);
-    --text:#fff;
-    --muted:#8190a6;
-    --blue:#00c8ff;
-    --purple:#7654ff;
-    --green:#42e6a5;
-    --red:#ff5575;
-}
-
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
 html{
@@ -33,14 +21,10 @@ html{
 }
 
 body{
-    min-height:100vh;
-    overflow-x:hidden;
     font-family:Inter,Arial,sans-serif;
-    color:var(--text);
-    background:
-        radial-gradient(circle at 10% 0%,rgba(0,200,255,.12),transparent 28%),
-        radial-gradient(circle at 90% 10%,rgba(118,84,255,.14),transparent 30%),
-        var(--bg);
+    background:#030712;
+    color:#fff;
+    overflow-x:hidden;
 }
 
 button,
@@ -49,43 +33,46 @@ select{
     font:inherit;
 }
 
-button{
-    cursor:pointer;
-}
-
+button,
 a{
-    color:inherit;
-    text-decoration:none;
+    -webkit-tap-highlight-color:transparent;
 }
-
-/* =========================
-   BACKGROUND
-========================= */
 
 body::before{
     content:"";
     position:fixed;
     inset:0;
-    z-index:-2;
-    pointer-events:none;
-    opacity:.25;
-    background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-    background-size:45px 45px;
+    z-index:-3;
+    background:
+        radial-gradient(circle at 15% 10%,rgba(0,174,255,.16),transparent 28%),
+        radial-gradient(circle at 85% 15%,rgba(111,61,255,.16),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(0,102,255,.08),transparent 35%);
 }
 
 body::after{
     content:"";
     position:fixed;
-    width:600px;
-    height:600px;
-    right:-250px;
-    bottom:-250px;
-    z-index:-3;
-    border-radius:50%;
-    background:rgba(0,150,255,.08);
-    filter:blur(100px);
+    inset:0;
+    z-index:-2;
+    pointer-events:none;
+    opacity:.15;
+    background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:45px 45px;
+}
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#020611;
+}
+
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(#00d9ff,#703cff);
+    border-radius:20px;
 }
 
 /* =========================
@@ -94,120 +81,165 @@ body::after{
 
 .promo{
     min-height:42px;
-    padding:9px 15px;
+    padding:8px 15px;
+
     display:flex;
     align-items:center;
     justify-content:center;
     flex-wrap:wrap;
-    gap:8px;
+    gap:7px;
+
     text-align:center;
-    font-size:11px;
-    font-weight:900;
+
     background:linear-gradient(
         100deg,
-        #006cff,
+        #006eff,
         #00cfff,
-        #6b43ff,
-        #006cff
+        #673cff,
+        #006eff
     );
+
     background-size:300% 100%;
     animation:promo 8s linear infinite;
+
+    font-size:11px;
+    font-weight:900;
 }
 
 @keyframes promo{
-    to{
-        background-position:300% 0;
-    }
+    from{background-position:0;}
+    to{background-position:300%;}
 }
 
 .promoCode{
     padding:6px 10px;
-    border-radius:8px;
+    border-radius:7px;
     background:rgba(0,0,0,.25);
     letter-spacing:1px;
 }
 
 /* =========================
-   NAV
+   NAVBAR
 ========================= */
 
 .nav{
     position:sticky;
     top:0;
     z-index:100;
-    min-height:72px;
-    padding:10px 5%;
+
+    min-height:74px;
+    padding:12px 5%;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:20px;
+
     background:rgba(2,7,17,.78);
-    border-bottom:1px solid var(--line);
-    backdrop-filter:blur(18px);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid rgba(255,255,255,.07);
 }
 
 .logo{
     display:flex;
     align-items:center;
     gap:10px;
+
+    color:white;
+    text-decoration:none;
+
     font-size:20px;
     font-weight:1000;
 }
 
 .logoIcon{
-    width:42px;
-    height:42px;
+    width:43px;
+    height:43px;
+
     display:grid;
     place-items:center;
+
     border-radius:13px;
-    background:linear-gradient(135deg,#00dfff,#087cff,#7545ff);
-    box-shadow:0 0 35px rgba(0,190,255,.25);
+
+    background:linear-gradient(
+        135deg,
+        #00ddff,
+        #087dff,
+        #783cff
+    );
+
+    box-shadow:0 0 35px rgba(0,180,255,.25);
 }
 
 .logo span{
-    color:#27dfff;
+    color:#28ddff;
 }
 
-.navRight{
+.navLinks{
     display:flex;
-    align-items:center;
     gap:8px;
 }
 
-.navBtn{
+.navButton{
     position:relative;
-    min-height:40px;
-    padding:10px 13px;
-    border:1px solid var(--line);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:11px 14px;
+
     border-radius:10px;
-    color:white;
-    background:#091528;
+
+    color:#fff;
+    text-decoration:none;
+
+    border:1px solid rgba(255,255,255,.07);
+
+    background:#0a1729;
+
+    cursor:pointer;
+
     font-size:10px;
     font-weight:900;
+
     transition:.2s;
 }
 
-.navBtn:hover{
+.navButton:hover{
     transform:translateY(-2px);
-    background:#10233c;
+    background:#12243c;
 }
 
-.cartBtn{
-    border:0;
-    background:linear-gradient(100deg,#008cff,#7140ff);
+.account{
+    background:linear-gradient(100deg,#007dff,#6340ff);
+}
+
+.admin{
+    background:linear-gradient(100deg,#512cff,#008cff);
+}
+
+.cartButton{
+    background:linear-gradient(100deg,#008cff,#703cff);
 }
 
 .cartCount{
     position:absolute;
     top:-7px;
     right:-7px;
-    min-width:21px;
-    height:21px;
+
+    min-width:20px;
+    height:20px;
+
     padding:0 5px;
+
     display:grid;
     place-items:center;
+
     border-radius:50%;
-    background:#ff4167;
+
+    background:#ff3d63;
+
     font-size:9px;
 }
 
@@ -216,76 +248,90 @@ body::after{
 ========================= */
 
 .hero{
-    position:relative;
-    min-height:650px;
+    min-height:610px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     padding:80px 5%;
+
     text-align:center;
 }
 
-.heroGlow{
-    position:absolute;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    background:rgba(0,180,255,.1);
-    filter:blur(110px);
-    pointer-events:none;
-}
-
 .heroContent{
-    max-width:900px;
-    position:relative;
+    width:min(900px,100%);
 }
 
 .badge{
     display:inline-flex;
     align-items:center;
     gap:8px;
+
     padding:8px 13px;
-    border:1px solid rgba(0,210,255,.2);
+
     border-radius:999px;
-    color:#55e4ff;
-    background:rgba(0,200,255,.06);
+
+    color:#62e5ff;
+
+    background:rgba(0,190,255,.07);
+
+    border:1px solid rgba(0,190,255,.18);
+
     font-size:9px;
-    font-weight:1000;
+    font-weight:900;
 }
 
 .dot{
     width:7px;
     height:7px;
+
     border-radius:50%;
-    background:#41e6ff;
-    box-shadow:0 0 15px #41e6ff;
+
+    background:#3fe6ff;
+    box-shadow:0 0 15px #3fe6ff;
 }
 
 .hero h1{
     margin-top:25px;
-    font-size:clamp(50px,8vw,94px);
-    line-height:.94;
+
+    font-size:clamp(48px,8vw,92px);
+
+    line-height:.95;
+
     letter-spacing:-5px;
+
     font-weight:1000;
 }
 
 .gradient{
-    background:linear-gradient(100deg,#fff,#26dcff,#725bff);
+    background:linear-gradient(
+        100deg,
+        #fff,
+        #2ee1ff,
+        #6578ff
+    );
+
     -webkit-background-clip:text;
     background-clip:text;
+
     color:transparent;
 }
 
-.hero p{
+.heroText{
     max-width:650px;
+
     margin:25px auto 0;
-    color:var(--muted);
-    line-height:1.7;
+
+    color:#8995a8;
+
     font-size:14px;
+    line-height:1.7;
 }
 
 .heroButtons{
     margin-top:30px;
+
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
@@ -293,25 +339,40 @@ body::after{
 }
 
 .heroButton{
-    padding:15px 21px;
+    padding:15px 22px;
+
     border-radius:12px;
-    border:1px solid var(--line);
+
+    text-decoration:none;
+
     font-size:10px;
     font-weight:1000;
+
     transition:.2s;
+}
+
+.primary{
+    color:#fff;
+
+    background:linear-gradient(
+        100deg,
+        #008cff,
+        #703cff
+    );
+
+    box-shadow:0 15px 45px rgba(0,120,255,.18);
+}
+
+.secondary{
+    color:#fff;
+
+    background:#091527;
+
+    border:1px solid rgba(255,255,255,.08);
 }
 
 .heroButton:hover{
     transform:translateY(-3px);
-}
-
-.heroPrimary{
-    border:0;
-    background:linear-gradient(100deg,#008cff,#7140ff);
-}
-
-.heroSecondary{
-    background:#091528;
 }
 
 /* =========================
@@ -320,20 +381,27 @@ body::after{
 
 .stats{
     width:min(900px,90%);
-    margin:-35px auto 0;
+    margin:-25px auto 0;
+
     display:grid;
     grid-template-columns:repeat(3,1fr);
+
     overflow:hidden;
-    border:1px solid var(--line);
+
     border-radius:18px;
-    background:rgba(7,18,34,.85);
+
+    background:rgba(7,17,32,.85);
+
+    border:1px solid rgba(255,255,255,.07);
+
     backdrop-filter:blur(15px);
 }
 
 .stat{
     padding:22px;
     text-align:center;
-    border-right:1px solid var(--line);
+
+    border-right:1px solid rgba(255,255,255,.06);
 }
 
 .stat:last-child{
@@ -348,7 +416,9 @@ body::after{
 .stat span{
     display:block;
     margin-top:6px;
-    color:var(--muted);
+
+    color:#718096;
+
     font-size:9px;
 }
 
@@ -366,9 +436,11 @@ body::after{
     letter-spacing:-1px;
 }
 
-.sectionDesc{
+.sectionDescription{
     margin-top:7px;
-    color:var(--muted);
+
+    color:#718096;
+
     font-size:11px;
 }
 
@@ -378,47 +450,82 @@ body::after{
 
 .products{
     margin-top:25px;
+
     display:grid;
     grid-template-columns:repeat(3,1fr);
+
     gap:18px;
 }
 
 .product{
     overflow:hidden;
-    border:1px solid var(--line);
+
     border-radius:20px;
-    background:linear-gradient(145deg,#09172a,#050d19);
+
+    background:linear-gradient(
+        145deg,
+        #081426,
+        #050d1b
+    );
+
+    border:1px solid rgba(255,255,255,.07);
+
     transition:.25s;
 }
 
 .product:hover{
     transform:translateY(-7px);
-    border-color:rgba(0,200,255,.28);
-    box-shadow:0 30px 70px rgba(0,0,0,.35);
+
+    border-color:rgba(0,190,255,.3);
+
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
 }
 
 .productImage{
-    height:230px;
+    height:220px;
+
+    position:relative;
+
     display:grid;
     place-items:center;
-    position:relative;
+
     background:
-        radial-gradient(circle,rgba(0,200,255,.15),transparent 60%);
+        radial-gradient(
+            circle,
+            rgba(0,180,255,.14),
+            transparent 62%
+        );
 }
 
 .productImage::after{
     content:"";
+
     position:absolute;
-    width:150px;
-    height:150px;
-    border:1px solid rgba(0,210,255,.08);
+
+    width:145px;
+    height:145px;
+
     border-radius:50%;
+
+    border:1px solid rgba(0,200,255,.09);
+
+    animation:spin 12s linear infinite;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
 }
 
 .productEmoji{
     position:relative;
     z-index:2;
-    font-size:76px;
+
+    font-size:78px;
+
+    filter:drop-shadow(
+        0 20px 25px rgba(0,0,0,.5)
+    );
+
     transition:.3s;
 }
 
@@ -426,14 +533,23 @@ body::after{
     transform:scale(1.1) rotate(-4deg);
 }
 
-.badgeProduct{
+.productBadge{
     position:absolute;
+    z-index:5;
+
     top:13px;
     left:13px;
-    z-index:3;
+
     padding:6px 8px;
+
     border-radius:7px;
-    background:linear-gradient(100deg,#008cff,#7140ff);
+
+    background:linear-gradient(
+        100deg,
+        #008cff,
+        #703cff
+    );
+
     font-size:8px;
     font-weight:1000;
 }
@@ -448,18 +564,21 @@ body::after{
 
 .productInfo p{
     min-height:34px;
+
     margin-top:7px;
-    color:var(--muted);
+
+    color:#718096;
+
     font-size:10px;
     line-height:1.5;
 }
 
 .productBottom{
     margin-top:18px;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
 }
 
 .price{
@@ -467,14 +586,30 @@ body::after{
     font-weight:1000;
 }
 
-.addBtn{
+.addButton{
     padding:10px 14px;
+
     border:0;
     border-radius:9px;
+
     color:white;
-    background:linear-gradient(100deg,#008cff,#7140ff);
+
+    background:linear-gradient(
+        100deg,
+        #008cff,
+        #703cff
+    );
+
+    cursor:pointer;
+
     font-size:9px;
     font-weight:1000;
+
+    transition:.2s;
+}
+
+.addButton:hover{
+    transform:scale(1.05);
 }
 
 /* =========================
@@ -483,16 +618,28 @@ body::after{
 
 .benefits{
     margin-top:25px;
+
     display:grid;
     grid-template-columns:repeat(4,1fr);
+
     gap:14px;
 }
 
 .benefit{
     padding:21px;
-    border:1px solid var(--line);
+
     border-radius:16px;
-    background:#071221;
+
+    background:#071120;
+
+    border:1px solid rgba(255,255,255,.07);
+
+    transition:.2s;
+}
+
+.benefit:hover{
+    transform:translateY(-4px);
+    border-color:rgba(0,190,255,.2);
 }
 
 .benefitIcon{
@@ -506,7 +653,9 @@ body::after{
 
 .benefit p{
     margin-top:6px;
-    color:var(--muted);
+
+    color:#718096;
+
     font-size:10px;
     line-height:1.5;
 }
@@ -518,10 +667,14 @@ body::after{
 .overlay{
     position:fixed;
     inset:0;
+
     z-index:500;
+
     display:none;
-    background:rgba(0,0,0,.72);
-    backdrop-filter:blur(8px);
+
+    background:rgba(0,0,0,.7);
+
+    backdrop-filter:blur(7px);
 }
 
 .overlay.show{
@@ -530,30 +683,37 @@ body::after{
 
 .cart{
     position:absolute;
-    top:0;
+
     right:0;
-    width:min(480px,100%);
+    top:0;
+
+    width:min(470px,100%);
     height:100%;
+
     overflow-y:auto;
-    padding:24px;
+
+    padding:25px;
+
     background:#050c18;
-    border-left:1px solid var(--line);
-    animation:cartIn .25s ease;
+
+    border-left:1px solid rgba(255,255,255,.08);
+
+    animation:cartIn .3s ease;
 }
 
 @keyframes cartIn{
-    from{
-        transform:translateX(100%);
-    }
-    to{
-        transform:translateX(0);
-    }
+    from{transform:translateX(100%);}
+    to{transform:translateX(0);}
 }
 
 .cartHeader{
     display:flex;
     align-items:center;
     justify-content:space-between;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid rgba(255,255,255,.07);
 }
 
 .cartHeader h2{
@@ -563,32 +723,37 @@ body::after{
 .close{
     width:37px;
     height:37px;
+
     border:0;
     border-radius:10px;
+
     color:white;
     background:#101d30;
-}
 
-.cartItems{
-    margin-top:20px;
+    cursor:pointer;
 }
 
 .cartItem{
     display:flex;
     align-items:center;
     gap:12px;
-    padding:14px 0;
-    border-bottom:1px solid var(--line);
+
+    padding:15px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .cartIcon{
-    width:55px;
-    height:55px;
+    width:52px;
+    height:52px;
+
     display:grid;
     place-items:center;
-    flex-shrink:0;
-    border-radius:13px;
-    background:#0b192c;
+
+    border-radius:12px;
+
+    background:#0b182a;
+
     font-size:25px;
 }
 
@@ -601,104 +766,97 @@ body::after{
     font-size:11px;
 }
 
-.cartInfo small{
+.cartInfo span{
     display:block;
     margin-top:4px;
-    color:var(--muted);
+
+    color:#718096;
+
     font-size:9px;
 }
 
 .qty{
     display:flex;
     align-items:center;
-    gap:7px;
+    gap:6px;
 }
 
 .qty button{
-    width:26px;
-    height:26px;
-    border:1px solid var(--line);
-    border-radius:7px;
-    color:white;
-    background:#0b1728;
+    width:25px;
+    height:25px;
+
+    border:0;
+    border-radius:6px;
+
+    color:#fff;
+    background:#12243c;
+
+    cursor:pointer;
 }
 
 .qty span{
-    min-width:18px;
+    min-width:15px;
     text-align:center;
-    font-size:10px;
-    font-weight:900;
+
+    color:#fff;
 }
 
-.remove{
+.removeButton{
     padding:7px;
+
     border:0;
     border-radius:7px;
-    color:#ff7187;
-    background:rgba(255,70,100,.08);
+
+    color:#ff7184;
+
+    background:rgba(255,60,90,.08);
+
+    cursor:pointer;
 }
-
-/* =========================
-   CART EMPTY
-========================= */
-
-.emptyCart{
-    margin-top:35px;
-    padding:30px 15px;
-    text-align:center;
-    border:1px dashed rgba(255,255,255,.08);
-    border-radius:16px;
-    color:var(--muted);
-    font-size:11px;
-}
-
-.emptyCartIcon{
-    margin-bottom:12px;
-    font-size:38px;
-}
-
-/* =========================
-   SUMMARY
-========================= */
 
 .summary{
-    margin-top:22px;
+    margin-top:20px;
+
     padding:18px;
-    border:1px solid var(--line);
-    border-radius:16px;
+
+    border-radius:15px;
+
     background:#091426;
+
+    border:1px solid rgba(255,255,255,.06);
 }
 
-.summaryRow{
+.line{
     display:flex;
     justify-content:space-between;
-    gap:15px;
+
     margin-top:11px;
-    color:#91a0b3;
+
+    color:#8d9caf;
+
     font-size:11px;
 }
 
-.summaryRow:first-child{
+.line:first-child{
     margin-top:0;
 }
 
-.summaryRow strong{
-    color:white;
+.line strong{
+    color:#fff;
 }
 
-.discountValue{
-    color:var(--green)!important;
+.discount{
+    color:#4fe6aa !important;
 }
 
-.shippingFree{
-    color:var(--green)!important;
-}
-
-.total{
+.totalLine{
     margin-top:17px;
     padding-top:15px;
-    border-top:1px solid var(--line);
-    color:white;
+
+    border-top:1px solid rgba(255,255,255,.07);
+
+    color:#fff;
+
     font-size:18px;
     font-weight:1000;
 }
@@ -708,59 +866,72 @@ body::after{
 ========================= */
 
 .coupon{
-    margin-top:17px;
-    padding-top:17px;
-    border-top:1px solid var(--line);
+    margin-top:15px;
 }
 
 .couponTitle{
-    margin-bottom:8px;
-    color:#a9b6c7;
+    color:#8d9caf;
+
     font-size:9px;
     font-weight:900;
 }
 
-.couponBox{
+.couponRow{
     display:flex;
     gap:7px;
+
+    margin-top:7px;
 }
 
-.couponBox input{
+.couponRow input{
     flex:1;
+
     min-width:0;
+
     padding:11px;
+
     outline:none;
-    border:1px solid var(--line);
+
     border-radius:9px;
+
     color:white;
     background:#040b16;
+
+    border:1px solid rgba(255,255,255,.08);
+
     text-transform:uppercase;
-    font-size:10px;
 }
 
-.couponBox button{
-    padding:0 13px;
+.couponRow button{
+    padding:0 14px;
+
     border:0;
     border-radius:9px;
+
     color:white;
-    background:linear-gradient(100deg,#008cff,#7140ff);
+
+    background:#122b4a;
+
+    cursor:pointer;
+
     font-size:9px;
     font-weight:1000;
 }
 
 .couponMessage{
     min-height:14px;
+
     margin-top:7px;
+
     font-size:9px;
-    font-weight:800;
 }
 
-.couponSuccess{
-    color:var(--green);
+.success{
+    color:#4fe6aa;
 }
 
-.couponError{
-    color:var(--red);
+.error{
+    color:#ff7184;
 }
 
 /* =========================
@@ -768,69 +939,113 @@ body::after{
 ========================= */
 
 .checkout{
-    margin-top:20px;
+    margin-top:18px;
 }
 
-.checkoutTitle{
-    font-size:13px;
-    font-weight:1000;
-}
-
-.field{
-    margin-top:12px;
-}
-
-.field label{
+.checkout label{
     display:block;
-    margin-bottom:6px;
-    color:#8492a6;
+
+    margin-top:13px;
+
+    color:#718096;
+
     font-size:9px;
     font-weight:900;
 }
 
-.field input,
-.field select{
+.checkout input,
+.checkout select{
     width:100%;
+
+    margin-top:7px;
+
     padding:12px;
+
     outline:none;
-    border:1px solid var(--line);
+
     border-radius:9px;
+
     color:white;
     background:#040b16;
+
+    border:1px solid rgba(255,255,255,.08);
+
     font-size:10px;
 }
 
-.field input:focus,
-.field select:focus{
-    border-color:rgba(0,200,255,.45);
-}
-
-.field select option{
+.checkout select option{
     color:#000;
 }
 
-.checkoutBtn{
+.checkoutButton{
     width:100%;
+
     margin-top:15px;
+
     padding:14px;
+
     border:0;
     border-radius:10px;
+
     color:white;
-    background:linear-gradient(100deg,#008cff,#7140ff);
+
+    background:linear-gradient(
+        100deg,
+        #008cff,
+        #703cff
+    );
+
+    cursor:pointer;
+
     font-size:10px;
     font-weight:1000;
+
     transition:.2s;
 }
 
-.checkoutBtn:hover{
+.checkoutButton:hover{
     transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(0,120,255,.2);
 }
 
-.secure{
-    margin-top:10px;
+.empty{
+    padding:45px 10px;
+
     text-align:center;
-    color:#66768c;
-    font-size:8px;
+
+    color:#718096;
+
+    font-size:11px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    margin-top:120px;
+
+    padding:45px 5%;
+
+    text-align:center;
+
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+footer strong{
+    font-size:18px;
+}
+
+footer span{
+    color:#29d9ff;
+}
+
+footer p{
+    margin-top:8px;
+
+    color:#718096;
+
+    font-size:9px;
 }
 
 /* =========================
@@ -839,18 +1054,32 @@ body::after{
 
 .toast{
     position:fixed;
+
     left:50%;
     bottom:25px;
+
     z-index:1000;
+
     padding:13px 18px;
-    border:1px solid rgba(0,200,255,.2);
+
     border-radius:12px;
+
+    color:white;
+
     background:#0c1b2e;
+
+    border:1px solid rgba(0,200,255,.2);
+
     box-shadow:0 20px 50px rgba(0,0,0,.4);
+
     transform:translate(-50%,30px);
+
     opacity:0;
+
     pointer-events:none;
-    transition:.25s;
+
+    transition:.3s;
+
     font-size:10px;
     font-weight:900;
 }
@@ -858,31 +1087,6 @@ body::after{
 .toast.show{
     opacity:1;
     transform:translate(-50%,0);
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-    margin-top:110px;
-    padding:45px 5%;
-    text-align:center;
-    border-top:1px solid var(--line);
-}
-
-footer strong{
-    font-size:18px;
-}
-
-footer strong span{
-    color:#27dfff;
-}
-
-footer p{
-    margin-top:8px;
-    color:#64748a;
-    font-size:9px;
 }
 
 /* =========================
@@ -900,11 +1104,44 @@ footer p{
     }
 }
 
-@media(max-width:650px){
+@media(max-width:700px){
 
     .nav{
-        padding:9px 4%;
+        min-height:66px;
     }
+
+    .navButton{
+        padding:9px 10px;
+    }
+
+    .navButton span{
+        display:none;
+    }
+
+    .hero{
+        min-height:550px;
+        padding-top:60px;
+    }
+
+    .hero h1{
+        letter-spacing:-3px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .stat{
+        border-right:0;
+        border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .stat:last-child{
+        border-bottom:0;
+    }
+}
+
+@media(max-width:550px){
 
     .logo{
         font-size:16px;
@@ -915,34 +1152,8 @@ footer p{
         height:36px;
     }
 
-    .navBtn{
-        padding:9px 10px;
-    }
-
-    .navBtn .label{
+    .admin{
         display:none;
-    }
-
-    .hero{
-        min-height:570px;
-    }
-
-    .hero h1{
-        font-size:49px;
-        letter-spacing:-3px;
-    }
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .stat{
-        border-right:0;
-        border-bottom:1px solid var(--line);
-    }
-
-    .stat:last-child{
-        border-bottom:0;
     }
 
     .products,
@@ -953,20 +1164,9 @@ footer p{
     .section{
         width:92%;
     }
-}
-
-@media(max-width:420px){
-
-    .accountBtn{
-        display:none;
-    }
-
-    .cart{
-        padding:18px;
-    }
 
     .hero h1{
-        font-size:43px;
+        font-size:48px;
     }
 }
 </style>
@@ -974,7 +1174,8 @@ footer p{
 
 <body>
 
-<!-- PROMO -->
+<!-- PROMOCJA -->
+
 <div class="promo">
     🎟️ KOD RABATOWY
     <span class="promoCode">START10</span>
@@ -982,7 +1183,9 @@ footer p{
     • 🚚 DARMOWA DOSTAWA OD 50 ZŁ
 </div>
 
+
 <!-- NAV -->
+
 <nav class="nav">
 
     <a href="#home" class="logo">
@@ -990,28 +1193,29 @@ footer p{
         Printerlase<span>3D</span>
     </a>
 
-    <div class="navRight">
+    <div class="navLinks">
 
-        <a href="konto.html" class="navBtn accountBtn">
-            👤 <span class="label">Konto</span>
+        <a href="konto.html" class="navButton account">
+            👤 Konto
         </a>
 
-        <a href="admin.html" class="navBtn">
-            🔐 <span class="label">Admin</span>
+        <a href="admin.html" class="navButton admin">
+            🔐 Admin
         </a>
 
-        <button class="navBtn cartBtn" onclick="openCart()">
-            🛒 <span class="label">Koszyk</span>
+        <button class="navButton cartButton" onclick="openCart()">
+            🛒 Koszyk
             <span id="cartCount" class="cartCount">0</span>
         </button>
 
     </div>
+
 </nav>
 
-<!-- HERO -->
-<section id="home" class="hero">
 
-    <div class="heroGlow"></div>
+<!-- HERO -->
+
+<section id="home" class="hero">
 
     <div class="heroContent">
 
@@ -1026,27 +1230,31 @@ footer p{
             Nasz <span class="gradient">wydruk.</span>
         </h1>
 
-        <p>
-            Breloki, dodatki, figurki i personalizowane projekty 3D.
-            Wybierz produkt, dodaj go do koszyka i zamów.
+        <p class="heroText">
+            Breloki, dodatki, figurki i personalizowane
+            projekty 3D. Wybierz produkt, dodaj go
+            do koszyka i zamów.
         </p>
 
         <div class="heroButtons">
 
-            <a href="#produkty" class="heroButton heroPrimary">
+            <a href="#produkty" class="heroButton primary">
                 🛒 ZOBACZ PRODUKTY
             </a>
 
-            <button onclick="openCart()" class="heroButton heroSecondary">
+            <button class="heroButton secondary" onclick="openCart()">
                 🛍️ OTWÓRZ KOSZYK
             </button>
 
         </div>
 
     </div>
+
 </section>
 
+
 <!-- STATS -->
+
 <section class="stats">
 
     <div class="stat">
@@ -1066,12 +1274,16 @@ footer p{
 
 </section>
 
-<!-- PRODUCTS -->
+
+<!-- PRODUKTY -->
+
 <section id="produkty" class="section">
 
-    <h2 class="sectionTitle">🔥 Produkty</h2>
+    <h2 class="sectionTitle">
+        🔥 Produkty
+    </h2>
 
-    <p class="sectionDesc">
+    <p class="sectionDescription">
         Wybierz coś dla siebie i wrzuć do koszyka.
     </p>
 
@@ -1079,12 +1291,16 @@ footer p{
 
 </section>
 
-<!-- BENEFITS -->
+
+<!-- DLACZEGO -->
+
 <section class="section">
 
-    <h2 class="sectionTitle">💙 Dlaczego Printerlase3D?</h2>
+    <h2 class="sectionTitle">
+        💙 Dlaczego Printerlase3D?
+    </h2>
 
-    <p class="sectionDesc">
+    <p class="sectionDescription">
         Mały sklep, ale robimy to porządnie.
     </p>
 
@@ -1115,9 +1331,12 @@ footer p{
         </div>
 
     </div>
+
 </section>
 
+
 <!-- FOOTER -->
+
 <footer>
 
     <strong>
@@ -1130,7 +1349,9 @@ footer p{
 
 </footer>
 
-<!-- CART -->
+
+<!-- KOSZYK -->
+
 <div id="overlay" class="overlay" onclick="outsideCart(event)">
 
     <aside class="cart" onclick="event.stopPropagation()">
@@ -1145,7 +1366,7 @@ footer p{
 
         </div>
 
-        <div id="cartItems" class="cartItems"></div>
+        <div id="cartItems"></div>
 
         <div id="cartSummary"></div>
 
@@ -1153,13 +1374,15 @@ footer p{
 
 </div>
 
+
 <div id="toast" class="toast"></div>
+
 
 <script>
 
-/* =========================================================
+/* =========================
    PRODUKTY
-========================================================= */
+========================= */
 
 const products = [
 
@@ -1220,9 +1443,9 @@ const products = [
 ];
 
 
-/* =========================================================
+/* =========================
    KOSZYK
-========================================================= */
+========================= */
 
 let cart =
     JSON.parse(
@@ -1230,17 +1453,19 @@ let cart =
     ) || [];
 
 
-/* =========================================================
+/* =========================
    KOD RABATOWY
-========================================================= */
+========================= */
 
-let activeCoupon =
-    localStorage.getItem("printerlase_coupon") || "";
+const COUPON = "START10";
+
+let couponActive =
+    localStorage.getItem("printerlase_coupon") === "true";
 
 
-/* =========================================================
+/* =========================
    PRODUKTY
-========================================================= */
+========================= */
 
 function renderProducts(){
 
@@ -1254,7 +1479,7 @@ function renderProducts(){
 
                 <div class="productImage">
 
-                    <div class="badgeProduct">
+                    <div class="productBadge">
                         ${product.badge}
                     </div>
 
@@ -1266,9 +1491,13 @@ function renderProducts(){
 
                 <div class="productInfo">
 
-                    <h3>${product.name}</h3>
+                    <h3>
+                        ${product.name}
+                    </h3>
 
-                    <p>${product.description}</p>
+                    <p>
+                        ${product.description}
+                    </p>
 
                     <div class="productBottom">
 
@@ -1277,7 +1506,7 @@ function renderProducts(){
                         </div>
 
                         <button
-                            class="addBtn"
+                            class="addButton"
                             onclick="addToCart(${product.id})"
                         >
                             + DODAJ
@@ -1293,11 +1522,16 @@ function renderProducts(){
 }
 
 
-/* =========================================================
-   DODAJ
-========================================================= */
+/* =========================
+   DODAWANIE
+========================= */
 
 function addToCart(id){
+
+    const product =
+        products.find(p => p.id === id);
+
+    if(!product) return;
 
     const existing =
         cart.find(item => item.id === id);
@@ -1308,44 +1542,36 @@ function addToCart(id){
 
     }else{
 
-        const product =
-            products.find(item => item.id === id);
-
-        if(!product) return;
-
         cart.push({
             ...product,
             quantity:1
         });
+
     }
 
     saveCart();
     renderCart();
     updateCartCount();
 
-    showToast("✓ Dodano produkt do koszyka");
+    showToast("✓ Dodano do koszyka");
+
 }
 
 
-/* =========================================================
-   ILOŚĆ
-========================================================= */
+/* =========================
+   ZMIANA ILOŚCI
+========================= */
 
-function changeQuantity(id, change){
+function changeQuantity(index, amount){
 
-    const item =
-        cart.find(product => product.id === id);
+    if(!cart[index]) return;
 
-    if(!item) return;
+    cart[index].quantity += amount;
 
-    item.quantity += change;
+    if(cart[index].quantity <= 0){
 
-    if(item.quantity <= 0){
+        cart.splice(index,1);
 
-        cart =
-            cart.filter(
-                product => product.id !== id
-            );
     }
 
     saveCart();
@@ -1354,28 +1580,24 @@ function changeQuantity(id, change){
 }
 
 
-/* =========================================================
+/* =========================
    USUWANIE
-========================================================= */
+========================= */
 
-function removeFromCart(id){
+function removeFromCart(index){
 
-    cart =
-        cart.filter(
-            item => item.id !== id
-        );
+    cart.splice(index,1);
 
     saveCart();
     renderCart();
     updateCartCount();
 
-    showToast("Produkt usunięty");
 }
 
 
-/* =========================================================
+/* =========================
    ZAPIS
-========================================================= */
+========================= */
 
 function saveCart(){
 
@@ -1383,57 +1605,74 @@ function saveCart(){
         "printerlase_cart",
         JSON.stringify(cart)
     );
+
 }
 
 
-/* =========================================================
-   SUMA PRODUKTÓW
-========================================================= */
+/* =========================
+   SUMA
+========================= */
 
 function subtotal(){
 
     return cart.reduce(
-        (sum,item) =>
-            sum +
+        (total,item) =>
+            total +
             Number(item.price) *
             Number(item.quantity || 1),
         0
     );
+
 }
 
 
-/* =========================================================
+/* =========================
    RABAT
-========================================================= */
+========================= */
 
 function discount(){
 
-    if(activeCoupon === "START10"){
-        return subtotal() * 0.10;
+    if(!couponActive){
+        return 0;
     }
 
-    return 0;
+    return subtotal() * 0.10;
+
 }
 
 
-/* =========================================================
+/* =========================
    DOSTAWA
-========================================================= */
+========================= */
 
 function shipping(){
 
-    const afterDiscount =
-        subtotal() - discount();
-
-    return afterDiscount >= 50
+    return subtotal() >= 50
         ? 0
         : 10;
+
 }
 
 
-/* =========================================================
-   RENDER KOSZYKA
-========================================================= */
+/* =========================
+   ŁĄCZNA CENA
+========================= */
+
+function totalPrice(){
+
+    return Math.max(
+        0,
+        subtotal() -
+        discount() +
+        shipping()
+    );
+
+}
+
+
+/* =========================
+   KOSZYK
+========================= */
 
 function renderCart(){
 
@@ -1447,17 +1686,10 @@ function renderCart(){
     if(cart.length === 0){
 
         items.innerHTML = `
-
-            <div class="emptyCart">
-
-                <div class="emptyCartIcon">
-                    🛒
-                </div>
-
+            <div class="empty">
+                🛒<br><br>
                 Koszyk jest pusty.
-
             </div>
-
         `;
 
         summary.innerHTML = "";
@@ -1467,7 +1699,7 @@ function renderCart(){
 
 
     items.innerHTML =
-        cart.map(item => `
+        cart.map((item,index) => `
 
             <div class="cartItem">
 
@@ -1481,16 +1713,16 @@ function renderCart(){
                         ${item.name}
                     </strong>
 
-                    <small>
+                    <span>
                         ${money(item.price)}
-                    </small>
+                    </span>
 
                 </div>
 
                 <div class="qty">
 
                     <button
-                        onclick="changeQuantity(${item.id},-1)"
+                        onclick="changeQuantity(${index},-1)"
                     >
                         −
                     </button>
@@ -1500,7 +1732,7 @@ function renderCart(){
                     </span>
 
                     <button
-                        onclick="changeQuantity(${item.id},1)"
+                        onclick="changeQuantity(${index},1)"
                     >
                         +
                     </button>
@@ -1508,10 +1740,10 @@ function renderCart(){
                 </div>
 
                 <button
-                    class="remove"
-                    onclick="removeFromCart(${item.id})"
+                    class="removeButton"
+                    onclick="removeFromCart(${index})"
                 >
-                    🗑️
+                    ✕
                 </button>
 
             </div>
@@ -1522,65 +1754,35 @@ function renderCart(){
     const sub = subtotal();
     const disc = discount();
     const ship = shipping();
-
-    const total =
-        Math.max(
-            0,
-            sub - disc + ship
-        );
+    const total = totalPrice();
 
 
     summary.innerHTML = `
 
         <div class="summary">
 
-            <div class="summaryRow">
-
+            <div class="line">
                 <span>Produkty</span>
-
-                <strong>
-                    ${money(sub)}
-                </strong>
-
+                <strong>${money(sub)}</strong>
             </div>
 
-
-            <div class="summaryRow">
-
+            <div class="line">
                 <span>Rabat START10</span>
-
-                <strong class="discountValue">
-                    -${money(disc)}
+                <strong class="discount">
+                    ${disc > 0 ? "-" + money(disc) : "—"}
                 </strong>
-
             </div>
 
-
-            <div class="summaryRow">
-
+            <div class="line">
                 <span>Dostawa</span>
 
-                <strong
-                    class="${ship === 0 ? "shippingFree" : ""}"
-                >
+                <strong class="${ship === 0 ? "discount" : ""}">
                     ${
                         ship === 0
                         ? "DARMOWA"
                         : money(ship)
                     }
                 </strong>
-
-            </div>
-
-
-            <div class="summaryRow total">
-
-                <span>Razem</span>
-
-                <strong>
-                    ${money(total)}
-                </strong>
-
             </div>
 
 
@@ -1590,19 +1792,12 @@ function renderCart(){
                     🎟️ MASZ KOD RABATOWY?
                 </div>
 
-                <div class="couponBox">
+                <div class="couponRow">
 
                     <input
                         id="couponInput"
-                        type="text"
-                        maxlength="20"
-                        placeholder="NP. START10"
-                        value="${activeCoupon}"
-                        onkeydown="
-                            if(event.key==='Enter'){
-                                applyCoupon();
-                            }
-                        "
+                        placeholder="START10"
+                        value="${couponActive ? "START10" : ""}"
                     >
 
                     <button onclick="applyCoupon()">
@@ -1611,10 +1806,15 @@ function renderCart(){
 
                 </div>
 
-                <div id="couponMessage" class="couponMessage">
+                <div
+                    id="couponMessage"
+                    class="couponMessage ${
+                        couponActive ? "success" : ""
+                    }"
+                >
                     ${
-                        activeCoupon === "START10"
-                        ? "✓ Kod START10 aktywny — masz 10% rabatu."
+                        couponActive
+                        ? "✓ Kod START10 aktywny — 10% rabatu"
                         : ""
                     }
                 </div>
@@ -1622,236 +1822,136 @@ function renderCart(){
             </div>
 
 
+            <div class="line totalLine">
+
+                <span>
+                    Razem
+                </span>
+
+                <strong>
+                    ${money(total)}
+                </strong>
+
+            </div>
+
+
             <div class="checkout">
 
-                <div class="checkoutTitle">
-                    📦 Dane zamówienia
-                </div>
+                <label>
+                    Imię i nazwisko
+                </label>
+
+                <input
+                    id="customerName"
+                    type="text"
+                    placeholder="Jan Kowalski"
+                >
 
 
-                <div class="field">
+                <label>
+                    E-mail
+                </label>
 
-                    <label>
-                        IMIĘ I NAZWISKO
-                    </label>
-
-                    <input
-                        id="customerName"
-                        type="text"
-                        placeholder="Jan Kowalski"
-                    >
-
-                </div>
+                <input
+                    id="customerEmail"
+                    type="email"
+                    placeholder="email@example.com"
+                >
 
 
-                <div class="field">
+                <label>
+                    Metoda dostawy
+                </label>
 
-                    <label>
-                        E-MAIL
-                    </label>
+                <select id="shippingMethod">
 
-                    <input
-                        id="customerEmail"
-                        type="email"
-                        placeholder="email@example.com"
-                    >
+                    <option value="InPost">
+                        📦 InPost
+                    </option>
 
-                </div>
+                    <option value="ORLEN Paczka">
+                        📦 ORLEN Paczka
+                    </option>
 
+                    <option value="DPD">
+                        🚚 DPD
+                    </option>
 
-                <div class="field">
-
-                    <label>
-                        METODA DOSTAWY
-                    </label>
-
-                    <select id="shippingMethod">
-
-                        <option value="InPost">
-                            📦 InPost
-                        </option>
-
-                        <option value="ORLEN Paczka">
-                            📦 ORLEN Paczka
-                        </option>
-
-                        <option value="DPD">
-                            🚚 DPD
-                        </option>
-
-                    </select>
-
-                </div>
+                </select>
 
 
                 <button
-                    class="checkoutBtn"
-                    onclick="placeOrder()"
+                    class="checkoutButton"
+                    onclick="goToCheckout()"
                 >
                     💳 PRZEJDŹ DO PŁATNOŚCI
                 </button>
-
-                <div class="secure">
-                    🔒 Bezpieczne składanie zamówienia
-                </div>
 
             </div>
 
         </div>
 
     `;
-
-    restoreCheckoutFields();
 }
 
 
-/* =========================================================
-   KOD START10
-========================================================= */
+/* =========================
+   KUPON
+========================= */
 
 function applyCoupon(){
 
     const input =
         document.getElementById("couponInput");
 
-    if(!input) return;
+    const message =
+        document.getElementById("couponMessage");
+
+    if(!input || !message) return;
 
     const code =
         input.value.trim().toUpperCase();
 
-    const message =
-        document.getElementById("couponMessage");
 
+    if(code === COUPON){
 
-    if(code === "START10"){
-
-        activeCoupon = "START10";
+        couponActive = true;
 
         localStorage.setItem(
             "printerlase_coupon",
-            activeCoupon
+            "true"
         );
-
-        showToast("🎟️ START10 aktywny — -10%");
 
         renderCart();
 
-        setTimeout(() => {
+        showToast(
+            "✓ START10 aktywny — 10% rabatu"
+        );
 
-            const msg =
-                document.getElementById(
-                    "couponMessage"
-                );
+    }else{
 
-            if(msg){
-                msg.textContent =
-                    "✓ Kod START10 aktywny — masz 10% rabatu.";
-                msg.className =
-                    "couponMessage couponSuccess";
-            }
+        couponActive = false;
 
-        },10);
+        localStorage.removeItem(
+            "printerlase_coupon"
+        );
 
-        return;
+        message.className =
+            "couponMessage error";
+
+        message.textContent =
+            "❌ Nieprawidłowy kod rabatowy.";
+
     }
 
-
-    activeCoupon = "";
-
-    localStorage.removeItem(
-        "printerlase_coupon"
-    );
-
-    message.textContent =
-        "❌ Nieprawidłowy kod rabatowy.";
-
-    message.className =
-        "couponMessage couponError";
 }
 
 
-/* =========================================================
-   POLA ZAMÓWIENIA
-========================================================= */
+/* =========================
+   CHECKOUT
+========================= */
 
-function saveCheckoutFields(){
-
-    const name =
-        document.getElementById("customerName");
-
-    const email =
-        document.getElementById("customerEmail");
-
-    const method =
-        document.getElementById("shippingMethod");
-
-    if(name){
-        localStorage.setItem(
-            "printerlase_name",
-            name.value
-        );
-    }
-
-    if(email){
-        localStorage.setItem(
-            "printerlase_email",
-            email.value
-        );
-    }
-
-    if(method){
-        localStorage.setItem(
-            "printerlase_method",
-            method.value
-        );
-    }
-}
-
-
-function restoreCheckoutFields(){
-
-    const name =
-        document.getElementById("customerName");
-
-    const email =
-        document.getElementById("customerEmail");
-
-    const method =
-        document.getElementById("shippingMethod");
-
-
-    if(name){
-        name.value =
-            localStorage.getItem(
-                "printerlase_name"
-            ) || "";
-    }
-
-    if(email){
-        email.value =
-            localStorage.getItem(
-                "printerlase_email"
-            ) || "";
-    }
-
-    if(method){
-
-        method.value =
-            localStorage.getItem(
-                "printerlase_method"
-            ) || "InPost";
-
-    }
-}
-
-
-/* =========================================================
-   ZAMÓWIENIE
-========================================================= */
-
-function placeOrder(){
-
-    saveCheckoutFields();
+function goToCheckout(){
 
     const name =
         document
@@ -1872,14 +1972,6 @@ function placeOrder(){
         .value;
 
 
-    if(cart.length === 0){
-
-        showToast("❌ Koszyk jest pusty.");
-
-        return;
-    }
-
-
     if(!name){
 
         showToast(
@@ -1892,7 +1984,8 @@ function placeOrder(){
 
     if(
         !email ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        !email.includes("@") ||
+        !email.includes(".")
     ){
 
         showToast(
@@ -1903,118 +1996,70 @@ function placeOrder(){
     }
 
 
-    const sub = subtotal();
-    const disc = discount();
-    const ship = shipping();
+    if(cart.length === 0){
 
-    const total =
-        Math.max(
-            0,
-            sub - disc + ship
+        showToast(
+            "❌ Koszyk jest pusty."
         );
 
-
-    const orders =
-        JSON.parse(
-            localStorage.getItem(
-                "printerlase_orders"
-            )
-        ) || [];
+        return;
+    }
 
 
-    const order = {
+    /*
+        Dane zostają zapisane,
+        żeby checkout.html mógł
+        je później wykorzystać.
+    */
 
-        id:
-            "PL-" +
-            Date.now(),
+    const checkoutData = {
 
         name,
-
         email,
 
-        shippingMethod:
-            method,
+        shippingMethod:method,
+
+        products:cart,
+
+        subtotal:subtotal(),
+
+        discount:discount(),
+
+        shipping:shipping(),
+
+        total:totalPrice(),
 
         coupon:
-            activeCoupon,
-
-        products:
-            cart.map(item => ({
-                id:item.id,
-                name:item.name,
-                price:item.price,
-                quantity:item.quantity
-            })),
-
-        subtotal:
-            Number(sub.toFixed(2)),
-
-        discount:
-            Number(disc.toFixed(2)),
-
-        shipping:
-            ship,
-
-        total:
-            Number(total.toFixed(2)),
-
-        status:
-            "NOWE",
+            couponActive
+            ? COUPON
+            : null,
 
         createdAt:
-            new Date().toISOString(),
-
-        date:
-            new Date().toLocaleString("pl-PL")
+            new Date().toISOString()
 
     };
 
 
-    orders.push(order);
-
-
     localStorage.setItem(
-        "printerlase_orders",
-        JSON.stringify(orders)
-    );
-
-
-    localStorage.setItem(
-        "printerlase_last_order",
-        JSON.stringify(order)
+        "printerlase_checkout",
+        JSON.stringify(checkoutData)
     );
 
 
     /*
-       Na tym etapie zapisujemy zamówienie.
-       Prawdziwa płatność wymaga podpięcia
-       operatora płatności/backendu.
+        Jeśli masz checkout.html,
+        przejdziemy właśnie tam.
     */
 
+    window.location.href =
+        "checkout.html";
 
-    cart = [];
-
-    activeCoupon = "";
-
-    localStorage.removeItem(
-        "printerlase_coupon"
-    );
-
-    saveCart();
-
-    renderCart();
-
-    updateCartCount();
-
-    showToast(
-        "✓ Zamówienie zapisane!"
-    );
 }
 
 
-/* =========================================================
-   OTWIERANIE KOSZYKA
-========================================================= */
+/* =========================
+   OTWIERANIE
+========================= */
 
 function openCart(){
 
@@ -2022,8 +2067,6 @@ function openCart(){
         .getElementById("overlay")
         .classList.add("show");
 
-    document.body.style.overflow =
-        "hidden";
 }
 
 
@@ -2033,24 +2076,21 @@ function closeCart(){
         .getElementById("overlay")
         .classList.remove("show");
 
-    document.body.style.overflow =
-        "";
 }
 
 
 function outsideCart(event){
 
-    if(
-        event.target.id === "overlay"
-    ){
+    if(event.target.id === "overlay"){
         closeCart();
     }
+
 }
 
 
-/* =========================================================
+/* =========================
    LICZNIK
-========================================================= */
+========================= */
 
 function updateCartCount(){
 
@@ -2065,24 +2105,27 @@ function updateCartCount(){
     document
         .getElementById("cartCount")
         .textContent = count;
+
 }
 
 
-/* =========================================================
+/* =========================
    CENA
-========================================================= */
+========================= */
 
 function money(value){
 
     return Number(value || 0)
         .toFixed(2)
-        .replace(".",",") + " zł";
+        .replace(".",",")
+        + " zł";
+
 }
 
 
-/* =========================================================
+/* =========================
    TOAST
-========================================================= */
+========================= */
 
 let toastTimer;
 
@@ -2091,25 +2134,33 @@ function showToast(text){
     const toast =
         document.getElementById("toast");
 
-    toast.textContent =
-        text;
+    toast.textContent = text;
 
     toast.classList.add("show");
 
     clearTimeout(toastTimer);
 
     toastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
+                toast.classList.remove("show");
+            },
+            2600
+        );
 
-            toast.classList.remove("show");
-
-        },2500);
 }
 
 
-/* =========================================================
-   ESC
-========================================================= */
+/* =========================
+   START
+========================= */
+
+renderProducts();
+renderCart();
+updateCartCount();
+
+
+/* ESC */
 
 document.addEventListener(
     "keydown",
@@ -2121,17 +2172,6 @@ document.addEventListener(
 
     }
 );
-
-
-/* =========================================================
-   START
-========================================================= */
-
-renderProducts();
-
-renderCart();
-
-updateCartCount();
 
 </script>
 
