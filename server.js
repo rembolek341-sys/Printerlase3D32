@@ -1,4 +1,3 @@
-```js
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
@@ -6,45 +5,87 @@ const fs = require("fs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname));
+/*
+|--------------------------------------------------------------------------
+| KONFIGURACJA
+|--------------------------------------------------------------------------
+*/
+
+const ADMIN_PASSWORD = "Admin2137!";
 
 const DATA_FILE = path.join(__dirname, "data.json");
 
-const ADMIN_PASSWORD =
-    process.env.ADMIN_PASSWORD || "Admin2137!";
+/*
+|--------------------------------------------------------------------------
+| MIDDLEWARE
+|--------------------------------------------------------------------------
+*/
+
+app.use(express.json({ limit: "10mb" }));
+
+app.use(express.urlencoded({
+    extended: true
+}));
+
+app.use(express.static(__dirname));
+
+/*
+|--------------------------------------------------------------------------
+| BAZA DANYCH
+|--------------------------------------------------------------------------
+*/
 
 function loadData() {
+
     try {
+
         if (!fs.existsSync(DATA_FILE)) {
-            const data = {
+
+            const initialData = {
                 orders: [],
                 withdrawals: []
             };
 
             fs.writeFileSync(
                 DATA_FILE,
-                JSON.stringify(data, null, 2)
+                JSON.stringify(initialData, null, 2),
+                "utf8"
             );
 
-            return data;
+            return initialData;
         }
 
-        const data = JSON.parse(
-            fs.readFileSync(DATA_FILE, "utf8")
+        const raw = fs.readFileSync(
+            DATA_FILE,
+            "utf8"
         );
+
+        if (!raw.trim()) {
+
+            return {
+                orders: [],
+                withdrawals: []
+            };
+        }
+
+        const data = JSON.parse(raw);
 
         return {
             orders: Array.isArray(data.orders)
                 ? data.orders
                 : [],
+
             withdrawals: Array.isArray(data.withdrawals)
                 ? data.withdrawals
                 : []
         };
+
     } catch (error) {
-        console.error("DATA ERROR:", error);
+
+        console.error(
+            "❌ Błąd data.json:",
+            error
+        );
 
         return {
             orders: [],
@@ -53,236 +94,743 @@ function loadData() {
     }
 }
 
+
 function saveData(data) {
-    fs.writeFileSync(
-        DATA_FILE,
-        JSON.stringify(data, null, 2)
-    );
+
+    try {
+
+        fs.writeFileSync(
+            DATA_FILE,
+            JSON.stringify(data, null, 2),
+            "utf8"
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "❌ Nie można zapisać data.json:",
+            error
+        );
+
+        return false;
+    }
 }
 
-function adminAuth(req, res, next) {
-    const password = req.headers["x-admin-password"];
 
-    if (password !== ADMIN_PASSWORD) {
+/*
+|--------------------------------------------------------------------------
+| ADMIN AUTH
+|--------------------------------------------------------------------------
+*/
+
+function adminAuth(req, res, next) {
+
+    const password =
+        req.headers["x-admin-password"];
+
+    if (
+        !password ||
+        password !== ADMIN_PASSWORD
+    ) {
+
         return res.status(401).json({
-            error: "Błędne hasło administratora."
+            error:
+                "Nieprawidłowe hasło administratora."
         });
     }
 
     next();
 }
 
-/* =========================
-   STRONA GŁÓWNA
-========================= */
+
+/*
+|--------------------------------------------------------------------------
+| STRONA GŁÓWNA
+|--------------------------------------------------------------------------
+*/
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+
+    res.sendFile(
+        path.join(
+            __dirname,
+            "index.html"
+        )
+    );
+
 });
 
-/* =========================
-   ADMIN
-========================= */
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN
+|--------------------------------------------------------------------------
+*/
 
 app.get("/admin", (req, res) => {
-    const file = path.join(__dirname, "admin.html");
 
-    if (!fs.existsSync(file)) {
-        return res.status(500).send(
-            "Brak pliku admin.html na serwerze."
-        );
-    }
+    res.sendFile(
+        path.join(
+            __dirname,
+            "admin.html"
+        )
+    );
 
-    res.sendFile(file);
 });
 
-/* =========================
-   DASHBOARD
-========================= */
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN DASHBOARD
+|--------------------------------------------------------------------------
+*/
 
 app.get(
     "/api/admin/dashboard",
     adminAuth,
     (req, res) => {
+
         const data = loadData();
 
-        const earned = data.orders
-            .filter(order => order.status === "PAID")
-            .reduce(
-                (sum, order) =>
-                    sum + Number(order.total || 0),
-                0
+        const orders = data.orders;
+
+        const withdrawals =
+            data.withdrawals;
+
+
+        const earned =
+            orders
+                .filter(
+                    order =>
+                        order.status === "PAID"
+                )
+                .reduce(
+                    (sum, order) =>
+                        sum +
+                        Number(
+                            order.total || 0
+                        ),
+                    0
+                );
+
+
+        const withdrawn =
+            withdrawals
+                .filter(
+                    item =>
+                        item.status === "COMPLETED"
+                )
+                .reduce(
+                    (sum, item) =>
+                        sum +
+                        Number(
+                            item.amount || 0
+                        ),
+                    0
+                );
+
+
+        const balance =
+            Math.max(
+                0,
+                earned - withdrawn
             );
 
-        const withdrawn = data.withdrawals
-            .filter(item => item.status === "COMPLETED")
-            .reduce(
-                (sum, item) =>
-                    sum + Number(item.amount || 0),
-                0
-            );
 
         res.json({
-            balance: Math.max(
-                0,
-                Number((earned - withdrawn).toFixed(2))
-            ),
-            earned: Number(earned.toFixed(2)),
-            withdrawn: Number(withdrawn.toFixed(2)),
-            orders: data.orders,
-            withdrawals: data.withdrawals
+
+            success: true,
+
+            balance:
+                Number(
+                    balance.toFixed(2)
+                ),
+
+            earned:
+                Number(
+                    earned.toFixed(2)
+                ),
+
+            withdrawn:
+                Number(
+                    withdrawn.toFixed(2)
+                ),
+
+            orders,
+
+            withdrawals
+
         });
+
     }
 );
 
-/* =========================
-   STATUS ZAMÓWIENIA
-========================= */
+
+/*
+|--------------------------------------------------------------------------
+| ZMIANA STATUSU ZAMÓWIENIA
+|--------------------------------------------------------------------------
+*/
 
 app.post(
     "/api/admin/order-status",
     adminAuth,
     (req, res) => {
-        const { id, status } = req.body;
 
-        const allowed = [
+        const {
+            id,
+            status
+        } = req.body;
+
+
+        const allowedStatuses = [
             "NEW",
             "PAID",
             "CANCELLED"
         ];
 
-        if (!id || !allowed.includes(status)) {
+
+        if (!id || !status) {
+
             return res.status(400).json({
-                error: "Nieprawidłowe dane."
+
+                error:
+                    "Brak ID lub statusu."
+
             });
+
         }
+
+
+        if (
+            !allowedStatuses.includes(status)
+        ) {
+
+            return res.status(400).json({
+
+                error:
+                    "Nieprawidłowy status."
+
+            });
+
+        }
+
 
         const data = loadData();
 
-        const order = data.orders.find(
-            item => item.id === id
-        );
+
+        const order =
+            data.orders.find(
+                item =>
+                    String(item.id) ===
+                    String(id)
+            );
+
 
         if (!order) {
+
             return res.status(404).json({
-                error: "Nie znaleziono zamówienia."
+
+                error:
+                    "Nie znaleziono zamówienia."
+
             });
+
         }
 
+
         order.status = status;
+
         order.updatedAt =
             new Date().toISOString();
 
-        saveData(data);
+
+        if (!saveData(data)) {
+
+            return res.status(500).json({
+
+                error:
+                    "Nie udało się zapisać zamówienia."
+
+            });
+
+        }
+
 
         res.json({
+
             success: true,
+
             order
+
         });
+
     }
 );
 
-/* =========================
-   NOWE ZAMÓWIENIE
-========================= */
 
-app.post("/api/orders", (req, res) => {
-    const order = req.body;
+/*
+|--------------------------------------------------------------------------
+| WYŁATA
+|--------------------------------------------------------------------------
+*/
 
-    if (!order || !order.name || !order.email) {
-        return res.status(400).json({
-            error: "Brak danych zamówienia."
+app.post(
+    "/api/admin/withdraw",
+    adminAuth,
+    (req, res) => {
+
+        const amount =
+            Number(req.body.amount);
+
+        const method =
+            req.body.method;
+
+
+        if (
+            !Number.isFinite(amount) ||
+            amount <= 0
+        ) {
+
+            return res.status(400).json({
+
+                error:
+                    "Nieprawidłowa kwota."
+
+            });
+
+        }
+
+
+        const allowedMethods = [
+            "bank",
+            "blik"
+        ];
+
+
+        if (
+            !allowedMethods.includes(method)
+        ) {
+
+            return res.status(400).json({
+
+                error:
+                    "Nieprawidłowa metoda wypłaty."
+
+            });
+
+        }
+
+
+        const data = loadData();
+
+
+        const earned =
+            data.orders
+                .filter(
+                    order =>
+                        order.status === "PAID"
+                )
+                .reduce(
+                    (sum, order) =>
+                        sum +
+                        Number(
+                            order.total || 0
+                        ),
+                    0
+                );
+
+
+        const withdrawn =
+            data.withdrawals
+                .filter(
+                    item =>
+                        item.status === "COMPLETED"
+                )
+                .reduce(
+                    (sum, item) =>
+                        sum +
+                        Number(
+                            item.amount || 0
+                        ),
+                    0
+                );
+
+
+        const balance =
+            earned - withdrawn;
+
+
+        if (amount > balance) {
+
+            return res.status(400).json({
+
+                error:
+                    `Brak wystarczających środków. Dostępne: ${balance.toFixed(2)} zł`
+
+            });
+
+        }
+
+
+        const withdrawal = {
+
+            id:
+                "WD-" +
+                Date.now(),
+
+            amount:
+                Number(
+                    amount.toFixed(2)
+                ),
+
+            method,
+
+            status:
+                "PENDING",
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        data.withdrawals.push(
+            withdrawal
+        );
+
+
+        if (!saveData(data)) {
+
+            return res.status(500).json({
+
+                error:
+                    "Nie udało się zapisać wypłaty."
+
+            });
+
+        }
+
+
+        res.json({
+
+            success: true,
+
+            message:
+                "Żądanie wypłaty zostało utworzone.",
+
+            withdrawal
+
         });
+
     }
+);
 
-    const data = loadData();
 
-    const newOrder = {
-        ...order,
-        id:
-            order.id ||
-            "PL-" + Date.now(),
-        status: "NEW",
-        createdAt:
-            order.createdAt ||
-            new Date().toISOString()
-    };
+/*
+|--------------------------------------------------------------------------
+| UTWORZENIE ZAMÓWIENIA
+|--------------------------------------------------------------------------
+*/
 
-    data.orders.push(newOrder);
+app.post(
+    "/api/orders",
+    (req, res) => {
 
-    saveData(data);
+        const order =
+            req.body;
 
-    console.log(
-        "NOWE ZAMÓWIENIE:",
-        newOrder.id
-    );
 
-    res.json({
-        success: true,
-        order: newOrder
-    });
-});
+        if (
+            !order ||
+            typeof order !== "object"
+        ) {
 
-/* =========================
-   PODGLĄD ZAMÓWIENIA
-========================= */
+            return res.status(400).json({
 
-app.get("/api/orders/:id", (req, res) => {
-    const data = loadData();
+                error:
+                    "Brak danych zamówienia."
 
-    const order = data.orders.find(
-        item => item.id === req.params.id
-    );
+            });
 
-    if (!order) {
-        return res.status(404).json({
-            error: "Nie znaleziono zamówienia."
+        }
+
+
+        if (
+            !order.name ||
+            !order.email ||
+            order.total === undefined ||
+            order.total === null
+        ) {
+
+            return res.status(400).json({
+
+                error:
+                    "Brakuje danych zamówienia."
+
+            });
+
+        }
+
+
+        const total =
+            Number(order.total);
+
+
+        if (
+            !Number.isFinite(total) ||
+            total <= 0
+        ) {
+
+            return res.status(400).json({
+
+                error:
+                    "Nieprawidłowa kwota zamówienia."
+
+            });
+
+        }
+
+
+        const data =
+            loadData();
+
+
+        const newOrder = {
+
+            ...order,
+
+            id:
+                order.id ||
+                "PL-" +
+                Date.now(),
+
+            total:
+                Number(
+                    total.toFixed(2)
+                ),
+
+            status:
+                "NEW",
+
+            createdAt:
+                order.createdAt ||
+                new Date().toISOString()
+
+        };
+
+
+        data.orders.push(
+            newOrder
+        );
+
+
+        if (!saveData(data)) {
+
+            return res.status(500).json({
+
+                error:
+                    "Nie udało się zapisać zamówienia."
+
+            });
+
+        }
+
+
+        console.log(
+            "📦 NOWE ZAMÓWIENIE:",
+            newOrder.id,
+            newOrder.total,
+            "zł"
+        );
+
+
+        res.status(201).json({
+
+            success: true,
+
+            order:
+                newOrder
+
         });
+
     }
+);
 
-    res.json(order);
-});
 
-/* =========================
-   404
-========================= */
+/*
+|--------------------------------------------------------------------------
+| SPRAWDZANIE ZAMÓWIENIA
+|--------------------------------------------------------------------------
+*/
 
-app.use((req, res) => {
-    res.status(404).send(`
-        <!DOCTYPE html>
-        <html lang="pl">
-        <head>
-            <meta charset="UTF-8">
-            <title>404</title>
-        </head>
-        <body style="
-            background:#050914;
-            color:white;
-            font-family:Arial;
-            text-align:center;
-            padding-top:100px;
-        ">
-            <h1>404</h1>
-            <p>Nie znaleziono strony.</p>
-            <a href="/" style="color:#00c8ff">
-                ← Wróć do sklepu
-            </a>
-        </body>
-        </html>
-    `);
-});
+app.get(
+    "/api/orders/:id",
+    (req, res) => {
 
-/* =========================
-   START
-========================= */
+        const data =
+            loadData();
 
-app.listen(PORT, "0.0.0.0", () => {
-    console.log("==============================");
-    console.log("      PRINTERLASE3D");
-    console.log("==============================");
-    console.log("PORT:", PORT);
-    console.log("ADMIN: /admin");
-    console.log("ADMIN PASSWORD: ustawione");
-    console.log("==============================");
-});
-```
+
+        const order =
+            data.orders.find(
+                item =>
+                    String(item.id) ===
+                    String(req.params.id)
+            );
+
+
+        if (!order) {
+
+            return res.status(404).json({
+
+                error:
+                    "Nie znaleziono zamówienia."
+
+            });
+
+        }
+
+
+        res.json(order);
+
+    }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| HEALTH CHECK
+|--------------------------------------------------------------------------
+*/
+
+app.get(
+    "/api/health",
+    (req, res) => {
+
+        res.json({
+
+            status:
+                "ok",
+
+            service:
+                "Printerlase3D",
+
+            time:
+                new Date().toISOString()
+
+        });
+
+    }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| 404
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+    (req, res) => {
+
+        res.status(404).send(`
+
+            <!DOCTYPE html>
+
+            <html lang="pl">
+
+            <head>
+
+                <meta charset="UTF-8">
+
+                <title>404 — Printerlase3D</title>
+
+                <style>
+
+                    body{
+                        margin:0;
+                        min-height:100vh;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:#030712;
+                        color:white;
+                        font-family:Arial;
+                        text-align:center;
+                    }
+
+                    a{
+                        color:#00c8ff;
+                    }
+
+                </style>
+
+            </head>
+
+            <body>
+
+                <div>
+
+                    <h1>404</h1>
+
+                    <p>
+                        Nie znaleziono strony.
+                    </p>
+
+                    <a href="/">
+                        ← Wróć do Printerlase3D
+                    </a>
+
+                </div>
+
+            </body>
+
+            </html>
+
+        `);
+
+    }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| START
+|--------------------------------------------------------------------------
+*/
+
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
+
+        console.log("");
+        console.log(
+            "================================="
+        );
+        console.log(
+            "        PRINTERLASE3D"
+        );
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            `🚀 Serwer działa na porcie ${PORT}`
+        );
+
+        console.log(
+            "🔐 Panel admin: /admin"
+        );
+
+        console.log(
+            "🔑 Hasło admina: ustawione"
+        );
+
+        console.log("");
+
+    }
+);
