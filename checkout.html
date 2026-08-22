@@ -7,565 +7,757 @@
 <title>Checkout — Printerlase3D</title>
 
 <style>
-*{
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+html {
+    scroll-behavior: smooth;
 }
 
-body{
-    margin:0;
-    min-height:100vh;
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: #fff;
+    font-family: Inter, Arial, sans-serif;
     background:
-        radial-gradient(circle at 10% 10%,rgba(0,180,255,.18),transparent 30%),
-        radial-gradient(circle at 90% 80%,rgba(125,60,255,.20),transparent 32%),
+        radial-gradient(circle at 15% 10%, rgba(0, 170, 255, .18), transparent 32%),
+        radial-gradient(circle at 85% 80%, rgba(124, 60, 255, .20), transparent 35%),
         #030712;
-    color:#fff;
-    font-family:Inter,Arial,sans-serif;
+    overflow-x: hidden;
 }
 
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    opacity:.14;
-    background-image:
-        linear-gradient(#18aaff18 1px,transparent 1px),
-        linear-gradient(90deg,#18aaff18 1px,transparent 1px);
-    background-size:55px 55px;
-    mask-image:linear-gradient(to bottom,#000,transparent);
+/* =========================
+   TŁO
+========================= */
+
+.background {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
 }
 
-/* NAV */
-
-.navbar{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:74px;
-    z-index:100;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 5%;
-    background:rgba(3,7,18,.78);
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid rgba(255,255,255,.08);
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .25;
+    animation: float 9s ease-in-out infinite alternate;
 }
 
-.brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    text-decoration:none;
-    color:white;
-    font-weight:900;
-    font-size:18px;
+.orb1 {
+    width: 400px;
+    height: 400px;
+    background: #008cff;
+    left: -180px;
+    top: -150px;
 }
 
-.brand-logo{
-    width:40px;
-    height:40px;
-    display:grid;
-    place-items:center;
-    border-radius:12px;
-    background:linear-gradient(135deg,#00d9ff,#187cff,#873cff);
-    box-shadow:0 0 25px #008cff55;
+.orb2 {
+    width: 350px;
+    height: 350px;
+    background: #7c3cff;
+    right: -150px;
+    bottom: -120px;
+    animation-delay: 2s;
 }
 
-.brand-logo span{
-    font-size:21px;
-    font-weight:1000;
-}
-
-.brand-name span{
-    background:linear-gradient(90deg,#fff,#29d9ff,#9161ff);
-    -webkit-background-clip:text;
-    color:transparent;
-}
-
-.back{
-    color:#9ba8ba;
-    text-decoration:none;
-    font-size:13px;
-    font-weight:800;
-    transition:.25s;
-}
-
-.back:hover{
-    color:#fff;
-}
-
-/* PAGE */
-
-.checkout-page{
-    width:min(1150px,92%);
-    margin:auto;
-    padding:125px 0 70px;
-}
-
-.checkout-title{
-    text-align:center;
-    margin-bottom:45px;
-}
-
-.checkout-title .small{
-    color:#35d8ff;
-    font-size:11px;
-    font-weight:1000;
-    letter-spacing:4px;
-}
-
-.checkout-title h1{
-    margin:12px 0;
-    font-size:clamp(36px,6vw,58px);
-    letter-spacing:-2px;
-}
-
-.gradient{
-    background:linear-gradient(90deg,#00e5ff,#238cff,#974cff);
-    -webkit-background-clip:text;
-    color:transparent;
-}
-
-.checkout-title p{
-    color:#8190a5;
-}
-
-/* GRID */
-
-.checkout-grid{
-    display:grid;
-    grid-template-columns:1fr 390px;
-    gap:22px;
-}
-
-.box{
-    background:linear-gradient(145deg,rgba(9,23,43,.92),rgba(4,10,20,.92));
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:24px;
-    padding:28px;
-    box-shadow:0 25px 80px rgba(0,0,0,.35);
-    backdrop-filter:blur(20px);
-}
-
-.box h2{
-    margin:0 0 25px;
-    font-size:21px;
-}
-
-/* INPUTS */
-
-.field{
-    margin-bottom:17px;
-}
-
-.field label{
-    display:block;
-    margin-bottom:7px;
-    color:#aeb9c9;
-    font-size:12px;
-    font-weight:800;
-}
-
-.field input{
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,.10);
-    outline:none;
-    background:#050c18;
-    color:white;
-    font-size:14px;
-    transition:.25s;
-}
-
-.field input::placeholder{
-    color:#536174;
-}
-
-.field input:focus{
-    border-color:#00bfff;
-    box-shadow:0 0 25px rgba(0,191,255,.13);
-}
-
-/* PAYMENT */
-
-.payment-options{
-    display:grid;
-    gap:11px;
-}
-
-.payment-option{
-    position:relative;
-}
-
-.payment-option input{
-    position:absolute;
-    opacity:0;
-}
-
-.payment-option label{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:16px;
-    border-radius:14px;
-    border:1px solid rgba(255,255,255,.08);
-    background:#050c18;
-    cursor:pointer;
-    transition:.25s;
-}
-
-.payment-option label:hover{
-    transform:translateY(-2px);
-    border-color:#00bfff55;
-}
-
-.payment-option input:checked + label{
-    border-color:#00cfff;
-    background:rgba(0,180,255,.09);
-    box-shadow:0 0 25px rgba(0,180,255,.12);
-}
-
-.payment-name{
-    font-weight:900;
-}
-
-.payment-desc{
-    color:#718096;
-    font-size:11px;
-    margin-top:4px;
-}
-
-.payment-icon{
-    font-size:25px;
-}
-
-/* CART */
-
-#orderItems{
-    max-height:370px;
-    overflow:auto;
-    padding-right:4px;
-}
-
-.order-item{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:10px;
-    padding:15px 0;
-    border-bottom:1px solid rgba(255,255,255,.07);
-}
-
-.order-item-name{
-    font-weight:900;
-    font-size:14px;
-}
-
-.order-item-price{
-    font-weight:900;
-}
-
-.order-item-controls{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    margin-top:9px;
-}
-
-.qty-btn,
-.remove-btn{
-    border:1px solid rgba(255,255,255,.10);
-    background:#ffffff08;
-    color:white;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.qty-btn{
-    width:29px;
-    height:29px;
-    font-weight:900;
-}
-
-.qty-btn:hover{
-    background:#008cff22;
-    border-color:#00bfff55;
-}
-
-.quantity{
-    min-width:22px;
-    text-align:center;
-    color:#b7c2d1;
-    font-size:12px;
-    font-weight:900;
-}
-
-.remove-btn{
-    padding:7px 9px;
-    color:#ff8d9a;
-    font-size:11px;
-}
-
-.remove-btn:hover{
-    background:#ff3d5520;
-    border-color:#ff526666;
-}
-
-.empty{
-    padding:25px 0;
-    color:#718096;
-    text-align:center;
-}
-
-/* DISCOUNT */
-
-.discount-box{
-    margin-top:24px;
-    padding-top:20px;
-    border-top:1px solid rgba(255,255,255,.07);
-}
-
-.discount-title{
-    font-size:12px;
-    color:#aeb9c9;
-    font-weight:900;
-    margin-bottom:9px;
-}
-
-.discount-row{
-    display:flex;
-    gap:8px;
-}
-
-.discount-row input{
-    flex:1;
-    min-width:0;
-    padding:13px;
-    border-radius:11px;
-    border:1px solid rgba(255,255,255,.10);
-    background:#050c18;
-    color:white;
-    outline:none;
-}
-
-.discount-row button{
-    padding:0 16px;
-    border:0;
-    border-radius:11px;
-    background:linear-gradient(100deg,#008cff,#754cff);
-    color:white;
-    font-weight:900;
-    cursor:pointer;
-}
-
-.discount-message{
-    min-height:18px;
-    margin-top:9px;
-    font-size:11px;
-    font-weight:800;
-}
-
-.discount-success{
-    color:#38e7a5;
-}
-
-.discount-error{
-    color:#ff7180;
-}
-
-/* SUMMARY */
-
-.summary{
-    margin-top:22px;
-    padding-top:18px;
-    border-top:1px solid rgba(255,255,255,.07);
-}
-
-.summary-row{
-    display:flex;
-    justify-content:space-between;
-    margin:10px 0;
-    color:#8795a8;
-    font-size:13px;
-}
-
-.summary-row.discount{
-    color:#38e7a5;
-}
-
-.total{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:17px;
-    padding-top:17px;
-    border-top:1px solid rgba(255,255,255,.10);
-    font-size:22px;
-    font-weight:1000;
-}
-
-.pay-button{
-    width:100%;
-    margin-top:23px;
-    padding:17px;
-    border:0;
-    border-radius:14px;
-    color:white;
-    font-weight:1000;
-    font-size:15px;
-    cursor:pointer;
-    background:linear-gradient(100deg,#008cff,#7b4cff);
-    box-shadow:0 15px 45px rgba(0,140,255,.25);
-    transition:.25s;
-}
-
-.pay-button:hover{
-    transform:translateY(-3px);
-    box-shadow:0 20px 55px rgba(0,140,255,.42);
-}
-
-.pay-button:disabled{
-    opacity:.45;
-    cursor:not-allowed;
-    transform:none;
-}
-
-.secure{
-    text-align:center;
-    color:#66758a;
-    font-size:11px;
-    margin-top:13px;
-}
-
-/* SUCCESS */
-
-.success{
-    display:none;
-    text-align:center;
-    padding:70px 25px;
-}
-
-.success-icon{
-    width:90px;
-    height:90px;
-    display:grid;
-    place-items:center;
-    margin:0 auto 25px;
-    border-radius:50%;
-    background:rgba(0,220,150,.12);
-    border:1px solid rgba(0,220,150,.4);
-    color:#35e8a4;
-    font-size:45px;
-    animation:successPop .5s ease;
-}
-
-@keyframes successPop{
-    from{
-        transform:scale(.5);
-        opacity:0;
+@keyframes float {
+    from {
+        transform: translate(0, 0) scale(1);
     }
-    to{
-        transform:scale(1);
-        opacity:1;
+
+    to {
+        transform: translate(60px, 50px) scale(1.15);
     }
 }
 
-.success h1{
-    font-size:38px;
+/* =========================
+   GÓRNY BAR
+========================= */
+
+.topbar {
+    height: 76px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    background: rgba(3, 7, 18, .78);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-.success p{
-    color:#8190a5;
-    line-height:1.7;
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 1000;
 }
 
-.success-code{
-    display:inline-block;
-    padding:12px 18px;
-    margin-top:15px;
-    border-radius:10px;
-    background:#081525;
-    color:#35d8ff;
-    font-weight:bold;
+.logo-box {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: linear-gradient(135deg,#00d9ff,#187cff,#873cff);
+    box-shadow: 0 0 25px rgba(0,140,255,.35);
 }
 
-.back-button{
-    display:inline-block;
-    margin-top:25px;
-    padding:13px 20px;
-    border-radius:12px;
-    color:white;
-    text-decoration:none;
-    background:#ffffff0c;
-    border:1px solid #ffffff12;
-    transition:.25s;
+.logo-box span {
+    font-size: 22px;
+    font-weight: 1000;
 }
 
-.back-button:hover{
-    background:#ffffff14;
-    transform:translateY(-2px);
+.logo-text {
+    font-size: 18px;
 }
 
-/* TOAST */
-
-.toast{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-    z-index:9999;
-    padding:15px 20px;
-    border-radius:14px;
-    background:linear-gradient(100deg,#008cff,#754cff);
-    box-shadow:0 15px 50px #0009;
-    font-weight:900;
-    animation:toastIn .3s ease;
+.logo-text span {
+    background: linear-gradient(90deg,#fff,#2bdcff,#9161ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
-@keyframes toastIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
+.back-shop {
+    color: #a7b3c4;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    transition: .25s;
+}
+
+.back-shop:hover {
+    color: #fff;
+    transform: translateX(-3px);
+}
+
+/* =========================
+   GŁÓWNA
+========================= */
+
+.page {
+    width: min(1150px, 92%);
+    margin: auto;
+    padding: 130px 0 70px;
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 45px;
+    animation: fadeUp .7s ease both;
+}
+
+.heading-label {
+    color: #35d8ff;
+    font-size: 11px;
+    font-weight: 1000;
+    letter-spacing: 3px;
+}
+
+.heading h1 {
+    margin: 12px 0;
+    font-size: clamp(38px, 6vw, 58px);
+    letter-spacing: -3px;
+}
+
+.gradient {
+    background: linear-gradient(90deg,#00e5ff,#238cff,#974cff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.heading p {
+    margin: 0;
+    color: #7f8da1;
+    font-size: 14px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.checkout-grid {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 390px;
+    gap: 22px;
+}
+
+.card {
+    background: rgba(7, 17, 31, .84);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 25px 80px rgba(0,0,0,.30);
+    backdrop-filter: blur(18px);
+    animation: fadeUp .7s ease both;
+}
+
+.card:nth-child(2) {
+    animation-delay: .1s;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.card-title-icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg,#008cff,#754cff);
+    box-shadow: 0 8px 25px rgba(0,140,255,.22);
+}
+
+.card-title h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+/* =========================
+   INPUTY
+========================= */
+
+.field {
+    margin-bottom: 17px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #aeb9c9;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.field input {
+    width: 100%;
+    padding: 14px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: #050c18;
+    color: #fff;
+    outline: none;
+    font-size: 14px;
+    transition: .25s;
+}
+
+.field input::placeholder {
+    color: #4e5d70;
+}
+
+.field input:focus {
+    border-color: #00bfff;
+    box-shadow: 0 0 25px rgba(0,191,255,.10);
+    transform: translateY(-1px);
+}
+
+.field input.error {
+    border-color: #ff4d6d;
+    box-shadow: 0 0 20px rgba(255,77,109,.12);
+}
+
+/* =========================
+   PŁATNOŚĆ
+========================= */
+
+.section-title {
+    margin: 32px 0 15px;
+    font-size: 17px;
+}
+
+.payment-list {
+    display: grid;
+    gap: 11px;
+}
+
+.payment {
+    position: relative;
+}
+
+.payment input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.payment label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 16px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: #050c18;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.payment label:hover {
+    border-color: rgba(0,191,255,.4);
+    transform: translateY(-2px);
+}
+
+.payment input:checked + label {
+    border-color: #00cfff;
+    background: rgba(0,180,255,.08);
+    box-shadow: 0 0 25px rgba(0,180,255,.09);
+}
+
+.payment-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-icon {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(255,255,255,.06);
+    font-size: 20px;
+}
+
+.payment-name {
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.payment-desc {
+    margin-top: 3px;
+    color: #68778b;
+    font-size: 10px;
+}
+
+.check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #455367;
+    transition: .2s;
+}
+
+.payment input:checked + label .check {
+    border: 5px solid #00cfff;
+}
+
+/* =========================
+   ZAMÓWIENIE
+========================= */
+
+.order-items {
+    max-height: 330px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.order-item:first-child {
+    padding-top: 0;
+}
+
+.order-name {
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.order-quantity {
+    margin-top: 5px;
+    color: #68778b;
+    font-size: 11px;
+}
+
+.order-price {
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 1000;
+}
+
+/* =========================
+   KOD RABATOWY
+========================= */
+
+.discount-box {
+    margin-top: 23px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.discount-label {
+    display: block;
+    margin-bottom: 9px;
+    color: #aeb9c9;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.discount-row {
+    display: flex;
+    gap: 8px;
+}
+
+.discount-row input {
+    min-width: 0;
+    flex: 1;
+    padding: 13px;
+    border-radius: 11px;
+    border: 1px solid rgba(255,255,255,.09);
+    background: #050c18;
+    color: #fff;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.discount-row input:focus {
+    border-color: #00bfff;
+}
+
+.discount-button {
+    padding: 0 16px;
+    border: 0;
+    border-radius: 11px;
+    background: linear-gradient(100deg,#008cff,#754cff);
+    color: #fff;
+    font-weight: 900;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.discount-button:hover {
+    transform: translateY(-2px);
+}
+
+.discount-message {
+    min-height: 18px;
+    margin-top: 8px;
+    font-size: 11px;
+}
+
+.discount-success {
+    color: #3dffa8;
+}
+
+.discount-error {
+    color: #ff6b83;
+}
+
+/* =========================
+   CENY
+========================= */
+
+.summary {
+    margin-top: 22px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 10px 0;
+    color: #8290a4;
+    font-size: 13px;
+}
+
+.summary-row.discount {
+    color: #3dffa8;
+}
+
+.summary-row.total {
+    margin-top: 19px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.09);
+    color: #fff;
+    font-size: 21px;
+    font-weight: 1000;
+}
+
+/* =========================
+   PRZYCISK
+========================= */
+
+.pay-button {
+    width: 100%;
+    margin-top: 23px;
+    padding: 17px;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(100deg,#008cff,#754cff);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 1000;
+    cursor: pointer;
+    box-shadow: 0 15px 45px rgba(0,140,255,.22);
+    transition: .25s;
+}
+
+.pay-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 55px rgba(0,140,255,.38);
+}
+
+.pay-button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secure {
+    margin-top: 13px;
+    text-align: center;
+    color: #5f6d80;
+    font-size: 10px;
+}
+
+/* =========================
+   PUSTY KOSZYK
+========================= */
+
+.empty {
+    text-align: center;
+    padding: 35px 10px;
+    color: #6e7d91;
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.empty a {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 17px;
+    border-radius: 11px;
+    color: white;
+    text-decoration: none;
+    background: linear-gradient(100deg,#008cff,#754cff);
+    font-weight: 900;
+}
+
+/* =========================
+   SUKCES
+========================= */
+
+.success-screen {
+    display: none;
+    text-align: center;
+    animation: successIn .7s ease both;
+}
+
+.success-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(0,220,150,.10);
+    border: 1px solid rgba(0,220,150,.4);
+    color: #3dffa8;
+    font-size: 48px;
+    box-shadow: 0 0 50px rgba(0,220,150,.15);
+}
+
+.success-screen h1 {
+    margin: 0 0 12px;
+    font-size: 40px;
+}
+
+.success-screen > p {
+    color: #8190a5;
+    line-height: 1.7;
+}
+
+.order-number {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 11px 17px;
+    border-radius: 11px;
+    background: #071525;
+    color: #35d8ff;
+    font-weight: 1000;
+}
+
+/* KOD PO ZAKUPIE */
+
+.reward {
+    max-width: 470px;
+    margin: 30px auto 0;
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(0,200,255,.20);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,140,255,.10),
+            rgba(120,70,255,.10)
+        );
+}
+
+.reward-label {
+    color: #35d8ff;
+    font-size: 10px;
+    font-weight: 1000;
+    letter-spacing: 2px;
+}
+
+.reward h2 {
+    margin: 9px 0;
+    font-size: 22px;
+}
+
+.reward p {
+    margin: 0 0 17px;
+    color: #8190a5;
+    font-size: 12px;
+}
+
+.reward-code {
+    padding: 15px;
+    border-radius: 12px;
+    background: #030a14;
+    color: #35d8ff;
+    font-size: 25px;
+    font-weight: 1000;
+    letter-spacing: 3px;
+    word-break: break-all;
+}
+
+.reward-info {
+    margin-top: 10px;
+    color: #627187;
+    font-size: 10px;
+}
+
+.copy-code {
+    margin-top: 12px;
+    padding: 10px 15px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    background: rgba(255,255,255,.05);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.shop-button {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(100deg,#008cff,#754cff);
+    font-size: 13px;
+    font-weight: 1000;
+}
+
+/* =========================
+   ANIMACJE
+========================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
     }
-    to{
-        opacity:1;
-        transform:translateY(0);
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* MOBILE */
-
-@media(max-width:800px){
-
-    .navbar{
-        padding:0 18px;
+@keyframes successIn {
+    from {
+        opacity: 0;
+        transform: scale(.94) translateY(20px);
     }
 
-    .checkout-page{
-        width:92%;
-        padding-top:110px;
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:850px) {
+
+    .checkout-grid {
+        grid-template-columns: 1fr;
     }
 
-    .checkout-grid{
-        grid-template-columns:1fr;
+    .order-summary {
+        order: -1;
+    }
+}
+
+@media(max-width:600px) {
+
+    .topbar {
+        padding: 0 18px;
     }
 
-    .checkout-title h1{
-        font-size:38px;
+    .back-shop {
+        font-size: 11px;
     }
 
-    .box{
-        padding:21px;
+    .page {
+        width: calc(100% - 28px);
+        padding-top: 110px;
     }
 
-    .back{
-        display:none;
+    .card {
+        padding: 21px;
+        border-radius: 20px;
+    }
+
+    .heading h1 {
+        letter-spacing: -2px;
+    }
+
+    .discount-row {
+        flex-direction: column;
+    }
+
+    .discount-button {
+        padding: 13px;
+    }
+
+    .success-screen h1 {
+        font-size: 31px;
     }
 }
 </style>
@@ -573,32 +765,38 @@ body::before{
 
 <body>
 
-<header class="navbar">
+<div class="background">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+</div>
 
-    <a href="index.html" class="brand">
 
-        <div class="brand-logo">
+<header class="topbar">
+
+    <a href="index.html" class="logo">
+
+        <div class="logo-box">
             <span>P</span>
         </div>
 
-        <div class="brand-name">
+        <div class="logo-text">
             Printerlase<span>3D</span>
         </div>
 
     </a>
 
-    <a href="index.html" class="back">
-        ← Wróć do sklepu
+    <a href="koszyk.html" class="back-shop">
+        ← Wróć do koszyka
     </a>
 
 </header>
 
 
-<main class="checkout-page">
+<main class="page">
 
-    <div class="checkout-title">
+    <section class="heading">
 
-        <div class="small">
+        <div class="heading-label">
             PRINTERLASE3D
         </div>
 
@@ -607,66 +805,107 @@ body::before{
         </h1>
 
         <p>
-            Uzupełnij dane, zastosuj kod rabatowy i zamów swój wydruk.
+            Uzupełnij dane, zastosuj kod rabatowy i wybierz płatność.
         </p>
 
-    </div>
+    </section>
 
+
+    <!-- CHECKOUT -->
 
     <div id="checkoutContent">
 
         <div class="checkout-grid">
 
+
             <!-- DANE -->
 
-            <div class="box">
+            <section class="card">
 
-                <h2>📦 Dane zamawiającego</h2>
+                <div class="card-title">
+
+                    <div class="card-title-icon">
+                        👤
+                    </div>
+
+                    <h2>Dane zamawiającego</h2>
+
+                </div>
+
 
                 <div class="field">
-                    <label>Imię i nazwisko</label>
+
+                    <label for="name">
+                        Imię i nazwisko
+                    </label>
+
                     <input
                         id="name"
                         type="text"
                         placeholder="Jan Kowalski"
+                        autocomplete="name"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>E-mail</label>
+
+                    <label for="email">
+                        E-mail
+                    </label>
+
                     <input
                         id="email"
                         type="email"
                         placeholder="jan@example.com"
+                        autocomplete="email"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>Telefon</label>
+
+                    <label for="phone">
+                        Telefon
+                    </label>
+
                     <input
                         id="phone"
                         type="tel"
                         placeholder="123 456 789"
+                        autocomplete="tel"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>Adres dostawy</label>
+
+                    <label for="address">
+                        Adres dostawy
+                    </label>
+
                     <input
                         id="address"
                         type="text"
                         placeholder="ul. Przykładowa 10, 41-000 Miasto"
+                        autocomplete="street-address"
                     >
+
                 </div>
 
 
-                <h2 style="margin-top:35px;">
-                    💳 Metoda płatności
+                <h2 class="section-title">
+                    Metoda płatności
                 </h2>
 
-                <div class="payment-options">
 
-                    <div class="payment-option">
+                <div class="payment-list">
+
+
+                    <div class="payment">
 
                         <input
                             type="radio"
@@ -678,26 +917,34 @@ body::before{
 
                         <label for="blik">
 
-                            <div>
-                                <div class="payment-name">
-                                    BLIK
+                            <div class="payment-left">
+
+                                <div class="payment-icon">
+                                    📱
                                 </div>
 
-                                <div class="payment-desc">
-                                    Płatność kodem BLIK
+                                <div>
+
+                                    <div class="payment-name">
+                                        BLIK
+                                    </div>
+
+                                    <div class="payment-desc">
+                                        Płatność kodem BLIK
+                                    </div>
+
                                 </div>
+
                             </div>
 
-                            <div class="payment-icon">
-                                📱
-                            </div>
+                            <div class="check"></div>
 
                         </label>
 
                     </div>
 
 
-                    <div class="payment-option">
+                    <div class="payment">
 
                         <input
                             type="radio"
@@ -708,26 +955,34 @@ body::before{
 
                         <label for="card">
 
-                            <div>
-                                <div class="payment-name">
-                                    Karta płatnicza
+                            <div class="payment-left">
+
+                                <div class="payment-icon">
+                                    💳
                                 </div>
 
-                                <div class="payment-desc">
-                                    Visa / Mastercard
+                                <div>
+
+                                    <div class="payment-name">
+                                        Karta płatnicza
+                                    </div>
+
+                                    <div class="payment-desc">
+                                        Visa / Mastercard
+                                    </div>
+
                                 </div>
+
                             </div>
 
-                            <div class="payment-icon">
-                                💳
-                            </div>
+                            <div class="check"></div>
 
                         </label>
 
                     </div>
 
 
-                    <div class="payment-option">
+                    <div class="payment">
 
                         <input
                             type="radio"
@@ -738,19 +993,27 @@ body::before{
 
                         <label for="transfer">
 
-                            <div>
-                                <div class="payment-name">
-                                    Przelew online
+                            <div class="payment-left">
+
+                                <div class="payment-icon">
+                                    🏦
                                 </div>
 
-                                <div class="payment-desc">
-                                    Szybki przelew bankowy
+                                <div>
+
+                                    <div class="payment-name">
+                                        Przelew online
+                                    </div>
+
+                                    <div class="payment-desc">
+                                        Szybki przelew bankowy
+                                    </div>
+
                                 </div>
+
                             </div>
 
-                            <div class="payment-icon">
-                                🏦
-                            </div>
+                            <div class="check"></div>
 
                         </label>
 
@@ -758,37 +1021,56 @@ body::before{
 
                 </div>
 
-            </div>
+            </section>
 
 
-            <!-- ZAMÓWIENIE -->
+            <!-- PODSUMOWANIE -->
 
-            <div class="box">
+            <section class="card order-summary">
 
-                <h2>🛒 Twoje zamówienie</h2>
+                <div class="card-title">
 
-                <div id="orderItems"></div>
+                    <div class="card-title-icon">
+                        🛒
+                    </div>
+
+                    <h2>Twoje zamówienie</h2>
+
+                </div>
+
+
+                <div
+                    id="orderItems"
+                    class="order-items"
+                ></div>
 
 
                 <!-- RABAT -->
 
                 <div class="discount-box">
 
-                    <div class="discount-title">
+                    <label
+                        class="discount-label"
+                        for="discountCode"
+                    >
                         🎟️ Masz kod rabatowy?
-                    </div>
+                    </label>
 
                     <div class="discount-row">
 
                         <input
                             id="discountCode"
                             type="text"
-                            placeholder="Wpisz kod..."
-                            autocomplete="off"
+                            placeholder="NP. PL3D-ABC123"
+                            maxlength="30"
                         >
 
-                        <button onclick="applyDiscount()">
-                            Użyj
+                        <button
+                            class="discount-button"
+                            onclick="applyDiscount()"
+                            type="button"
+                        >
+                            Zastosuj
                         </button>
 
                     </div>
@@ -801,13 +1083,15 @@ body::before{
                 </div>
 
 
-                <!-- PODSUMOWANIE -->
+                <!-- CENY -->
 
                 <div class="summary">
 
                     <div class="summary-row">
 
-                        <span>Produkty</span>
+                        <span>
+                            Produkty
+                        </span>
 
                         <span id="subtotal">
                             0,00 zł
@@ -824,7 +1108,6 @@ body::before{
 
                         <span>
                             Rabat
-                            <span id="discountLabel"></span>
                         </span>
 
                         <span id="discountAmount">
@@ -836,18 +1119,22 @@ body::before{
 
                     <div class="summary-row">
 
-                        <span>Dostawa</span>
+                        <span>
+                            Dostawa
+                        </span>
 
-                        <span id="shipping">
+                        <span>
                             0,00 zł
                         </span>
 
                     </div>
 
 
-                    <div class="total">
+                    <div class="summary-row total">
 
-                        <span>Razem</span>
+                        <span>
+                            Razem
+                        </span>
 
                         <span id="total">
                             0,00 zł
@@ -862,15 +1149,17 @@ body::before{
                     id="payButton"
                     class="pay-button"
                     onclick="finishOrder()"
+                    type="button"
                 >
-                    🔒 Zapłać i zamów
+                    💳 Zapłać i zamów
                 </button>
 
+
                 <div class="secure">
-                    🔒 Twoje dane są przechowywane lokalnie.
+                    🔒 Twoje dane są przechowywane lokalnie w tej wersji sklepu.
                 </div>
 
-            </div>
+            </section>
 
         </div>
 
@@ -879,37 +1168,82 @@ body::before{
 
     <!-- SUKCES -->
 
-    <div class="box success" id="success">
+    <section
+        id="success"
+        class="card success-screen"
+    >
 
         <div class="success-icon">
             ✓
         </div>
 
+
         <h1>
             Zamówienie przyjęte!
         </h1>
 
+
         <p>
-            Dzięki za zamówienie w Printerlase3D.
+            Dzięki za zakupy w Printerlase3D! 🖨️
             <br>
             Twoje zamówienie zostało zapisane.
         </p>
 
+
         <div
-            class="success-code"
             id="orderNumber"
+            class="order-number"
         ></div>
 
-        <br>
+
+        <div class="reward">
+
+            <div class="reward-label">
+                🎁 PREZENT ZA ZAKUP
+            </div>
+
+            <h2>
+                -10% na kolejne zamówienie
+            </h2>
+
+            <p>
+                Otrzymujesz jednorazowy kod rabatowy
+                ważny przez 30 dni.
+            </p>
+
+
+            <div
+                id="rewardCode"
+                class="reward-code"
+            >
+                —
+            </div>
+
+
+            <div class="reward-info">
+                Kod można wykorzystać tylko raz.
+            </div>
+
+
+            <button
+                class="copy-code"
+                onclick="copyDiscountCode()"
+                type="button"
+            >
+                📋 Kopiuj kod
+            </button>
+
+        </div>
+
 
         <a
             href="index.html"
-            class="back-button"
+            class="shop-button"
         >
-            ← Wróć do sklepu
+            🛍️ Wróć do sklepu
         </a>
 
-    </div>
+    </section>
 
 </main>
 
@@ -917,23 +1251,34 @@ body::before{
 <script>
 
 /* =====================================================
-   PRINTERLASE3D CHECKOUT
+   DANE KOSZYKA
 ===================================================== */
 
+let cart = loadCart();
 
-/* -----------------------------
-   KOSZYK
------------------------------ */
+let subtotal = 0;
+let appliedDiscount = null;
+let discountValue = 0;
 
-function getCart(){
 
-    try{
+/* =====================================================
+   WCZYTANIE KOSZYKA
+===================================================== */
 
-        return JSON.parse(
-            localStorage.getItem("printerlase_cart")
-        ) || [];
+function loadCart() {
 
-    }catch(error){
+    try {
+
+        const data =
+            JSON.parse(
+                localStorage.getItem("printerlase_cart") || "[]"
+            );
+
+        return Array.isArray(data)
+            ? data
+            : [];
+
+    } catch {
 
         return [];
 
@@ -942,340 +1287,94 @@ function getCart(){
 }
 
 
-function saveCart(cart){
+/* =====================================================
+   FORMATOWANIE CENY
+===================================================== */
 
-    localStorage.setItem(
-        "printerlase_cart",
-        JSON.stringify(cart)
-    );
+function money(value) {
 
-}
-
-
-/* -----------------------------
-   RABATY
------------------------------ */
-
-const discountCodes = {
-
-    START10:{
-        type:"percent",
-        value:10,
-        label:"-10%"
-    },
-
-    PRINTER20:{
-        type:"percent",
-        value:20,
-        label:"-20%"
-    },
-
-    WELCOME:{
-        type:"percent",
-        value:15,
-        label:"-15%"
-    },
-
-    "3D5":{
-        type:"fixed",
-        value:5,
-        label:"-5 zł"
-    }
-
-};
-
-
-let appliedDiscount = null;
-
-
-/* -----------------------------
-   ODCZYT RABATU
------------------------------ */
-
-function loadDiscount(){
-
-    try{
-
-        const saved =
-            JSON.parse(
-                localStorage.getItem(
-                    "printerlase_discount"
-                )
-            );
-
-        if(
-            saved &&
-            discountCodes[saved.code]
-        ){
-
-            appliedDiscount = saved;
-
-            document.getElementById(
-                "discountCode"
-            ).value = saved.code;
-
-        }
-
-    }catch(error){
-
-        appliedDiscount = null;
-
-    }
+    return Number(value)
+        .toFixed(2)
+        .replace(".", ",") + " zł";
 
 }
 
 
-/* -----------------------------
-   ZAPIS RABATU
------------------------------ */
+/* =====================================================
+   BEZPIECZNY TEKST
+===================================================== */
 
-function saveDiscount(){
+function escapeHTML(value) {
 
-    if(appliedDiscount){
-
-        localStorage.setItem(
-            "printerlase_discount",
-            JSON.stringify(appliedDiscount)
-        );
-
-    }else{
-
-        localStorage.removeItem(
-            "printerlase_discount"
-        );
-
-    }
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
-/* -----------------------------
-   KOD RABATOWY
------------------------------ */
-
-function applyDiscount(){
-
-    const input =
-        document.getElementById("discountCode");
-
-    const message =
-        document.getElementById("discountMessage");
-
-    const code =
-        input.value
-            .trim()
-            .toUpperCase();
-
-    if(!code){
-
-        message.textContent =
-            "Wpisz kod rabatowy.";
-
-        message.className =
-            "discount-message discount-error";
-
-        return;
-
-    }
-
-
-    if(!discountCodes[code]){
-
-        appliedDiscount = null;
-
-        saveDiscount();
-
-        message.textContent =
-            "❌ Ten kod rabatowy nie istnieje.";
-
-        message.className =
-            "discount-message discount-error";
-
-        renderOrder();
-
-        return;
-
-    }
-
-
-    appliedDiscount = {
-
-        code:code
-
-    };
-
-
-    saveDiscount();
-
-
-    const discount =
-        discountCodes[code];
-
-
-    message.textContent =
-        "✓ Kod " +
-        code +
-        " został zastosowany!";
-
-
-    message.className =
-        "discount-message discount-success";
-
-
-    renderOrder();
-
-}
-
-
-/* -----------------------------
-   USUWANIE RABATU
------------------------------ */
-
-function removeDiscount(){
-
-    appliedDiscount = null;
-
-    saveDiscount();
-
-    document.getElementById(
-        "discountCode"
-    ).value = "";
-
-    document.getElementById(
-        "discountMessage"
-    ).textContent =
-        "Kod rabatowy usunięty.";
-
-    document.getElementById(
-        "discountMessage"
-    ).className =
-        "discount-message discount-error";
-
-    renderOrder();
-
-}
-
-
-/* -----------------------------
-   CENA
------------------------------ */
-
-function calculateDiscount(subtotal){
-
-    if(!appliedDiscount){
-        return 0;
-    }
-
-
-    const discount =
-        discountCodes[appliedDiscount.code];
-
-
-    if(!discount){
-        return 0;
-    }
-
-
-    let amount = 0;
-
-
-    if(discount.type === "percent"){
-
-        amount =
-            subtotal *
-            (discount.value / 100);
-
-    }
-
-
-    if(discount.type === "fixed"){
-
-        amount =
-            discount.value;
-
-    }
-
-
-    return Math.min(
-        amount,
-        subtotal
-    );
-
-}
-
-
-/* -----------------------------
-   RYSOWANIE KOSZYKA
------------------------------ */
-
-function renderOrder(){
-
-    const cart = getCart();
+/* =====================================================
+   WYŚWIETLANIE PRODUKTÓW
+===================================================== */
+
+function renderCart() {
 
     const container =
         document.getElementById("orderItems");
 
-    const subtotalElement =
-        document.getElementById("subtotal");
+    subtotal = 0;
 
-    const discountRow =
-        document.getElementById("discountRow");
 
-    const discountAmountElement =
-        document.getElementById("discountAmount");
+    if (!cart.length) {
 
-    const discountLabel =
-        document.getElementById("discountLabel");
+        container.innerHTML = `
 
-    const totalElement =
-        document.getElementById("total");
+            <div class="empty">
 
-    const payButton =
-        document.getElementById("payButton");
+                <div class="empty-icon">
+                    🛒
+                </div>
+
+                Twój koszyk jest pusty.
+
+                <br>
+
+                <a href="index.html">
+                    Wróć do sklepu
+                </a>
+
+            </div>
+
+        `;
+
+        document.getElementById("payButton").disabled = true;
+
+        updateSummary();
+
+        return;
+
+    }
+
+
+    document.getElementById("payButton").disabled = false;
 
 
     container.innerHTML = "";
 
 
-    if(cart.length === 0){
-
-        container.innerHTML = `
-            <div class="empty">
-                🛒 Twój koszyk jest pusty.<br><br>
-                <a
-                    href="index.html"
-                    style="color:#35d8ff;text-decoration:none;font-weight:900;"
-                >
-                    Wróć do sklepu →
-                </a>
-            </div>
-        `;
-
-        subtotalElement.textContent =
-            "0,00 zł";
-
-        totalElement.textContent =
-            "0,00 zł";
-
-        payButton.disabled = true;
-
-        return;
-
-    }
-
-
-    payButton.disabled = false;
-
-
-    let subtotal = 0;
-
-
-    cart.forEach((item,index) => {
+    cart.forEach(item => {
 
         const quantity =
             Math.max(
                 1,
-                Number(item.quantity || item.qty || 1)
+                Number(
+                    item.quantity ||
+                    item.qty ||
+                    1
+                )
             );
 
         const price =
@@ -1284,296 +1383,387 @@ function renderOrder(){
                 Number(item.price || 0)
             );
 
-
         const itemTotal =
             price * quantity;
-
 
         subtotal += itemTotal;
 
 
-        const div =
-            document.createElement("div");
+        container.innerHTML += `
 
-        div.className =
-            "order-item";
+            <div class="order-item">
 
+                <div>
 
-        div.innerHTML = `
+                    <div class="order-name">
+                        ${escapeHTML(
+                            item.name || "Produkt"
+                        )}
+                    </div>
 
-            <div>
-
-                <div class="order-item-name">
-                    ${escapeHTML(
-                        item.name || "Produkt"
-                    )}
-                </div>
-
-                <div class="order-item-controls">
-
-                    <button
-                        class="qty-btn"
-                        onclick="changeQuantity(${index},-1)"
-                    >
-                        −
-                    </button>
-
-                    <span class="quantity">
-                        ${quantity}
-                    </span>
-
-                    <button
-                        class="qty-btn"
-                        onclick="changeQuantity(${index},1)"
-                    >
-                        +
-                    </button>
-
-                    <button
-                        class="remove-btn"
-                        onclick="removeItem(${index})"
-                    >
-                        Usuń
-                    </button>
+                    <div class="order-quantity">
+                        Ilość: ${quantity}
+                    </div>
 
                 </div>
 
-            </div>
+                <div class="order-price">
+                    ${money(itemTotal)}
+                </div>
 
-            <div class="order-item-price">
-                ${formatPrice(itemTotal)}
             </div>
 
         `;
 
-
-        container.appendChild(div);
-
     });
 
 
+    updateSummary();
+
+}
+
+
+/* =====================================================
+   PODSUMOWANIE
+===================================================== */
+
+function updateSummary() {
+
+    const discountRow =
+        document.getElementById("discountRow");
+
     const discountAmount =
-        calculateDiscount(subtotal);
+        document.getElementById("discountAmount");
+
+    const subtotalElement =
+        document.getElementById("subtotal");
+
+    const totalElement =
+        document.getElementById("total");
 
 
-    const shipping =
-        subtotal > 0 ? 8.99 : 0;
+    subtotalElement.textContent =
+        money(subtotal);
+
+
+    discountValue = 0;
+
+
+    if (
+        appliedDiscount &&
+        appliedDiscount.percent
+    ) {
+
+        discountValue =
+            subtotal *
+            (Number(appliedDiscount.percent) / 100);
+
+        discountValue =
+            Math.min(
+                discountValue,
+                subtotal
+            );
+
+        discountRow.style.display = "flex";
+
+        discountAmount.textContent =
+            "-" + money(discountValue);
+
+    } else {
+
+        discountRow.style.display = "none";
+
+    }
 
 
     const finalTotal =
         Math.max(
             0,
-            subtotal -
-            discountAmount +
-            shipping
+            subtotal - discountValue
         );
-
-
-    subtotalElement.textContent =
-        formatPrice(subtotal);
-
-
-    if(appliedDiscount && discountAmount > 0){
-
-        const discount =
-            discountCodes[
-                appliedDiscount.code
-            ];
-
-
-        discountRow.style.display =
-            "flex";
-
-
-        discountLabel.textContent =
-            " (" +
-            appliedDiscount.code +
-            ")";
-
-
-        discountAmountElement.textContent =
-            "-" +
-            formatPrice(discountAmount);
-
-    }else{
-
-        discountRow.style.display =
-            "none";
-
-    }
-
-
-    document.getElementById(
-        "shipping"
-    ).textContent =
-        formatPrice(shipping);
 
 
     totalElement.textContent =
-        formatPrice(finalTotal);
+        money(finalTotal);
 
 }
 
 
-/* -----------------------------
-   ZMIANA ILOŚCI
------------------------------ */
+/* =====================================================
+   GENEROWANIE KODU
+===================================================== */
 
-function changeQuantity(index,change){
+function generateDiscountCode() {
 
-    const cart = getCart();
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-    if(!cart[index]){
-        return;
+    let code = "PL3D-";
+
+
+    for (
+        let i = 0;
+        i < 6;
+        i++
+    ) {
+
+        code +=
+            chars[
+                Math.floor(
+                    Math.random() *
+                    chars.length
+                )
+            ];
+
     }
 
 
-    const current =
-        Number(
-            cart[index].quantity ||
-            cart[index].qty ||
-            1
+    return code;
+
+}
+
+
+/* =====================================================
+   SPRAWDZANIE KODU
+===================================================== */
+
+function getStoredDiscount() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "printerlase_discount"
+            );
+
+        if (!saved) {
+            return null;
+        }
+
+
+        const discount =
+            JSON.parse(saved);
+
+
+        if (
+            !discount ||
+            !discount.code
+        ) {
+
+            return null;
+
+        }
+
+
+        if (discount.used) {
+
+            localStorage.removeItem(
+                "printerlase_discount"
+            );
+
+            return null;
+
+        }
+
+
+        if (
+            Number(discount.expires) <=
+            Date.now()
+        ) {
+
+            localStorage.removeItem(
+                "printerlase_discount"
+            );
+
+            return null;
+
+        }
+
+
+        return discount;
+
+    } catch {
+
+        localStorage.removeItem(
+            "printerlase_discount"
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   ZASTOSOWANIE KODU
+===================================================== */
+
+function applyDiscount() {
+
+    const input =
+        document.getElementById(
+            "discountCode"
+        );
+
+    const message =
+        document.getElementById(
+            "discountMessage"
         );
 
 
-    const newQuantity =
-        current + change;
+    const entered =
+        input.value
+            .trim()
+            .toUpperCase();
 
 
-    if(newQuantity <= 0){
-
-        cart.splice(index,1);
-
-    }else{
-
-        cart[index].quantity =
-            newQuantity;
-
-    }
+    message.className =
+        "discount-message";
 
 
-    saveCart(cart);
+    if (!entered) {
 
-    renderOrder();
+        message.textContent =
+            "Wpisz kod rabatowy.";
 
-}
+        message.classList.add(
+            "discount-error"
+        );
 
-
-/* -----------------------------
-   USUWANIE PRODUKTU
------------------------------ */
-
-function removeItem(index){
-
-    const cart = getCart();
-
-    if(!cart[index]){
         return;
+
     }
 
 
-    cart.splice(index,1);
+    const saved =
+        getStoredDiscount();
 
-    saveCart(cart);
 
-    renderOrder();
+    if (!saved) {
 
-    showToast(
-        "Produkt usunięty z koszyka"
+        message.textContent =
+            "Ten kod jest nieprawidłowy albo wygasł.";
+
+        message.classList.add(
+            "discount-error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        saved.code.toUpperCase() !==
+        entered
+    ) {
+
+        message.textContent =
+            "Nieprawidłowy kod rabatowy.";
+
+        message.classList.add(
+            "discount-error"
+        );
+
+        return;
+
+    }
+
+
+    appliedDiscount = saved;
+
+
+    message.textContent =
+        "✓ Kod aktywny — otrzymujesz " +
+        saved.percent +
+        "% rabatu.";
+
+    message.classList.add(
+        "discount-success"
     );
 
-}
+
+    input.disabled = true;
 
 
-/* -----------------------------
-   FORMAT CENY
------------------------------ */
-
-function formatPrice(price){
-
-    return Number(price)
-        .toFixed(2)
-        .replace(".",",") +
-        " zł";
+    updateSummary();
 
 }
 
 
-/* -----------------------------
-   ZABEZPIECZENIE TEKSTU
------------------------------ */
+/* =====================================================
+   TWORZENIE NOWEGO KODU
+===================================================== */
 
-function escapeHTML(text){
+function createRewardCode() {
 
-    return String(text)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    let code;
+
+    do {
+
+        code =
+            generateDiscountCode();
+
+    } while (
+        code ===
+        localStorage.getItem(
+            "printerlase_last_reward_code"
+        )
+    );
+
+
+    const expires =
+        Date.now() +
+        30 *
+        24 *
+        60 *
+        60 *
+        1000;
+
+
+    const reward = {
+
+        code: code,
+
+        percent: 10,
+
+        used: false,
+
+        expires: expires,
+
+        created: Date.now()
+
+    };
+
+
+    localStorage.setItem(
+        "printerlase_discount",
+        JSON.stringify(reward)
+    );
+
+
+    localStorage.setItem(
+        "printerlase_last_reward_code",
+        code
+    );
+
+
+    return reward;
 
 }
 
 
-/* -----------------------------
-   TOAST
------------------------------ */
+/* =====================================================
+   FINALIZACJA ZAMÓWIENIA
+===================================================== */
 
-function showToast(text){
+function finishOrder() {
 
-    const old =
-        document.querySelector(".toast");
+    if (!cart.length) {
 
-    if(old){
-        old.remove();
-    }
-
-
-    const toast =
-        document.createElement("div");
-
-    toast.className =
-        "toast";
-
-    toast.textContent =
-        text;
-
-
-    document.body.appendChild(toast);
-
-
-    setTimeout(() => {
-
-        toast.style.opacity = "0";
-        toast.style.transform =
-            "translateY(15px)";
-        toast.style.transition =
-            ".3s";
-
-
-        setTimeout(
-            () => toast.remove(),
-            300
-        );
-
-    },1600);
-
-}
-
-
-/* -----------------------------
-   FINALIZACJA
------------------------------ */
-
-function finishOrder(){
-
-    const cart = getCart();
-
-
-    if(cart.length === 0){
-
-        showToast(
-            "Koszyk jest pusty!"
+        alert(
+            "🛒 Koszyk jest pusty."
         );
 
         return;
@@ -1582,44 +1772,49 @@ function finishOrder(){
 
 
     const name =
-        document.getElementById(
-            "name"
-        ).value.trim();
-
+        document.getElementById("name");
 
     const email =
-        document.getElementById(
-            "email"
-        ).value.trim();
-
+        document.getElementById("email");
 
     const phone =
-        document.getElementById(
-            "phone"
-        ).value.trim();
-
+        document.getElementById("phone");
 
     const address =
-        document.getElementById(
-            "address"
-        ).value.trim();
+        document.getElementById("address");
 
 
-    const paymentElement =
-        document.querySelector(
-            'input[name="payment"]:checked'
-        );
+    const fields = [
+        name,
+        email,
+        phone,
+        address
+    ];
 
 
-    if(
-        !name ||
-        !email ||
-        !phone ||
-        !address
-    ){
+    let valid = true;
+
+
+    fields.forEach(field => {
+
+        field.classList.remove("error");
+
+
+        if (!field.value.trim()) {
+
+            field.classList.add("error");
+
+            valid = false;
+
+        }
+
+    });
+
+
+    if (!valid) {
 
         alert(
-            "Uzupełnij wszystkie dane zamówienia."
+            "⚠️ Uzupełnij wszystkie dane."
         );
 
         return;
@@ -1627,13 +1822,14 @@ function finishOrder(){
     }
 
 
-    if(
-        !email.includes("@") ||
-        !email.includes(".")
-    ){
+    if (
+        !email.value.includes("@")
+    ) {
+
+        email.classList.add("error");
 
         alert(
-            "Podaj poprawny adres e-mail."
+            "⚠️ Wpisz poprawny adres e-mail."
         );
 
         return;
@@ -1642,47 +1838,26 @@ function finishOrder(){
 
 
     const payment =
-        paymentElement
-            ? paymentElement.value
-            : "BLIK";
+        document.querySelector(
+            'input[name="payment"]:checked'
+        );
 
 
-    let subtotal = 0;
+    if (!payment) {
 
+        alert(
+            "⚠️ Wybierz metodę płatności."
+        );
 
-    cart.forEach(item => {
+        return;
 
-        const quantity =
-            Number(
-                item.quantity ||
-                item.qty ||
-                1
-            );
-
-        const price =
-            Number(item.price || 0);
-
-
-        subtotal +=
-            price * quantity;
-
-    });
-
-
-    const discountAmount =
-        calculateDiscount(subtotal);
-
-
-    const shipping =
-        subtotal > 0 ? 8.99 : 0;
+    }
 
 
     const finalTotal =
         Math.max(
             0,
-            subtotal -
-            discountAmount +
-            shipping
+            subtotal - discountValue
         );
 
 
@@ -1690,51 +1865,59 @@ function finishOrder(){
         "PL3D-" +
         Math.random()
             .toString(36)
-            .substring(2,7)
-            .toUpperCase() +
-        "-" +
-        Date.now()
-            .toString()
-            .slice(-4);
+            .substring(2, 8)
+            .toUpperCase();
 
+
+    /* =================================================
+       ZAMÓWIENIE
+    ================================================= */
 
     const order = {
 
-        number:orderNumber,
+        number: orderNumber,
 
-        customer:{
+        customer: {
 
-            name:name,
+            name:
+                name.value.trim(),
 
-            email:email,
+            email:
+                email.value.trim(),
 
-            phone:phone,
+            phone:
+                phone.value.trim(),
 
-            address:address
-
-        },
-
-        payment:payment,
-
-        products:cart,
-
-        subtotal:subtotal,
-
-        discount:{
-
-            code:
-                appliedDiscount
-                    ? appliedDiscount.code
-                    : null,
-
-            amount:
-                discountAmount
+            address:
+                address.value.trim()
 
         },
 
-        shipping:shipping,
+        payment:
+            payment.value,
 
-        total:finalTotal,
+        products:
+            cart,
+
+        subtotal:
+            subtotal,
+
+        discount:
+            appliedDiscount
+                ? {
+                    code:
+                        appliedDiscount.code,
+
+                    percent:
+                        appliedDiscount.percent,
+
+                    value:
+                        discountValue
+                }
+                : null,
+
+        total:
+            finalTotal,
 
         date:
             new Date().toISOString()
@@ -1742,43 +1925,88 @@ function finishOrder(){
     };
 
 
+    /* =================================================
+       JEŚLI KOD BYŁ UŻYTY — ZUŻYWAMY GO
+    ================================================= */
+
+    if (appliedDiscount) {
+
+        const stored =
+            getStoredDiscount();
+
+
+        if (
+            stored &&
+            stored.code ===
+            appliedDiscount.code
+        ) {
+
+            stored.used = true;
+
+
+            localStorage.setItem(
+                "printerlase_discount",
+                JSON.stringify(stored)
+            );
+
+        }
+
+    }
+
+
+    /* =================================================
+       NOWY KOD ZA ZAKUP
+    ================================================= */
+
+    const reward =
+        createRewardCode();
+
+
+    order.rewardCode = {
+
+        code:
+            reward.code,
+
+        percent:
+            reward.percent,
+
+        expires:
+            reward.expires
+
+    };
+
+
+    /* =================================================
+       ZAPIS ZAMÓWIENIA
+    ================================================= */
+
     localStorage.setItem(
         "printerlase_last_order",
         JSON.stringify(order)
     );
 
 
-    /*
-        WAŻNE:
-
-        To jeszcze NIE jest prawdziwa
-        płatność BLIK/kartą.
-
-        Tutaj później podłączymy
-        operatora płatności.
-    */
-
+    /* =================================================
+       KASOWANIE KOSZYKA
+    ================================================= */
 
     localStorage.removeItem(
         "printerlase_cart"
     );
 
 
-    localStorage.removeItem(
-        "printerlase_discount"
-    );
-
+    /* =================================================
+       EKRAN SUKCESU
+    ================================================= */
 
     document.getElementById(
         "checkoutContent"
-    ).style.display =
-        "none";
+    ).style.display = "none";
 
 
     document.getElementById(
         "success"
-    ).style.display =
-        "block";
+    ).style.display = "block";
 
 
     document.getElementById(
@@ -1788,41 +2016,103 @@ function finishOrder(){
         orderNumber;
 
 
+    document.getElementById(
+        "rewardCode"
+    ).textContent =
+        reward.code;
+
+
     window.scrollTo({
-        top:0,
-        behavior:"smooth"
+        top: 0,
+        behavior: "smooth"
     });
 
 }
 
 
-/* -----------------------------
-   START
------------------------------ */
+/* =====================================================
+   KOPIOWANIE KODU
+===================================================== */
 
-loadDiscount();
+function copyDiscountCode() {
 
-renderOrder();
+    const code =
+        document.getElementById(
+            "rewardCode"
+        ).textContent;
 
 
-/* ENTER = KOD RABATOWY */
+    if (
+        !code ||
+        code === "—"
+    ) {
 
-document.getElementById(
-    "discountCode"
-).addEventListener(
-    "keydown",
-    function(event){
-
-        if(event.key === "Enter"){
-
-            event.preventDefault();
-
-            applyDiscount();
-
-        }
+        return;
 
     }
-);
+
+
+    navigator.clipboard
+        .writeText(code)
+        .then(() => {
+
+            const button =
+                document.querySelector(
+                    ".copy-code"
+                );
+
+            const oldText =
+                button.textContent;
+
+
+            button.textContent =
+                "✓ Skopiowano!";
+
+
+            setTimeout(() => {
+
+                button.textContent =
+                    oldText;
+
+            }, 1500);
+
+        })
+        .catch(() => {
+
+            alert(
+                "Kod: " + code
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+renderCart();
+
+
+/* ENTER W POLU KODU */
+
+document
+    .getElementById("discountCode")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                applyDiscount();
+
+            }
+
+        }
+    );
 
 </script>
 
