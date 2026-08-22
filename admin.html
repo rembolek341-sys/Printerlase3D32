@@ -3,7 +3,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Printerlase3D — Panel Admina</title>
 
@@ -19,12 +19,14 @@ body{
     font-family:Arial,Helvetica,sans-serif;
     color:#fff;
     background:
-        radial-gradient(circle at 10% 0%,#063b59,transparent 30%),
-        radial-gradient(circle at 90% 0%,#321052,transparent 30%),
+        radial-gradient(circle at 10% 0%,#003d5c 0,transparent 30%),
+        radial-gradient(circle at 100% 0%,#371052 0,transparent 28%),
         #020611;
 }
 
-button,input,select,textarea{
+button,
+input,
+select{
     font:inherit;
 }
 
@@ -32,155 +34,40 @@ button{
     cursor:pointer;
 }
 
-::-webkit-scrollbar{
-    width:8px;
-}
-
-::-webkit-scrollbar-track{
-    background:#020611;
-}
-
-::-webkit-scrollbar-thumb{
-    background:linear-gradient(#00c8ff,#713cff);
-    border-radius:20px;
+.hidden{
+    display:none!important;
 }
 
 
-/* =========================
+/* ==============================
    LOGIN
-========================= */
+============================== */
 
 #loginScreen{
-    position:fixed;
-    inset:0;
-    z-index:9999;
+    min-height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
     padding:20px;
-    background:#020611;
 }
 
 .loginBox{
-    width:min(430px,100%);
-    padding:35px;
-    border:1px solid #254760;
-    border-radius:25px;
-    background:#071222dd;
+    width:100%;
+    max-width:390px;
+    padding:32px;
+    border:1px solid #1d3d56;
+    border-radius:22px;
+    background:#061020e8;
     box-shadow:
-        0 30px 100px #000,
-        0 0 80px #00c8ff0b;
+        0 30px 100px #0008,
+        0 0 60px #00c8ff0d;
     backdrop-filter:blur(20px);
-    animation:loginIn .6s ease;
-}
-
-@keyframes loginIn{
-    from{
-        opacity:0;
-        transform:translateY(30px) scale(.95);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
-}
-
-.loginLogo{
-    margin-bottom:8px;
-    font-size:29px;
-    font-weight:1000;
-}
-
-.loginLogo span{
-    color:#00c8ff;
-}
-
-.loginSubtitle{
-    margin-bottom:25px;
-    color:#75869d;
-    font-size:9px;
-    line-height:1.6;
-}
-
-.field{
-    margin-bottom:15px;
-}
-
-.field label{
-    display:block;
-    margin-bottom:7px;
-    color:#8193a9;
-    font-size:8px;
-    font-weight:1000;
-}
-
-.field input,
-.field select,
-.field textarea{
-    width:100%;
-    padding:13px;
-    outline:none;
-    border:1px solid #203b55;
-    border-radius:10px;
-    color:white;
-    background:#030914;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-    border-color:#00c8ff;
-    box-shadow:0 0 20px #00c8ff12;
-}
-
-.loginBtn,
-.primary{
-    width:100%;
-    padding:14px;
-    border:0;
-    border-radius:11px;
-    color:white;
-    background:linear-gradient(100deg,#008cff,#713cff);
-    font-size:9px;
-    font-weight:1000;
-}
-
-.loginError{
-    display:none;
-    margin-bottom:15px;
-    padding:10px;
-    border:1px solid #713244;
-    border-radius:9px;
-    color:#ff7992;
-    background:#ff31500c;
-    font-size:8px;
-}
-
-
-/* =========================
-   APP
-========================= */
-
-#app{
-    display:none;
-}
-
-.topbar{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    height:72px;
-    padding:0 4%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-bottom:1px solid #142d43;
-    background:#030712dd;
-    backdrop-filter:blur(20px);
+    animation:show .5s ease;
 }
 
 .logo{
-    font-size:20px;
+    margin-bottom:8px;
+    font-size:30px;
     font-weight:1000;
 }
 
@@ -188,378 +75,434 @@ button{
     color:#00c8ff;
 }
 
-.adminBadge{
-    margin-left:8px;
-    padding:5px 7px;
-    border:1px solid #713cff;
-    border-radius:6px;
-    color:#c5b7ff;
-    background:#713cff12;
-    font-size:7px;
+.loginSubtitle{
+    margin-bottom:25px;
+    color:#71859a;
+    font-size:12px;
+}
+
+.inputGroup{
+    margin-bottom:15px;
+}
+
+.inputGroup label{
+    display:block;
+    margin-bottom:7px;
+    color:#91a3b7;
+    font-size:11px;
+    font-weight:800;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    border:1px solid #203c55;
+    border-radius:11px;
+    outline:none;
+    color:#fff;
+    background:#030a15;
+    padding:13px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#00c8ff;
+    box-shadow:0 0 20px #00c8ff12;
+}
+
+.loginButton{
+    width:100%;
+    margin-top:8px;
+    padding:14px;
+    border:0;
+    border-radius:11px;
+    color:#001018;
+    background:#00c8ff;
+    font-weight:1000;
+}
+
+.loginButton:hover{
+    box-shadow:0 10px 35px #00c8ff25;
+    transform:translateY(-2px);
+}
+
+.loginError{
+    min-height:18px;
+    margin-top:12px;
+    color:#ff6577;
+    font-size:11px;
+    text-align:center;
+}
+
+
+/* ==============================
+   APP
+============================== */
+
+#adminApp{
+    display:none;
+    min-height:100vh;
+}
+
+#adminApp.active{
+    display:block;
+}
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+    border-bottom:1px solid #18334a;
+    background:#020611dd;
+    backdrop-filter:blur(20px);
+}
+
+.topbarInner{
+    max-width:1400px;
+    margin:auto;
+    padding:14px 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.brand{
+    font-size:20px;
+    font-weight:1000;
+}
+
+.brand span{
+    color:#00c8ff;
 }
 
 .topActions{
     display:flex;
-    gap:7px;
+    gap:8px;
 }
 
-.topBtn{
-    padding:9px 11px;
-    border:1px solid #23415b;
+.topButton{
+    padding:10px 13px;
+    border:1px solid #24445d;
     border-radius:9px;
-    color:#b5c4d5;
-    background:#09182a;
-    font-size:8px;
-    font-weight:1000;
+    color:#fff;
+    background:#071222;
+    font-size:11px;
+    font-weight:900;
 }
 
-.topBtn:hover{
+.topButton:hover{
     border-color:#00c8ff;
-    color:#fff;
 }
 
 .logout{
-    border-color:#633042;
-    color:#ff7990;
+    color:#ff7d8b;
 }
 
 
-/* =========================
-   LAYOUT
-========================= */
+/* ==============================
+   CONTENT
+============================== */
 
-.layout{
-    display:grid;
-    grid-template-columns:240px 1fr;
-    min-height:calc(100vh - 72px);
+.container{
+    max-width:1400px;
+    margin:auto;
+    padding:30px 22px 70px;
 }
 
-.sidebar{
-    position:sticky;
-    top:72px;
-    height:calc(100vh - 72px);
-    padding:20px 13px;
-    border-right:1px solid #142d43;
-    background:#040b16cc;
-}
-
-.sidebarTitle{
-    margin:8px 10px 12px;
-    color:#607289;
-    font-size:7px;
-    font-weight:1000;
-    letter-spacing:2px;
-}
-
-.sideBtn{
-    width:100%;
-    margin-bottom:5px;
-    padding:12px;
-    text-align:left;
-    border:1px solid transparent;
-    border-radius:10px;
-    color:#8192a8;
-    background:transparent;
-    font-size:8px;
-    font-weight:1000;
-    transition:.2s;
-}
-
-.sideBtn:hover,
-.sideBtn.active{
-    border-color:#23445e;
-    color:white;
-    background:#0a1a2c;
-}
-
-.sideBtn.active{
-    box-shadow:inset 3px 0 #00c8ff;
-}
-
-.main{
-    min-width:0;
-    padding:30px;
-}
-
-
-/* =========================
-   DASHBOARD
-========================= */
-
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
-    animation:pageIn .35s ease;
-}
-
-@keyframes pageIn{
-    from{
-        opacity:0;
-        transform:translateY(12px);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
-}
-
-.pageHeader{
-    margin-bottom:25px;
-}
-
-.pageHeader h1{
+.pageTitle{
     margin-bottom:6px;
-    font-size:31px;
-    letter-spacing:-1px;
+    font-size:34px;
+    font-weight:1000;
 }
 
-.pageHeader p{
-    color:#75869d;
-    font-size:9px;
+.pageDescription{
+    margin-bottom:25px;
+    color:#72859a;
+    font-size:12px;
 }
+
+
+/* ==============================
+   STATS
+============================== */
 
 .stats{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:13px;
+    grid-template-columns:
+        repeat(4,1fr);
+    gap:12px;
     margin-bottom:25px;
 }
 
 .stat{
-    position:relative;
-    overflow:hidden;
     padding:20px;
-    border:1px solid #1a3852;
-    border-radius:18px;
-    background:#071222;
+    border:1px solid #18344b;
+    border-radius:17px;
+    background:#061020d9;
+    transition:.2s;
 }
 
-.stat::after{
-    content:"";
-    position:absolute;
-    right:-35px;
-    bottom:-45px;
-    width:100px;
-    height:100px;
-    border-radius:50%;
-    background:#00c8ff08;
+.stat:hover{
+    transform:translateY(-3px);
+    border-color:#00c8ff55;
 }
 
-.statIcon{
-    margin-bottom:10px;
-    font-size:22px;
+.statTitle{
+    margin-bottom:9px;
+    color:#71859a;
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
 }
 
 .statValue{
-    margin-bottom:4px;
-    font-size:25px;
+    font-size:29px;
     font-weight:1000;
 }
 
-.statLabel{
-    color:#708198;
-    font-size:7px;
-    font-weight:1000;
+.blue{
+    color:#00c8ff;
+}
+
+.green{
+    color:#43e49b;
+}
+
+.purple{
+    color:#bd8cff;
+}
+
+.orange{
+    color:#ffb85c;
 }
 
 
-/* =========================
-   CARDS
-========================= */
+/* ==============================
+   SECTIONS
+============================== */
 
-.card{
-    margin-bottom:20px;
-    border:1px solid #19354d;
-    border-radius:18px;
-    background:#071222;
+.section{
+    margin-top:22px;
     overflow:hidden;
+    border:1px solid #18344b;
+    border-radius:18px;
+    background:#061020d9;
 }
 
-.cardHeader{
-    padding:17px 20px;
+.sectionHeader{
+    padding:17px 19px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    border-bottom:1px solid #163048;
+    gap:15px;
+    border-bottom:1px solid #173047;
 }
 
-.cardHeader h2{
-    font-size:13px;
-}
-
-.cardHeader span{
-    color:#65768d;
-    font-size:8px;
-}
-
-.cardBody{
-    padding:20px;
-}
-
-
-/* =========================
-   ORDERS TABLE
-========================= */
-
-.tableWrap{
-    overflow:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    padding:12px;
-    text-align:left;
-    color:#64758b;
-    background:#050d18;
-    font-size:7px;
-    letter-spacing:.5px;
-}
-
-td{
-    padding:13px 12px;
-    border-top:1px solid #142c42;
-    color:#a7b5c5;
-    font-size:8px;
-}
-
-tr:hover td{
-    background:#09182a;
-}
-
-.orderId{
-    color:#00c8ff;
+.sectionTitle{
+    font-size:17px;
     font-weight:1000;
 }
 
+.sectionCount{
+    padding:5px 9px;
+    border-radius:999px;
+    color:#001018;
+    background:#00c8ff;
+    font-size:9px;
+    font-weight:1000;
+}
+
+
+/* ==============================
+   ORDERS
+============================== */
+
+.orders{
+    display:flex;
+    flex-direction:column;
+}
+
+.order{
+    padding:18px;
+    border-bottom:1px solid #132a3c;
+    transition:.2s;
+}
+
+.order:last-child{
+    border-bottom:0;
+}
+
+.order:hover{
+    background:#081525;
+}
+
+.orderTop{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.orderId{
+    margin-bottom:5px;
+    color:#00c8ff;
+    font-size:12px;
+    font-weight:1000;
+}
+
+.orderDate{
+    color:#627589;
+    font-size:9px;
+}
+
+.orderCustomer{
+    margin-top:14px;
+    font-size:14px;
+    font-weight:900;
+}
+
+.orderContact{
+    margin-top:5px;
+    color:#7e91a5;
+    font-size:10px;
+    line-height:1.6;
+}
+
+.orderItems{
+    margin-top:14px;
+    display:grid;
+    gap:6px;
+}
+
+.item{
+    padding:9px 11px;
+    border:1px solid #173149;
+    border-radius:9px;
+    color:#a9b8c7;
+    background:#030914;
+    font-size:10px;
+}
+
+.item strong{
+    color:#fff;
+}
+
+.orderBottom{
+    margin-top:15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.orderPrice{
+    font-size:23px;
+    font-weight:1000;
+}
+
+.orderMeta{
+    color:#73869a;
+    font-size:9px;
+}
+
+.statusArea{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
 .status{
-    display:inline-block;
-    padding:6px 8px;
-    border-radius:7px;
-    font-size:7px;
+    padding:7px 9px;
+    border-radius:8px;
+    border:1px solid #24445c;
+    font-size:9px;
     font-weight:1000;
 }
 
 .status.NEW{
-    color:#7ddcff;
-    background:#00c8ff12;
+    color:#00c8ff;
 }
 
 .status.IN_PROGRESS{
-    color:#cbbcff;
-    background:#713cff15;
+    color:#ffbd5c;
 }
 
 .status.READY{
-    color:#7dffa9;
-    background:#00d66b12;
+    color:#bd8cff;
 }
 
 .status.COMPLETED{
-    color:#7dffa9;
-    background:#00d66b12;
+    color:#43e49b;
 }
 
 .status.CANCELLED{
-    color:#ff7e94;
-    background:#ff315012;
+    color:#ff6679;
 }
 
-.actionBtn{
-    padding:7px 8px;
-    border:1px solid #24425c;
-    border-radius:7px;
-    color:white;
-    background:#0b1b2d;
-    font-size:7px;
-    font-weight:1000;
+.statusSelect{
+    width:auto;
+    padding:8px;
+    font-size:9px;
 }
 
-.actionBtn:hover{
-    border-color:#00c8ff;
+.deleteButton{
+    padding:8px 10px;
+    border:1px solid #5b2530;
+    border-radius:8px;
+    color:#ff7585;
+    background:#230b10;
+    font-size:9px;
+    font-weight:900;
 }
 
-.dangerBtn{
-    color:#ff7790;
-    border-color:#5c3040;
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-.toolbar{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.search{
-    flex:1;
-    min-width:200px;
-    padding:12px;
-    outline:none;
-    border:1px solid #213d57;
-    border-radius:9px;
-    color:white;
-    background:#030914;
-}
-
-.filter{
-    padding:12px;
-    outline:none;
-    border:1px solid #213d57;
-    border-radius:9px;
-    color:white;
-    background:#030914;
-    font-size:8px;
+.deleteButton:hover{
+    background:#3a0d15;
 }
 
 
-/* =========================
+/* ==============================
    CUSTOM MODELS
-========================= */
+============================== */
 
 .customGrid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
+    grid-template-columns:
+        repeat(2,1fr);
+    gap:12px;
+    padding:15px;
 }
 
-.customOrder{
-    padding:20px;
-    border:1px solid #1b3852;
-    border-radius:16px;
-    background:#071222;
+.customCard{
+    padding:16px;
+    border:1px solid #19364e;
+    border-radius:15px;
+    background:#040b16;
     transition:.25s;
 }
 
-.customOrder:hover{
-    transform:translateY(-4px);
-    border-color:#2b6384;
+.customCard:hover{
+    transform:translateY(-3px);
+    border-color:#00c8ff55;
 }
 
-.customTop{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:13px;
+.modelName{
+    font-size:15px;
+    font-weight:1000;
 }
 
-.customTop h3{
-    font-size:13px;
+.modelId{
+    margin-top:4px;
+    color:#00c8ff;
+    font-size:9px;
+    font-weight:900;
 }
 
-.customInfo{
+.modelInfo{
+    margin-top:14px;
     display:grid;
     gap:7px;
 }
@@ -567,123 +510,88 @@ tr:hover td{
 .infoRow{
     display:flex;
     justify-content:space-between;
-    gap:15px;
-    padding:8px;
-    border-radius:7px;
-    background:#0a192b;
-    font-size:8px;
-}
-
-.infoRow span{
-    color:#6f8097;
+    gap:10px;
+    color:#71859a;
+    font-size:10px;
 }
 
 .infoRow strong{
-    color:white;
+    color:#d7e1ea;
     text-align:right;
 }
 
 .description{
-    margin-top:12px;
-    padding:12px;
-    border-radius:9px;
-    color:#8798ad;
-    background:#050d18;
-    font-size:8px;
-    line-height:1.6;
-}
-
-.customActions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
     margin-top:13px;
+    padding:10px;
+    border-radius:9px;
+    color:#9cadbd;
+    background:#08111e;
+    font-size:10px;
+    line-height:1.5;
 }
 
-
-/* =========================
-   PRODUCTS
-========================= */
-
-.productAdminGrid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:13px;
-}
-
-.productAdmin{
-    padding:17px;
-    border:1px solid #1a3852;
-    border-radius:15px;
-    background:#071222;
-}
-
-.productEmoji{
-    height:110px;
+.modelActions{
+    margin-top:14px;
     display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:13px;
-    border-radius:12px;
-    background:radial-gradient(circle,#123d58,#071222);
-    font-size:60px;
+    gap:7px;
+    flex-wrap:wrap;
 }
 
-.productAdmin h3{
-    margin-bottom:5px;
+
+/* ==============================
+   EMPTY
+============================== */
+
+.empty{
+    padding:45px 20px;
+    color:#617489;
+    text-align:center;
     font-size:12px;
 }
 
-.productAdmin p{
+.emptyIcon{
     margin-bottom:10px;
-    color:#718298;
-    font-size:8px;
-}
-
-.productAdminBottom{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.productAdminPrice{
-    font-size:17px;
-    font-weight:1000;
+    font-size:30px;
 }
 
 
-/* =========================
-   MODAL
-========================= */
+/* ==============================
+   TOAST
+============================== */
 
-.modal{
+#toast{
     position:fixed;
-    inset:0;
-    z-index:5000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:#000c;
+    right:20px;
+    bottom:20px;
+    z-index:9999;
+    max-width:320px;
+    padding:13px 16px;
+    border:1px solid #254963;
+    border-radius:11px;
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    background:#071424;
+    box-shadow:0 15px 50px #0007;
+    transition:.25s;
+    font-size:11px;
+    font-weight:800;
 }
 
-.modalBox{
-    position:relative;
-    width:min(720px,100%);
-    max-height:90vh;
-    overflow:auto;
-    padding:27px;
-    border:1px solid #31516d;
-    border-radius:22px;
-    background:#071222;
-    box-shadow:0 30px 100px #000;
-    animation:modalIn .3s ease;
+#toast.show{
+    opacity:1;
+    transform:none;
 }
 
-@keyframes modalIn{
+
+/* ==============================
+   ANIMATION
+============================== */
+
+@keyframes show{
     from{
         opacity:0;
-        transform:scale(.9);
+        transform:translateY(20px) scale(.98);
     }
     to{
         opacity:1;
@@ -691,128 +599,20 @@ tr:hover td{
     }
 }
 
-.close{
-    position:absolute;
-    top:14px;
-    right:14px;
-    padding:7px 10px;
-    border:0;
-    border-radius:7px;
-    color:white;
-    background:#ff3f66;
-    font-size:8px;
-}
-
-.modalBox h2{
-    margin-bottom:20px;
-    font-size:21px;
-}
-
-.detailGrid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
-
-.detailBox{
-    padding:12px;
-    border-radius:9px;
-    background:#0a192b;
-}
-
-.detailBox span{
-    display:block;
-    margin-bottom:5px;
-    color:#66778d;
-    font-size:7px;
-}
-
-.detailBox strong{
-    font-size:9px;
+.fade{
+    animation:show .4s ease;
 }
 
 
-/* =========================
-   TOAST
-========================= */
-
-#toast{
-    position:fixed;
-    left:50%;
-    bottom:25px;
-    z-index:10000;
-    padding:13px 18px;
-    border:1px solid #31506d;
-    border-radius:10px;
-    color:white;
-    background:#0d1e32;
-    opacity:0;
-    transform:translate(-50%,25px);
-    pointer-events:none;
-    transition:.25s;
-    font-size:8px;
-    font-weight:1000;
-}
-
-#toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
-
-
-/* =========================
-   EMPTY
-========================= */
-
-.empty{
-    padding:50px 20px;
-    text-align:center;
-    color:#66778e;
-    font-size:9px;
-}
-
-
-/* =========================
+/* ==============================
    RESPONSIVE
-========================= */
+============================== */
 
-@media(max-width:1050px){
+@media(max-width:900px){
 
     .stats{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .productAdminGrid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-}
-
-@media(max-width:800px){
-
-    .layout{
-        grid-template-columns:1fr;
-    }
-
-    .sidebar{
-        position:static;
-        height:auto;
-        border-right:0;
-        border-bottom:1px solid #142d43;
-    }
-
-    .sidebar nav{
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:5px;
-    }
-
-    .sideBtn{
-        margin:0;
-    }
-
-    .main{
-        padding:20px;
+        grid-template-columns:
+            repeat(2,1fr);
     }
 
     .customGrid{
@@ -823,35 +623,48 @@ tr:hover td{
 
 @media(max-width:600px){
 
-    .topbar{
-        height:auto;
-        min-height:70px;
-        padding:12px;
-        gap:10px;
+    .topbarInner{
+        align-items:flex-start;
+        flex-direction:column;
     }
 
-    .adminBadge{
-        display:none;
+    .topActions{
+        width:100%;
     }
 
-    .topActions .topBtn:first-child{
-        display:none;
+    .topButton{
+        flex:1;
     }
 
-    .sidebar nav{
-        grid-template-columns:1fr 1fr;
+    .container{
+        padding:
+            22px 12px 50px;
+    }
+
+    .pageTitle{
+        font-size:27px;
     }
 
     .stats{
-        grid-template-columns:1fr;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
     }
 
-    .productAdminGrid{
-        grid-template-columns:1fr;
+    .stat{
+        padding:14px;
     }
 
-    .detailGrid{
-        grid-template-columns:1fr;
+    .statValue{
+        font-size:21px;
+    }
+
+    .orderTop{
+        flex-direction:column;
+    }
+
+    .orderBottom{
+        align-items:flex-start;
+        flex-direction:column;
     }
 
 }
@@ -861,31 +674,24 @@ tr:hover td{
 <body>
 
 
-<!-- =========================
+<!-- ==================================================
      LOGIN
-========================= -->
+================================================== -->
 
-<section id="loginScreen">
+<div id="loginScreen">
 
     <div class="loginBox">
 
-        <div class="loginLogo">
+        <div class="logo">
             Printerlase<span>3D</span>
         </div>
 
-        <p class="loginSubtitle">
-            Panel administracyjny sklepu.
-            Dostęp tylko dla administratora.
-        </p>
-
-        <div
-            class="loginError"
-            id="loginError"
-        >
-            ❌ Nieprawidłowy login lub hasło.
+        <div class="loginSubtitle">
+            Panel administratora sklepu
         </div>
 
-        <div class="field">
+
+        <div class="inputGroup">
 
             <label>
                 LOGIN
@@ -895,12 +701,13 @@ tr:hover td{
                 id="login"
                 type="text"
                 autocomplete="username"
-                placeholder="Login administratora"
+                placeholder="admin"
             >
 
         </div>
 
-        <div class="field">
+
+        <div class="inputGroup">
 
             <label>
                 HASŁO
@@ -915,514 +722,207 @@ tr:hover td{
 
         </div>
 
+
         <button
-            class="loginBtn"
-            onclick="loginAdmin()"
+            class="loginButton"
+            onclick="login()"
         >
-            🔐 ZALOGUJ DO PANELU
+            ZALOGUJ DO PANELU
         </button>
 
-    </div>
 
-</section>
-
-
-<!-- =========================
-     APP
-========================= -->
-
-<div id="app">
-
-    <header class="topbar">
-
-        <div>
-
-            <span class="logo">
-                Printerlase<span>3D</span>
-            </span>
-
-            <span class="adminBadge">
-                ADMIN
-            </span>
-
-        </div>
-
-
-        <div class="topActions">
-
-            <button
-                class="topBtn"
-                onclick="location.href='/'"
-            >
-                🌐 SKLEP
-            </button>
-
-            <button
-                class="topBtn logout"
-                onclick="logoutAdmin()"
-            >
-                WYLOGUJ
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <div class="layout">
-
-
-        <!-- SIDEBAR -->
-
-        <aside class="sidebar">
-
-            <div class="sidebarTitle">
-                ZARZĄDZANIE
-            </div>
-
-            <nav>
-
-                <button
-                    class="sideBtn active"
-                    onclick="showPage('dashboard',this)"
-                >
-                    📊 Dashboard
-                </button>
-
-                <button
-                    class="sideBtn"
-                    onclick="showPage('orders',this)"
-                >
-                    🛒 Zamówienia
-                </button>
-
-                <button
-                    class="sideBtn"
-                    onclick="showPage('custom',this)"
-                >
-                    🧩 Własne modele
-                </button>
-
-                <button
-                    class="sideBtn"
-                    onclick="showPage('products',this)"
-                >
-                    📦 Produkty
-                </button>
-
-            </nav>
-
-
-            <div class="sidebarTitle" style="margin-top:25px">
-                SKLEP
-            </div>
-
-            <nav>
-
-                <button
-                    class="sideBtn"
-                    onclick="location.href='/'"
-                >
-                    🏠 Otwórz sklep
-                </button>
-
-            </nav>
-
-        </aside>
-
-
-        <!-- MAIN -->
-
-        <main class="main">
-
-
-            <!-- DASHBOARD -->
-
-            <section
-                class="page active"
-                id="page-dashboard"
-            >
-
-                <div class="pageHeader">
-
-                    <h1>
-                        Dashboard
-                    </h1>
-
-                    <p>
-                        Centrum zarządzania Printerlase3D.
-                    </p>
-
-                </div>
-
-
-                <div class="stats">
-
-                    <div class="stat">
-
-                        <div class="statIcon">
-                            🛒
-                        </div>
-
-                        <div
-                            class="statValue"
-                            id="statOrders"
-                        >
-                            0
-                        </div>
-
-                        <div class="statLabel">
-                            ZAMÓWIENIA
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <div class="statIcon">
-                            💰
-                        </div>
-
-                        <div
-                            class="statValue"
-                            id="statRevenue"
-                        >
-                            0 zł
-                        </div>
-
-                        <div class="statLabel">
-                            PRZYCHÓD
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <div class="statIcon">
-                            🧩
-                        </div>
-
-                        <div
-                            class="statValue"
-                            id="statCustom"
-                        >
-                            0
-                        </div>
-
-                        <div class="statLabel">
-                            WŁASNE MODELE
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <div class="statIcon">
-                            ⏳
-                        </div>
-
-                        <div
-                            class="statValue"
-                            id="statPending"
-                        >
-                            0
-                        </div>
-
-                        <div class="statLabel">
-                            OCZEKUJĄCE
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="cardHeader">
-
-                        <h2>
-                            🕐 Ostatnie zamówienia
-                        </h2>
-
-                        <span>
-                            NAJNOWSZE
-                        </span>
-
-                    </div>
-
-                    <div class="cardBody">
-
-                        <div
-                            id="recentOrders"
-                            class="tableWrap"
-                        ></div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="cardHeader">
-
-                        <h2>
-                            🧩 Ostatnie własne modele
-                        </h2>
-
-                    </div>
-
-                    <div class="cardBody">
-
-                        <div
-                            id="recentCustom"
-                            class="customGrid"
-                        ></div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- ORDERS -->
-
-            <section
-                class="page"
-                id="page-orders"
-            >
-
-                <div class="pageHeader">
-
-                    <h1>
-                        🛒 Zamówienia
-                    </h1>
-
-                    <p>
-                        Wszystkie zamówienia ze sklepu.
-                    </p>
-
-                </div>
-
-
-                <div class="toolbar">
-
-                    <input
-                        id="orderSearch"
-                        class="search"
-                        placeholder="Szukaj po ID, nazwie lub e-mailu..."
-                        oninput="renderOrders()"
-                    >
-
-                    <select
-                        id="orderFilter"
-                        class="filter"
-                        onchange="renderOrders()"
-                    >
-
-                        <option value="ALL">
-                            Wszystkie
-                        </option>
-
-                        <option value="NEW">
-                            Nowe
-                        </option>
-
-                        <option value="IN_PROGRESS">
-                            W realizacji
-                        </option>
-
-                        <option value="READY">
-                            Gotowe
-                        </option>
-
-                        <option value="COMPLETED">
-                            Zakończone
-                        </option>
-
-                        <option value="CANCELLED">
-                            Anulowane
-                        </option>
-
-                    </select>
-
-                    <button
-                        class="topBtn"
-                        onclick="loadData()"
-                    >
-                        🔄 ODŚWIEŻ
-                    </button>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="tableWrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        ID
-                                    </th>
-
-                                    <th>
-                                        KLIENT
-                                    </th>
-
-                                    <th>
-                                        PRODUKTY
-                                    </th>
-
-                                    <th>
-                                        SUMA
-                                    </th>
-
-                                    <th>
-                                        STATUS
-                                    </th>
-
-                                    <th>
-                                        DATA
-                                    </th>
-
-                                    <th>
-                                        AKCJE
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="ordersTable"></tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- CUSTOM MODELS -->
-
-            <section
-                class="page"
-                id="page-custom"
-            >
-
-                <div class="pageHeader">
-
-                    <h1>
-                        🧩 Własne modele 3D
-                    </h1>
-
-                    <p>
-                        Modele przesłane przez klientów
-                        z formularza na stronie.
-                    </p>
-
-                </div>
-
-
-                <div class="toolbar">
-
-                    <input
-                        id="customSearch"
-                        class="search"
-                        placeholder="Szukaj po kliencie, e-mailu lub pliku..."
-                        oninput="renderCustom()"
-                    >
-
-                    <button
-                        class="topBtn"
-                        onclick="loadData()"
-                    >
-                        🔄 ODŚWIEŻ
-                    </button>
-
-                </div>
-
-
-                <div
-                    class="customGrid"
-                    id="customGrid"
-                ></div>
-
-            </section>
-
-
-            <!-- PRODUCTS -->
-
-            <section
-                class="page"
-                id="page-products"
-            >
-
-                <div class="pageHeader">
-
-                    <h1>
-                        📦 Produkty
-                    </h1>
-
-                    <p>
-                        Produkty wyświetlane w sklepie.
-                    </p>
-
-                </div>
-
-
-                <div
-                    class="productAdminGrid"
-                    id="adminProducts"
-                ></div>
-
-            </section>
-
-
-        </main>
+        <div
+            id="loginError"
+            class="loginError"
+        ></div>
 
     </div>
 
 </div>
 
 
-<!-- ORDER MODAL -->
+<!-- ==================================================
+     PANEL
+================================================== -->
 
-<div
-    class="modal"
-    id="orderModal"
-    onclick="closeModalOutside(event)"
->
+<div id="adminApp">
 
-    <div class="modalBox">
+    <header class="topbar">
 
-        <button
-            class="close"
-            onclick="closeOrderModal()"
-        >
-            ✕
-        </button>
+        <div class="topbarInner">
 
-        <h2>
-            Szczegóły zamówienia
-        </h2>
+            <div class="brand">
+                Printerlase<span>3D</span>
+                <small>ADMIN PANEL</small>
+            </div>
 
-        <div
-            id="orderDetails"
-        ></div>
 
-    </div>
+            <div class="topActions">
+
+                <button
+                    class="topButton"
+                    onclick="loadData()"
+                >
+                    ↻ ODŚWIEŻ
+                </button>
+
+                <button
+                    class="topButton logout"
+                    onclick="logout()"
+                >
+                    WYLOGUJ
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <h1 class="pageTitle">
+            Panel administratora
+        </h1>
+
+        <p class="pageDescription">
+            Zarządzaj zamówieniami i własnymi modelami 3D.
+        </p>
+
+
+        <!-- =========================
+             STATS
+        ========================== -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="statTitle">
+                    Zamówienia
+                </div>
+
+                <div
+                    id="statOrders"
+                    class="statValue blue"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="statTitle">
+                    Własne modele
+                </div>
+
+                <div
+                    id="statModels"
+                    class="statValue purple"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="statTitle">
+                    Przychód
+                </div>
+
+                <div
+                    id="statRevenue"
+                    class="statValue green"
+                >
+                    0,00 zł
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="statTitle">
+                    Nowe
+                </div>
+
+                <div
+                    id="statNew"
+                    class="statValue orange"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             ORDERS
+        ========================== -->
+
+        <section class="section">
+
+            <div class="sectionHeader">
+
+                <div class="sectionTitle">
+                    🛒 Zamówienia
+                </div>
+
+                <div
+                    id="ordersCount"
+                    class="sectionCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div
+                id="orders"
+                class="orders"
+            ></div>
+
+        </section>
+
+
+        <!-- =========================
+             CUSTOM MODELS
+        ========================== -->
+
+        <section class="section">
+
+            <div class="sectionHeader">
+
+                <div class="sectionTitle">
+                    🧩 Własne modele 3D
+                </div>
+
+                <div
+                    id="modelsCount"
+                    class="sectionCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div
+                id="customModels"
+                class="customGrid"
+            ></div>
+
+        </section>
+
+    </main>
 
 </div>
 
@@ -1432,46 +932,38 @@ tr:hover td{
 
 <script>
 
-/* =========================
-   AUTH
-========================= */
-
 let token =
     localStorage.getItem(
-        "printerlase3d_admin_token"
+        "printerlase_admin_token"
     );
 
-let orders = [];
-let customOrders = [];
 
+/* ==================================================
+   LOGIN
+================================================== */
 
-/*
-   UWAGA:
-   Produkcyjny backend powinien
-   sprawdzać hasło po stronie serwera.
+async function login(){
 
-   Ten login jest kompatybilny z:
-   login: admin
-   hasło: Admin2137!
+    const loginValue =
+        document
+            .getElementById("login")
+            .value
+            .trim();
 
-   Jeżeli server.js ma własny endpoint
-   /api/admin/login, frontend użyje właśnie jego.
-*/
-
-async function loginAdmin(){
-
-    const login =
-        document.getElementById("login")
-            .value.trim();
-
-    const password =
-        document.getElementById("password")
+    const passwordValue =
+        document
+            .getElementById("password")
             .value;
 
-    const error =
-        document.getElementById("loginError");
 
-    error.style.display = "none";
+    const error =
+        document.getElementById(
+            "loginError"
+        );
+
+
+    error.textContent =
+        "Logowanie...";
 
 
     try{
@@ -1481,139 +973,176 @@ async function loginAdmin(){
                 "/api/admin/login",
                 {
                     method:"POST",
+
                     headers:{
                         "Content-Type":
                             "application/json"
                     },
+
                     body:JSON.stringify({
-                        login,
-                        password
+
+                        login:
+                            loginValue,
+
+                        password:
+                            passwordValue
+
                     })
+
                 }
             );
 
 
         const data =
-            await response.json()
-                .catch(() => ({}));
+            await response.json();
 
 
         if(!response.ok){
 
             throw new Error(
                 data.error ||
-                "Błędne dane."
+                "Błąd logowania."
             );
 
         }
 
 
-        if(data.token){
-
-            token = data.token;
-
-            localStorage.setItem(
-                "printerlase3d_admin_token",
-                token
-            );
-
-        }
+        token =
+            data.token;
 
 
-        showApp();
+        localStorage.setItem(
+            "printerlase_admin_token",
+            token
+        );
+
+
+        showAdmin();
 
     }
     catch(error){
 
-        /*
-          Tryb awaryjny do lokalnego
-          testowania panelu.
-
-          Usuń ten fragment, jeśli
-          backend ma być jedynym
-          źródłem autoryzacji.
-        */
-
-        if(
-            login === "admin" &&
-            password === "Admin2137!"
-        ){
-
-            token = "local-admin";
-
-            localStorage.setItem(
-                "printerlase3d_admin_token",
-                token
-            );
-
-            showApp();
-
-            return;
-        }
-
-
-        error.textContent =
-            "❌ Nieprawidłowy login lub hasło.";
-
-        error.style.display = "block";
+        errorElement(
+            error.message
+        );
 
     }
 
 }
 
 
-function logoutAdmin(){
+function errorElement(
+    message
+){
 
-    token = null;
+    document
+        .getElementById(
+            "loginError"
+        )
+        .textContent =
+        message;
 
-    localStorage.removeItem(
-        "printerlase3d_admin_token"
+}
+
+
+/* Enter = login */
+
+document
+    .getElementById("password")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.key === "Enter"
+            ){
+
+                login();
+
+            }
+
+        }
     );
 
-    document.getElementById("app")
-        .style.display = "none";
 
-    document.getElementById("loginScreen")
-        .style.display = "flex";
+/* ==================================================
+   SHOW ADMIN
+================================================== */
+
+async function showAdmin(){
+
+    document
+        .getElementById(
+            "loginScreen"
+        )
+        .style.display =
+        "none";
+
+
+    document
+        .getElementById(
+            "adminApp"
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    await loadData();
 
 }
 
 
-/* =========================
-   APP
-========================= */
-
-function showApp(){
-
-    document.getElementById("loginScreen")
-        .style.display = "none";
-
-    document.getElementById("app")
-        .style.display = "block";
-
-    loadData();
-
-}
-
-
-/* =========================
+/* ==================================================
    API
-========================= */
+================================================== */
 
-async function apiFetch(url,options={}){
+async function api(
+    url,
+    options={}
+){
 
-    options.headers = {
-        ...(options.headers || {}),
-        "Authorization":
-            "Bearer " + token
-    };
+    options.headers =
+        options.headers || {};
+
+
+    options.headers.Authorization =
+        "Bearer " +
+        token;
+
+
+    if(
+        options.body &&
+        typeof options.body !==
+        "string"
+    ){
+
+        options.headers[
+            "Content-Type"
+        ] =
+            "application/json";
+
+
+        options.body =
+            JSON.stringify(
+                options.body
+            );
+
+    }
+
 
     const response =
-        await fetch(url,options);
+        await fetch(
+            url,
+            options
+        );
 
-    if(response.status === 401){
 
-        logoutAdmin();
+    if(
+        response.status === 401
+    ){
+
+        logout();
 
         throw new Error(
             "Sesja wygasła."
@@ -1621,9 +1150,10 @@ async function apiFetch(url,options={}){
 
     }
 
+
     const data =
-        await response.json()
-            .catch(() => ({}));
+        await response.json();
+
 
     if(!response.ok){
 
@@ -1634,1089 +1164,711 @@ async function apiFetch(url,options={}){
 
     }
 
+
     return data;
+
 }
 
 
-/* =========================
-   LOAD DATA
-========================= */
+/* ==================================================
+   LOAD
+================================================== */
 
 async function loadData(){
+
+    if(!token){
+
+        return;
+
+    }
+
 
     try{
 
         const data =
-            await apiFetch(
+            await api(
                 "/api/admin/data"
             );
 
-        orders =
-            Array.isArray(data.orders)
-                ? data.orders
-                : [];
 
-        customOrders =
-            Array.isArray(data.customOrders)
-                ? data.customOrders
-                : [];
+        renderStats(
+            data
+        );
 
+        renderOrders(
+            data.orders || []
+        );
 
-        renderDashboard();
-        renderOrders();
-        renderCustom();
-        renderProducts();
-
+        renderCustomModels(
+            data.customOrders || []
+        );
 
     }
     catch(error){
 
-        /*
-          Jeśli backend jeszcze nie ma
-          /api/admin/data, panel nadal
-          się otworzy.
-        */
-
-        showToast(
-            "⚠️ " + error.message
+        toast(
+            error.message
         );
-
-        renderDashboard();
-        renderOrders();
-        renderCustom();
-        renderProducts();
 
     }
 
 }
 
 
-/* =========================
-   DASHBOARD
-========================= */
+/* ==================================================
+   STATS
+================================================== */
 
-function renderDashboard(){
+function renderStats(
+    data
+){
 
-    const revenue =
-        orders.reduce(
-            (sum,o) =>
-                sum + Number(o.total || 0),
-            0
-        );
+    const orders =
+        data.orders || [];
 
-    const pending =
+    const models =
+        data.customOrders || [];
+
+
+    const newOrders =
         orders.filter(
-            o =>
-                !["COMPLETED","CANCELLED"]
-                    .includes(o.status)
+            order =>
+                order.status ===
+                "NEW"
         ).length;
 
 
-    document.getElementById(
-        "statOrders"
-    ).textContent =
+    const revenue =
+        orders.reduce(
+            (
+                sum,
+                order
+            ) =>
+                sum +
+                Number(
+                    order.total || 0
+                ),
+            0
+        );
+
+
+    document
+        .getElementById(
+            "statOrders"
+        )
+        .textContent =
         orders.length;
 
 
-    document.getElementById(
-        "statRevenue"
-    ).textContent =
-        money(revenue);
+    document
+        .getElementById(
+            "statModels"
+        )
+        .textContent =
+        models.length;
 
 
-    document.getElementById(
-        "statCustom"
-    ).textContent =
-        customOrders.length;
+    document
+        .getElementById(
+            "statRevenue"
+        )
+        .textContent =
+        money(
+            revenue
+        );
 
 
-    document.getElementById(
-        "statPending"
-    ).textContent =
-        pending;
-
-
-    const recent =
-        orders.slice(0,5);
-
-
-    document.getElementById(
-        "recentOrders"
-    ).innerHTML =
-        recent.length
-        ? orderTableHTML(recent)
-        : `<div class="empty">
-            Brak zamówień.
-           </div>`;
-
-
-    document.getElementById(
-        "recentCustom"
-    ).innerHTML =
-        customOrders
-            .slice(0,4)
-            .map(customCardHTML)
-            .join("") ||
-        `<div class="empty">
-            Brak własnych modeli.
-         </div>`;
+    document
+        .getElementById(
+            "statNew"
+        )
+        .textContent =
+        newOrders;
 
 }
 
 
-/* =========================
+/* ==================================================
    ORDERS
-========================= */
+================================================== */
 
-function renderOrders(){
+function renderOrders(
+    orders
+){
 
-    const search =
-        (
-            document.getElementById(
-                "orderSearch"
-            )?.value || ""
-        ).toLowerCase();
-
-
-    const filter =
+    const container =
         document.getElementById(
-            "orderFilter"
-        )?.value || "ALL";
-
-
-    const filtered =
-        orders.filter(order => {
-
-            const text =
-                JSON.stringify(order)
-                    .toLowerCase();
-
-            const matchesSearch =
-                text.includes(search);
-
-            const matchesFilter =
-                filter === "ALL" ||
-                order.status === filter;
-
-            return matchesSearch &&
-                   matchesFilter;
-
-        });
-
-
-    const tbody =
-        document.getElementById(
-            "ordersTable"
+            "orders"
         );
 
-    if(!filtered.length){
 
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    <div class="empty">
-                        Brak zamówień.
-                    </div>
-                </td>
-            </tr>
+    document
+        .getElementById(
+            "ordersCount"
+        )
+        .textContent =
+        orders.length;
+
+
+    if(!orders.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="emptyIcon">
+                    🛒
+                </div>
+
+                Brak zamówień.
+
+            </div>
+
         `;
 
         return;
+
     }
 
 
-    tbody.innerHTML =
-        filtered
-            .map(order => `
-
-                <tr>
-
-                    <td>
-                        <span class="orderId">
-                            #${escapeHTML(
-                                order.id || "???"
-                            )}
-                        </span>
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            order.name || "—"
-                        )}
-                        <br>
-                        <span style="
-                            color:#5f7188;
-                            font-size:7px;
-                        ">
-                            ${escapeHTML(
-                                order.email || ""
-                            )}
-                        </span>
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            productNames(order)
-                        )}
-                    </td>
-
-                    <td>
-                        <strong>
-                            ${money(order.total)}
-                        </strong>
-                    </td>
-
-                    <td>
-                        ${statusHTML(order.status)}
-                    </td>
-
-                    <td>
-                        ${formatDate(
-                            order.createdAt
-                        )}
-                    </td>
-
-                    <td>
-
-                        <button
-                            class="actionBtn"
-                            onclick="showOrder('${escapeAttr(
-                                order.id
-                            )}')"
-                        >
-                            ZOBACZ
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            `)
+    container.innerHTML =
+        orders
+            .map(
+                order =>
+                    orderHTML(
+                        order
+                    )
+            )
             .join("");
 
 }
 
 
-function orderTableHTML(list){
-
-    return `
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>ID</th>
-                    <th>KLIENT</th>
-                    <th>SUMA</th>
-                    <th>STATUS</th>
-                    <th>AKCJA</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                ${list.map(order => `
-
-                    <tr>
-
-                        <td>
-                            <span class="orderId">
-                                #${escapeHTML(
-                                    order.id || "???"
-                                )}
-                            </span>
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                order.name || "—"
-                            )}
-                        </td>
-
-                        <td>
-                            ${money(order.total)}
-                        </td>
-
-                        <td>
-                            ${statusHTML(
-                                order.status
-                            )}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="actionBtn"
-                                onclick="showOrder('${escapeAttr(
-                                    order.id
-                                )}')"
-                            >
-                                ZOBACZ
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `).join("")}
-
-            </tbody>
-
-        </table>
-    `;
-
-}
-
-
-/* =========================
-   CUSTOM
-========================= */
-
-function renderCustom(){
-
-    const search =
-        (
-            document.getElementById(
-                "customSearch"
-            )?.value || ""
-        ).toLowerCase();
-
-
-    const filtered =
-        customOrders.filter(order =>
-            JSON.stringify(order)
-                .toLowerCase()
-                .includes(search)
-        );
-
-
-    document.getElementById(
-        "customGrid"
-    ).innerHTML =
-        filtered.length
-        ? filtered
-            .map(customCardHTML)
-            .join("")
-        : `<div class="empty">
-            Brak modeli.
-           </div>`;
-
-}
-
-
-function customCardHTML(order){
-
-    const id =
-        order.id ||
-        order._id ||
-        "???";
-
-    const file =
-        order.file ||
-        order.filename ||
-        order.fileName ||
-        "Brak pliku";
-
-
-    return `
-
-        <div class="customOrder">
-
-            <div class="customTop">
-
-                <h3>
-                    🧩 ${escapeHTML(file)}
-                </h3>
-
-                ${statusHTML(
-                    order.status || "NEW"
-                )}
-
-            </div>
-
-
-            <div class="customInfo">
-
-                <div class="infoRow">
-
-                    <span>
-                        ID
-                    </span>
-
-                    <strong>
-                        #${escapeHTML(id)}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>
-                        Klient
-                    </span>
-
-                    <strong>
-                        ${escapeHTML(
-                            order.name || "—"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>
-                        E-mail
-                    </span>
-
-                    <strong>
-                        ${escapeHTML(
-                            order.email || "—"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>
-                        Materiał
-                    </span>
-
-                    <strong>
-                        ${escapeHTML(
-                            order.material || "—"
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="infoRow">
-
-                    <span>
-                        Kolor
-                    </span>
-
-                    <strong>
-                        ${escapeHTML(
-                            order.color || "—"
-                        )}
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="description">
-
-                ${escapeHTML(
-                    order.description ||
-                    "Brak opisu."
-                )}
-
-            </div>
-
-
-            <div class="customActions">
-
-                ${
-                    order.downloadUrl ||
-                    order.fileUrl ||
-                    order.url
-                    ? `
-                        <a
-                            class="actionBtn"
-                            href="${escapeAttr(
-                                order.downloadUrl ||
-                                order.fileUrl ||
-                                order.url
-                            )}"
-                            target="_blank"
-                            rel="noopener"
-                        >
-                            📥 POBIERZ MODEL
-                        </a>
-                    `
-                    : `
-                        <button
-                            class="actionBtn"
-                            onclick="showToast('ℹ️ Backend nie podał jeszcze linku do pliku.')"
-                        >
-                            📁 PLIK
-                        </button>
-                    `
-                }
-
-
-                <button
-                    class="actionBtn"
-                    onclick="changeCustomStatus('${escapeAttr(id)}')"
-                >
-                    STATUS
-                </button>
-
-
-                <button
-                    class="actionBtn dangerBtn"
-                    onclick="deleteCustom('${escapeAttr(id)}')"
-                >
-                    USUŃ
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================
-   PRODUCTS
-========================= */
-
-const adminProducts = [
-
-    ["🔑","Brelok Printerlase3D",12],
-    ["💙","Brelok FRIENDZ",15],
-    ["📱","Mini stojak na telefon",24],
-    ["🔌","Organizer kabli",18],
-    ["🎧","Podstawka pod słuchawki",39],
-    ["🎮","Gamingowy uchwyt",29],
-    ["🌱","Mini doniczka",22],
-    ["👾","Figurka Pixel",35],
-    ["🚲","Uchwyt rowerowy",45],
-    ["🗂️","Organizer biurkowy",32],
-    ["🕹️","Stojak na pada",34],
-    ["🏷️","Personalizowana tabliczka",25]
-
-];
-
-
-function renderProducts(){
-
-    document.getElementById(
-        "adminProducts"
-    ).innerHTML =
-        adminProducts
-            .map(p => `
-
-                <div class="productAdmin">
-
-                    <div class="productEmoji">
-                        ${p[0]}
-                    </div>
-
-                    <h3>
-                        ${escapeHTML(p[1])}
-                    </h3>
-
-                    <p>
-                        Produkt Printerlase3D
-                    </p>
-
-                    <div class="productAdminBottom">
-
-                        <div class="productAdminPrice">
-                            ${money(p[2])}
-                        </div>
-
-                        <button
-                            class="actionBtn"
-                            onclick="showToast('✏️ Edycję produktów dodamy do backendu.')"
-                        >
-                            EDYTUJ
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `)
-            .join("");
-
-}
-
-
-/* =========================
-   ORDER DETAILS
-========================= */
-
-function showOrder(id){
-
-    const order =
-        orders.find(
-            o => String(o.id) === String(id)
-        );
-
-    if(!order){
-
-        showToast(
-            "❌ Nie znaleziono zamówienia."
-        );
-
-        return;
-    }
-
+function orderHTML(
+    order
+){
 
     const items =
-        Array.isArray(order.items)
+        Array.isArray(
+            order.items
+        )
             ? order.items
             : [];
 
 
-    document.getElementById(
-        "orderDetails"
-    ).innerHTML = `
+    const itemsHTML =
+        items.length
+            ? items
+                .map(
+                    item => `
 
-        <div class="detailGrid">
+                        <div class="item">
 
-            <div class="detailBox">
-                <span>ID</span>
-                <strong>
-                    #${escapeHTML(order.id || "???")}
-                </strong>
-            </div>
+                            <strong>
+                                ${escapeHTML(
+                                    item.name
+                                )}
+                            </strong>
 
-            <div class="detailBox">
-                <span>STATUS</span>
-                <strong>
-                    ${escapeHTML(
-                        order.status || "NEW"
-                    )}
-                </strong>
-            </div>
-
-            <div class="detailBox">
-                <span>KLIENT</span>
-                <strong>
-                    ${escapeHTML(
-                        order.name || "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="detailBox">
-                <span>E-MAIL</span>
-                <strong>
-                    ${escapeHTML(
-                        order.email || "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="detailBox">
-                <span>ADRES</span>
-                <strong>
-                    ${escapeHTML(
-                        order.address || "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="detailBox">
-                <span>DATA</span>
-                <strong>
-                    ${formatDate(
-                        order.createdAt
-                    )}
-                </strong>
-            </div>
-
-        </div>
-
-
-        <div style="
-            margin-top:15px;
-            padding:15px;
-            border-radius:10px;
-            background:#050d18;
-        ">
-
-            <div style="
-                margin-bottom:10px;
-                color:#6d7f96;
-                font-size:8px;
-                font-weight:1000;
-            ">
-                PRODUKTY
-            </div>
-
-            ${
-                items.length
-                ? items.map(item => `
-
-                    <div style="
-                        display:flex;
-                        justify-content:space-between;
-                        gap:10px;
-                        padding:9px 0;
-                        border-bottom:1px solid #142c42;
-                        font-size:9px;
-                    ">
-
-                        <span>
-                            ${escapeHTML(
-                                item.name || "Produkt"
-                            )}
-                            × ${Number(
+                            ×
+                            ${Number(
                                 item.quantity ||
                                 item.qty ||
                                 1
                             )}
-                        </span>
 
-                        <strong>
+                            —
                             ${money(
-                                Number(item.price || 0) *
-                                Number(
-                                    item.quantity ||
-                                    item.qty ||
-                                    1
+                                item.total ||
+                                (
+                                    Number(
+                                        item.price ||
+                                        0
+                                    ) *
+                                    Number(
+                                        item.quantity ||
+                                        item.qty ||
+                                        1
+                                    )
                                 )
                             )}
-                        </strong>
 
+                        </div>
+
+                    `
+                )
+                .join("")
+            : `
+                <div class="item">
+                    Brak produktów
+                </div>
+            `;
+
+
+    return `
+
+        <article class="order fade">
+
+            <div class="orderTop">
+
+                <div>
+
+                    <div class="orderId">
+                        ${escapeHTML(
+                            order.id
+                        )}
                     </div>
 
-                `).join("")
-                : `
-                    <div style="
-                        color:#718198;
-                        font-size:8px;
-                    ">
-                        Brak danych produktów.
+                    <div class="orderDate">
+                        ${formatDate(
+                            order.createdAt
+                        )}
                     </div>
-                `
-            }
 
-        </div>
+                </div>
 
 
-        <div style="
-            margin-top:15px;
-        ">
+                <div class="statusArea">
 
-            <div class="detailBox">
-                <span>SUMA</span>
-                <strong style="
-                    font-size:20px;
-                    color:#00c8ff;
-                ">
-                    ${money(order.total)}
-                </strong>
+                    <span
+                        class="status ${escapeHTML(
+                            order.status ||
+                            "NEW"
+                        )}"
+                    >
+                        ${statusName(
+                            order.status
+                        )}
+                    </span>
+
+
+                    <select
+                        class="statusSelect"
+                        onchange="changeOrderStatus(
+                            '${escapeJS(order.id)}',
+                            this.value
+                        )"
+                    >
+
+                        ${statusOptions(
+                            order.status
+                        )}
+
+                    </select>
+
+                </div>
+
             </div>
 
-        </div>
+
+            <div class="orderCustomer">
+
+                👤
+                ${escapeHTML(
+                    order.name ||
+                    "Brak nazwy"
+                )}
+
+            </div>
 
 
-        <div style="
-            display:flex;
-            flex-wrap:wrap;
-            gap:7px;
-            margin-top:15px;
-        ">
+            <div class="orderContact">
 
-            <button
-                class="actionBtn"
-                onclick="changeOrderStatus('${escapeAttr(order.id)}','IN_PROGRESS')"
-            >
-                🔧 W REALIZACJI
-            </button>
+                📧
+                ${escapeHTML(
+                    order.email ||
+                    "-"
+                )}
 
-            <button
-                class="actionBtn"
-                onclick="changeOrderStatus('${escapeAttr(order.id)}','READY')"
-            >
-                📦 GOTOWE
-            </button>
+                <br>
 
-            <button
-                class="actionBtn"
-                onclick="changeOrderStatus('${escapeAttr(order.id)}','COMPLETED')"
-            >
-                ✅ ZAKOŃCZONE
-            </button>
+                📞
+                ${escapeHTML(
+                    order.phone ||
+                    "-"
+                )}
 
-            <button
-                class="actionBtn dangerBtn"
-                onclick="changeOrderStatus('${escapeAttr(order.id)}','CANCELLED')"
-            >
-                ❌ ANULUJ
-            </button>
+                <br>
 
-        </div>
+                📍
+                ${escapeHTML(
+                    order.address ||
+                    "-"
+                )}
+
+            </div>
+
+
+            <div class="orderItems">
+
+                ${itemsHTML}
+
+            </div>
+
+
+            <div class="orderBottom">
+
+                <div>
+
+                    <div class="orderPrice">
+
+                        ${money(
+                            order.total
+                        )}
+
+                    </div>
+
+                    <div class="orderMeta">
+
+                        ${order.discount
+                            ? `Rabat: -${money(
+                                order.discount
+                            )}`
+                            : "Bez rabatu"
+                        }
+
+                        ·
+
+                        ${escapeHTML(
+                            order.delivery ||
+                            "Dostawa"
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="deleteButton"
+                    onclick="deleteOrder(
+                        '${escapeJS(order.id)}'
+                    )"
+                >
+                    🗑 Usuń
+                </button>
+
+            </div>
+
+        </article>
 
     `;
 
-
-    document.getElementById(
-        "orderModal"
-    ).style.display = "flex";
-
 }
 
 
-function closeOrderModal(){
+/* ==================================================
+   CUSTOM MODELS
+================================================== */
 
-    document.getElementById(
-        "orderModal"
-    ).style.display = "none";
+function renderCustomModels(
+    models
+){
 
-}
-
-
-function closeModalOutside(event){
-
-    if(event.target.id === "orderModal"){
-
-        closeOrderModal();
-
-    }
-
-}
-
-
-/* =========================
-   STATUS
-========================= */
-
-async function changeOrderStatus(id,status){
-
-    try{
-
-        await apiFetch(
-            `/api/admin/orders/${encodeURIComponent(id)}/status`,
-            {
-                method:"PATCH",
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-                body:JSON.stringify({
-                    status
-                })
-            }
+    const container =
+        document.getElementById(
+            "customModels"
         );
 
-        showToast(
-            "✅ Status zmieniony."
-        );
 
-        closeOrderModal();
-
-        loadData();
-
-    }
-    catch(error){
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-
-}
-
-
-async function changeCustomStatus(id){
-
-    const status =
-        prompt(
-            "Wpisz status: NEW, IN_PROGRESS, READY, COMPLETED lub CANCELLED",
-            "IN_PROGRESS"
-        );
-
-    if(!status) return;
-
-    const normalized =
-        status.trim().toUpperCase();
-
-
-    try{
-
-        await apiFetch(
-            `/api/admin/custom/${encodeURIComponent(id)}/status`,
-            {
-                method:"PATCH",
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-                body:JSON.stringify({
-                    status:normalized
-                })
-            }
-        );
-
-        showToast(
-            "✅ Status zmieniony."
-        );
-
-        loadData();
-
-    }
-    catch(error){
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-
-}
-
-
-/* =========================
-   DELETE CUSTOM
-========================= */
-
-async function deleteCustom(id){
-
-    if(
-        !confirm(
-            "Na pewno usunąć ten model?"
+    document
+        .getElementById(
+            "modelsCount"
         )
-    ){
+        .textContent =
+        models.length;
+
+
+    if(!models.length){
+
+        container.innerHTML = `
+
+            <div
+                class="empty"
+                style="grid-column:1/-1"
+            >
+
+                <div class="emptyIcon">
+                    🧩
+                </div>
+
+                Nikt jeszcze nie wysłał
+                własnego modelu 3D.
+
+            </div>
+
+        `;
+
         return;
+
     }
 
 
-    try{
+    container.innerHTML =
+        models
+            .map(
+                model =>
+                    customModelHTML(
+                        model
+                    )
+            )
+            .join("");
 
-        await apiFetch(
-            `/api/admin/custom/${encodeURIComponent(id)}`,
-            {
-                method:"DELETE"
+}
+
+
+function customModelHTML(
+    model
+){
+
+    return `
+
+        <article class="customCard fade">
+
+            <div class="modelName">
+
+                🧩
+                ${escapeHTML(
+                    model.fileName ||
+                    model.name ||
+                    "Własny model"
+                )}
+
+            </div>
+
+
+            <div class="modelId">
+
+                ${escapeHTML(
+                    model.id
+                )}
+
+            </div>
+
+
+            <div class="modelInfo">
+
+                <div class="infoRow">
+
+                    <span>Klient</span>
+
+                    <strong>
+                        ${escapeHTML(
+                            model.name ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="infoRow">
+
+                    <span>E-mail</span>
+
+                    <strong>
+                        ${escapeHTML(
+                            model.email ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="infoRow">
+
+                    <span>Materiał</span>
+
+                    <strong>
+                        ${escapeHTML(
+                            model.material ||
+                            "PLA"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="infoRow">
+
+                    <span>Kolor</span>
+
+                    <strong>
+                        ${escapeHTML(
+                            model.color ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="infoRow">
+
+                    <span>Ilość</span>
+
+                    <strong>
+                        ${Number(
+                            model.quantity ||
+                            1
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="infoRow">
+
+                    <span>Wymiary</span>
+
+                    <strong>
+                        ${escapeHTML(
+                            model.dimensions ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="infoRow">
+
+                    <span>Szacowana cena</span>
+
+                    <strong>
+                        ${money(
+                            model.estimatedPrice ||
+                            0
+                        )}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            ${
+                model.description
+                    ? `
+                        <div class="description">
+
+                            ${escapeHTML(
+                                model.description
+                            )}
+
+                        </div>
+                    `
+                    : ""
             }
-        );
-
-        showToast(
-            "🗑️ Model usunięty."
-        );
-
-        loadData();
-
-    }
-    catch(error){
-
-        showToast(
-            "❌ " + error.message
-        );
-
-    }
-
-}
 
 
-/* =========================
-   NAVIGATION
-========================= */
+            <div class="modelActions">
 
-function showPage(page,button){
+                <select
+                    class="statusSelect"
+                    onchange="changeModelStatus(
+                        '${escapeJS(model.id)}',
+                        this.value
+                    )"
+                >
 
-    document
-        .querySelectorAll(".page")
-        .forEach(el =>
-            el.classList.remove("active")
-        );
+                    ${statusOptions(
+                        model.status
+                    )}
 
-
-    document
-        .querySelectorAll(".sideBtn")
-        .forEach(el =>
-            el.classList.remove("active")
-        );
+                </select>
 
 
-    document.getElementById(
-        "page-" + page
-    ).classList.add("active");
+                ${
+                    model.fileUrl
+                        ? `
+                            <button
+                                class="topButton"
+                                onclick="window.open(
+                                    '${escapeJS(model.fileUrl)}',
+                                    '_blank'
+                                )"
+                            >
+                                👁 Zobacz model
+                            </button>
+                        `
+                        : ""
+                }
 
 
-    if(button){
+                <button
+                    class="deleteButton"
+                    onclick="deleteModel(
+                        '${escapeJS(model.id)}'
+                    )"
+                >
+                    🗑 Usuń
+                </button>
 
-        button.classList.add("active");
+            </div>
 
-    }
+        </article>
 
-}
-
-
-/* =========================
-   HELPERS
-========================= */
-
-function money(value){
-
-    return Number(value || 0)
-        .toFixed(2)
-        .replace(".",",") + " zł";
+    `;
 
 }
 
 
-function formatDate(value){
+/* ==================================================
+   STATUS
+================================================== */
 
-    if(!value) return "—";
+function statusOptions(
+    current
+){
 
-    const date =
-        new Date(value);
+    const options = [
 
-    if(Number.isNaN(
-        date.getTime()
-    )){
-        return "—";
-    }
+        ["NEW","NOWE"],
 
-    return date.toLocaleString(
-        "pl-PL",
-        {
-            dateStyle:"short",
-            timeStyle:"short"
-        }
-    );
+        ["IN_PROGRESS","W REALIZACJI"],
 
-}
+        ["READY","GOTOWE"],
+
+        ["COMPLETED","ZAKOŃCZONE"],
+
+        ["CANCELLED","ANULOWANE"]
+
+    ];
 
 
-function productNames(order){
-
-    if(
-        !Array.isArray(order.items)
-    ){
-        return "—";
-    }
-
-    return order.items
+    return options
         .map(
-            item =>
-                `${item.name || "Produkt"} × ${
-                    item.quantity ||
-                    item.qty ||
-                    1
-                }`
+            option => `
+
+                <option
+                    value="${option[0]}"
+                    ${
+                        option[0] ===
+                        current
+                            ? "selected"
+                            : ""
+                    }
+                >
+                    ${option[1]}
+                </option>
+
+            `
         )
-        .join(", ");
+        .join("");
 
 }
 
 
-function statusHTML(status){
-
-    const value =
-        status || "NEW";
+function statusName(
+    status
+){
 
     const names = {
 
-        NEW:"NOWE",
+        NEW:
+            "NOWE",
 
         IN_PROGRESS:
             "W REALIZACJI",
@@ -2732,102 +1884,456 @@ function statusHTML(status){
 
     };
 
-    return `
-        <span class="status ${escapeAttr(value)}">
-            ${escapeHTML(
-                names[value] || value
-            )}
-        </span>
-    `;
 
-}
-
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-function escapeAttr(value){
-
-    return String(value ?? "")
-        .replaceAll("\\","\\\\")
-        .replaceAll("'","\\'")
-        .replaceAll('"',"&quot;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;");
-
-}
-
-
-function showToast(text){
-
-    const toast =
-        document.getElementById(
-            "toast"
-        );
-
-    toast.textContent = text;
-
-    toast.classList.add("show");
-
-    clearTimeout(
-        window.toastTimer
+    return (
+        names[status] ||
+        "NOWE"
     );
 
-    window.toastTimer =
-        setTimeout(
-            () =>
-                toast.classList.remove(
-                    "show"
-                ),
-            3000
+}
+
+
+/* ==================================================
+   CHANGE ORDER STATUS
+================================================== */
+
+async function changeOrderStatus(
+    id,
+    status
+){
+
+    try{
+
+        await api(
+            `/api/admin/orders/${encodeURIComponent(
+                id
+            )}/status`,
+            {
+                method:"PATCH",
+                body:{
+                    status
+                }
+            }
         );
+
+
+        toast(
+            "Status zamówienia zmieniony."
+        );
+
+
+        await loadData();
+
+    }
+    catch(error){
+
+        toast(
+            error.message
+        );
+
+    }
 
 }
 
 
-/* =========================
-   START
-========================= */
+/* ==================================================
+   CHANGE MODEL STATUS
+================================================== */
 
-document.addEventListener(
-    "keydown",
-    event => {
+async function changeModelStatus(
+    id,
+    status
+){
 
-        if(
-            event.key === "Enter" &&
-            document.getElementById(
-                "loginScreen"
-            ).style.display !== "none"
-        ){
+    try{
 
-            loginAdmin();
+        await api(
+            `/api/admin/custom/${encodeURIComponent(
+                id
+            )}/status`,
+            {
+                method:"PATCH",
+                body:{
+                    status
+                }
+            }
+        );
 
-        }
 
-        if(event.key === "Escape"){
+        toast(
+            "Status modelu zmieniony."
+        );
 
-            closeOrderModal();
+
+        await loadData();
+
+    }
+    catch(error){
+
+        toast(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   DELETE ORDER
+================================================== */
+
+async function deleteOrder(
+    id
+){
+
+    if(
+        !confirm(
+            "Na pewno usunąć to zamówienie?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        await api(
+            `/api/admin/orders/${encodeURIComponent(
+                id
+            )}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+
+        toast(
+            "Zamówienie usunięte."
+        );
+
+
+        await loadData();
+
+    }
+    catch(error){
+
+        toast(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   DELETE MODEL
+================================================== */
+
+async function deleteModel(
+    id
+){
+
+    if(
+        !confirm(
+            "Na pewno usunąć ten model?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        await api(
+            `/api/admin/custom/${encodeURIComponent(
+                id
+            )}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+
+        toast(
+            "Model usunięty."
+        );
+
+
+        await loadData();
+
+    }
+    catch(error){
+
+        toast(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   LOGOUT
+================================================== */
+
+async function logout(){
+
+    try{
+
+        if(token){
+
+            await fetch(
+                "/api/admin/logout",
+                {
+                    method:"POST",
+
+                    headers:{
+                        Authorization:
+                            "Bearer " +
+                            token
+                    }
+                }
+            );
 
         }
 
     }
-);
+    catch(error){
 
+        console.log(error);
+
+    }
+
+
+    token = null;
+
+    localStorage.removeItem(
+        "printerlase_admin_token"
+    );
+
+
+    document
+        .getElementById(
+            "adminApp"
+        )
+        .classList.remove(
+            "active"
+        );
+
+
+    document
+        .getElementById(
+            "loginScreen"
+        )
+        .style.display =
+        "flex";
+
+}
+
+
+/* ==================================================
+   TOAST
+================================================== */
+
+let toastTimer;
+
+
+function toast(
+    message
+){
+
+    const element =
+        document.getElementById(
+            "toast"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                element.classList.remove(
+                    "show"
+                );
+
+            },
+            2500
+        );
+
+}
+
+
+/* ==================================================
+   HELPERS
+================================================== */
+
+function money(
+    value
+){
+
+    return Number(
+        value || 0
+    )
+    .toLocaleString(
+        "pl-PL",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    ) + " zł";
+
+}
+
+
+function formatDate(
+    value
+){
+
+    if(!value){
+        return "-";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+
+        return "-";
+
+    }
+
+
+    return date.toLocaleString(
+        "pl-PL",
+        {
+            dateStyle:"medium",
+            timeStyle:"short"
+        }
+    );
+
+}
+
+
+function escapeHTML(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+function escapeJS(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    )
+    .replace(
+        /\n/g,
+        "\\n"
+    )
+    .replace(
+        /\r/g,
+        "\\r"
+    );
+
+}
+
+
+/* ==================================================
+   AUTO LOGIN
+================================================== */
 
 if(token){
 
-    showApp();
+    showAdmin();
 
 }
+
+
+/* ==================================================
+   AUTO REFRESH
+================================================== */
+
+setInterval(
+    () => {
+
+        if(
+            token &&
+            document
+                .getElementById(
+                    "adminApp"
+                )
+                .classList
+                .contains("active")
+        ){
+
+            loadData();
+
+        }
+
+    },
+    10000
+);
 
 </script>
 
