@@ -7,7 +7,6 @@
 <title>Checkout — Printerlase3D</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -19,206 +18,75 @@ html{
 body{
     margin:0;
     min-height:100vh;
+    background:
+        radial-gradient(circle at 15% 10%,rgba(0,170,255,.18),transparent 32%),
+        radial-gradient(circle at 85% 80%,rgba(125,65,255,.18),transparent 32%),
+        #030712;
     color:white;
     font-family:Inter,Arial,sans-serif;
-    background:
-        radial-gradient(circle at 15% 10%,rgba(0,170,255,.18),transparent 35%),
-        radial-gradient(circle at 85% 80%,rgba(125,60,255,.18),transparent 35%),
-        #030712;
-    overflow-x:hidden;
 }
 
-/* =========================
-   TŁO
-========================= */
-
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    opacity:.18;
-    background-image:
-        linear-gradient(#159cff18 1px,transparent 1px),
-        linear-gradient(90deg,#159cff18 1px,transparent 1px);
-    background-size:55px 55px;
-    mask-image:linear-gradient(to bottom,#000,transparent);
-}
-
-.orb{
-    position:fixed;
-    width:350px;
-    height:350px;
-    border-radius:50%;
-    filter:blur(100px);
-    pointer-events:none;
-    opacity:.25;
-    z-index:-1;
-    animation:float 9s ease-in-out infinite alternate;
-}
-
-.orb.one{
-    background:#008cff;
-    top:-150px;
-    left:-120px;
-}
-
-.orb.two{
-    background:#763cff;
-    right:-150px;
-    bottom:-100px;
-    animation-delay:2s;
-}
-
-@keyframes float{
-    to{
-        transform:translate(60px,50px) scale(1.1);
-    }
-}
-
-/* =========================
-   TOP
-========================= */
-
-.topbar{
-    position:relative;
-    max-width:1100px;
+.page{
+    max-width:1150px;
     margin:auto;
-    padding:25px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    padding:100px 20px 60px;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:40px;
 }
 
 .logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    text-decoration:none;
-    color:white;
-    font-weight:1000;
-    font-size:18px;
-}
-
-.logo-icon{
-    width:42px;
-    height:42px;
-    display:grid;
-    place-items:center;
-    border-radius:13px;
-    background:linear-gradient(135deg,#00d9ff,#167cff,#803cff);
-    box-shadow:0 0 25px #008cff55;
-    transform:rotate(-4deg);
-}
-
-.logo-icon span{
-    transform:rotate(4deg);
-    font-size:21px;
-}
-
-.back{
-    color:#8996aa;
-    text-decoration:none;
-    font-size:13px;
-    font-weight:900;
-    transition:.25s;
-}
-
-.back:hover{
-    color:white;
-    transform:translateX(-4px);
-}
-
-/* =========================
-   PAGE
-========================= */
-
-.checkout-page{
-    max-width:1100px;
-    margin:auto;
-    padding:55px 25px 80px;
-}
-
-.checkout-title{
-    text-align:center;
-    margin-bottom:45px;
-}
-
-.checkout-title .small{
+    display:inline-block;
     color:#35d8ff;
-    font-size:10px;
+    font-size:12px;
     font-weight:1000;
     letter-spacing:4px;
 }
 
-.checkout-title h1{
+.header h1{
+    font-size:48px;
     margin:12px 0;
-    font-size:clamp(38px,6vw,58px);
-    letter-spacing:-3px;
 }
 
-.checkout-title p{
+.header p{
     color:#8190a5;
-    margin:0;
 }
 
-.checkout-grid{
+.grid{
     display:grid;
     grid-template-columns:1fr 390px;
-    gap:22px;
+    gap:25px;
 }
 
-/* =========================
-   BOX
-========================= */
-
 .box{
-    background:linear-gradient(
-        145deg,
-        rgba(9,22,42,.9),
-        rgba(4,11,23,.92)
-    );
+    background:rgba(7,17,32,.88);
     border:1px solid rgba(255,255,255,.08);
     border-radius:24px;
     padding:28px;
-    box-shadow:0 25px 80px #0008;
-    backdrop-filter:blur(18px);
-    animation:boxIn .7s ease both;
-}
-
-@keyframes boxIn{
-    from{
-        opacity:0;
-        transform:translateY(25px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    box-shadow:0 25px 80px rgba(0,0,0,.4);
+    backdrop-filter:blur(20px);
 }
 
 .box h2{
-    margin:0 0 23px;
-    font-size:21px;
+    margin:0 0 22px;
 }
 
-/* =========================
-   INPUTY
-========================= */
-
 .field{
-    margin-bottom:17px;
+    margin-bottom:16px;
 }
 
 .field label{
     display:block;
+    margin-bottom:7px;
     color:#aeb9c9;
     font-size:12px;
-    font-weight:900;
-    margin-bottom:7px;
+    font-weight:800;
 }
 
-.field input{
+.field input,
+.field select{
     width:100%;
     padding:14px;
     border-radius:12px;
@@ -226,144 +94,94 @@ body::before{
     background:#050c18;
     color:white;
     outline:none;
-    transition:.25s;
 }
 
-.field input::placeholder{
-    color:#4e5c70;
-}
-
-.field input:focus{
+.field input:focus,
+.field select:focus{
     border-color:#00bfff;
-    box-shadow:0 0 25px #00bfff18;
-    transform:translateY(-1px);
+    box-shadow:0 0 20px rgba(0,191,255,.12);
 }
 
-/* =========================
-   PŁATNOŚĆ
-========================= */
-
-.payment-options{
+.delivery{
     display:grid;
     gap:12px;
+    margin-bottom:30px;
 }
 
-.payment-option{
+.delivery-option{
     position:relative;
 }
 
-.payment-option input{
+.delivery-option input{
     position:absolute;
     opacity:0;
 }
 
-.payment-option label{
+.delivery-option label{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:16px;
-    border-radius:14px;
+    gap:15px;
+    padding:17px;
+    border-radius:15px;
     border:1px solid rgba(255,255,255,.08);
     background:#050c18;
     cursor:pointer;
     transition:.25s;
 }
 
-.payment-option label:hover{
+.delivery-option label:hover{
     transform:translateY(-2px);
     border-color:#00bfff66;
 }
 
-.payment-option input:checked + label{
+.delivery-option input:checked + label{
     border-color:#00cfff;
-    background:#00bfff0d;
-    box-shadow:0 0 25px #00bfff12;
+    background:rgba(0,180,255,.09);
+    box-shadow:0 0 25px rgba(0,180,255,.1);
 }
 
-.payment-name{
-    font-weight:1000;
-}
-
-.payment-desc{
-    color:#718096;
-    font-size:11px;
-    margin-top:4px;
-}
-
-.payment-icon{
-    font-size:24px;
-}
-
-/* =========================
-   KOSZYK
-========================= */
-
-.order-item{
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    padding:15px 0;
-    border-bottom:1px solid rgba(255,255,255,.07);
-    animation:itemIn .4s ease both;
-}
-
-@keyframes itemIn{
-    from{
-        opacity:0;
-        transform:translateX(15px);
-    }
-    to{
-        opacity:1;
-        transform:translateX(0);
-    }
-}
-
-.order-item-name{
+.delivery-title{
     font-weight:900;
 }
 
-.order-item-qty{
+.delivery-desc{
     color:#718096;
     font-size:11px;
     margin-top:5px;
 }
 
-.order-item-price{
-    font-weight:1000;
+.delivery-price{
+    font-weight:900;
     white-space:nowrap;
 }
 
-/* =========================
-   KOD RABATOWY
-========================= */
-
-.coupon-box{
-    margin-top:25px;
-    padding:18px;
-    border-radius:17px;
-    border:1px solid #00bfff20;
-    background:
-        linear-gradient(
-            135deg,
-            #008cff0d,
-            #7c3cff0d
-        );
+.free{
+    color:#32e6a1;
 }
 
-.coupon-title{
-    font-size:13px;
-    font-weight:1000;
-    margin-bottom:11px;
+.paczkomat-box{
+    display:none;
+    margin-top:-15px;
+    margin-bottom:25px;
+    padding:16px;
+    border-radius:15px;
+    background:rgba(0,191,255,.06);
+    border:1px solid rgba(0,191,255,.15);
 }
 
-.coupon-row{
+.paczkomat-box.show{
+    display:block;
+}
+
+.coupon{
     display:flex;
     gap:8px;
+    margin-top:22px;
 }
 
-.coupon-row input{
+.coupon input{
     flex:1;
-    min-width:0;
     padding:13px;
     border-radius:11px;
     border:1px solid rgba(255,255,255,.1);
@@ -373,69 +191,80 @@ body::before{
     text-transform:uppercase;
 }
 
-.coupon-row input:focus{
-    border-color:#00bfff;
-}
-
-.coupon-row button{
+.coupon button{
     border:0;
     border-radius:11px;
-    padding:13px 16px;
+    padding:0 16px;
     color:white;
-    background:linear-gradient(100deg,#008cff,#754cff);
-    font-weight:1000;
+    font-weight:900;
     cursor:pointer;
-    transition:.25s;
+    background:linear-gradient(100deg,#008cff,#754cff);
 }
 
-.coupon-row button:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px #008cff35;
+.coupon-message{
+    min-height:18px;
+    margin-top:8px;
+    font-size:11px;
 }
 
-#couponMessage{
-    margin-top:10px;
-    font-size:12px;
+.success-text{
+    color:#32e6a1;
+}
+
+.error-text{
+    color:#ff6b7a;
+}
+
+.order-item{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.item-name{
     font-weight:900;
 }
 
-.discount-line{
-    display:flex;
-    justify-content:space-between;
-    margin-top:15px;
-    padding:12px;
-    border-radius:11px;
-    background:#00dc9610;
-    border:1px solid #00dc9625;
-    color:#35e6a1;
-    font-size:12px;
-    font-weight:1000;
+.item-qty{
+    margin-top:5px;
+    color:#718096;
+    font-size:11px;
 }
 
-/* =========================
-   SUMA
-========================= */
+.item-price{
+    font-weight:900;
+    white-space:nowrap;
+}
+
+.summary{
+    margin-top:20px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin:11px 0;
+    color:#8794a7;
+    font-size:13px;
+}
+
+.summary-row.discount{
+    color:#32e6a1;
+}
 
 .total{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    margin-top:22px;
+    padding-top:18px;
+    margin-top:18px;
+    border-top:1px solid rgba(255,255,255,.09);
     font-size:22px;
     font-weight:1000;
 }
 
-#total{
-    background:linear-gradient(90deg,#35d8ff,#9560ff);
-    -webkit-background-clip:text;
-    color:transparent;
-}
-
-/* =========================
-   BUTTON
-========================= */
-
-.pay-button{
+.pay{
     width:100%;
     margin-top:25px;
     padding:17px;
@@ -445,30 +274,34 @@ body::before{
     font-size:15px;
     font-weight:1000;
     cursor:pointer;
-    background:linear-gradient(100deg,#008cff,#7b4cff);
-    box-shadow:0 15px 40px #008cff35;
-    transition:.3s;
+    background:linear-gradient(100deg,#008cff,#754cff);
+    box-shadow:0 15px 45px rgba(0,140,255,.25);
+    transition:.25s;
 }
 
-.pay-button:hover{
-    transform:translateY(-4px);
-    box-shadow:0 22px 55px #008cff55;
+.pay:hover{
+    transform:translateY(-3px);
+    box-shadow:0 20px 55px rgba(0,140,255,.4);
 }
 
-.pay-button:active{
-    transform:scale(.98);
+.pay:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
 }
 
 .secure{
     text-align:center;
+    margin-top:13px;
     color:#66758a;
     font-size:11px;
-    margin-top:14px;
 }
 
-/* =========================
-   SUCCESS
-========================= */
+.empty{
+    text-align:center;
+    padding:40px 10px;
+    color:#718096;
+}
 
 .success{
     display:none;
@@ -477,52 +310,39 @@ body::before{
 }
 
 .success-icon{
-    width:95px;
-    height:95px;
+    width:90px;
+    height:90px;
+    margin:0 auto 25px;
     display:grid;
     place-items:center;
-    margin:0 auto 25px;
     border-radius:50%;
-    background:#00dc9612;
-    border:1px solid #00dc9655;
-    color:#35e6a1;
-    font-size:48px;
-    animation:successPop .6s cubic-bezier(.2,1.5,.4,1);
-}
-
-@keyframes successPop{
-    from{
-        opacity:0;
-        transform:scale(.3);
-    }
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
+    background:rgba(0,220,150,.12);
+    border:1px solid rgba(0,220,150,.4);
+    color:#32e6a1;
+    font-size:45px;
+    box-shadow:0 0 40px rgba(0,220,150,.12);
 }
 
 .success h1{
     font-size:38px;
-    margin-bottom:10px;
 }
 
 .success p{
     color:#8190a5;
-    line-height:1.8;
+    line-height:1.7;
 }
 
-.success-code{
+.order-number{
     display:inline-block;
-    margin-top:15px;
     padding:13px 18px;
     border-radius:11px;
     background:#081525;
-    border:1px solid #00bfff22;
     color:#35d8ff;
-    font-weight:1000;
+    font-weight:900;
+    margin-top:10px;
 }
 
-.back-button{
+.back{
     display:inline-block;
     margin-top:25px;
     padding:13px 20px;
@@ -531,181 +351,271 @@ body::before{
     text-decoration:none;
     background:#ffffff0c;
     border:1px solid #ffffff12;
-    transition:.25s;
 }
 
-.back-button:hover{
-    background:#ffffff12;
-    transform:translateY(-2px);
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:800px){
-
-    .topbar{
-        padding:18px;
-    }
-
-    .checkout-page{
-        padding:35px 18px 60px;
-    }
-
-    .checkout-grid{
+@media(max-width:850px){
+    .grid{
         grid-template-columns:1fr;
     }
 
-    .checkout-title h1{
-        font-size:38px;
-    }
-
-    .box{
-        padding:21px;
-    }
-
-    .coupon-row{
-        flex-direction:column;
-    }
-
-    .coupon-row button{
-        width:100%;
+    .header h1{
+        font-size:36px;
     }
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="orb one"></div>
-<div class="orb two"></div>
+<div class="page">
 
-<header class="topbar">
+    <header class="header">
+        <div class="logo">PRINTERLASE3D</div>
 
-    <a href="index.html" class="logo">
-
-        <div class="logo-icon">
-            <span>P</span>
-        </div>
-
-        Printerlase3D
-
-    </a>
-
-    <a href="koszyk.html" class="back">
-        ← Wróć do koszyka
-    </a>
-
-</header>
-
-
-<main class="checkout-page">
-
-    <div class="checkout-title">
-
-        <div class="small">
-            PRINTERLASE3D
-        </div>
-
-        <h1>
-            Finalizacja zamówienia
-        </h1>
+        <h1>Finalizacja zamówienia</h1>
 
         <p>
-            Uzupełnij dane i sprawdź swoje zamówienie.
+            Uzupełnij dane, wybierz dostawę i sprawdź swoje zamówienie.
         </p>
+    </header>
 
-    </div>
 
-
-    <!-- =========================
-         CHECKOUT
-    ========================== -->
+    <!-- CHECKOUT -->
 
     <div id="checkoutContent">
 
-        <div class="checkout-grid">
+        <div class="grid">
 
-
-            <!-- DANE -->
+            <!-- LEWA STRONA -->
 
             <div class="box">
 
-                <h2>
-                    Dane zamawiającego
-                </h2>
+                <h2>👤 Dane zamawiającego</h2>
 
                 <div class="field">
-
-                    <label>
-                        Imię i nazwisko
-                    </label>
-
+                    <label>Imię i nazwisko</label>
                     <input
                         id="name"
                         type="text"
                         placeholder="Jan Kowalski"
                     >
-
                 </div>
 
-
                 <div class="field">
-
-                    <label>
-                        E-mail
-                    </label>
-
+                    <label>E-mail</label>
                     <input
                         id="email"
                         type="email"
                         placeholder="jan@example.com"
                     >
-
                 </div>
 
-
                 <div class="field">
-
-                    <label>
-                        Telefon
-                    </label>
-
+                    <label>Telefon</label>
                     <input
                         id="phone"
                         type="tel"
                         placeholder="123 456 789"
                     >
-
                 </div>
 
-
                 <div class="field">
-
-                    <label>
-                        Adres dostawy
-                    </label>
-
+                    <label>Adres</label>
                     <input
                         id="address"
                         type="text"
-                        placeholder="ul. Przykładowa 10, 41-000 Miasto"
+                        placeholder="ul. Przykładowa 10"
                     >
+                </div>
 
+                <div class="field">
+                    <label>Kod pocztowy</label>
+                    <input
+                        id="postcode"
+                        type="text"
+                        placeholder="41-000"
+                    >
+                </div>
+
+                <div class="field">
+                    <label>Miasto</label>
+                    <input
+                        id="city"
+                        type="text"
+                        placeholder="Mikołów"
+                    >
                 </div>
 
 
                 <h2 style="margin-top:35px;">
-                    Metoda płatności
+                    📦 Dostawa
                 </h2>
 
+                <div class="delivery">
 
-                <div class="payment-options">
+                    <div class="delivery-option">
+
+                        <input
+                            type="radio"
+                            name="delivery"
+                            id="inpost"
+                            value="InPost Paczkomat"
+                            data-price="12"
+                        >
+
+                        <label for="inpost">
+
+                            <div>
+                                <div class="delivery-title">
+                                    📦 InPost Paczkomat
+                                </div>
+
+                                <div class="delivery-desc">
+                                    Dostawa do wybranego paczkomatu
+                                </div>
+                            </div>
+
+                            <div
+                                class="delivery-price"
+                                id="inpostPrice"
+                            >
+                                12,00 zł
+                            </div>
+
+                        </label>
+
+                    </div>
 
 
-                    <div class="payment-option">
+                    <div class="delivery-option">
+
+                        <input
+                            type="radio"
+                            name="delivery"
+                            id="inpostCourier"
+                            value="InPost Kurier"
+                            data-price="15"
+                        >
+
+                        <label for="inpostCourier">
+
+                            <div>
+                                <div class="delivery-title">
+                                    🚚 InPost Kurier
+                                </div>
+
+                                <div class="delivery-desc">
+                                    Dostawa kurierem pod adres
+                                </div>
+                            </div>
+
+                            <div
+                                class="delivery-price"
+                                id="courierPrice"
+                            >
+                                15,00 zł
+                            </div>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="delivery-option">
+
+                        <input
+                            type="radio"
+                            name="delivery"
+                            id="orlen"
+                            value="ORLEN Paczka"
+                            data-price="10"
+                        >
+
+                        <label for="orlen">
+
+                            <div>
+                                <div class="delivery-title">
+                                    📮 ORLEN Paczka
+                                </div>
+
+                                <div class="delivery-desc">
+                                    Odbiór w punkcie ORLEN
+                                </div>
+                            </div>
+
+                            <div class="delivery-price">
+                                10,00 zł
+                            </div>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="delivery-option">
+
+                        <input
+                            type="radio"
+                            name="delivery"
+                            id="dpd"
+                            value="DPD Kurier"
+                            data-price="16"
+                        >
+
+                        <label for="dpd">
+
+                            <div>
+                                <div class="delivery-title">
+                                    🚚 DPD Kurier
+                                </div>
+
+                                <div class="delivery-desc">
+                                    Dostawa kurierem
+                                </div>
+                            </div>
+
+                            <div class="delivery-price">
+                                16,00 zł
+                            </div>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PACZKOMAT -->
+
+                <div
+                    class="paczkomat-box"
+                    id="paczkomatBox"
+                >
+
+                    <div class="field" style="margin:0;">
+
+                        <label>
+                            Kod paczkomatu InPost
+                        </label>
+
+                        <input
+                            id="paczkomat"
+                            type="text"
+                            placeholder="np. KAT01M"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <h2 style="margin-top:30px;">
+                    💳 Płatność
+                </h2>
+
+                <div class="delivery">
+
+                    <div class="delivery-option">
 
                         <input
                             type="radio"
@@ -718,19 +628,13 @@ body::before{
                         <label for="blik">
 
                             <div>
-
-                                <div class="payment-name">
-                                    BLIK
+                                <div class="delivery-title">
+                                    📱 BLIK
                                 </div>
 
-                                <div class="payment-desc">
+                                <div class="delivery-desc">
                                     Płatność kodem BLIK
                                 </div>
-
-                            </div>
-
-                            <div class="payment-icon">
-                                📱
                             </div>
 
                         </label>
@@ -738,7 +642,7 @@ body::before{
                     </div>
 
 
-                    <div class="payment-option">
+                    <div class="delivery-option">
 
                         <input
                             type="radio"
@@ -750,19 +654,13 @@ body::before{
                         <label for="card">
 
                             <div>
-
-                                <div class="payment-name">
-                                    Karta płatnicza
+                                <div class="delivery-title">
+                                    💳 Karta
                                 </div>
 
-                                <div class="payment-desc">
+                                <div class="delivery-desc">
                                     Visa / Mastercard
                                 </div>
-
-                            </div>
-
-                            <div class="payment-icon">
-                                💳
                             </div>
 
                         </label>
@@ -770,7 +668,7 @@ body::before{
                     </div>
 
 
-                    <div class="payment-option">
+                    <div class="delivery-option">
 
                         <input
                             type="radio"
@@ -782,100 +680,107 @@ body::before{
                         <label for="transfer">
 
                             <div>
-
-                                <div class="payment-name">
-                                    Przelew online
+                                <div class="delivery-title">
+                                    🏦 Przelew
                                 </div>
 
-                                <div class="payment-desc">
-                                    Szybki przelew bankowy
+                                <div class="delivery-desc">
+                                    Przelew bankowy
                                 </div>
-
-                            </div>
-
-                            <div class="payment-icon">
-                                🏦
                             </div>
 
                         </label>
 
                     </div>
 
-
                 </div>
 
             </div>
 
 
-            <!-- ZAMÓWIENIE -->
+            <!-- PRAWA STRONA -->
 
             <div class="box">
 
-                <h2>
-                    Twoje zamówienie
-                </h2>
+                <h2>🛒 Zamówienie</h2>
 
                 <div id="orderItems"></div>
 
 
-                <!-- KOD RABATOWY -->
+                <div class="coupon">
 
-                <div class="coupon-box">
+                    <input
+                        id="coupon"
+                        type="text"
+                        placeholder="KOD RABATOWY"
+                    >
 
-                    <div class="coupon-title">
-                        🎟️ Masz kod rabatowy?
-                    </div>
-
-                    <div class="coupon-row">
-
-                        <input
-                            id="couponInput"
-                            type="text"
-                            placeholder="Wpisz kod START10"
-                            autocomplete="off"
-                        >
-
-                        <button
-                            type="button"
-                            onclick="applyCoupon()"
-                        >
-                            Zastosuj
-                        </button>
-
-                    </div>
-
-                    <div id="couponMessage"></div>
+                    <button onclick="applyCoupon()">
+                        Zastosuj
+                    </button>
 
                 </div>
 
+                <div
+                    id="couponMessage"
+                    class="coupon-message"
+                ></div>
 
-                <div id="discountContainer"></div>
 
+                <div class="summary">
 
-                <div class="total">
+                    <div class="summary-row">
+                        <span>Produkty</span>
+                        <span id="productsTotal">
+                            0,00 zł
+                        </span>
+                    </div>
 
-                    <span>
-                        Razem
-                    </span>
+                    <div class="summary-row">
+                        <span>Dostawa</span>
+                        <span id="deliveryTotal">
+                            0,00 zł
+                        </span>
+                    </div>
 
-                    <span id="total">
-                        0,00 zł
-                    </span>
+                    <div
+                        class="summary-row discount"
+                        id="discountRow"
+                        style="display:none;"
+                    >
+                        <span>Rabat START10</span>
+                        <span id="discountTotal">
+                            -0,00 zł
+                        </span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Do zapłaty</span>
+                        <span id="beforeTotal">
+                            0,00 zł
+                        </span>
+                    </div>
+
+                    <div class="total">
+                        <span>RAZEM</span>
+                        <span id="total">
+                            0,00 zł
+                        </span>
+                    </div>
 
                 </div>
 
 
                 <button
-                    class="pay-button"
-                    type="button"
+                    id="payButton"
+                    class="pay"
                     onclick="finishOrder()"
                 >
-                    🔒 Zapłać i zamów
+                    🛍️ Złóż zamówienie
                 </button>
 
-
                 <div class="secure">
-                    🔒 Bezpieczna realizacja zamówienia
+                    🔒 Twoje dane są używane do realizacji zamówienia.
                 </div>
 
             </div>
@@ -885,9 +790,7 @@ body::before{
     </div>
 
 
-    <!-- =========================
-         SUCCESS
-    ========================== -->
+    <!-- SUCCESS -->
 
     <div
         class="box success"
@@ -898,146 +801,146 @@ body::before{
             ✓
         </div>
 
-        <h1>
-            Zamówienie przyjęte!
-        </h1>
+        <h1>Zamówienie przyjęte!</h1>
 
         <p>
-
-            Dzięki za zamówienie w Printerlase3D.
-
+            Dzięki za zakupy w Printerlase3D! 🥳
             <br>
-
-            Potwierdzenie zostanie wysłane
-            na podany adres e-mail.
-
+            Twoje zamówienie zostało zapisane.
         </p>
 
-
         <div
-            class="success-code"
+            class="order-number"
             id="orderNumber"
         ></div>
 
+        <p>
+            🎁 Otrzymujesz również kolejny kod rabatowy:
+        </p>
+
+        <div class="order-number">
+            NEXT10
+        </div>
 
         <br>
 
-
         <a
             href="index.html"
-            class="back-button"
+            class="back"
         >
             ← Wróć do sklepu
         </a>
 
     </div>
 
-</main>
+</div>
 
 
 <script>
 
-/* ==========================================
-   POBRANIE KOSZYKA
-========================================== */
+/* =========================================
+   KOSZYK
+========================================= */
 
-const cart =
-    JSON.parse(
+let cart = [];
+
+try{
+    cart = JSON.parse(
         localStorage.getItem("printerlase_cart") || "[]"
     );
+}catch{
+    cart = [];
+}
 
 
 const itemsContainer =
     document.getElementById("orderItems");
 
 
-const totalElement =
-    document.getElementById("total");
-
-
-const couponInput =
-    document.getElementById("couponInput");
-
-
-const couponMessage =
-    document.getElementById("couponMessage");
-
-
-const discountContainer =
-    document.getElementById("discountContainer");
-
-
-let subtotal = 0;
-
+let productsTotal = 0;
 let discount = 0;
+let couponApplied = false;
 
-let appliedCoupon = "";
+
+/* =========================================
+   FORMAT CENY
+========================================= */
+
+function money(value){
+
+    return Number(value)
+        .toFixed(2)
+        .replace(".", ",") + " zł";
+
+}
 
 
-/* ==========================================
+/* =========================================
    WYŚWIETLANIE PRODUKTÓW
-========================================== */
+========================================= */
 
-if(cart.length === 0){
+function renderCart(){
 
-    itemsContainer.innerHTML = `
+    itemsContainer.innerHTML = "";
 
-        <p style="
-            color:#718096;
-            text-align:center;
-            padding:20px 0;
-        ">
-            🛒 Twój koszyk jest pusty.
-        </p>
+    productsTotal = 0;
 
-    `;
 
-}else{
+    if(cart.length === 0){
 
-    cart.forEach((item,index)=>{
+        itemsContainer.innerHTML = `
+            <div class="empty">
+                🛒 Twój koszyk jest pusty.
+                <br><br>
+                <a
+                    href="index.html"
+                    style="color:#35d8ff;"
+                >
+                    Wróć do sklepu
+                </a>
+            </div>
+        `;
+
+        document.getElementById("payButton").disabled = true;
+
+        updateSummary();
+
+        return;
+    }
+
+
+    cart.forEach(item => {
 
         const quantity =
-            Number(
-                item.quantity ||
-                item.qty ||
-                1
-            );
+            Number(item.quantity || item.qty || 1);
 
         const price =
             Number(item.price || 0);
 
-
-        subtotal +=
+        const itemTotal =
             price * quantity;
+
+        productsTotal += itemTotal;
 
 
         itemsContainer.innerHTML += `
 
-            <div
-                class="order-item"
-                style="animation-delay:${index * .06}s"
-            >
+            <div class="order-item">
 
                 <div>
 
-                    <div class="order-item-name">
-                        ${escapeHTML(
-                            item.name || "Produkt"
-                        )}
+                    <div class="item-name">
+                        ${escapeHTML(item.name || "Produkt")}
                     </div>
 
-                    <div class="order-item-qty">
+                    <div class="item-qty">
                         Ilość: ${quantity}
                     </div>
 
                 </div>
 
-                <div class="order-item-price">
-
-                    ${(price * quantity)
-                        .toFixed(2)
-                        .replace(".", ",")} zł
-
+                <div class="item-price">
+                    ${money(itemTotal)}
                 </div>
 
             </div>
@@ -1046,312 +949,253 @@ if(cart.length === 0){
 
     });
 
-}
 
-
-/* ==========================================
-   BEZPIECZNE WYŚWIETLANIE NAZWY
-========================================== */
-
-function escapeHTML(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    updateSummary();
 
 }
 
 
-/* ==========================================
-   KOD START10
-========================================== */
+/* =========================================
+   ZABEZPIECZENIE HTML
+========================================= */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================
+   DOSTAWA
+========================================= */
+
+function getDeliveryPrice(){
+
+    const selected =
+        document.querySelector(
+            'input[name="delivery"]:checked'
+        );
+
+
+    if(!selected){
+
+        return 0;
+
+    }
+
+
+    const normalPrice =
+        Number(selected.dataset.price || 0);
+
+
+    /*
+       DARMOWA DOSTAWA OD 50 ZŁ
+    */
+
+    if(productsTotal >= 50){
+
+        return 0;
+
+    }
+
+
+    return normalPrice;
+
+}
+
+
+/* =========================================
+   PODSUMOWANIE
+========================================= */
+
+function updateSummary(){
+
+    const delivery =
+        getDeliveryPrice();
+
+
+    const subtotal =
+        productsTotal + delivery;
+
+
+    let finalTotal =
+        subtotal - discount;
+
+
+    if(finalTotal < 0){
+
+        finalTotal = 0;
+
+    }
+
+
+    document.getElementById(
+        "productsTotal"
+    ).textContent = money(productsTotal);
+
+
+    document.getElementById(
+        "deliveryTotal"
+    ).innerHTML =
+        productsTotal >= 50
+        ? '<span class="free">DARMOWA</span>'
+        : money(delivery);
+
+
+    document.getElementById(
+        "discountTotal"
+    ).textContent =
+        "-" + money(discount);
+
+
+    document.getElementById(
+        "beforeTotal"
+    ).textContent =
+        money(subtotal);
+
+
+    document.getElementById(
+        "total"
+    ).textContent =
+        money(finalTotal);
+
+}
+
+
+/* =========================================
+   KOD RABATOWY START10
+========================================= */
 
 function applyCoupon(){
 
+    const input =
+        document.getElementById("coupon");
+
+    const message =
+        document.getElementById("couponMessage");
+
     const code =
-        couponInput.value
-            .trim()
-            .toUpperCase();
+        input.value.trim().toUpperCase();
+
+
+    message.className =
+        "coupon-message";
+
+
+    if(code === ""){
+
+        message.textContent =
+            "Wpisz kod rabatowy.";
+
+        message.classList.add("error-text");
+
+        return;
+
+    }
 
 
     if(code === "START10"){
 
-        if(subtotal <= 0){
+        if(couponApplied){
 
-            couponMessage.textContent =
-                "✕ Dodaj produkt do koszyka.";
+            message.textContent =
+                "Kod został już zastosowany.";
 
-            couponMessage.style.color =
-                "#ff667d";
+            message.classList.add("error-text");
 
             return;
 
         }
 
 
-        appliedCoupon =
-            "START10";
-
-
         discount =
-            subtotal * 0.10;
+            productsTotal * 0.10;
+
+        couponApplied = true;
 
 
-        localStorage.setItem(
-            "printerlase_coupon",
-            "START10"
+        document.getElementById(
+            "discountRow"
+        ).style.display = "flex";
+
+
+        message.textContent =
+            "✓ Kod START10 daje 10% rabatu!";
+
+        message.classList.add(
+            "success-text"
         );
 
 
-        couponMessage.textContent =
-            "✓ Kod START10 aktywny — rabat 10%";
+        input.disabled = true;
 
+        updateSummary();
 
-        couponMessage.style.color =
-            "#35e6a1";
-
-
-        updateTotal();
-
-    }else{
-
-        appliedCoupon =
-            "";
-
-
-        discount =
-            0;
-
-
-        localStorage.removeItem(
-            "printerlase_coupon"
-        );
-
-
-        couponMessage.textContent =
-            code
-                ? "✕ Nieprawidłowy kod rabatowy."
-                : "";
-
-
-        couponMessage.style.color =
-            "#ff667d";
-
-
-        updateTotal();
-
-    }
-
-}
-
-
-/* ==========================================
-   ENTER = ZASTOSUJ KOD
-========================================== */
-
-couponInput.addEventListener(
-    "keydown",
-    function(event){
-
-        if(event.key === "Enter"){
-
-            event.preventDefault();
-
-            applyCoupon();
-
-        }
-
-    }
-);
-
-
-/* ==========================================
-   PRZELICZANIE CENY
-========================================== */
-
-function updateTotal(){
-
-    const finalTotal =
-        Math.max(
-            0,
-            subtotal - discount
-        );
-
-
-    discountContainer.innerHTML =
-        "";
-
-
-    if(discount > 0){
-
-        discountContainer.innerHTML = `
-
-            <div class="discount-line">
-
-                <span>
-                    🎟️ Rabat START10
-                </span>
-
-                <span>
-                    -${discount
-                        .toFixed(2)
-                        .replace(".", ",")} zł
-                </span>
-
-            </div>
-
-        `;
+        return;
 
     }
 
 
-    totalElement.textContent =
-        finalTotal
-            .toFixed(2)
-            .replace(".", ",") +
-        " zł";
+    message.textContent =
+        "❌ Nieprawidłowy kod rabatowy.";
 
-}
-
-
-/* ==========================================
-   PRZYWRACANIE KUPONU
-========================================== */
-
-const savedCoupon =
-    localStorage.getItem(
-        "printerlase_coupon"
+    message.classList.add(
+        "error-text"
     );
 
-
-if(savedCoupon === "START10"){
-
-    couponInput.value =
-        "START10";
-
-
-    appliedCoupon =
-        "START10";
-
-
-    discount =
-        subtotal * 0.10;
-
-
-    couponMessage.textContent =
-        "✓ Kod START10 aktywny — rabat 10%";
-
-
-    couponMessage.style.color =
-        "#35e6a1";
-
 }
 
 
-updateTotal();
+/* =========================================
+   POKAŻ POLE PACZKOMATU
+========================================= */
+
+document
+    .querySelectorAll(
+        'input[name="delivery"]'
+    )
+    .forEach(input => {
+
+        input.addEventListener(
+            "change",
+            function(){
+
+                const box =
+                    document.getElementById(
+                        "paczkomatBox"
+                    );
 
 
-/* ==========================================
-   FINALIZACJA
-========================================== */
+                if(this.value === "InPost Paczkomat"){
 
-function finishOrder(){
+                    box.classList.add("show");
 
-    const name =
-        document.getElementById("name")
-            .value
-            .trim();
+                }else{
 
+                    box.classList.remove("show");
 
-    const email =
-        document.getElementById("email")
-            .value
-            .trim();
+                }
 
 
-    const phone =
-        document.getElementById("phone")
-            .value
-            .trim();
+                updateSummary();
 
-
-    const address =
-        document.getElementById("address")
-            .value
-            .trim();
-
-
-    const paymentElement =
-        document.querySelector(
-            'input[name="payment"]:checked'
+            }
         );
 
-
-    const payment =
-        paymentElement
-            ? paymentElement.value
-            : "";
+    });
 
 
-    /* WALIDACJA */
+/* =========================================
+   ZAMÓWIENIE
+========================================= */
 
-    if(!name){
-
-        alert("Podaj imię i nazwisko.");
-
-        document.getElementById("name").focus();
-
-        return;
-
-    }
-
-
-    if(!email){
-
-        alert("Podaj adres e-mail.");
-
-        document.getElementById("email").focus();
-
-        return;
-
-    }
-
-
-    if(!email.includes("@")){
-
-        alert("Podaj poprawny adres e-mail.");
-
-        document.getElementById("email").focus();
-
-        return;
-
-    }
-
-
-    if(!phone){
-
-        alert("Podaj numer telefonu.");
-
-        document.getElementById("phone").focus();
-
-        return;
-
-    }
-
-
-    if(!address){
-
-        alert("Podaj adres dostawy.");
-
-        document.getElementById("address").focus();
-
-        return;
-
-    }
-
+function finishOrder(){
 
     if(cart.length === 0){
 
@@ -1364,20 +1208,129 @@ function finishOrder(){
     }
 
 
-    /* =====================================
-       CENA KOŃCOWA
-    ===================================== */
+    const name =
+        document.getElementById("name")
+            .value.trim();
 
-    const finalTotal =
-        Math.max(
-            0,
-            subtotal - discount
+    const email =
+        document.getElementById("email")
+            .value.trim();
+
+    const phone =
+        document.getElementById("phone")
+            .value.trim();
+
+    const address =
+        document.getElementById("address")
+            .value.trim();
+
+    const postcode =
+        document.getElementById("postcode")
+            .value.trim();
+
+    const city =
+        document.getElementById("city")
+            .value.trim();
+
+
+    const delivery =
+        document.querySelector(
+            'input[name="delivery"]:checked'
         );
 
 
-    /* =====================================
-       NUMER ZAMÓWIENIA
-    ===================================== */
+    const payment =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        );
+
+
+    if(
+        !name ||
+        !email ||
+        !phone ||
+        !address ||
+        !postcode ||
+        !city
+    ){
+
+        alert(
+            "Uzupełnij wszystkie dane."
+        );
+
+        return;
+
+    }
+
+
+    if(!delivery){
+
+        alert(
+            "Wybierz sposób dostawy."
+        );
+
+        return;
+
+    }
+
+
+    if(!payment){
+
+        alert(
+            "Wybierz sposób płatności."
+        );
+
+        return;
+
+    }
+
+
+    let paczkomat = "";
+
+
+    if(
+        delivery.value ===
+        "InPost Paczkomat"
+    ){
+
+        paczkomat =
+            document.getElementById(
+                "paczkomat"
+            ).value.trim();
+
+
+        if(!paczkomat){
+
+            alert(
+                "Podaj kod paczkomatu InPost."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    const deliveryPrice =
+        getDeliveryPrice();
+
+
+    const subtotal =
+        productsTotal +
+        deliveryPrice;
+
+
+    let finalTotal =
+        subtotal - discount;
+
+
+    if(finalTotal < 0){
+
+        finalTotal = 0;
+
+    }
+
 
     const orderNumber =
         "PL3D-" +
@@ -1386,64 +1339,58 @@ function finishOrder(){
             .slice(-8);
 
 
-    /* =====================================
-       ZAMÓWIENIE
-    ===================================== */
-
     const order = {
 
-        number:
-            orderNumber,
+        number: orderNumber,
 
         customer:{
 
-            name:
-                name,
+            name:name,
 
-            email:
-                email,
+            email:email,
 
-            phone:
-                phone,
+            phone:phone,
 
-            address:
-                address
+            address:address,
+
+            postcode:postcode,
+
+            city:city
 
         },
 
-        payment:
-            payment,
+        delivery:{
 
-        products:
-            cart,
+            method:delivery.value,
 
-        coupon:
-            appliedCoupon || null,
+            price:deliveryPrice,
 
-        discount:
-            Number(
-                discount.toFixed(2)
-            ),
+            paczkomat:paczkomat
 
-        subtotal:
-            Number(
-                subtotal.toFixed(2)
-            ),
+        },
 
-        total:
-            Number(
-                finalTotal.toFixed(2)
-            ),
+        payment:payment.value,
 
-        date:
-            new Date().toISOString()
+        products:cart,
+
+        productsTotal:productsTotal,
+
+        discount:discount,
+
+        deliveryPrice:deliveryPrice,
+
+        total:finalTotal,
+
+        date:new Date().toISOString(),
+
+        nextCoupon:"NEXT10"
 
     };
 
 
-    /* =====================================
-       ZAPIS
-    ===================================== */
+    /*
+       ZAPISUJEMY ZAMÓWIENIE
+    */
 
     localStorage.setItem(
         "printerlase_last_order",
@@ -1451,98 +1398,81 @@ function finishOrder(){
     );
 
 
-    /* =====================================
-       GENEROWANIE KOLEJNEGO KODU
-       PO ZAMÓWIENIU
-    ===================================== */
+    /*
+       ZAPISUJEMY HISTORIĘ ZAMÓWIEŃ
+    */
 
-    const nextCoupon =
-        "NEXT" +
-        Math.floor(
-            1000 +
-            Math.random() * 9000
-        );
+    let orders = [];
+
+    try{
+
+        orders =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_orders"
+                ) || "[]"
+            );
+
+    }catch{
+
+        orders = [];
+
+    }
+
+
+    orders.push(order);
 
 
     localStorage.setItem(
-        "printerlase_next_coupon",
-        nextCoupon
+        "printerlase_orders",
+        JSON.stringify(orders)
     );
 
 
-    /* =====================================
-       CZYSZCZENIE
-    ===================================== */
+    /*
+       Czyścimy koszyk
+    */
 
     localStorage.removeItem(
         "printerlase_cart"
     );
 
 
-    localStorage.removeItem(
-        "printerlase_coupon"
-    );
-
-
-    /* =====================================
+    /*
        EKRAN SUKCESU
-    ===================================== */
+    */
 
     document.getElementById(
         "checkoutContent"
-    ).style.display =
-        "none";
+    ).style.display = "none";
 
 
-    const success =
-        document.getElementById(
-            "success"
-        );
-
-
-    success.style.display =
-        "block";
+    document.getElementById(
+        "success"
+    ).style.display = "block";
 
 
     document.getElementById(
         "orderNumber"
-    ).innerHTML = `
-
-        Numer zamówienia:
-        <strong>
-            ${orderNumber}
-        </strong>
-
-        <br><br>
-
-        🎁 Twój kolejny kod rabatowy:
-
-        <strong style="
-            color:#35e6ff;
-            font-size:20px;
-        ">
-            ${nextCoupon}
-        </strong>
-
-        <br>
-
-        <small style="
-            color:#718096;
-            font-weight:normal;
-        ">
-            Otrzymasz 10% rabatu przy kolejnym zamówieniu.
-        </small>
-
-    `;
+    ).textContent =
+        "Numer zamówienia: " +
+        orderNumber;
 
 }
 
 
-/* ==========================================
+/* =========================================
    START
-========================================== */
+========================================= */
 
-updateTotal();
+renderCart();
+
+
+/*
+   Automatycznie aktualizuj dostawę
+*/
+
+updateSummary();
 
 </script>
 
