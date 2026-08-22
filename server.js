@@ -1,32 +1,29 @@
-```js
 const express = require("express");
-const session = require("express-session");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
+const session = require("express-session");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// =====================================================
-// KONFIGURACJA
-// =====================================================
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Admin2137!";
-const SESSION_SECRET =
-    process.env.SESSION_SECRET || "printerlase3d-super-secret-change-me";
+if (!ADMIN_PASSWORD) {
+    console.error("❌ BRAK ADMIN_PASSWORD W RENDER ENVIRONMENT VARIABLES");
+}
 
-const DATA_FILE = path.join(__dirname, "data.json");
-
-// =====================================================
-// MIDDLEWARE
-// =====================================================
+if (!SESSION_SECRET) {
+    console.error("❌ BRAK SESSION_SECRET W RENDER ENVIRONMENT VARIABLES");
+}
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
     session({
-        secret: SESSION_SECRET,
+        secret: SESSION_SECRET || "CHANGE_THIS_SECRET",
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -38,26 +35,22 @@ app.use(
     })
 );
 
-app.use(express.static(__dirname));
-
-// =====================================================
-// BAZA DANYCH
-// =====================================================
+const DATA_FILE = path.join(__dirname, "data.json");
 
 function loadData() {
     try {
         if (!fs.existsSync(DATA_FILE)) {
-            const initialData = {
+            const data = {
                 orders: [],
                 withdrawals: []
             };
 
             fs.writeFileSync(
                 DATA_FILE,
-                JSON.stringify(initialData, null, 2)
+                JSON.stringify(data, null, 2)
             );
 
-            return initialData;
+            return data;
         }
 
         const data = JSON.parse(
@@ -65,17 +58,14 @@ function loadData() {
         );
 
         return {
-            orders: Array.isArray(data.orders)
-                ? data.orders
-                : [],
-
+            orders: Array.isArray(data.orders) ? data.orders : [],
             withdrawals: Array.isArray(data.withdrawals)
                 ? data.withdrawals
                 : []
         };
 
     } catch (error) {
-        console.error("Błąd data.json:", error);
+        console.error("❌ Błąd data.json:", error);
 
         return {
             orders: [],
@@ -91,90 +81,112 @@ function saveData(data) {
     );
 }
 
-// =====================================================
-// ADMIN SESSION
-// =====================================================
-
-function requireAdmin(req, res, next) {
-    if (req.session && req.session.isAdmin === true) {
-        return next();
-    }
-
-    return res.status(401).json({
-        error: "Brak autoryzacji."
-    });
-}
-
-// =====================================================
-// ADMIN LOGIN
-// =====================================================
-
-app.post("/api/admin/login", (req, res) => {
-    const password = String(req.body.password || "");
-
-    if (!password) {
-        return res.status(400).json({
-            error: "Podaj hasło."
+function adminAuth(req, res, next) {
+    if (!req.session || req.session.admin !== true) {
+        return res.status(401).json({
+            error: "Brak autoryzacji."
         });
     }
 
-    if (password !== ADMIN_PASSWORD) {
+    next();
+}
+
+/* =========================
+   STRONA GŁÓWNA
+========================= */
+
+app.get("/", (req, res) => {
+    res.sendFile(
+        path.join(__dirname, "index.html")
+    );
+});
+
+/* =========================
+   ADMIN LOGIN
+========================= */
+
+app.post("/api/admin/login", (req, res) => {
+
+    const password = String(
+        req.body.password || ""
+    );
+
+    if (!ADMIN_PASSWORD) {
+        return res.status(500).json({
+            error: "ADMIN_PASSWORD nie jest ustawione na Render."
+        });
+    }
+
+    if (
+        password.length !== ADMIN_PASSWORD.length ||
+        !crypto.timingSafeEqual(
+            Buffer.from(password),
+            Buffer.from(ADMIN_PASSWORD)
+        )
+    ) {
         return res.status(401).json({
             error: "Błędne hasło administratora."
         });
     }
 
-    req.session.isAdmin = true;
+    req.session.admin = true;
 
-    req.session.save((error) => {
-        if (error) {
-            console.error("Błąd sesji:", error);
-
-            return res.status(500).json({
-                error: "Nie udało się utworzyć sesji."
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Zalogowano."
-        });
-    });
-});
-
-// =====================================================
-// ADMIN LOGOUT
-// =====================================================
-
-app.post("/api/admin/logout", (req, res) => {
-    req.session.destroy(() => {
-        res.clearCookie("connect.sid");
-
-        res.json({
-            success: true
-        });
-    });
-});
-
-// =====================================================
-// SPRAWDZENIE SESJI
-// =====================================================
-
-app.get("/api/admin/me", (req, res) => {
     res.json({
-        authenticated:
-            req.session &&
-            req.session.isAdmin === true
+        success: true
     });
 });
 
-// =====================================================
-// DASHBOARD
-// =====================================================
+/* =========================
+   ADMIN LOGOUT
+========================= */
+
+app.post(
+    "/api/admin/logout",
+    adminAuth,
+    (req, res) => {
+
+        req.session.destroy(() => {
+            res.json({
+                success: true
+            });
+        });
+
+    }
+);
+
+/* =========================
+   SPRAWDZENIE SESJI
+========================= */
+
+app.get(
+    "/api/admin/me",
+    (req, res) => {
+
+        res.json({
+            authenticated:
+                req.session?.admin === true
+        });
+
+    }
+);
+
+/* =========================
+   ADMIN PANEL
+========================= */
+
+app.get("/admin", (req, res) => {
+    res.sendFile(
+        path.join(__dirname, "admin.html")
+    );
+});
+
+/* =========================
+   DASHBOARD
+========================= */
 
 app.get(
     "/api/admin/dashboard",
-    requireAdmin,
+    adminAuth,
     (req, res) => {
 
         const data = loadData();
@@ -191,20 +203,25 @@ app.get(
             );
 
         const withdrawn = withdrawals
-            .filter(item => item.status === "COMPLETED")
+            .filter(item =>
+                item.status === "COMPLETED"
+            )
             .reduce(
                 (sum, item) =>
                     sum + Number(item.amount || 0),
                 0
             );
 
-        const pendingWithdrawals = withdrawals
-            .filter(item => item.status === "PENDING")
-            .reduce(
-                (sum, item) =>
-                    sum + Number(item.amount || 0),
-                0
-            );
+        const pendingWithdrawals =
+            withdrawals
+                .filter(item =>
+                    item.status === "PENDING"
+                )
+                .reduce(
+                    (sum, item) =>
+                        sum + Number(item.amount || 0),
+                    0
+                );
 
         const balance =
             Math.max(
@@ -219,39 +236,35 @@ app.get(
             earned: Number(earned.toFixed(2)),
             withdrawn: Number(withdrawn.toFixed(2)),
             pendingWithdrawals:
-                Number(pendingWithdrawals.toFixed(2)),
+                Number(
+                    pendingWithdrawals.toFixed(2)
+                ),
             orders,
             withdrawals
         });
     }
 );
 
-// =====================================================
-// STATUS ZAMÓWIENIA
-// =====================================================
+/* =========================
+   ZMIANA STATUSU ZAMÓWIENIA
+========================= */
 
 app.post(
     "/api/admin/order-status",
-    requireAdmin,
+    adminAuth,
     (req, res) => {
 
         const { id, status } = req.body;
 
-        const allowedStatuses = [
+        const allowed = [
             "NEW",
             "PAID",
             "CANCELLED"
         ];
 
-        if (!id || !status) {
+        if (!id || !allowed.includes(status)) {
             return res.status(400).json({
-                error: "Brak ID lub statusu."
-            });
-        }
-
-        if (!allowedStatuses.includes(status)) {
-            return res.status(400).json({
-                error: "Nieprawidłowy status."
+                error: "Nieprawidłowe dane."
             });
         }
 
@@ -280,17 +293,20 @@ app.post(
     }
 );
 
-// =====================================================
-// WYDRUK / WYŁATA - UTWORZENIE ŻĄDANIA
-// =====================================================
+/* =========================
+   WYPŁATA
+========================= */
 
 app.post(
     "/api/admin/withdraw",
-    requireAdmin,
+    adminAuth,
     (req, res) => {
 
-        const amount = Number(req.body.amount);
-        const method = req.body.method;
+        const amount =
+            Number(req.body.amount);
+
+        const method =
+            String(req.body.method || "");
 
         if (
             !Number.isFinite(amount) ||
@@ -312,7 +328,9 @@ app.post(
         const data = loadData();
 
         const earned = data.orders
-            .filter(order => order.status === "PAID")
+            .filter(order =>
+                order.status === "PAID"
+            )
             .reduce(
                 (sum, order) =>
                     sum + Number(order.total || 0),
@@ -320,7 +338,9 @@ app.post(
             );
 
         const withdrawn = data.withdrawals
-            .filter(item => item.status === "COMPLETED")
+            .filter(item =>
+                item.status === "COMPLETED"
+            )
             .reduce(
                 (sum, item) =>
                     sum + Number(item.amount || 0),
@@ -328,32 +348,46 @@ app.post(
             );
 
         const pending = data.withdrawals
-            .filter(item => item.status === "PENDING")
+            .filter(item =>
+                item.status === "PENDING"
+            )
             .reduce(
                 (sum, item) =>
                     sum + Number(item.amount || 0),
                 0
             );
 
-        const available =
-            earned - withdrawn - pending;
+        const balance =
+            earned -
+            withdrawn -
+            pending;
 
-        if (amount > available) {
+        if (amount > balance) {
             return res.status(400).json({
                 error:
-                    `Dostępne saldo: ${available.toFixed(2)} zł`
+                    `Dostępne saldo: ${balance.toFixed(2)} zł`
             });
         }
 
         const withdrawal = {
-            id: "WD-" + Date.now(),
-            amount: Number(amount.toFixed(2)),
+            id:
+                "WD-" +
+                Date.now(),
+
+            amount:
+                Number(amount.toFixed(2)),
+
             method,
+
             status: "PENDING",
-            createdAt: new Date().toISOString()
+
+            createdAt:
+                new Date().toISOString()
         };
 
-        data.withdrawals.push(withdrawal);
+        data.withdrawals.push(
+            withdrawal
+        );
 
         saveData(data);
 
@@ -364,144 +398,199 @@ app.post(
     }
 );
 
-// =====================================================
-// ZAMÓWIENIA ZE SKLEPU
-// =====================================================
+/* =========================
+   STATUS WYPŁATY
+========================= */
 
-app.post("/api/orders", (req, res) => {
+app.post(
+    "/api/admin/withdraw-status",
+    adminAuth,
+    (req, res) => {
 
-    const order = req.body;
+        const { id, status } =
+            req.body;
 
-    if (!order) {
-        return res.status(400).json({
-            error: "Brak danych."
+        const allowed = [
+            "PENDING",
+            "COMPLETED",
+            "CANCELLED"
+        ];
+
+        if (
+            !id ||
+            !allowed.includes(status)
+        ) {
+            return res.status(400).json({
+                error: "Nieprawidłowe dane."
+            });
+        }
+
+        const data = loadData();
+
+        const withdrawal =
+            data.withdrawals.find(
+                item => item.id === id
+            );
+
+        if (!withdrawal) {
+            return res.status(404).json({
+                error: "Nie znaleziono wypłaty."
+            });
+        }
+
+        withdrawal.status = status;
+
+        withdrawal.updatedAt =
+            new Date().toISOString();
+
+        saveData(data);
+
+        res.json({
+            success: true,
+            withdrawal
         });
     }
+);
 
-    if (
-        !order.name ||
-        !order.email ||
-        !order.total
-    ) {
-        return res.status(400).json({
-            error: "Brakuje danych zamówienia."
+/* =========================
+   ZAMÓWIENIE ZE SKLEPU
+========================= */
+
+app.post(
+    "/api/orders",
+    (req, res) => {
+
+        const order = req.body;
+
+        if (
+            !order ||
+            !order.name ||
+            !order.email ||
+            !Number.isFinite(
+                Number(order.total)
+            )
+        ) {
+            return res.status(400).json({
+                error:
+                    "Brakuje danych zamówienia."
+            });
+        }
+
+        const data = loadData();
+
+        const newOrder = {
+            ...order,
+
+            id:
+                order.id ||
+                "PL-" +
+                Date.now(),
+
+            status: "NEW",
+
+            createdAt:
+                order.createdAt ||
+                new Date().toISOString()
+        };
+
+        data.orders.push(
+            newOrder
+        );
+
+        saveData(data);
+
+        console.log(
+            "📦 NOWE ZAMÓWIENIE:",
+            newOrder.id
+        );
+
+        res.json({
+            success: true,
+            order: newOrder
         });
     }
+);
 
-    const data = loadData();
+/* =========================
+   SPRAWDZENIE ZAMÓWIENIA
+========================= */
 
-    const newOrder = {
-        ...order,
+app.get(
+    "/api/orders/:id",
+    (req, res) => {
 
-        id:
-            order.id ||
-            "PL-" + Date.now(),
+        const data = loadData();
 
-        status: "NEW",
+        const order =
+            data.orders.find(
+                item =>
+                    item.id ===
+                    req.params.id
+            );
 
-        createdAt:
-            order.createdAt ||
-            new Date().toISOString()
-    };
+        if (!order) {
+            return res.status(404).json({
+                error:
+                    "Nie znaleziono zamówienia."
+            });
+        }
 
-    data.orders.push(newOrder);
-
-    saveData(data);
-
-    console.log(
-        "NOWE ZAMÓWIENIE:",
-        newOrder.id
-    );
-
-    res.json({
-        success: true,
-        order: newOrder
-    });
-});
-
-// =====================================================
-// SPRAWDZENIE ZAMÓWIENIA
-// =====================================================
-
-app.get("/api/orders/:id", (req, res) => {
-
-    const data = loadData();
-
-    const order = data.orders.find(
-        item => item.id === req.params.id
-    );
-
-    if (!order) {
-        return res.status(404).json({
-            error: "Nie znaleziono zamówienia."
-        });
+        res.json(order);
     }
+);
 
-    res.json(order);
-});
+/* =========================
+   PLIKI PUBLICZNE
+========================= */
 
-// =====================================================
-// /admin
-// =====================================================
+app.use(
+    express.static(__dirname)
+);
 
-app.get("/admin", (req, res) => {
-    res.sendFile(
-        path.join(__dirname, "admin.html")
-    );
-});
+/* =========================
+   404
+========================= */
 
-// =====================================================
-// 404
-// =====================================================
+app.use(
+    (req, res) => {
 
-app.use((req, res) => {
-    res.status(404).send(`
-        <!DOCTYPE html>
-        <html lang="pl">
-        <head>
-            <meta charset="UTF-8">
-            <title>404 — Printerlase3D</title>
-            <style>
-                body {
-                    background:#030712;
-                    color:white;
-                    font-family:Arial;
-                    text-align:center;
-                    padding-top:100px;
-                }
-
-                a {
-                    color:#00c8ff;
-                }
-            </style>
-        </head>
-
-        <body>
+        res.status(404).send(`
             <h1>404</h1>
             <p>Nie znaleziono strony.</p>
-            <a href="/">← Wróć do sklepu</a>
-        </body>
-        </html>
-    `);
-});
+            <a href="/">Wróć do sklepu</a>
+        `);
+    }
+);
 
-// =====================================================
-// START
-// =====================================================
+/* =========================
+   START
+========================= */
 
-app.listen(PORT, () => {
+app.listen(
+    PORT,
+    () => {
 
-    console.log("");
-    console.log("=================================");
-    console.log("       PRINTERLASE3D");
-    console.log("=================================");
-    console.log(`Serwer: http://localhost:${PORT}`);
-    console.log(`Admin:  http://localhost:${PORT}/admin`);
-    console.log(
-        ADMIN_PASSWORD
-            ? "ADMIN_PASSWORD: ustawione"
-            : "ADMIN_PASSWORD: BRAK"
-    );
-    console.log("");
-});
-```
+        console.log("");
+        console.log(
+            "==============================="
+        );
+        console.log(
+            "      PRINTERLASE3D"
+        );
+        console.log(
+            "==============================="
+        );
+
+        console.log(
+            `🚀 Port: ${PORT}`
+        );
+
+        console.log(
+            ADMIN_PASSWORD
+                ? "🔐 Hasło admina: ustawione"
+                : "❌ Brak ADMIN_PASSWORD"
+        );
+
+        console.log("");
+    }
+);
