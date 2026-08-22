@@ -1,8 +1,7 @@
-```json
 {
   "name": "printerlase3d",
   "version": "1.0.0",
-  "description": "Printerlase3D",
+  "description": "Printerlase3D shop",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -12,4 +11,3 @@
     "multer": "^2.0.2"
   }
 }
-```
