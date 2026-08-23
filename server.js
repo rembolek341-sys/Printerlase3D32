@@ -15,28 +15,97 @@ const FREE_DELIVERY_FROM = 50;
 const DISCOUNT_CODE = "START10";
 const DISCOUNT_PERCENT = 10;
 
+/*
+========================================
+PLIKI DANYCH
+========================================
+*/
+
 const DATA_DIR = path.join(__dirname, "data");
-const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
-const MODELS_FILE = path.join(DATA_DIR, "custom-models.json");
-const TOKENS_FILE = path.join(DATA_DIR, "tokens.json");
+
+const ORDERS_FILE = path.join(
+    DATA_DIR,
+    "orders.json"
+);
+
+const MODELS_FILE = path.join(
+    DATA_DIR,
+    "custom-models.json"
+);
+
+const TOKENS_FILE = path.join(
+    DATA_DIR,
+    "tokens.json"
+);
+
+const BALANCE_FILE = path.join(
+    DATA_DIR,
+    "balance.json"
+);
+
+const WITHDRAWALS_FILE = path.join(
+    DATA_DIR,
+    "withdrawals.json"
+);
 
 if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.mkdirSync(DATA_DIR, {
+        recursive: true
+    });
 }
+
+/*
+========================================
+TWORZENIE PLIKÓW
+========================================
+*/
 
 function createFile(file, data) {
     if (!fs.existsSync(file)) {
         fs.writeFileSync(
             file,
-            JSON.stringify(data, null, 2),
+            JSON.stringify(
+                data,
+                null,
+                2
+            ),
             "utf8"
         );
     }
 }
 
-createFile(ORDERS_FILE, []);
-createFile(MODELS_FILE, []);
-createFile(TOKENS_FILE, []);
+createFile(
+    ORDERS_FILE,
+    []
+);
+
+createFile(
+    MODELS_FILE,
+    []
+);
+
+createFile(
+    TOKENS_FILE,
+    []
+);
+
+createFile(
+    BALANCE_FILE,
+    {
+        balance: 0
+    }
+);
+
+createFile(
+    WITHDRAWALS_FILE,
+    []
+);
+
+/*
+========================================
+JSON
+========================================
+*/
 
 function readJSON(file, fallback) {
     try {
@@ -44,7 +113,11 @@ function readJSON(file, fallback) {
             return fallback;
         }
 
-        const data = fs.readFileSync(file, "utf8");
+        const data =
+            fs.readFileSync(
+                file,
+                "utf8"
+            );
 
         if (!data.trim()) {
             return fallback;
@@ -65,10 +138,20 @@ function readJSON(file, fallback) {
 function writeJSON(file, data) {
     fs.writeFileSync(
         file,
-        JSON.stringify(data, null, 2),
+        JSON.stringify(
+            data,
+            null,
+            2
+        ),
         "utf8"
     );
 }
+
+/*
+========================================
+EXPRESS
+========================================
+*/
 
 app.use(
     express.json({
@@ -83,7 +166,15 @@ app.use(
     })
 );
 
-app.use(express.static(__dirname));
+app.use(
+    express.static(__dirname)
+);
+
+/*
+========================================
+ID / TOKEN
+========================================
+*/
 
 function generateId(prefix) {
     return (
@@ -91,85 +182,230 @@ function generateId(prefix) {
         "-" +
         Date.now().toString(36) +
         "-" +
-        crypto.randomBytes(4).toString("hex")
+        crypto
+            .randomBytes(4)
+            .toString("hex")
     ).toUpperCase();
 }
 
 function generateToken() {
-    return crypto.randomBytes(32).toString("hex");
+    return crypto
+        .randomBytes(32)
+        .toString("hex");
 }
 
 function getToken(req) {
-    const auth = req.headers.authorization || "";
+    const auth =
+        req.headers.authorization ||
+        "";
 
-    if (!auth.startsWith("Bearer ")) {
+    if (
+        !auth.startsWith(
+            "Bearer "
+        )
+    ) {
         return null;
     }
 
     return auth.substring(7);
 }
 
-function requireAdmin(req, res, next) {
-    const token = getToken(req);
+/*
+========================================
+ADMIN AUTH
+========================================
+*/
+
+function requireAdmin(
+    req,
+    res,
+    next
+) {
+    const token =
+        getToken(req);
 
     if (!token) {
-        return res.status(401).json({
-            success: false,
-            error: "Brak autoryzacji."
-        });
+        return res
+            .status(401)
+            .json({
+                success: false,
+                error:
+                    "Brak autoryzacji."
+            });
     }
 
-    const tokens = readJSON(TOKENS_FILE, []);
+    const tokens =
+        readJSON(
+            TOKENS_FILE,
+            []
+        );
 
-    const session = tokens.find(function (item) {
-        return item.token === token;
-    });
+    const session =
+        tokens.find(
+            function (item) {
+                return (
+                    item.token ===
+                    token
+                );
+            }
+        );
 
     if (!session) {
-        return res.status(401).json({
-            success: false,
-            error: "Sesja wygasła."
-        });
+        return res
+            .status(401)
+            .json({
+                success: false,
+                error:
+                    "Sesja wygasła."
+            });
     }
 
     next();
 }
 
-/* =========================
-   LOGIN
-========================= */
+/*
+========================================
+SALDO
+========================================
+*/
+
+function getBalance() {
+    const data =
+        readJSON(
+            BALANCE_FILE,
+            {
+                balance: 0
+            }
+        );
+
+    const balance =
+        Number(
+            data.balance || 0
+        );
+
+    return Number(
+        balance.toFixed(2)
+    );
+}
+
+function setBalance(
+    amount
+) {
+    const safeAmount =
+        Math.max(
+            0,
+            Number(amount || 0)
+        );
+
+    writeJSON(
+        BALANCE_FILE,
+        {
+            balance:
+                Number(
+                    safeAmount.toFixed(
+                        2
+                    )
+                )
+        }
+    );
+
+    return getBalance();
+}
+
+function addBalance(
+    amount
+) {
+    const current =
+        getBalance();
+
+    const add =
+        Math.max(
+            0,
+            Number(amount || 0)
+        );
+
+    return setBalance(
+        current + add
+    );
+}
+
+function subtractBalance(
+    amount
+) {
+    const current =
+        getBalance();
+
+    const subtract =
+        Math.max(
+            0,
+            Number(amount || 0)
+        );
+
+    if (
+        subtract >
+        current
+    ) {
+        return null;
+    }
+
+    return setBalance(
+        current - subtract
+    );
+}
+
+/*
+========================================
+LOGIN
+========================================
+*/
 
 app.post(
     "/api/admin/login",
-    function (req, res) {
-        const login = String(
-            req.body.login || ""
-        ).trim();
+    function (
+        req,
+        res
+    ) {
+        const login =
+            String(
+                req.body.login ||
+                    ""
+            ).trim();
 
-        const password = String(
-            req.body.password || ""
-        );
+        const password =
+            String(
+                req.body.password ||
+                    ""
+            );
 
         if (
-            login !== ADMIN_LOGIN ||
-            password !== ADMIN_PASSWORD
+            login !==
+                ADMIN_LOGIN ||
+            password !==
+                ADMIN_PASSWORD
         ) {
-            return res.status(401).json({
-                success: false,
-                error: "Nieprawidłowy login lub hasło."
-            });
+            return res
+                .status(401)
+                .json({
+                    success: false,
+                    error:
+                        "Nieprawidłowy login lub hasło."
+                });
         }
 
-        const token = generateToken();
+        const token =
+            generateToken();
 
-        const tokens = readJSON(
-            TOKENS_FILE,
-            []
-        );
+        const tokens =
+            readJSON(
+                TOKENS_FILE,
+                []
+            );
 
         tokens.push({
-            token: token,
-            createdAt: new Date().toISOString()
+            token:
+                token,
+            createdAt:
+                new Date().toISOString()
         });
 
         writeJSON(
@@ -183,29 +419,45 @@ app.post(
 
         res.json({
             success: true,
-            token: token
+            token:
+                token
         });
     }
 );
 
-/* =========================
-   LOGOUT
-========================= */
+/*
+========================================
+LOGOUT
+========================================
+*/
 
 app.post(
     "/api/admin/logout",
     requireAdmin,
-    function (req, res) {
-        const token = getToken(req);
+    function (
+        req,
+        res
+    ) {
+        const token =
+            getToken(req);
 
-        let tokens = readJSON(
-            TOKENS_FILE,
-            []
-        );
+        let tokens =
+            readJSON(
+                TOKENS_FILE,
+                []
+            );
 
-        tokens = tokens.filter(function (item) {
-            return item.token !== token;
-        });
+        tokens =
+            tokens.filter(
+                function (
+                    item
+                ) {
+                    return (
+                        item.token !==
+                        token
+                    );
+                }
+            );
 
         writeJSON(
             TOKENS_FILE,
@@ -218,148 +470,375 @@ app.post(
     }
 );
 
-/* =========================
-   HEALTH
-========================= */
+/*
+========================================
+HEALTH
+========================================
+*/
 
 app.get(
     "/api/health",
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
         res.json({
             success: true,
             online: true,
-            service: "Printerlase3D",
-            node: process.version
+            service:
+                "Printerlase3D",
+            node:
+                process.version
         });
     }
 );
 
-/* =========================
-   ADMIN DATA
-========================= */
+/*
+========================================
+ADMIN DATA
+========================================
+*/
 
 app.get(
     "/api/admin/data",
     requireAdmin,
-    function (req, res) {
-        const orders = readJSON(
-            ORDERS_FILE,
-            []
-        );
-
-        const models = readJSON(
-            MODELS_FILE,
-            []
-        );
-
-        let revenue = 0;
-
-        orders.forEach(function (order) {
-            revenue += Number(
-                order.total || 0
+    function (
+        req,
+        res
+    ) {
+        const orders =
+            readJSON(
+                ORDERS_FILE,
+                []
             );
-        });
+
+        const models =
+            readJSON(
+                MODELS_FILE,
+                []
+            );
+
+        const withdrawals =
+            readJSON(
+                WITHDRAWALS_FILE,
+                []
+            );
+
+        let revenue =
+            0;
+
+        orders.forEach(
+            function (
+                order
+            ) {
+                revenue +=
+                    Number(
+                        order.total ||
+                            0
+                    );
+            }
+        );
 
         res.json({
             success: true,
-            orders: orders,
-            customOrders: models,
+
+            orders:
+                orders,
+
+            customOrders:
+                models,
+
+            withdrawals:
+                withdrawals,
+
+            balance:
+                getBalance(),
+
             stats: {
-                orders: orders.length,
-                models: models.length,
-                revenue: Number(
-                    revenue.toFixed(2)
-                )
+                orders:
+                    orders.length,
+
+                models:
+                    models.length,
+
+                revenue:
+                    Number(
+                        revenue.toFixed(
+                            2
+                        )
+                    ),
+
+                balance:
+                    getBalance()
             }
         });
     }
 );
 
-/* =========================
-   CALCULATOR
-========================= */
+/*
+========================================
+WYPŁATA
+========================================
+
+Możesz wypłacić dowolną kwotę,
+ale nie większą niż aktualne saldo.
+
+2000 -> 1000 -> 1000
+2000 -> 2000 -> 0
+2000 -> 2500 -> odmowa
+========================================
+*/
+
+app.post(
+    "/api/admin/withdraw",
+    requireAdmin,
+    function (
+        req,
+        res
+    ) {
+        const amount =
+            Number(
+                req.body.amount
+            );
+
+        if (
+            !Number.isFinite(
+                amount
+            ) ||
+            amount <= 0
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Podaj prawidłową kwotę wypłaty."
+                });
+        }
+
+        const roundedAmount =
+            Number(
+                amount.toFixed(
+                    2
+                )
+            );
+
+        const currentBalance =
+            getBalance();
+
+        if (
+            roundedAmount >
+            currentBalance
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Nie masz wystarczającego salda.",
+                    balance:
+                        currentBalance
+                });
+        }
+
+        const newBalance =
+            subtractBalance(
+                roundedAmount
+            );
+
+        if (
+            newBalance ===
+            null
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Nie można wykonać wypłaty."
+                });
+        }
+
+        const withdrawal = {
+            id:
+                generateId(
+                    "PAY"
+                ),
+
+            amount:
+                roundedAmount,
+
+            balanceBefore:
+                currentBalance,
+
+            balanceAfter:
+                newBalance,
+
+            status:
+                "PAID",
+
+            createdAt:
+                new Date().toISOString()
+        };
+
+        const withdrawals =
+            readJSON(
+                WITHDRAWALS_FILE,
+                []
+            );
+
+        withdrawals.unshift(
+            withdrawal
+        );
+
+        writeJSON(
+            WITHDRAWALS_FILE,
+            withdrawals
+        );
+
+        console.log(
+            "[WITHDRAWAL] " +
+                roundedAmount +
+                " PLN | SALDO: " +
+                newBalance +
+                " PLN"
+        );
+
+        res.json({
+            success: true,
+
+            withdrawal:
+                withdrawal,
+
+            balance:
+                newBalance
+        });
+    }
+);
+
+/*
+========================================
+CALCULATOR
+========================================
+*/
 
 function calculateOrder(
     items,
     discountCode,
     delivery
 ) {
-    if (!Array.isArray(items)) {
+    if (
+        !Array.isArray(
+            items
+        )
+    ) {
         items = [];
     }
 
-    let subtotal = 0;
+    let subtotal =
+        0;
 
-    const normalized = items.map(
-        function (item) {
-            const price = Math.max(
-                0,
-                Number(item.price || 0)
-            );
+    const normalized =
+        items.map(
+            function (
+                item
+            ) {
+                const price =
+                    Math.max(
+                        0,
+                        Number(
+                            item.price ||
+                                0
+                        )
+                    );
 
-            const quantity = Math.max(
-                1,
-                Number(
-                    item.quantity ||
-                    item.qty ||
-                    1
-                )
-            );
+                const quantity =
+                    Math.max(
+                        1,
+                        Number(
+                            item.quantity ||
+                                item.qty ||
+                                1
+                        )
+                    );
 
-            const total =
-                price * quantity;
+                const total =
+                    price *
+                    quantity;
 
-            subtotal += total;
+                subtotal +=
+                    total;
 
-            return {
-                name: String(
-                    item.name ||
-                    "Produkt"
-                ),
-                price: Number(
-                    price.toFixed(2)
-                ),
-                quantity: quantity,
-                total: Number(
-                    total.toFixed(2)
-                )
-            };
-        }
-    );
+                return {
+                    name:
+                        String(
+                            item.name ||
+                                "Produkt"
+                        ),
 
-    const code = String(
-        discountCode || ""
-    )
-        .trim()
-        .toUpperCase();
+                    price:
+                        Number(
+                            price.toFixed(
+                                2
+                            )
+                        ),
 
-    let discount = 0;
+                    quantity:
+                        quantity,
+
+                    total:
+                        Number(
+                            total.toFixed(
+                                2
+                            )
+                        )
+                };
+            }
+        );
+
+    const code =
+        String(
+            discountCode ||
+                ""
+        )
+            .trim()
+            .toUpperCase();
+
+    let discount =
+        0;
 
     if (
-        code === DISCOUNT_CODE
+        code ===
+        DISCOUNT_CODE
     ) {
         discount =
-            subtotal *
-            DISCOUNT_PERCENT /
+            (subtotal *
+                DISCOUNT_PERCENT) /
             100;
     }
 
-    const afterDiscount = Math.max(
-        0,
-        subtotal - discount
-    );
+    const afterDiscount =
+        Math.max(
+            0,
+            subtotal -
+                discount
+        );
 
-    let deliveryPrice = 9.99;
+    let deliveryPrice =
+        9.99;
 
     if (
-        delivery === "pickup"
+        delivery ===
+        "pickup"
     ) {
-        deliveryPrice = 0;
+        deliveryPrice =
+            0;
     } else if (
         afterDiscount >=
         FREE_DELIVERY_FROM
     ) {
-        deliveryPrice = 0;
+        deliveryPrice =
+            0;
     }
 
     const total =
@@ -367,25 +846,45 @@ function calculateOrder(
         deliveryPrice;
 
     return {
-        items: normalized,
-        subtotal: Number(
-            subtotal.toFixed(2)
-        ),
-        discount: Number(
-            discount.toFixed(2)
-        ),
-        deliveryPrice: Number(
-            deliveryPrice.toFixed(2)
-        ),
-        total: Number(
-            total.toFixed(2)
-        )
+        items:
+            normalized,
+
+        subtotal:
+            Number(
+                subtotal.toFixed(
+                    2
+                )
+            ),
+
+        discount:
+            Number(
+                discount.toFixed(
+                    2
+                )
+            ),
+
+        deliveryPrice:
+            Number(
+                deliveryPrice.toFixed(
+                    2
+                )
+            ),
+
+        total:
+            Number(
+                total.toFixed(
+                    2
+                )
+            )
     };
 }
 
 app.post(
     "/api/calculate",
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
         const result =
             calculateOrder(
                 req.body.items,
@@ -400,24 +899,32 @@ app.post(
     }
 );
 
-/* =========================
-   ZAMÓWIENIA
-========================= */
+/*
+========================================
+ZAMÓWIENIA
+========================================
+*/
 
 app.post(
     "/api/orders",
-    function (req, res) {
-        const body = req.body || {};
+    function (
+        req,
+        res
+    ) {
+        const body =
+            req.body || {};
 
         if (
             !body.name ||
             !body.email
         ) {
-            return res.status(400).json({
-                success: false,
-                error:
-                    "Imię i e-mail są wymagane."
-            });
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Imię i e-mail są wymagane."
+                });
         }
 
         const calculated =
@@ -428,26 +935,36 @@ app.post(
             );
 
         const order = {
-            id: generateId("ORD"),
+            id:
+                generateId(
+                    "ORD"
+                ),
 
-            name: String(
-                body.name
-            ).trim(),
+            name:
+                String(
+                    body.name
+                ).trim(),
 
-            email: String(
-                body.email
-            ).trim(),
+            email:
+                String(
+                    body.email
+                ).trim(),
 
-            phone: String(
-                body.phone || ""
-            ).trim(),
+            phone:
+                String(
+                    body.phone ||
+                        ""
+                ).trim(),
 
-            address: String(
-                body.address || ""
-            ).trim(),
+            address:
+                String(
+                    body.address ||
+                        ""
+                ).trim(),
 
             delivery:
-                body.delivery === "pickup"
+                body.delivery ===
+                "pickup"
                     ? "Odbiór osobisty"
                     : "Dostawa",
 
@@ -462,7 +979,8 @@ app.post(
 
             discountCode:
                 String(
-                    body.discountCode || ""
+                    body.discountCode ||
+                        ""
                 )
                     .trim()
                     .toUpperCase(),
@@ -473,11 +991,14 @@ app.post(
             total:
                 calculated.total,
 
-            status: "NEW",
+            status:
+                "NEW",
 
-            note: String(
-                body.note || ""
-            ).trim(),
+            note:
+                String(
+                    body.note ||
+                        ""
+                ).trim(),
 
             createdAt:
                 new Date().toISOString()
@@ -489,112 +1010,162 @@ app.post(
                 []
             );
 
-        orders.unshift(order);
+        orders.unshift(
+            order
+        );
 
         writeJSON(
             ORDERS_FILE,
             orders
         );
 
+        /*
+        ========================================
+        DODANIE PIENIĘDZY DO SALDA
+        ========================================
+        */
+
+        const newBalance =
+            addBalance(
+                order.total
+            );
+
         console.log(
             "[ORDER] " +
-            order.id +
-            " | " +
-            order.total +
-            " PLN"
+                order.id +
+                " | " +
+                order.total +
+                " PLN"
+        );
+
+        console.log(
+            "[BALANCE] +" +
+                order.total +
+                " PLN | SALDO: " +
+                newBalance +
+                " PLN"
         );
 
         res.status(201).json({
             success: true,
-            order: order
+
+            order:
+                order,
+
+            balance:
+                newBalance
         });
     }
 );
 
-/* =========================
-   WŁASNY MODEL 3D
-========================= */
+/*
+========================================
+WŁASNY MODEL 3D
+========================================
+*/
 
 app.post(
     "/api/custom-model",
-    function (req, res) {
-        const body = req.body || {};
+    function (
+        req,
+        res
+    ) {
+        const body =
+            req.body || {};
 
         if (
             !body.name ||
             !body.email
         ) {
-            return res.status(400).json({
-                success: false,
-                error:
-                    "Imię i e-mail są wymagane."
-            });
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Imię i e-mail są wymagane."
+                });
         }
 
         const model = {
-            id: generateId("MODEL"),
+            id:
+                generateId(
+                    "MODEL"
+                ),
 
-            name: String(
-                body.name
-            ).trim(),
+            name:
+                String(
+                    body.name
+                ).trim(),
 
-            email: String(
-                body.email
-            ).trim(),
+            email:
+                String(
+                    body.email
+                ).trim(),
 
-            phone: String(
-                body.phone || ""
-            ).trim(),
+            phone:
+                String(
+                    body.phone ||
+                        ""
+                ).trim(),
 
-            fileName: String(
-                body.fileName ||
-                body.filename ||
-                ""
-            ).trim(),
+            fileName:
+                String(
+                    body.fileName ||
+                        body.filename ||
+                        ""
+                ).trim(),
 
-            fileUrl: String(
-                body.fileUrl ||
-                body.url ||
-                ""
-            ).trim(),
+            fileUrl:
+                String(
+                    body.fileUrl ||
+                        body.url ||
+                        ""
+                ).trim(),
 
-            material: String(
-                body.material ||
-                "PLA"
-            ).trim(),
+            material:
+                String(
+                    body.material ||
+                        "PLA"
+                ).trim(),
 
-            color: String(
-                body.color ||
-                ""
-            ).trim(),
+            color:
+                String(
+                    body.color ||
+                        ""
+                ).trim(),
 
-            quantity: Math.max(
-                1,
-                Number(
-                    body.quantity ||
-                    1
-                )
-            ),
+            quantity:
+                Math.max(
+                    1,
+                    Number(
+                        body.quantity ||
+                            1
+                    )
+                ),
 
-            dimensions: String(
-                body.dimensions ||
-                ""
-            ).trim(),
+            dimensions:
+                String(
+                    body.dimensions ||
+                        ""
+                ).trim(),
 
-            description: String(
-                body.description ||
-                ""
-            ).trim(),
+            description:
+                String(
+                    body.description ||
+                        ""
+                ).trim(),
 
-            estimatedPrice: Math.max(
-                0,
-                Number(
-                    body.estimatedPrice ||
-                    0
-                )
-            ),
+            estimatedPrice:
+                Math.max(
+                    0,
+                    Number(
+                        body.estimatedPrice ||
+                            0
+                    )
+                ),
 
-            status: "NEW",
+            status:
+                "NEW",
 
             createdAt:
                 new Date().toISOString()
@@ -606,7 +1177,9 @@ app.post(
                 []
             );
 
-        models.unshift(model);
+        models.unshift(
+            model
+        );
 
         writeJSON(
             MODELS_FILE,
@@ -615,29 +1188,37 @@ app.post(
 
         console.log(
             "[MODEL] " +
-            model.id
+                model.id
         );
 
         res.status(201).json({
             success: true,
-            model: model
+            model:
+                model
         });
     }
 );
 
-/* =========================
-   STATUS ZAMÓWIENIA
-========================= */
+/*
+========================================
+STATUS ZAMÓWIENIA
+========================================
+*/
 
 app.patch(
     "/api/admin/orders/:id/status",
     requireAdmin,
-    function (req, res) {
-        const status = String(
-            req.body.status || ""
-        )
-            .trim()
-            .toUpperCase();
+    function (
+        req,
+        res
+    ) {
+        const status =
+            String(
+                req.body.status ||
+                    ""
+            )
+                .trim()
+                .toUpperCase();
 
         const allowed = [
             "NEW",
@@ -648,13 +1229,17 @@ app.patch(
         ];
 
         if (
-            !allowed.includes(status)
+            !allowed.includes(
+                status
+            )
         ) {
-            return res.status(400).json({
-                success: false,
-                error:
-                    "Nieprawidłowy status."
-            });
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Nieprawidłowy status."
+                });
         }
 
         const orders =
@@ -665,23 +1250,33 @@ app.patch(
 
         const order =
             orders.find(
-                function (item) {
+                function (
+                    item
+                ) {
                     return (
-                        String(item.id) ===
-                        String(req.params.id)
+                        String(
+                            item.id
+                        ) ===
+                        String(
+                            req.params
+                                .id
+                        )
                     );
                 }
             );
 
         if (!order) {
-            return res.status(404).json({
-                success: false,
-                error:
-                    "Nie znaleziono zamówienia."
-            });
+            return res
+                .status(404)
+                .json({
+                    success: false,
+                    error:
+                        "Nie znaleziono zamówienia."
+                });
         }
 
-        order.status = status;
+        order.status =
+            status;
 
         order.updatedAt =
             new Date().toISOString();
@@ -693,24 +1288,32 @@ app.patch(
 
         res.json({
             success: true,
-            order: order
+            order:
+                order
         });
     }
 );
 
-/* =========================
-   STATUS MODELU
-========================= */
+/*
+========================================
+STATUS MODELU
+========================================
+*/
 
 app.patch(
     "/api/admin/custom/:id/status",
     requireAdmin,
-    function (req, res) {
-        const status = String(
-            req.body.status || ""
-        )
-            .trim()
-            .toUpperCase();
+    function (
+        req,
+        res
+    ) {
+        const status =
+            String(
+                req.body.status ||
+                    ""
+            )
+                .trim()
+                .toUpperCase();
 
         const allowed = [
             "NEW",
@@ -721,13 +1324,17 @@ app.patch(
         ];
 
         if (
-            !allowed.includes(status)
+            !allowed.includes(
+                status
+            )
         ) {
-            return res.status(400).json({
-                success: false,
-                error:
-                    "Nieprawidłowy status."
-            });
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Nieprawidłowy status."
+                });
         }
 
         const models =
@@ -738,23 +1345,33 @@ app.patch(
 
         const model =
             models.find(
-                function (item) {
+                function (
+                    item
+                ) {
                     return (
-                        String(item.id) ===
-                        String(req.params.id)
+                        String(
+                            item.id
+                        ) ===
+                        String(
+                            req.params
+                                .id
+                        )
                     );
                 }
             );
 
         if (!model) {
-            return res.status(404).json({
-                success: false,
-                error:
-                    "Nie znaleziono modelu."
-            });
+            return res
+                .status(404)
+                .json({
+                    success: false,
+                    error:
+                        "Nie znaleziono modelu."
+                });
         }
 
-        model.status = status;
+        model.status =
+            status;
 
         model.updatedAt =
             new Date().toISOString();
@@ -766,19 +1383,25 @@ app.patch(
 
         res.json({
             success: true,
-            model: model
+            model:
+                model
         });
     }
 );
 
-/* =========================
-   USUWANIE
-========================= */
+/*
+========================================
+USUWANIE ZAMÓWIENIA
+========================================
+*/
 
 app.delete(
     "/api/admin/orders/:id",
     requireAdmin,
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
         const orders =
             readJSON(
                 ORDERS_FILE,
@@ -787,10 +1410,17 @@ app.delete(
 
         const filtered =
             orders.filter(
-                function (order) {
+                function (
+                    order
+                ) {
                     return (
-                        String(order.id) !==
-                        String(req.params.id)
+                        String(
+                            order.id
+                        ) !==
+                        String(
+                            req.params
+                                .id
+                        )
                     );
                 }
             );
@@ -799,11 +1429,13 @@ app.delete(
             filtered.length ===
             orders.length
         ) {
-            return res.status(404).json({
-                success: false,
-                error:
-                    "Nie znaleziono zamówienia."
-            });
+            return res
+                .status(404)
+                .json({
+                    success: false,
+                    error:
+                        "Nie znaleziono zamówienia."
+                });
         }
 
         writeJSON(
@@ -817,10 +1449,19 @@ app.delete(
     }
 );
 
+/*
+========================================
+USUWANIE MODELU
+========================================
+*/
+
 app.delete(
     "/api/admin/custom/:id",
     requireAdmin,
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
         const models =
             readJSON(
                 MODELS_FILE,
@@ -829,10 +1470,17 @@ app.delete(
 
         const filtered =
             models.filter(
-                function (model) {
+                function (
+                    model
+                ) {
                     return (
-                        String(model.id) !==
-                        String(req.params.id)
+                        String(
+                            model.id
+                        ) !==
+                        String(
+                            req.params
+                                .id
+                        )
                     );
                 }
             );
@@ -841,11 +1489,13 @@ app.delete(
             filtered.length ===
             models.length
         ) {
-            return res.status(404).json({
-                success: false,
-                error:
-                    "Nie znaleziono modelu."
-            });
+            return res
+                .status(404)
+                .json({
+                    success: false,
+                    error:
+                        "Nie znaleziono modelu."
+                });
         }
 
         writeJSON(
@@ -859,13 +1509,18 @@ app.delete(
     }
 );
 
-/* =========================
-   STRONY
-========================= */
+/*
+========================================
+STRONA ADMINA
+========================================
+*/
 
 app.get(
     "/admin",
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
         res.sendFile(
             path.join(
                 __dirname,
@@ -875,9 +1530,18 @@ app.get(
     }
 );
 
+/*
+========================================
+STRONA GŁÓWNA
+========================================
+*/
+
 app.get(
     "/",
-    function (req, res) {
+    function (
+        req,
+        res
+    ) {
         res.sendFile(
             path.join(
                 __dirname,
@@ -887,43 +1551,61 @@ app.get(
     }
 );
 
-/* =========================
-   API 404
-========================= */
+/*
+========================================
+API 404
+========================================
+*/
 
 app.use(
     "/api",
-    function (req, res) {
-        res.status(404).json({
-            success: false,
-            error:
-                "Nie znaleziono API."
-        });
+    function (
+        req,
+        res
+    ) {
+        res
+            .status(404)
+            .json({
+                success: false,
+                error:
+                    "Nie znaleziono API."
+            });
     }
 );
 
-/* =========================
-   ERROR
-========================= */
+/*
+========================================
+ERROR
+========================================
+*/
 
 app.use(
-    function (error, req, res, next) {
+    function (
+        error,
+        req,
+        res,
+        next
+    ) {
         console.error(
             "SERVER ERROR:",
             error
         );
 
-        res.status(500).json({
-            success: false,
-            error:
-                "Wewnętrzny błąd serwera."
-        });
+        res
+            .status(500)
+            .json({
+                success: false,
+                error:
+                    "Wewnętrzny błąd serwera."
+            });
     }
 );
 
-/* =========================
-   START
-========================= */
+/*
+========================================
+START
+========================================
+*/
 
 app.listen(
     PORT,
@@ -942,7 +1624,8 @@ app.listen(
         );
 
         console.log(
-            "PORT: " + PORT
+            "PORT: " +
+                PORT
         );
 
         console.log(
@@ -950,17 +1633,25 @@ app.listen(
         );
 
         console.log(
+            "SALDO: BEZ LIMITU"
+        );
+
+        console.log(
+            "WYPŁATA: DO WYSOKOŚCI SALDA"
+        );
+
+        console.log(
             "DISCOUNT: " +
-            DISCOUNT_CODE +
-            " -" +
-            DISCOUNT_PERCENT +
-            "%"
+                DISCOUNT_CODE +
+                " -" +
+                DISCOUNT_PERCENT +
+                "%"
         );
 
         console.log(
             "FREE DELIVERY: " +
-            FREE_DELIVERY_FROM +
-            " PLN"
+                FREE_DELIVERY_FROM +
+                " PLN"
         );
 
         console.log(
