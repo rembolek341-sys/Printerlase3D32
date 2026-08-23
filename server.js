@@ -2,6 +2,9 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
+const stripe = require("stripe")(
+    process.env.STRIPE_SECRET_KEY
+);
 
 const app = express();
 
@@ -27,13 +30,9 @@ const DELIVERY_PRICE = 9.99;
 const DISCOUNT_CODE = "START10";
 const DISCOUNT_PERCENT = 10;
 
-// Maksymalne saldo sklepu
 const MAX_BALANCE = 1000000;
-
-// Największa pojedyncza wypłata
 const MAX_WITHDRAWAL = 200;
 
-// Dozwolone szybkie wypłaty
 const WITHDRAWAL_OPTIONS = [
     200,
     100,
@@ -64,7 +63,7 @@ const WITHDRAWALS_FILE =
     path.join(DATA_DIR, "withdrawals.json");
 
 // ======================================================
-// TWORZENIE FOLDERU DATA
+// FOLDER DATA
 // ======================================================
 
 if (!fs.existsSync(DATA_DIR)) {
@@ -143,27 +142,6 @@ function writeJSON(file, data) {
 }
 
 // ======================================================
-// EXPRESS
-// ======================================================
-
-app.use(
-    express.json({
-        limit: "25mb"
-    })
-);
-
-app.use(
-    express.urlencoded({
-        extended: true,
-        limit: "25mb"
-    })
-);
-
-app.use(
-    express.static(__dirname)
-);
-
-// ======================================================
 // ID
 // ======================================================
 
@@ -205,6 +183,233 @@ function getToken(req) {
 }
 
 // ======================================================
+// STRIPE WEBHOOK
+// MUSI BYĆ PRZED express.json()
+// ======================================================
+
+app.post(
+    "/api/stripe/webhook",
+    express.raw({
+        type: "application/json"
+    }),
+    function (req, res) {
+        const signature =
+            req.headers["stripe-signature"];
+
+        let event;
+
+        try {
+            event =
+                stripe.webhooks.constructEvent(
+                    req.body,
+                    signature,
+                    process.env.STRIPE_WEBHOOK_SECRET
+                );
+        } catch (error) {
+            console.error(
+                "[STRIPE WEBHOOK ERROR]",
+                error.message
+            );
+
+            return res
+                .status(400)
+                .send(
+                    "Webhook signature verification failed."
+                );
+        }
+
+        try {
+            if (
+                event.type ===
+                "checkout.session.completed"
+            ) {
+                const session =
+                    event.data.object;
+
+                const orderId =
+                    session.metadata &&
+                    session.metadata.orderId;
+
+                if (!orderId) {
+                    console.error(
+                        "[STRIPE] Brak orderId w metadata."
+                    );
+
+                    return res.json({
+                        received: true
+                    });
+                }
+
+                const orders =
+                    readJSON(
+                        ORDERS_FILE,
+                        []
+                    );
+
+                const order =
+                    orders.find(
+                        function (item) {
+                            return (
+                                item.id ===
+                                orderId
+                            );
+                        }
+                    );
+
+                if (!order) {
+                    console.error(
+                        "[STRIPE] Nie znaleziono zamówienia:",
+                        orderId
+                    );
+
+                    return res.json({
+                        received: true
+                    });
+                }
+
+                // Zapobiega podwójnemu dodaniu pieniędzy
+                if (
+                    order.paymentStatus !==
+                    "PAID"
+                ) {
+                    order.paymentStatus =
+                        "PAID";
+
+                    order.status =
+                        "NEW";
+
+                    order.paidAt =
+                        new Date()
+                            .toISOString();
+
+                    order.stripeSessionId =
+                        session.id;
+
+                    order.paymentIntentId =
+                        session.payment_intent ||
+                        null;
+
+                    writeJSON(
+                        ORDERS_FILE,
+                        orders
+                    );
+
+                    // Dopiero po potwierdzeniu płatności
+                    const balance =
+                        addMoney(
+                            order.total
+                        );
+
+                    console.log(
+                        "[STRIPE] OPŁACONO:",
+                        order.id
+                    );
+
+                    console.log(
+                        "[STRIPE] KWOTA:",
+                        order.total,
+                        "PLN"
+                    );
+
+                    console.log(
+                        "[SALDO]:",
+                        balance.balance,
+                        "PLN"
+                    );
+                }
+            }
+
+            if (
+                event.type ===
+                "checkout.session.expired"
+            ) {
+                const session =
+                    event.data.object;
+
+                const orderId =
+                    session.metadata &&
+                    session.metadata.orderId;
+
+                if (orderId) {
+                    const orders =
+                        readJSON(
+                            ORDERS_FILE,
+                            []
+                        );
+
+                    const order =
+                        orders.find(
+                            function (item) {
+                                return (
+                                    item.id ===
+                                    orderId
+                                );
+                            }
+                        );
+
+                    if (
+                        order &&
+                        order.paymentStatus ===
+                            "PENDING"
+                    ) {
+                        order.status =
+                            "CANCELLED";
+
+                        order.paymentStatus =
+                            "EXPIRED";
+
+                        order.updatedAt =
+                            new Date()
+                                .toISOString();
+
+                        writeJSON(
+                            ORDERS_FILE,
+                            orders
+                        );
+                    }
+                }
+            }
+        } catch (error) {
+            console.error(
+                "[WEBHOOK PROCESS ERROR]",
+                error
+            );
+
+            return res
+                .status(500)
+                .send(
+                    "Webhook processing error."
+                );
+        }
+
+        res.json({
+            received: true
+        });
+    }
+);
+
+// ======================================================
+// EXPRESS
+// ======================================================
+
+app.use(
+    express.json({
+        limit: "25mb"
+    })
+);
+
+app.use(
+    express.urlencoded({
+        extended: true,
+        limit: "25mb"
+    })
+);
+
+app.use(
+    express.static(__dirname)
+);
+
+// ======================================================
 // ADMIN AUTH
 // ======================================================
 
@@ -217,11 +422,13 @@ function requireAdmin(
         getToken(req);
 
     if (!token) {
-        return res.status(401).json({
-            success: false,
-            error:
-                "Brak autoryzacji."
-        });
+        return res
+            .status(401)
+            .json({
+                success: false,
+                error:
+                    "Brak autoryzacji."
+            });
     }
 
     const tokens =
@@ -241,11 +448,13 @@ function requireAdmin(
         );
 
     if (!session) {
-        return res.status(401).json({
-            success: false,
-            error:
-                "Sesja wygasła."
-        });
+        return res
+            .status(401)
+            .json({
+                success: false,
+                error:
+                    "Sesja wygasła."
+            });
     }
 
     next();
@@ -293,7 +502,11 @@ function saveBalanceData(data) {
             data.totalRevenue || 0
         );
 
-    if (!Number.isFinite(balance)) {
+    if (
+        !Number.isFinite(
+            balance
+        )
+    ) {
         balance = 0;
     }
 
@@ -305,13 +518,14 @@ function saveBalanceData(data) {
         totalRevenue = 0;
     }
 
-    balance = Math.max(
-        0,
-        Math.min(
-            MAX_BALANCE,
-            balance
-        )
-    );
+    balance =
+        Math.max(
+            0,
+            Math.min(
+                MAX_BALANCE,
+                balance
+            )
+        );
 
     totalRevenue =
         Math.max(
@@ -343,9 +557,7 @@ function saveBalanceData(data) {
 // DODAWANIE PIENIĘDZY
 // ======================================================
 
-function addMoney(
-    amount
-) {
+function addMoney(amount) {
     amount =
         Number(amount);
 
@@ -382,9 +594,7 @@ function addMoney(
 // ODEJMOWANIE PIENIĘDZY
 // ======================================================
 
-function removeMoney(
-    amount
-) {
+function removeMoney(amount) {
     amount =
         Number(amount);
 
@@ -406,7 +616,7 @@ function removeMoney(
 }
 
 // ======================================================
-// LOGIN
+// ADMIN LOGIN
 // ======================================================
 
 app.post(
@@ -456,17 +666,12 @@ app.post(
                     .toISOString()
         });
 
-        // Maksymalnie 20 aktywnych sesji
         tokens =
             tokens.slice(-20);
 
         writeJSON(
             TOKENS_FILE,
             tokens
-        );
-
-        console.log(
-            "[ADMIN] Zalogowano"
         );
 
         res.json({
@@ -565,11 +770,16 @@ app.get(
 
         orders.forEach(
             function (order) {
-                ordersRevenue +=
-                    Number(
-                        order.total ||
-                            0
-                    );
+                if (
+                    order.paymentStatus ===
+                    "PAID"
+                ) {
+                    ordersRevenue +=
+                        Number(
+                            order.total ||
+                                0
+                        );
+                }
             }
         );
 
@@ -660,7 +870,7 @@ app.get(
 );
 
 // ======================================================
-// SALDO ADMINA
+// BALANCE
 // ======================================================
 
 app.get(
@@ -733,7 +943,6 @@ app.post(
                 )
             );
 
-        // Maksymalnie 200 zł JEDNORAZOWO
         if (
             amount >
             MAX_WITHDRAWAL
@@ -812,18 +1021,6 @@ app.post(
             withdrawals
         );
 
-        console.log(
-            "[WYPLATA] " +
-                amount +
-                " PLN"
-        );
-
-        console.log(
-            "[SALDO] " +
-                newBalance.balance +
-                " PLN"
-        );
-
         res.json({
             success: true,
 
@@ -837,7 +1034,7 @@ app.post(
 );
 
 // ======================================================
-// SZYBKIE WYPŁATY
+// SZYBKA WYPŁATA
 // ======================================================
 
 app.post(
@@ -859,7 +1056,7 @@ app.post(
                 .json({
                     success: false,
                     error:
-                        "Dozwolone wypłaty: 200 zł, 100 zł, 50 zł lub 20 zł."
+                        "Dozwolone wypłaty: 200, 100, 50 lub 20 PLN."
                 });
         }
 
@@ -919,12 +1116,6 @@ app.post(
             withdrawals
         );
 
-        console.log(
-            "[QUICK WITHDRAW] " +
-                amount +
-                " PLN"
-        );
-
         res.json({
             success: true,
 
@@ -941,7 +1132,7 @@ app.post(
 );
 
 // ======================================================
-// KALKULATOR ZAMÓWIENIA
+// KALKULATOR
 // ======================================================
 
 function calculateOrder(
@@ -1117,7 +1308,276 @@ app.post(
 );
 
 // ======================================================
-// NOWE ZAMÓWIENIE
+// STRIPE CHECKOUT
+// ======================================================
+
+app.post(
+    "/api/create-checkout-session",
+    async function (req, res) {
+        try {
+            const body =
+                req.body || {};
+
+            if (
+                !body.name ||
+                !body.email
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success: false,
+                        error:
+                            "Imię i e-mail są wymagane."
+                    });
+            }
+
+            const calculated =
+                calculateOrder(
+                    body.items,
+                    body.discountCode,
+                    body.delivery
+                );
+
+            if (
+                calculated.items.length ===
+                0
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success: false,
+                        error:
+                            "Koszyk jest pusty."
+                    });
+            }
+
+            if (
+                calculated.total <=
+                0
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success: false,
+                        error:
+                            "Nieprawidłowa kwota."
+                    });
+            }
+
+            const order = {
+                id:
+                    generateId(
+                        "ORD"
+                    ),
+
+                name:
+                    String(
+                        body.name
+                    ).trim(),
+
+                email:
+                    String(
+                        body.email
+                    ).trim(),
+
+                phone:
+                    String(
+                        body.phone ||
+                            ""
+                    ).trim(),
+
+                address:
+                    String(
+                        body.address ||
+                            ""
+                    ).trim(),
+
+                delivery:
+                    body.delivery ===
+                    "pickup"
+                        ? "Odbiór osobisty"
+                        : "Dostawa",
+
+                items:
+                    calculated.items,
+
+                subtotal:
+                    calculated.subtotal,
+
+                discount:
+                    calculated.discount,
+
+                discountCode:
+                    String(
+                        body.discountCode ||
+                            ""
+                    )
+                        .trim()
+                        .toUpperCase(),
+
+                deliveryPrice:
+                    calculated.deliveryPrice,
+
+                total:
+                    calculated.total,
+
+                status:
+                    "AWAITING_PAYMENT",
+
+                paymentStatus:
+                    "PENDING",
+
+                note:
+                    String(
+                        body.note ||
+                            ""
+                    ).trim(),
+
+                createdAt:
+                    new Date()
+                        .toISOString()
+            };
+
+            const orders =
+                readJSON(
+                    ORDERS_FILE,
+                    []
+                );
+
+            orders.unshift(
+                order
+            );
+
+            writeJSON(
+                ORDERS_FILE,
+                orders
+            );
+
+            const lineItems =
+                calculated.items.map(
+                    function (item) {
+                        return {
+                            price_data: {
+                                currency:
+                                    "pln",
+
+                                product_data: {
+                                    name:
+                                        item.name
+                                },
+
+                                unit_amount:
+                                    Math.round(
+                                        item.price *
+                                            100
+                                    )
+                            },
+
+                            quantity:
+                                item.quantity
+                        };
+                    }
+                );
+
+            if (
+                calculated.deliveryPrice >
+                0
+            ) {
+                lineItems.push({
+                    price_data: {
+                        currency:
+                            "pln",
+
+                        product_data: {
+                            name:
+                                "Dostawa"
+                        },
+
+                        unit_amount:
+                            Math.round(
+                                calculated.deliveryPrice *
+                                    100
+                            )
+                    },
+
+                    quantity: 1
+                });
+            }
+
+            const baseUrl =
+                process.env.BASE_URL ||
+                `${req.protocol}://${req.get("host")}`;
+
+            const session =
+                await stripe.checkout.sessions.create(
+                    {
+                        mode:
+                            "payment",
+
+                        payment_method_types: [
+                            "card"
+                        ],
+
+                        customer_email:
+                            order.email,
+
+                        line_items:
+                            lineItems,
+
+                        metadata: {
+                            orderId:
+                                order.id
+                        },
+
+                        success_url:
+                            `${baseUrl}/sukces.html?session_id={CHECKOUT_SESSION_ID}`,
+
+                        cancel_url:
+                            `${baseUrl}/checkout.html?payment=cancelled`
+                    }
+                );
+
+            order.stripeSessionId =
+                session.id;
+
+            writeJSON(
+                ORDERS_FILE,
+                orders
+            );
+
+            console.log(
+                "[STRIPE] Utworzono checkout:",
+                order.id
+            );
+
+            res.json({
+                success: true,
+
+                orderId:
+                    order.id,
+
+                url:
+                    session.url
+            });
+        } catch (error) {
+            console.error(
+                "[STRIPE ERROR]",
+                error
+            );
+
+            res
+                .status(500)
+                .json({
+                    success: false,
+                    error:
+                        "Nie udało się utworzyć płatności."
+                });
+        }
+    }
+);
+
+// ======================================================
+// STARE API ZAMÓWIENIA
 // ======================================================
 
 app.post(
@@ -1145,6 +1605,19 @@ app.post(
                 body.discountCode,
                 body.delivery
             );
+
+        if (
+            calculated.items.length ===
+            0
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Koszyk jest pusty."
+                });
+        }
 
         const order = {
             id:
@@ -1204,7 +1677,10 @@ app.post(
                 calculated.total,
 
             status:
-                "NEW",
+                "AWAITING_PAYMENT",
+
+            paymentStatus:
+                "PENDING",
 
             note:
                 String(
@@ -1232,37 +1708,14 @@ app.post(
             orders
         );
 
-        // ==================================================
-        // PIENIĄDZE Z ZAMÓWIENIA WPADAJĄ DO SALDA
-        // ==================================================
-
-        const balance =
-            addMoney(
-                order.total
-            );
-
-        console.log(
-            "[ORDER] " +
-                order.id +
-                " | " +
-                order.total +
-                " PLN"
-        );
-
-        console.log(
-            "[SALDO] " +
-                balance.balance +
-                " PLN"
-        );
-
         res.status(201).json({
             success: true,
 
             order:
                 order,
 
-            balance:
-                balance.balance
+            message:
+                "Zamówienie utworzone. Oczekuje na płatność."
         });
     }
 );
@@ -1391,11 +1844,6 @@ app.post(
             models
         );
 
-        console.log(
-            "[MODEL] " +
-                model.id
-        );
-
         res.status(201).json({
             success: true,
             model:
@@ -1421,6 +1869,7 @@ app.patch(
                 .toUpperCase();
 
         const allowed = [
+            "AWAITING_PAYMENT",
             "NEW",
             "IN_PROGRESS",
             "READY",
@@ -1867,8 +2316,8 @@ app.listen(
         );
 
         console.log(
-            "PORT: " +
-                PORT
+            "PORT:",
+            PORT
         );
 
         console.log(
@@ -1876,33 +2325,17 @@ app.listen(
         );
 
         console.log(
-            "MAX SALDO: " +
-                MAX_BALANCE +
-                " PLN"
+            "STRIPE:",
+            process.env.STRIPE_SECRET_KEY
+                ? "OK"
+                : "BRAK KLUCZA"
         );
 
         console.log(
-            "MAX JEDNORAZOWA WYPLATA: " +
-                MAX_WITHDRAWAL +
-                " PLN"
-        );
-
-        console.log(
-            "WYPLATY: 200 / 100 / 50 / 20 PLN"
-        );
-
-        console.log(
-            "DISCOUNT: " +
-                DISCOUNT_CODE +
-                " -" +
-                DISCOUNT_PERCENT +
-                "%"
-        );
-
-        console.log(
-            "FREE DELIVERY: " +
-                FREE_DELIVERY_FROM +
-                " PLN"
+            "WEBHOOK:",
+            process.env.STRIPE_WEBHOOK_SECRET
+                ? "OK"
+                : "BRAK SEKRETU"
         );
 
         console.log(
