@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Płatność — Printerlase3D</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    color:white;
+    background:#030712;
+    overflow-x:hidden;
+}
+
+/* =========================
+   TŁO
+========================= */
+
+.bg{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:-2;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(110px);
+    opacity:.25;
+    animation:float 10s infinite alternate ease-in-out;
+}
+
+.orb1{
+    width:420px;
+    height:420px;
+    background:#008cff;
+    left:-160px;
+    top:-180px;
+}
+
+.orb2{
+    width:400px;
+    height:400px;
+    background:#7b3cff;
+    right:-150px;
+    top:350px;
+}
+
+.orb3{
+    width:300px;
+    height:300px;
+    background:#00d9ff;
+    left:40%;
+    bottom:-180px;
+}
+
+@keyframes float{
+    from{
+        transform:translate(0,0) scale(1);
+    }
+
+    to{
+        transform:translate(60px,40px) scale(1.15);
+    }
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-1;
+    opacity:.1;
+
+    background-image:
+        linear-gradient(#1b9cff 1px,transparent 1px),
+        linear-gradient(90deg,#1b9cff 1px,transparent 1px);
+
+    background-size:55px 55px;
+
+    mask-image:linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:76px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 5%;
+
+    background:rgba(3,7,18,.8);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid #ffffff10;
+
+    z-index:1000;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    color:white;
+    text-decoration:none;
+
+    font-weight:900;
+    font-size:19px;
+}
+
+.brand-logo{
+    width:43px;
+    height:43px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00d9ff,
+            #187cff,
+            #873cff
+        );
+
+    box-shadow:0 0 25px #008cff55;
+}
+
+.brand-logo span{
+    font-size:23px;
+    font-weight:1000;
+}
+
+.brand-name span{
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #28d9ff,
+            #9161ff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.nav-right{
+    display:flex;
+    gap:9px;
+}
+
+.nav-btn{
+    padding:10px 14px;
+
+    border-radius:11px;
+
+    color:white;
+    text-decoration:none;
+
+    background:#ffffff08;
+    border:1px solid #ffffff10;
+
+    font-size:13px;
+    font-weight:800;
+}
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+    max-width:1150px;
+    margin:auto;
+
+    padding:
+        125px
+        20px
+        70px;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.title{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.title-label{
+    color:#35d8ff;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:3px;
+}
+
+.title h1{
+    margin:12px 0;
+
+    font-size:
+        clamp(38px,6vw,58px);
+
+    letter-spacing:-3px;
+}
+
+.title p{
+    color:#7e8da2;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.checkout-layout{
+    display:grid;
+
+    grid-template-columns:
+        1fr 380px;
+
+    gap:22px;
+}
+
+/* =========================
+   BOX
+========================= */
+
+.box{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(9,23,43,.94),
+            rgba(4,10,20,.94)
+        );
+
+    border:1px solid #ffffff0d;
+
+    border-radius:24px;
+
+    padding:27px;
+
+    box-shadow:
+        0 25px 80px #0008;
+
+    backdrop-filter:blur(15px);
+}
+
+.box h2{
+    margin-bottom:22px;
+    font-size:21px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:16px;
+}
+
+.field{
+    margin-bottom:16px;
+}
+
+.field.full{
+    grid-column:1 / -1;
+}
+
+label{
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#aeb9c9;
+
+    font-size:11px;
+    font-weight:900;
+}
+
+input,
+select{
+    width:100%;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    border:1px solid #ffffff12;
+
+    outline:none;
+
+    background:#030a14;
+
+    color:white;
+
+    font-size:14px;
+
+    transition:.2s;
+}
+
+input::placeholder{
+    color:#536176;
+}
+
+input:focus,
+select:focus{
+    border-color:#00cfff66;
+
+    box-shadow:
+        0 0 20px #00bfff10;
+}
+
+select option{
+    background:#030a14;
+}
+
+/* =========================
+   PAYMENT
+========================= */
+
+.payment-options{
+    display:grid;
+    gap:10px;
+}
+
+.payment-option{
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    background:#ffffff05;
+
+    border:1px solid #ffffff0d;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.payment-option:hover{
+    background:#008cff0b;
+    border-color:#00bfff35;
+}
+
+.payment-option.active{
+    background:#008cff12;
+    border-color:#00cfff66;
+
+    box-shadow:
+        0 0 25px #008cff10;
+}
+
+.payment-option input{
+    width:18px;
+    height:18px;
+
+    accent-color:#008cff;
+}
+
+.payment-icon{
+    width:42px;
+    height:42px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:11px;
+
+    background:#ffffff08;
+
+    font-size:21px;
+}
+
+.payment-text strong{
+    display:block;
+
+    font-size:14px;
+
+    margin-bottom:4px;
+}
+
+.payment-text span{
+    color:#748298;
+
+    font-size:11px;
+}
+
+/* =========================
+   ORDER SUMMARY
+========================= */
+
+.summary-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:11px 0;
+
+    color:#8996aa;
+
+    font-size:13px;
+}
+
+.summary-row strong{
+    color:white;
+}
+
+.total{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    margin-top:17px;
+    padding-top:20px;
+
+    border-top:1px solid #ffffff10;
+
+    font-size:22px;
+    font-weight:1000;
+}
+
+.total-price{
+    background:
+        linear-gradient(
+            90deg,
+            #00e5ff,
+            #8d50ff
+        );
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.pay-button{
+    width:100%;
+
+    margin-top:22px;
+
+    padding:17px;
+
+    border:0;
+
+    border-radius:14px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #754cff
+        );
+
+    box-shadow:
+        0 15px 45px #008cff35;
+
+    font-size:14px;
+    font-weight:1000;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.pay-button:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 20px 60px #008cff55;
+}
+
+/* =========================
+   SECURITY
+========================= */
+
+.security{
+    margin-top:18px;
+
+    padding:13px;
+
+    border-radius:12px;
+
+    background:#00cfff08;
+
+    border:1px solid #00cfff15;
+
+    color:#718096;
+
+    font-size:10px;
+
+    line-height:1.6;
+
+    text-align:center;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+
+    right:20px;
+    bottom:20px;
+
+    padding:15px 18px;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #008cff,
+            #754cff
+        );
+
+    box-shadow:0 15px 50px #0009;
+
+    font-size:12px;
+    font-weight:900;
+
+    opacity:0;
+
+    transform:translateY(20px);
+
+    pointer-events:none;
+
+    transition:.3s;
+
+    z-index:9999;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:850px){
+
+    .checkout-layout{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:0 15px;
+    }
+
+    .page{
+        padding:
+            110px
+            15px
+            50px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .box{
+        padding:19px;
+        border-radius:19px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+</div>
+
+<div class="grid"></div>
+
+
+<header class="navbar">
+
+    <a href="index.html" class="brand">
+
+        <div class="brand-logo">
+            <span>P</span>
+        </div>
+
+        <div class="brand-name">
+            Printerlase<span>3D</span>
+        </div>
+
+    </a>
+
+    <div class="nav-right">
+
+        <a
+            href="konto.html"
+            class="nav-btn"
+        >
+            👤 Konto
+        </a>
+
+        <a
+            href="koszyk.html"
+            class="nav-btn"
+        >
+            🛒 Koszyk
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <div class="title">
+
+        <div class="title-label">
+            PRINTERLASE3D • ZAMÓWIENIE
+        </div>
+
+        <h1>
+            Finalizacja zamówienia
+        </h1>
+
+        <p>
+            Podaj dane dostawy i wybierz metodę płatności.
+        </p>
+
+    </div>
+
+
+    <div class="checkout-layout">
+
+
+        <!-- =====================
+             DANE
+        ====================== -->
+
+        <section class="box">
+
+            <h2>
+                📦 Dane dostawy
+            </h2>
+
+
+            <div class="form-grid">
+
+
+                <div class="field">
+
+                    <label>
+                        IMIĘ
+                    </label>
+
+                    <input
+                        id="firstName"
+                        type="text"
+                        placeholder="Jan"
+                        autocomplete="given-name"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        NAZWISKO
+                    </label>
+
+                    <input
+                        id="lastName"
+                        type="text"
+                        placeholder="Kowalski"
+                        autocomplete="family-name"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        NUMER TELEFONU
+                    </label>
+
+                    <input
+                        id="phone"
+                        type="tel"
+                        placeholder="+48 123 456 789"
+                        autocomplete="tel"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        E-MAIL
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="twoj@email.pl"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <div class="field full">
+
+                    <label>
+                        ULICA I NUMER DOMU / MIESZKANIA
+                    </label>
+
+                    <input
+                        id="street"
+                        type="text"
+                        placeholder="ul. Przykładowa 12/4"
+                        autocomplete="street-address"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        KOD POCZTOWY
+                    </label>
+
+                    <input
+                        id="postal"
+                        type="text"
+                        placeholder="00-000"
+                        autocomplete="postal-code"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        MIASTO
+                    </label>
+
+                    <input
+                        id="city"
+                        type="text"
+                        placeholder="Warszawa"
+                        autocomplete="address-level2"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <h2 style="margin-top:20px;">
+                💳 Metoda płatności
+            </h2>
+
+
+            <div class="payment-options">
+
+
+                <label
+                    class="payment-option active"
+                    onclick="selectPayment(this)"
+                >
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="blik"
+                        checked
+                    >
+
+                    <div class="payment-icon">
+                        📱
+                    </div>
+
+                    <div class="payment-text">
+
+                        <strong>
+                            BLIK
+                        </strong>
+
+                        <span>
+                            Szybka płatność kodem BLIK
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <label
+                    class="payment-option"
+                    onclick="selectPayment(this)"
+                >
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="card"
+                    >
+
+                    <div class="payment-icon">
+                        💳
+                    </div>
+
+                    <div class="payment-text">
+
+                        <strong>
+                            Karta płatnicza
+                        </strong>
+
+                        <span>
+                            Visa / Mastercard
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <label
+                    class="payment-option"
+                    onclick="selectPayment(this)"
+                >
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="transfer"
+                    >
+
+                    <div class="payment-icon">
+                        🏦
+                    </div>
+
+                    <div class="payment-text">
+
+                        <strong>
+                            Szybki przelew
+                        </strong>
+
+                        <span>
+                            Przelew online
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <label
+                    class="payment-option"
+                    onclick="selectPayment(this)"
+                >
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="cash"
+                    >
+
+                    <div class="payment-icon">
+                        💵
+                    </div>
+
+                    <div class="payment-text">
+
+                        <strong>
+                            Płatność przy odbiorze
+                        </strong>
+
+                        <span>
+                            Zapłacisz przy dostawie
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================
+             PODSUMOWANIE
+        ====================== -->
+
+        <aside class="box">
+
+            <h2>
+                🛒 Twoje zamówienie
+            </h2>
+
+
+            <div
+                id="orderItems"
+            >
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Produkty
+                </span>
+
+                <strong id="subtotal">
+                    0,00 zł
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Rabat
+                </span>
+
+                <strong
+                    id="discount"
+                    style="color:#35e6a0;"
+                >
+                    0,00 zł
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Dostawa
+                </span>
+
+                <strong id="shipping">
+                    9,99 zł
+                </strong>
+
+            </div>
+
+
+            <div class="total">
+
+                <span>
+                    Razem
+                </span>
+
+                <span
+                    id="grandTotal"
+                    class="total-price"
+                >
+                    0,00 zł
+                </span>
+
+            </div>
+
+
+            <button
+                class="pay-button"
+                onclick="placeOrder()"
+            >
+                🔒 Złóż zamówienie
+            </button>
+
+
+            <div class="security">
+
+                🔐 Twoje dane są wykorzystywane
+                wyłącznie do realizacji zamówienia.
+
+                <br>
+
+                Po kliknięciu przycisku zamówienie
+                zostanie zapisane.
+
+            </div>
+
+
+            <a
+                href="koszyk.html"
+                style="
+                    display:block;
+                    text-align:center;
+                    margin-top:15px;
+                    color:#748298;
+                    text-decoration:none;
+                    font-size:12px;
+                    font-weight:800;
+                "
+            >
+                ← Wróć do koszyka
+            </a>
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script>
+
+const CART_KEY =
+    "printerlase_cart";
+
+const DISCOUNT_KEY =
+    "printerlase_discount";
+
+const ORDERS_KEY =
+    "printerlase_orders";
+
+const SHIPPING_PRICE =
+    9.99;
+
+const FREE_SHIPPING_FROM =
+    50;
+
+
+/* =========================
+   KOSZYK
+========================= */
+
+function getCart(){
+
+    try{
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem(
+                    CART_KEY
+                )
+            );
+
+        return Array.isArray(cart)
+            ? cart
+            : [];
+
+    }catch(e){
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================
+   RABAT
+========================= */
+
+function getDiscount(){
+
+    try{
+
+        const discount =
+            JSON.parse(
+                localStorage.getItem(
+                    DISCOUNT_KEY
+                )
+            );
+
+        return discount || null;
+
+    }catch(e){
+
+        return null;
+
+    }
+
+}
+
+
+/* =========================
+   CENA
+========================= */
+
+function money(value){
+
+    return Number(value || 0)
+        .toFixed(2)
+        .replace(".",",")
+        + " zł";
+
+}
+
+
+/* =========================
+   PODSUMOWANIE
+========================= */
+
+function calculate(){
+
+    const cart =
+        getCart();
+
+    let subtotal = 0;
+
+
+    cart.forEach(item => {
+
+        const quantity =
+            Number(
+                item.quantity ||
+                item.qty ||
+                1
+            );
+
+        const price =
+            Number(
+                item.price || 0
+            );
+
+        subtotal +=
+            price * quantity;
+
+    });
+
+
+    const discount =
+        getDiscount();
+
+    let discountAmount = 0;
+
+
+    if(discount){
+
+        discountAmount =
+            subtotal *
+            (
+                Number(
+                    discount.percent || 0
+                ) / 100
+            );
+
+    }
+
+
+    const afterDiscount =
+        Math.max(
+            0,
+            subtotal -
+            discountAmount
+        );
+
+
+    const shipping =
+        afterDiscount >=
+            FREE_SHIPPING_FROM
+            ? 0
+            : SHIPPING_PRICE;
+
+
+    const total =
+        afterDiscount +
+        shipping;
+
+
+    return {
+        subtotal,
+        discountAmount,
+        shipping,
+        total
+    };
+
+}
+
+
+/* =========================
+   PRODUKTY
+========================= */
+
+function renderOrder(){
+
+    const cart =
+        getCart();
+
+    const container =
+        document.getElementById(
+            "orderItems"
+        );
+
+
+    if(cart.length === 0){
+
+        container.innerHTML = `
+
+            <div style="
+                padding:20px 0;
+                color:#ff7185;
+                font-size:13px;
+            ">
+                Koszyk jest pusty.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        cart.map(item => {
+
+            const quantity =
+                Number(
+                    item.quantity ||
+                    item.qty ||
+                    1
+                );
+
+            const price =
+                Number(
+                    item.price || 0
+                );
+
+            return `
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                    padding:10px 0;
+                    border-bottom:1px solid #ffffff08;
+                    font-size:12px;
+                ">
+
+                    <span style="
+                        color:#9aa6b7;
+                    ">
+
+                        ${escapeHTML(
+                            item.name ||
+                            "Produkt"
+                        )}
+
+                        × ${quantity}
+
+                    </span>
+
+                    <strong>
+                        ${money(
+                            price * quantity
+                        )}
+                    </strong>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+    const totals =
+        calculate();
+
+
+    document.getElementById(
+        "subtotal"
+    ).textContent =
+        money(
+            totals.subtotal
+        );
+
+
+    document.getElementById(
+        "discount"
+    ).textContent =
+        totals.discountAmount > 0
+            ? "-" +
+              money(
+                  totals.discountAmount
+              )
+            : money(0);
+
+
+    document.getElementById(
+        "shipping"
+    ).textContent =
+        totals.shipping === 0
+            ? "DARMOWA"
+            : money(
+                totals.shipping
+            );
+
+
+    document.getElementById(
+        "shipping"
+    ).style.color =
+        totals.shipping === 0
+            ? "#35e6a0"
+            : "white";
+
+
+    document.getElementById(
+        "grandTotal"
+    ).textContent =
+        money(
+            totals.total
+        );
+
+}
+
+
+/* =========================
+   PŁATNOŚĆ
+========================= */
+
+function selectPayment(element){
+
+    document
+        .querySelectorAll(
+            ".payment-option"
+        )
+        .forEach(option => {
+
+            option.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    element.classList.add(
+        "active"
+    );
+
+}
+
+
+/* =========================
+   ZŁOŻENIE ZAMÓWIENIA
+========================= */
+
+function placeOrder(){
+
+    const firstName =
+        document.getElementById(
+            "firstName"
+        ).value.trim();
+
+    const lastName =
+        document.getElementById(
+            "lastName"
+        ).value.trim();
+
+    const phone =
+        document.getElementById(
+            "phone"
+        ).value.trim();
+
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
+
+    const street =
+        document.getElementById(
+            "street"
+        ).value.trim();
+
+    const postal =
+        document.getElementById(
+            "postal"
+        ).value.trim();
+
+    const city =
+        document.getElementById(
+            "city"
+        ).value.trim();
+
+
+    if(
+        !firstName ||
+        !lastName ||
+        !phone ||
+        !email ||
+        !street ||
+        !postal ||
+        !city
+    ){
+
+        showToast(
+            "⚠️ Uzupełnij wszystkie dane."
+        );
+
+        return;
+
+    }
+
+
+    if(!email.includes("@")){
+
+        showToast(
+            "⚠️ Podaj prawidłowy e-mail."
+        );
+
+        return;
+
+    }
+
+
+    const cart =
+        getCart();
+
+
+    if(cart.length === 0){
+
+        showToast(
+            "🛒 Koszyk jest pusty."
+        );
+
+        return;
+
+    }
+
+
+    const payment =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        ).value;
+
+
+    const totals =
+        calculate();
+
+
+    const order = {
+
+        id:
+            "PL3D-" +
+            Date.now(),
+
+        createdAt:
+            new Date().toISOString(),
+
+        customer:{
+
+            firstName,
+            lastName,
+            phone,
+            email,
+
+            address:{
+
+                street,
+                postal,
+                city
+
+            }
+
+        },
+
+        payment:payment,
+
+        products:cart,
+
+        subtotal:
+            totals.subtotal,
+
+        discount:
+            totals.discountAmount,
+
+        shipping:
+            totals.shipping,
+
+        total:
+            totals.total,
+
+        status:
+            "Nowe"
+
+    };
+
+
+    let orders = [];
+
+
+    try{
+
+        orders =
+            JSON.parse(
+                localStorage.getItem(
+                    ORDERS_KEY
+                )
+            ) || [];
+
+    }catch(e){
+
+        orders = [];
+
+    }
+
+
+    orders.push(order);
+
+
+    localStorage.setItem(
+        ORDERS_KEY,
+        JSON.stringify(orders)
+    );
+
+
+    /*
+       Na razie zapisujemy zamówienie
+       lokalnie.
+
+       Prawdziwa płatność wymaga
+       integracji z operatorem płatności.
+    */
+
+
+    localStorage.removeItem(
+        CART_KEY
+    );
+
+    localStorage.removeItem(
+        DISCOUNT_KEY
+    );
+
+
+    showToast(
+        "✅ Zamówienie zostało utworzone!"
+    );
+
+
+    setTimeout(() => {
+
+        window.location.href =
+            "sukces.html?order=" +
+            encodeURIComponent(
+                order.id
+            );
+
+    },1200);
+
+}
+
+
+/* =========================
+   ESCAPE
+========================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function showToast(text){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+    toast.textContent =
+        text;
+
+    toast.classList.add(
+        "show"
+    );
+
+    clearTimeout(
+        toastTimer
+    );
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },2200);
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+renderOrder();
+
+</script>
+
+</body>
+</html>
