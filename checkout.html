@@ -1,2841 +1,1065 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
+const express = require("express");
+const Stripe = require("stripe");
+const path = require("path");
+const fs = require("fs");
+const crypto = require("crypto");
 
-<meta charset="UTF-8">
+const app = express();
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+const PORT = process.env.PORT || 10000;
 
-<meta
-    name="theme-color"
-    content="#02050c"
->
+const BASE_URL = (
+    process.env.BASE_URL ||
+    "https://printerlase3d32.onrender.com"
+).replace(/\/$/, "");
 
-<title>
-    Checkout — Printerlase3D
-</title>
+const STRIPE_SECRET_KEY =
+    process.env.STRIPE_SECRET_KEY || "";
 
-<style>
+const STRIPE_WEBHOOK_SECRET =
+    process.env.STRIPE_WEBHOOK_SECRET || "";
 
-:root{
+let stripe = null;
 
-    --bg:#02050c;
-
-    --card:#081222;
-
-    --cyan:#19dcff;
-
-    --blue:#008cff;
-
-    --purple:#7655ff;
-
-    --green:#00df91;
-
-    --red:#ff4b6e;
-
-    --text:#ffffff;
-
-    --muted:#7e8da5;
-
-    --border:rgba(255,255,255,.08);
-
+if (STRIPE_SECRET_KEY) {
+    stripe = new Stripe(STRIPE_SECRET_KEY);
+    console.log("[STRIPE] API KEY: OK");
+} else {
+    console.error("[STRIPE] BRAK STRIPE_SECRET_KEY");
 }
 
-*{
-    box-sizing:border-box;
+/* =========================================================
+   DATA
+========================================================= */
 
-    margin:0;
-    padding:0;
+const DATA_DIR =
+    path.join(__dirname, "data");
+
+const ORDERS_FILE =
+    path.join(DATA_DIR, "orders.json");
+
+if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, {
+        recursive: true
+    });
 }
 
-body{
-
-    min-height:100vh;
-
-    color:var(--text);
-
-    font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    background:
-
-        radial-gradient(
-            circle at 10% 10%,
-            rgba(25,220,255,.13),
-            transparent 30%
-        ),
-
-        radial-gradient(
-            circle at 90% 10%,
-            rgba(118,85,255,.15),
-            transparent 30%
-        ),
-
-        var(--bg);
-
-}
-
-.topbar{
-
-    height:70px;
-
-    display:flex;
-
-    align-items:center;
-
-    border-bottom:
-        1px solid
-        var(--border);
-
-    background:
-        rgba(2,5,12,.82);
-
-    backdrop-filter:
-        blur(20px);
-
-}
-
-.topbar-inner{
-
-    width:min(
-        1200px,
-        94%
+if (!fs.existsSync(ORDERS_FILE)) {
+    fs.writeFileSync(
+        ORDERS_FILE,
+        "[]",
+        "utf8"
     );
-
-    margin:auto;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-}
-
-.logo{
-
-    color:white;
-
-    text-decoration:none;
-
-    font-size:20px;
-
-    font-weight:1000;
-
-}
-
-.logo span{
-
-    color:var(--cyan);
-
-}
-
-.back{
-
-    color:#aab7c9;
-
-    text-decoration:none;
-
-    padding:
-        10px
-        14px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:10px;
-
-}
-
-.page{
-
-    width:min(
-        1200px,
-        94%
-    );
-
-    margin:auto;
-
-    padding:
-        50px
-        0
-        80px;
-
-}
-
-.header{
-
-    text-align:center;
-
-    margin-bottom:35px;
-
-}
-
-.header h1{
-
-    margin-bottom:12px;
-
-    font-size:
-        clamp(
-            35px,
-            5vw,
-            55px
-        );
-
-}
-
-.gradient{
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--cyan),
-            #6681ff,
-            var(--purple)
-        );
-
-    -webkit-background-clip:text;
-
-    background-clip:text;
-
-    color:transparent;
-
-}
-
-.header p{
-
-    color:var(--muted);
-
-}
-
-.grid{
-
-    display:grid;
-
-    grid-template-columns:
-        minmax(0,1fr)
-        400px;
-
-    gap:22px;
-
-    align-items:start;
-
-}
-
-.card{
-
-    padding:28px;
-
-    border-radius:22px;
-
-    border:
-        1px solid
-        var(--border);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10,23,42,.95),
-            rgba(5,12,23,.95)
-        );
-
-    box-shadow:
-        0 30px 100px
-        rgba(0,0,0,.40);
-
-}
-
-.card h2{
-
-    margin-bottom:22px;
-
-}
-
-.form-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        1fr
-        1fr;
-
-    gap:14px;
-
-}
-
-.field{
-
-    min-width:0;
-
-}
-
-.full{
-
-    grid-column:
-        1 / -1;
-
-}
-
-label{
-
-    display:block;
-
-    margin-bottom:7px;
-
-    color:#9aa8bb;
-
-    font-size:11px;
-
-    font-weight:900;
-
-}
-
-input{
-
-    width:100%;
-
-    padding:14px;
-
-    color:white;
-
-    background:#050d1a;
-
-    border:
-        1px solid
-        rgba(255,255,255,.09);
-
-    border-radius:11px;
-
-    outline:none;
-
-}
-
-input:focus{
-
-    border-color:
-        var(--cyan);
-
-    box-shadow:
-        0 0 20px
-        rgba(25,220,255,.08);
-
-}
-
-.section{
-
-    margin-top:28px;
-
-}
-
-.section-title{
-
-    margin-bottom:12px;
-
-    color:#aab6c7;
-
-    font-size:13px;
-
-    font-weight:1000;
-
-}
-
-.delivery{
-
-    display:grid;
-
-    gap:10px;
-
-}
-
-.delivery-option{
-
-    position:relative;
-
-}
-
-.delivery-option input{
-
-    position:absolute;
-
-    opacity:0;
-
-    pointer-events:none;
-
-}
-
-.delivery-option label{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:15px;
-
-    padding:16px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:13px;
-
-    background:#050d1a;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-}
-
-.delivery-option label:hover{
-
-    border-color:
-        rgba(25,220,255,.30);
-
-    transform:
-        translateY(-1px);
-
-}
-
-.delivery-option
-input:checked + label{
-
-    border-color:
-        var(--cyan);
-
-    background:
-        rgba(25,220,255,.06);
-
-}
-
-.delivery-name{
-
-    color:white;
-
-    font-size:13px;
-
-    font-weight:900;
-
-}
-
-.delivery-desc{
-
-    margin-top:4px;
-
-    color:#637289;
-
-    font-size:10px;
-
-}
-
-.price{
-
-    white-space:nowrap;
-
-    font-weight:900;
-
-}
-
-.free{
-
-    color:var(--green);
-
-}
-
-.paczkomat{
-
-    display:none;
-
-    margin-top:10px;
-
-}
-
-.paczkomat.show{
-
-    display:block;
-
-}
-
-.payment-info{
-
-    padding:16px;
-
-    border:
-        1px solid
-        rgba(25,220,255,.13);
-
-    border-radius:13px;
-
-    background:
-        rgba(25,220,255,.04);
-
-    color:#7f90a8;
-
-    font-size:11px;
-
-    line-height:1.7;
-
-}
-
-.items{
-
-    max-height:320px;
-
-    overflow:auto;
-
-}
-
-.item{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:
-        13px
-        0;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.06);
-
-}
-
-.item-icon{
-
-    width:48px;
-    height:48px;
-
-    display:grid;
-
-    place-items:center;
-
-    flex-shrink:0;
-
-    border-radius:11px;
-
-    background:#0b192d;
-
-    font-size:22px;
-
-}
-
-.item-main{
-
-    flex:1;
-
-    min-width:0;
-
-}
-
-.item-name{
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-    white-space:nowrap;
-
-    font-size:13px;
-
-    font-weight:900;
-
-}
-
-.item-meta{
-
-    margin-top:5px;
-
-    color:#637289;
-
-    font-size:10px;
-
-}
-
-.item-price{
-
-    white-space:nowrap;
-
-    font-size:13px;
-
-    font-weight:900;
-
-}
-
-.empty{
-
-    padding:
-        40px
-        10px;
-
-    text-align:center;
-
-    color:#687990;
-
-    line-height:1.8;
-
-}
-
-.empty a{
-
-    color:var(--cyan);
-
-}
-
-.coupon{
-
-    display:flex;
-
-    gap:8px;
-
-    margin-top:20px;
-
-}
-
-.coupon input{
-
-    flex:1;
-
-}
-
-.coupon button{
-
-    padding:
-        0
-        16px;
-
-    border:0;
-
-    border-radius:10px;
-
-    color:white;
-
-    font-weight:900;
-
-    background:
-        linear-gradient(
-            100deg,
-            var(--blue),
-            var(--purple)
-        );
-
-    cursor:pointer;
-
-}
-
-.coupon button:disabled{
-
-    opacity:.5;
-
-    cursor:not-allowed;
-
-}
-
-.message{
-
-    min-height:18px;
-
-    margin-top:7px;
-
-    font-size:10px;
-
-}
-
-.summary{
-
-    margin-top:20px;
-
-}
-
-.row{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:10px;
-
-    margin:10px 0;
-
-    color:#7d8ca2;
-
-    font-size:12px;
-
-}
-
-.row strong{
-
-    color:#b7c2d0;
-
-}
-
-.discount{
-
-    color:var(--green);
-
-}
-
-.discount strong{
-
-    color:var(--green);
-
-}
-
-.total{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    margin-top:18px;
-
-    padding-top:18px;
-
-    border-top:
-        1px solid
-        var(--border);
-
-    font-size:20px;
-
-    font-weight:1000;
-
-}
-
-.total strong{
-
-    color:var(--cyan);
-
-    font-size:27px;
-
-}
-
-.pay{
-
-    width:100%;
-
-    margin-top:22px;
-
-    padding:17px;
-
-    border:0;
-
-    border-radius:13px;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            100deg,
-            var(--blue),
-            var(--purple)
-        );
-
-    font-size:15px;
-
-    font-weight:1000;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-}
-
-.pay:hover{
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 15px 40px
-        rgba(0,140,255,.25);
-
-}
-
-.pay:disabled{
-
-    opacity:.55;
-
-    cursor:not-allowed;
-
-    transform:none;
-
-}
-
-.secure{
-
-    margin-top:12px;
-
-    text-align:center;
-
-    color:#52637b;
-
-    font-size:9px;
-
-}
-
-.toast{
-
-    position:fixed;
-
-    right:20px;
-
-    bottom:20px;
-
-    z-index:99999;
-
-    max-width:380px;
-
-    padding:
-        15px
-        18px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:12px;
-
-    background:#0c1b30;
-
-    box-shadow:
-        0 20px 70px
-        rgba(0,0,0,.5);
-
-    opacity:0;
-
-    transform:
-        translateY(30px);
-
-    pointer-events:none;
-
-    transition:.3s;
-
-}
-
-.toast.show{
-
-    opacity:1;
-
-    transform:none;
-
-}
-
-.toast.error{
-
-    border-color:
-        rgba(255,75,110,.45);
-
-}
-
-.toast.success{
-
-    border-color:
-        rgba(0,223,145,.45);
-
-}
-
-.success{
-
-    display:none;
-
-    max-width:700px;
-
-    margin:
-        60px
-        auto;
-
-    text-align:center;
-
-}
-
-.success.show{
-
-    display:block;
-
-}
-
-.success-icon{
-
-    width:100px;
-
-    height:100px;
-
-    margin:
-        0
-        auto
-        25px;
-
-    display:grid;
-
-    place-items:center;
-
-    border-radius:50%;
-
-    color:var(--green);
-
-    border:
-        1px solid
-        rgba(0,223,145,.35);
-
-    background:
-        rgba(0,223,145,.08);
-
-    font-size:50px;
-
-}
-
-.success h2{
-
-    margin-bottom:12px;
-
-    font-size:38px;
-
-}
-
-.success p{
-
-    color:var(--muted);
-
-    line-height:1.7;
-
-}
-
-.order-number{
-
-    display:inline-block;
-
-    margin-top:20px;
-
-    padding:
-        14px
-        20px;
-
-    border:
-        1px solid
-        rgba(25,220,255,.20);
-
-    border-radius:12px;
-
-    color:var(--cyan);
-
-    background:#071322;
-
-    font-weight:900;
-
-}
-
-@media(max-width:900px){
-
-    .grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-@media(max-width:600px){
-
-    .page{
-
-        padding-top:30px;
-
-    }
-
-    .form-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .full{
-
-        grid-column:auto;
-
-    }
-
-    .card{
-
-        padding:20px;
-
-    }
-
-    .coupon{
-
-        flex-direction:column;
-
-    }
-
-    .coupon button{
-
-        padding:13px;
-
-    }
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<header class="topbar">
-
-<div class="topbar-inner">
-
-<a
-    class="logo"
-    href="index.html"
->
-    Printerlase<span>3D</span>
-</a>
-
-<a
-    class="back"
-    href="index.html"
->
-    ← Sklep
-</a>
-
-</div>
-
-</header>
-
-
-<main class="page">
-
-
-<header class="header">
-
-<h1>
-
-    Finalizacja
-
-    <span class="gradient">
-        zamówienia
-    </span>
-
-</h1>
-
-<p>
-
-    Uzupełnij dane i przejdź
-    do bezpiecznej płatności.
-
-</p>
-
-</header>
-
-
-<div
-    id="checkoutContent"
->
-
-
-<div class="grid">
-
-
-<!-- =====================================================
-     CUSTOMER
-===================================================== -->
-
-<section class="card">
-
-<h2>
-    👤 Dane zamawiającego
-</h2>
-
-
-<div class="form-grid">
-
-
-<div class="field">
-
-<label for="name">
-    IMIĘ I NAZWISKO *
-</label>
-
-<input
-    id="name"
-    autocomplete="name"
-    placeholder="Jan Kowalski"
-/>
-
-</div>
-
-
-<div class="field">
-
-<label for="email">
-    E-MAIL *
-</label>
-
-<input
-    id="email"
-    type="email"
-    autocomplete="email"
-    placeholder="jan@example.com"
-/>
-
-</div>
-
-
-<div class="field">
-
-<label for="phone">
-    TELEFON *
-</label>
-
-<input
-    id="phone"
-    type="tel"
-    autocomplete="tel"
-    placeholder="123456789"
-/>
-
-</div>
-
-
-<div class="field">
-
-<label for="postcode">
-    KOD POCZTOWY *
-</label>
-
-<input
-    id="postcode"
-    autocomplete="postal-code"
-    placeholder="41-000"
-/>
-
-</div>
-
-
-<div class="field full">
-
-<label for="address">
-    ADRES *
-</label>
-
-<input
-    id="address"
-    autocomplete="street-address"
-    placeholder="ul. Przykładowa 10"
-/>
-
-</div>
-
-
-<div class="field">
-
-<label for="city">
-    MIASTO *
-</label>
-
-<input
-    id="city"
-    autocomplete="address-level2"
-    placeholder="Mikołów"
-/>
-
-</div>
-
-</div>
-
-
-<div class="section">
-
-<div class="section-title">
-    📦 Sposób dostawy
-</div>
-
-
-<div class="delivery">
-
-
-<div class="delivery-option">
-
-<input
-    type="radio"
-    name="delivery"
-    id="inpost"
-    value="InPost Paczkomat"
-    data-price="12"
->
-
-<label for="inpost">
-
-<div>
-
-<div class="delivery-name">
-    📦 InPost Paczkomat
-</div>
-
-<div class="delivery-desc">
-    Odbiór w paczkomacie
-</div>
-
-</div>
-
-<div
-    class="price"
-    data-price-label
->
-    12,00 zł
-</div>
-
-</label>
-
-</div>
-
-
-<div class="delivery-option">
-
-<input
-    type="radio"
-    name="delivery"
-    id="courier"
-    value="InPost Kurier"
-    data-price="15"
->
-
-<label for="courier">
-
-<div>
-
-<div class="delivery-name">
-    🚚 InPost Kurier
-</div>
-
-<div class="delivery-desc">
-    Dostawa pod adres
-</div>
-
-</div>
-
-<div
-    class="price"
-    data-price-label
->
-    15,00 zł
-</div>
-
-</label>
-
-</div>
-
-
-<div class="delivery-option">
-
-<input
-    type="radio"
-    name="delivery"
-    id="orlen"
-    value="ORLEN Paczka"
-    data-price="10"
->
-
-<label for="orlen">
-
-<div>
-
-<div class="delivery-name">
-    📮 ORLEN Paczka
-</div>
-
-<div class="delivery-desc">
-    Odbiór w punkcie
-</div>
-
-</div>
-
-<div
-    class="price"
-    data-price-label
->
-    10,00 zł
-</div>
-
-</label>
-
-</div>
-
-
-<div class="delivery-option">
-
-<input
-    type="radio"
-    name="delivery"
-    id="dpd"
-    value="DPD Kurier"
-    data-price="16"
->
-
-<label for="dpd">
-
-<div>
-
-<div class="delivery-name">
-    🚛 DPD Kurier
-</div>
-
-<div class="delivery-desc">
-    Dostawa kurierem
-</div>
-
-</div>
-
-<div
-    class="price"
-    data-price-label
->
-    16,00 zł
-</div>
-
-</label>
-
-</div>
-
-
-</div>
-
-
-<div
-    id="paczkomatBox"
-    class="paczkomat"
->
-
-<label for="paczkomat">
-    KOD PACZKOMATU *
-</label>
-
-<input
-    id="paczkomat"
-    placeholder="np. KAT01M"
-/>
-
-</div>
-
-</div>
-
-
-<div class="section">
-
-<div class="section-title">
-    💳 Płatność
-</div>
-
-
-<div class="payment-info">
-
-    🔒 Po kliknięciu przycisku zostaniesz
-    przekierowany do <strong>Stripe Checkout</strong>.
-
-    <br><br>
-
-    Dane karty i dostępne metody płatności
-    są obsługiwane przez Stripe.
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     SUMMARY
-===================================================== -->
-
-<aside class="card">
-
-<h2>
-    🛒 Twoje zamówienie
-</h2>
-
-
-<div
-    id="items"
-    class="items"
-></div>
-
-
-<div class="coupon">
-
-<input
-    id="coupon"
-    placeholder="Kod rabatowy"
-/>
-
-<button
-    id="couponBtn"
-    type="button"
->
-    Zastosuj
-</button>
-
-</div>
-
-
-<div
-    id="couponMessage"
-    class="message"
-></div>
-
-
-<div class="summary">
-
-
-<div class="row">
-
-<span>
-    Produkty
-</span>
-
-<strong id="productsTotal">
-    0,00 zł
-</strong>
-
-</div>
-
-
-<div class="row">
-
-<span>
-    Dostawa
-</span>
-
-<strong id="deliveryTotal">
-    0,00 zł
-</strong>
-
-</div>
-
-
-<div
-    id="discountRow"
-    class="row discount"
-    style="display:none"
->
-
-<span>
-    Rabat START10
-</span>
-
-<strong id="discount">
-    -0,00 zł
-</strong>
-
-</div>
-
-
-<div class="total">
-
-<span>
-    RAZEM
-</span>
-
-<strong id="total">
-    0,00 zł
-</strong>
-
-</div>
-
-
-</div>
-
-
-<button
-    id="payButton"
-    class="pay"
-    type="button"
->
-
-    💳 Przejdź do płatności
-
-</button>
-
-
-<div class="secure">
-
-    🔒 Bezpieczna płatność przez Stripe
-
-</div>
-
-</aside>
-
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     SUCCESS
-===================================================== -->
-
-<section
-    id="success"
-    class="success"
->
-
-<div class="card">
-
-<div class="success-icon">
-    ✓
-</div>
-
-<h2>
-    Płatność zakończona! 🎉
-</h2>
-
-<p>
-
-    Twoja płatność została
-    potwierdzona przez Stripe.
-
-</p>
-
-<div
-    id="orderNumber"
-    class="order-number"
-></div>
-
-<br><br>
-
-<a
-    class="back"
-    href="index.html"
->
-    ← Wróć do sklepu
-</a>
-
-</div>
-
-</section>
-
-
-</main>
-
-
-<div
-    id="toast"
-    class="toast"
-></div>
-
-
-<script>
-
-"use strict";
-
-
-/* =====================================================
-   KONFIG
-===================================================== */
-
-const CART_KEY =
-    "printerlase_cart";
-
-const API_CREATE =
-    "/api/create-checkout-session";
-
-
-/* =====================================================
-   STATE
-===================================================== */
-
-let cart = [];
-
-let productsTotal = 0;
-
-let discount = 0;
-
-let couponApplied = false;
-
-
-/* =====================================================
-   LOAD CART
-===================================================== */
-
-try {
-
-    cart =
-        JSON.parse(
-            localStorage.getItem(
-                CART_KEY
-            ) || "[]"
-        );
-
-    if (
-        !Array.isArray(cart)
-    ) {
-
-        cart = [];
-
-    }
-
-} catch (error) {
-
-    console.error(
-        "[CART ERROR]",
-        error
-    );
-
-    cart = [];
-
-}
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const itemsEl =
-    document.getElementById(
-        "items"
-    );
-
-const productsTotalEl =
-    document.getElementById(
-        "productsTotal"
-    );
-
-const deliveryTotalEl =
-    document.getElementById(
-        "deliveryTotal"
-    );
-
-const discountRow =
-    document.getElementById(
-        "discountRow"
-    );
-
-const discountEl =
-    document.getElementById(
-        "discount"
-    );
-
-const totalEl =
-    document.getElementById(
-        "total"
-    );
-
-const payButton =
-    document.getElementById(
-        "payButton"
-    );
-
-
-/* =====================================================
-   MONEY
-===================================================== */
-
-function money(value) {
-
-    return (
-        Number(value || 0)
-            .toFixed(2)
-            .replace(".", ",")
-        + " zł"
-    );
-
-}
-
-
-/* =====================================================
-   ESCAPE
-===================================================== */
-
-function escapeHTML(value) {
-
-    return String(
-        value ?? ""
-    )
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
-
-/* =====================================================
-   TOAST
-===================================================== */
-
-let toastTimer;
-
-function showToast(
-    message,
-    type = "success"
-) {
-
-    const element =
-        document.getElementById(
-            "toast"
-        );
-
-
-    element.textContent =
-        message;
-
-
-    element.className =
-        "toast " +
-        type +
-        " show";
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                element.classList.remove(
-                    "show"
-                );
-
-            },
-            3500
-        );
-
-}
-
-
-/* =====================================================
-   PRICE
-===================================================== */
-
-function getPrice(item) {
-
-    const value =
-        Number(
-            item.price
-        );
-
-
-    if (
-        !Number.isFinite(value) ||
-        value < 0
-    ) {
-
-        return 0;
-
-    }
-
-
-    return value;
-
-}
-
-
-/* =====================================================
-   QUANTITY
-===================================================== */
-
-function getQuantity(item) {
-
-    const value =
-        Number(
-            item.quantity ??
-            item.qty ??
-            1
-        );
-
-
-    if (
-        !Number.isFinite(value) ||
-        value < 1
-    ) {
-
-        return 1;
-
-    }
-
-
-    return Math.floor(
-        value
-    );
-
-}
-
-
-/* =====================================================
-   CART
-===================================================== */
-
-function renderCart() {
-
-    itemsEl.innerHTML =
-        "";
-
-    productsTotal =
-        0;
-
-
-    if (
-        cart.length === 0
-    ) {
-
-        itemsEl.innerHTML = `
-
-            <div class="empty">
-
-                🛒
-
-                <br><br>
-
-                Twój koszyk jest pusty.
-
-                <br><br>
-
-                <a href="index.html">
-                    Wróć do sklepu
-                </a>
-
-            </div>
-
-        `;
-
-
-        payButton.disabled =
-            true;
-
-
-        updateSummary();
-
-        return;
-
-    }
-
-
-    payButton.disabled =
-        false;
-
-
-    cart.forEach(
-        item => {
-
-            const price =
-                getPrice(item);
-
-            const quantity =
-                getQuantity(item);
-
-            const itemTotal =
-                price *
-                quantity;
-
-
-            productsTotal +=
-                itemTotal;
-
-
-            const icon =
-                item.emoji ||
-                item.icon ||
-                "🖨️";
-
-
-            itemsEl.insertAdjacentHTML(
-                "beforeend",
-                `
-
-                <div class="item">
-
-                    <div class="item-icon">
-                        ${escapeHTML(icon)}
-                    </div>
-
-                    <div class="item-main">
-
-                        <div class="item-name">
-                            ${escapeHTML(
-                                item.name ||
-                                "Produkt"
-                            )}
-                        </div>
-
-                        <div class="item-meta">
-                            ${quantity}
-                            ×
-                            ${money(price)}
-                        </div>
-
-                    </div>
-
-                    <div class="item-price">
-                        ${money(itemTotal)}
-                    </div>
-
-                </div>
-
-                `
-            );
-
-        }
-    );
-
-
-    updateSummary();
-
-}
-
-
-/* =====================================================
-   DELIVERY
-===================================================== */
-
-function getDelivery() {
-
-    return document.querySelector(
-        'input[name="delivery"]:checked'
-    );
-
-}
-
-
-function getDeliveryPrice() {
-
-    const delivery =
-        getDelivery();
-
-
-    if (!delivery) {
-        return 0;
-    }
-
-
-    if (
-        productsTotal >= 50
-    ) {
-
-        return 0;
-
-    }
-
-
-    const price =
-        Number(
-            delivery.dataset.price ||
-            0
-        );
-
-
-    return Number.isFinite(price)
-        ? Math.max(0, price)
-        : 0;
-
-}
-
-
-/* =====================================================
-   SUMMARY
-===================================================== */
-
-function updateSummary() {
-
-    if (
-        couponApplied
-    ) {
-
-        discount =
-            productsTotal * 0.10;
-
-    } else {
-
-        discount = 0;
-
-    }
-
-
-    const delivery =
-        getDeliveryPrice();
-
-
-    const afterDiscount =
-        Math.max(
-            0,
-            productsTotal -
-            discount
-        );
-
-
-    const total =
-        afterDiscount +
-        delivery;
-
-
-    productsTotalEl.textContent =
-        money(productsTotal);
-
-
-    if (
-        productsTotal >= 50
-    ) {
-
-        deliveryTotalEl.innerHTML =
-            '<span class="free">DARMOWA</span>';
-
-    } else {
-
-        deliveryTotalEl.textContent =
-            money(delivery);
-
-    }
-
-
-    discountEl.textContent =
-        "-" +
-        money(discount);
-
-
-    discountRow.style.display =
-        discount > 0
-            ? "flex"
-            : "none";
-
-
-    totalEl.textContent =
-        money(total);
-
-
-    document
-        .querySelectorAll(
-            "[data-price-label]"
-        )
-        .forEach(
-            element => {
-
-                const selected =
-                    getDelivery();
-
-                const radio =
-                    element
-                        .closest(
-                            ".delivery-option"
-                        )
-                        ?.querySelector(
-                            "input"
-                        );
-
-
-                if (
-                    productsTotal >= 50
-                ) {
-
-                    element.innerHTML =
-                        '<span class="free">DARMOWA</span>';
-
-                } else if (radio) {
-
-                    element.textContent =
-                        money(
-                            Number(
-                                radio.dataset.price ||
-                                0
-                            )
-                        );
-
-                }
-
-            }
-        );
-
-}
-
-
-/* =====================================================
-   DELIVERY EVENTS
-===================================================== */
-
-document
-    .querySelectorAll(
-        'input[name="delivery"]'
-    )
-    .forEach(
-        radio => {
-
-            radio.addEventListener(
-                "change",
-                () => {
-
-                    const box =
-                        document.getElementById(
-                            "paczkomatBox"
-                        );
-
-
-                    if (
-                        radio.value ===
-                        "InPost Paczkomat"
-                    ) {
-
-                        box.classList.add(
-                            "show"
-                        );
-
-                    } else {
-
-                        box.classList.remove(
-                            "show"
-                        );
-
-                        document.getElementById(
-                            "paczkomat"
-                        ).value =
-                            "";
-
-                    }
-
-
-                    updateSummary();
-
-                }
-            );
-
-        }
-    );
-
-
-/* =====================================================
-   COUPON
-===================================================== */
-
-document
-    .getElementById(
-        "couponBtn"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            const input =
-                document.getElementById(
-                    "coupon"
-                );
-
-            const message =
-                document.getElementById(
-                    "couponMessage"
-                );
-
-
-            const code =
-                input.value
-                    .trim()
-                    .toUpperCase();
-
-
-            if (
-                code ===
-                "START10"
-            ) {
-
-                if (
-                    cart.length === 0
-                ) {
-
-                    message.textContent =
-                        "Koszyk jest pusty.";
-
-                    message.style.color =
-                        "var(--red)";
-
-                    return;
-
-                }
-
-
-                couponApplied =
-                    true;
-
-
-                input.disabled =
-                    true;
-
-
-                document.getElementById(
-                    "couponBtn"
-                ).disabled =
-                    true;
-
-
-                message.textContent =
-                    "✓ START10 aktywny — 10% rabatu";
-
-
-                message.style.color =
-                    "var(--green)";
-
-
-                updateSummary();
-
-                return;
-
-            }
-
-
-            message.textContent =
-                "❌ Nieprawidłowy kod.";
-
-            message.style.color =
-                "var(--red)";
-
-        }
-    );
-
-
-/* =====================================================
-   VALIDATION
-===================================================== */
-
-function validate() {
-
-    const name =
-        document.getElementById(
-            "name"
-        ).value.trim();
-
-
-    const email =
-        document.getElementById(
-            "email"
-        ).value.trim();
-
-
-    const phone =
-        document.getElementById(
-            "phone"
-        ).value.trim();
-
-
-    const postcode =
-        document.getElementById(
-            "postcode"
-        ).value.trim();
-
-
-    const address =
-        document.getElementById(
-            "address"
-        ).value.trim();
-
-
-    const city =
-        document.getElementById(
-            "city"
-        ).value.trim();
-
-
-    const delivery =
-        getDelivery();
-
-
-    if (
-        name.length < 3
-    ) {
-
-        showToast(
-            "Podaj imię i nazwisko.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-            .test(email)
-    ) {
-
-        showToast(
-            "Podaj poprawny e-mail.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    if (
-        phone.replace(
-            /\D/g,
-            ""
-        ).length < 9
-    ) {
-
-        showToast(
-            "Podaj poprawny telefon.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    if (
-        !/^\d{2}-\d{3}$/.test(
-            postcode
-        )
-    ) {
-
-        showToast(
-            "Podaj kod pocztowy np. 41-000.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    if (
-        address.length < 5
-    ) {
-
-        showToast(
-            "Podaj adres.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    if (
-        city.length < 2
-    ) {
-
-        showToast(
-            "Podaj miasto.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    if (!delivery) {
-
-        showToast(
-            "Wybierz sposób dostawy.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    if (
-        delivery.value ===
-        "InPost Paczkomat"
-    ) {
-
-        const paczkomat =
-            document.getElementById(
-                "paczkomat"
-            ).value.trim();
-
-
-        if (
-            paczkomat.length < 3
-        ) {
-
-            showToast(
-                "Podaj kod paczkomatu.",
-                "error"
-            );
-
-            return false;
-
-        }
-
-    }
-
-
-    if (
-        cart.length === 0
-    ) {
-
-        showToast(
-            "Koszyk jest pusty.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-
-    return true;
-
 }
-
-
-/* =====================================================
-   CREATE CHECKOUT
-===================================================== */
-
-async function createCheckout() {
-
-    if (
-        !validate()
-    ) {
-        return;
-    }
-
-
-    payButton.disabled =
-        true;
-
-
-    payButton.textContent =
-        "⏳ Przygotowywanie płatności...";
-
-
-    const delivery =
-        getDelivery();
-
-
-    const deliveryPrice =
-        getDeliveryPrice();
-
-
-    const customer = {
-
-        name:
-            document.getElementById(
-                "name"
-            ).value.trim(),
-
-        email:
-            document.getElementById(
-                "email"
-            ).value.trim(),
-
-        phone:
-            document.getElementById(
-                "phone"
-            ).value.trim(),
-
-        address:
-            document.getElementById(
-                "address"
-            ).value.trim(),
-
-        postcode:
-            document.getElementById(
-                "postcode"
-            ).value.trim(),
-
-        city:
-            document.getElementById(
-                "city"
-            ).value.trim(),
-
-        paczkomat:
-            document.getElementById(
-                "paczkomat"
-            ).value.trim()
-
-    };
-
-
-    const payload = {
-
-        items:
-            cart.map(
-                item => ({
-
-                    name:
-                        String(
-                            item.name ||
-                            "Produkt"
-                        ),
-
-                    price:
-                        Number(
-                            item.price
-                        ),
-
-                    quantity:
-                        Number(
-                            item.quantity ??
-                            item.qty ??
-                            1
-                        )
-
-                })
-            ),
-
-        customer,
-
-        delivery: {
-
-            method:
-                delivery.value,
-
-            price:
-                deliveryPrice
-
-        },
-
-        discountCode:
-            couponApplied
-                ? "START10"
-                : ""
-
-    };
-
-
-    console.log(
-        "[CHECKOUT] Wysyłam:",
-        payload
-    );
 
+/* =========================================================
+   HELPERS
+========================================================= */
 
+function readOrders() {
     try {
-
-        const response =
-            await fetch(
-                API_CREATE,
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body:
-                        JSON.stringify(
-                            payload
-                        )
-
-                }
+        const text =
+            fs.readFileSync(
+                ORDERS_FILE,
+                "utf8"
             );
 
+        if (!text.trim()) {
+            return [];
+        }
 
-        const text =
-            await response.text();
+        const data =
+            JSON.parse(text);
 
+        return Array.isArray(data)
+            ? data
+            : [];
+    } catch (error) {
+        console.error(
+            "[ORDERS READ ERROR]",
+            error.message
+        );
 
-        let data;
+        return [];
+    }
+}
 
+function saveOrders(orders) {
+    fs.writeFileSync(
+        ORDERS_FILE,
+        JSON.stringify(
+            orders,
+            null,
+            2
+        ),
+        "utf8"
+    );
+}
+
+function generateOrderId() {
+    return (
+        "ORD-" +
+        Date.now().toString(36).toUpperCase() +
+        "-" +
+        crypto
+            .randomBytes(4)
+            .toString("hex")
+            .toUpperCase()
+    );
+}
+
+/* =========================================================
+   WEBHOOK
+   MUSI BYĆ PRZED express.json()
+========================================================= */
+
+app.post(
+    "/api/stripe/webhook",
+    express.raw({
+        type: "application/json"
+    }),
+    (req, res) => {
+
+        if (!stripe) {
+            return res
+                .status(500)
+                .send("Stripe not configured");
+        }
+
+        if (!STRIPE_WEBHOOK_SECRET) {
+            return res
+                .status(500)
+                .send("Webhook secret missing");
+        }
+
+        const signature =
+            req.headers["stripe-signature"];
+
+        let event;
+
+        try {
+            event =
+                stripe.webhooks.constructEvent(
+                    req.body,
+                    signature,
+                    STRIPE_WEBHOOK_SECRET
+                );
+        } catch (error) {
+
+            console.error(
+                "[WEBHOOK ERROR]",
+                error.message
+            );
+
+            return res
+                .status(400)
+                .send("Invalid signature");
+        }
 
         try {
 
-            data =
-                JSON.parse(text);
+            if (
+                event.type ===
+                "checkout.session.completed"
+            ) {
+
+                const session =
+                    event.data.object;
+
+                const orderId =
+                    session.metadata?.orderId;
+
+                console.log(
+                    "[WEBHOOK] checkout.session.completed:",
+                    session.id
+                );
+
+                if (orderId) {
+
+                    const orders =
+                        readOrders();
+
+                    const order =
+                        orders.find(
+                            item =>
+                                item.id ===
+                                orderId
+                        );
+
+                    if (order) {
+
+                        if (
+                            order.paymentStatus !==
+                            "PAID"
+                        ) {
+
+                            order.paymentStatus =
+                                "PAID";
+
+                            order.status =
+                                "NEW";
+
+                            order.stripeSessionId =
+                                session.id;
+
+                            order.paymentIntentId =
+                                session.payment_intent ||
+                                null;
+
+                            order.paidAt =
+                                new Date()
+                                    .toISOString();
+
+                            saveOrders(
+                                orders
+                            );
+                        }
+                    }
+                }
+            }
 
         } catch (error) {
 
             console.error(
-                "[CHECKOUT] Odpowiedź serwera:",
-                text
+                "[WEBHOOK PROCESS ERROR]",
+                error
             );
 
-            throw new Error(
-                "Serwer zwrócił nieprawidłową odpowiedź."
-            );
-
+            return res
+                .status(500)
+                .send("Webhook error");
         }
 
+        res.json({
+            received: true
+        });
+    }
+);
 
+/* =========================================================
+   MIDDLEWARE
+========================================================= */
+
+app.use(
+    express.json({
+        limit: "5mb"
+    })
+);
+
+app.use(
+    express.urlencoded({
+        extended: true,
+        limit: "5mb"
+    })
+);
+
+app.use(
+    express.static(__dirname)
+);
+
+/* =========================================================
+   HEALTH
+========================================================= */
+
+app.get(
+    "/api/health",
+    (req, res) => {
+
+        res.json({
+            success: true,
+            stripe: Boolean(stripe),
+            webhook:
+                Boolean(
+                    STRIPE_WEBHOOK_SECRET
+                ),
+            baseUrl: BASE_URL,
+            node: process.version
+        });
+    }
+);
+
+/* =========================================================
+   CREATE CHECKOUT
+========================================================= */
+
+app.post(
+    "/api/create-checkout-session",
+    async (req, res) => {
+
+        console.log("");
         console.log(
-            "[CHECKOUT] Odpowiedź:",
-            data
+            "========== CHECKOUT REQUEST =========="
+        );
+        console.log(
+            "[CHECKOUT] Nowe żądanie"
         );
 
+        try {
 
-        if (
-            !response.ok ||
-            !data.success
-        ) {
+            /* -----------------------------------------
+               STRIPE
+            ----------------------------------------- */
 
-            throw new Error(
-                data.error ||
-                `Błąd HTTP ${response.status}`
+            if (!stripe) {
+
+                console.error(
+                    "[STRIPE] stripe == null"
+                );
+
+                return res
+                    .status(500)
+                    .json({
+                        success: false,
+                        error:
+                            "Brak STRIPE_SECRET_KEY."
+                    });
+            }
+
+            console.log(
+                "[STRIPE] Obiekt Stripe: OK"
             );
 
-        }
+            /* -----------------------------------------
+               BODY
+            ----------------------------------------- */
 
+            const body =
+                req.body || {};
 
-        if (
-            !data.url
-        ) {
-
-            throw new Error(
-                "Stripe nie zwrócił adresu Checkout."
+            console.log(
+                "[CHECKOUT] Body keys:",
+                Object.keys(body)
             );
 
-        }
+            const items =
+                Array.isArray(body.items)
+                    ? body.items
+                    : [];
 
+            const customer =
+                body.customer || {};
 
-        /*
-           NIE pokazujemy tutaj sukcesu.
+            const delivery =
+                body.delivery || {};
 
-           Teraz idziemy do Stripe.
-        */
+            const discountCode =
+                String(
+                    body.discountCode || ""
+                )
+                    .trim()
+                    .toUpperCase();
 
-        window.location.href =
-            data.url;
+            console.log(
+                "[CHECKOUT] Liczba produktów:",
+                items.length
+            );
 
-    } catch (error) {
+            /* -----------------------------------------
+               BASIC VALIDATION
+            ----------------------------------------- */
 
-        console.error(
-            "[CHECKOUT ERROR]",
-            error
-        );
+            if (
+                items.length === 0
+            ) {
 
+                return res
+                    .status(400)
+                    .json({
+                        success: false,
+                        error:
+                            "Koszyk jest pusty."
+                    });
+            }
 
-        showToast(
-            "❌ " +
-            (
-                error.message ||
-                "Błąd płatności."
-            ),
-            "error"
-        );
+            const email =
+                String(
+                    customer.email || ""
+                ).trim();
 
+            console.log(
+                "[CHECKOUT] Email:",
+                email
+            );
 
-        payButton.disabled =
-            false;
+            if (
+                !email ||
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                    .test(email)
+            ) {
 
+                return res
+                    .status(400)
+                    .json({
+                        success: false,
+                        error:
+                            "Nieprawidłowy e-mail."
+                    });
+            }
 
-        payButton.textContent =
-            "💳 Przejdź do płatności";
+            /* -----------------------------------------
+               PRODUCTS
+            ----------------------------------------- */
 
-    }
+            const lineItems = [];
 
-}
+            let subtotal = 0;
 
+            for (
+                const item
+                of items
+            ) {
 
-/* =====================================================
-   VERIFY RETURN
-===================================================== */
+                const name =
+                    String(
+                        item.name ||
+                        "Produkt Printerlase3D"
+                    )
+                        .trim()
+                        .slice(0, 250);
 
-async function verifyPayment() {
+                const price =
+                    Number(
+                        item.price
+                    );
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+                const quantity =
+                    Number(
+                        item.quantity ??
+                        item.qty ??
+                        1
+                    );
 
+                console.log(
+                    "[PRODUCT]",
+                    {
+                        name,
+                        price,
+                        quantity
+                    }
+                );
 
-    const payment =
-        params.get(
-            "payment"
-        );
+                if (
+                    !Number.isFinite(
+                        price
+                    ) ||
+                    price <= 0
+                ) {
 
+                    return res
+                        .status(400)
+                        .json({
+                            success: false,
+                            error:
+                                `Nieprawidłowa cena: ${name}`
+                        });
+                }
 
-    const sessionId =
-        params.get(
-            "session_id"
-        );
+                if (
+                    !Number.isInteger(
+                        quantity
+                    ) ||
+                    quantity < 1 ||
+                    quantity > 100
+                ) {
 
+                    return res
+                        .status(400)
+                        .json({
+                            success: false,
+                            error:
+                                `Nieprawidłowa ilość: ${name}`
+                        });
+                }
 
-    if (
-        payment ===
-        "cancelled"
-    ) {
+                subtotal +=
+                    price *
+                    quantity;
 
-        showToast(
-            "Płatność została anulowana.",
-            "error"
-        );
+                lineItems.push({
+                    price_data: {
+                        currency: "pln",
 
+                        product_data: {
+                            name
+                        },
 
-        window.history.replaceState(
-            {},
-            document.title,
-            "checkout.html"
-        );
+                        unit_amount:
+                            Math.round(
+                                price * 100
+                            )
+                    },
 
+                    quantity
+                });
+            }
 
-        return;
+            console.log(
+                "[CHECKOUT] Subtotal:",
+                subtotal
+            );
 
-    }
+            /* -----------------------------------------
+               DISCOUNT
+            ----------------------------------------- */
 
+            let discount = 0;
 
-    if (
-        payment !==
-            "success" ||
-        !sessionId
-    ) {
+            if (
+                discountCode ===
+                "START10"
+            ) {
 
-        return;
+                discount =
+                    subtotal * 0.10;
+            }
 
-    }
+            const afterDiscount =
+                Math.max(
+                    0,
+                    subtotal -
+                    discount
+                );
 
+            console.log(
+                "[CHECKOUT] Rabat:",
+                discount
+            );
 
-    try {
+            /* -----------------------------------------
+               DELIVERY
+            ----------------------------------------- */
 
-        const response =
-            await fetch(
-                "/api/checkout-session/" +
-                encodeURIComponent(
-                    sessionId
+            let deliveryPrice =
+                Number(
+                    delivery.price || 0
+                );
+
+            if (
+                !Number.isFinite(
+                    deliveryPrice
+                ) ||
+                deliveryPrice < 0
+            ) {
+                deliveryPrice = 0;
+            }
+
+            if (
+                afterDiscount >= 50
+            ) {
+                deliveryPrice = 0;
+            }
+
+            console.log(
+                "[CHECKOUT] Dostawa:",
+                deliveryPrice
+            );
+
+            /*
+             * Dodajemy dostawę jako osobny item.
+             */
+
+            if (
+                deliveryPrice > 0
+            ) {
+
+                lineItems.push({
+
+                    price_data: {
+
+                        currency: "pln",
+
+                        product_data: {
+                            name:
+                                `Dostawa - ${
+                                    String(
+                                        delivery.method ||
+                                        "Dostawa"
+                                    ).slice(
+                                        0,
+                                        100
+                                    )
+                                }`
+                        },
+
+                        unit_amount:
+                            Math.round(
+                                deliveryPrice *
+                                100
+                            )
+                    },
+
+                    quantity: 1
+                });
+            }
+
+            /* -----------------------------------------
+               TOTAL
+            ----------------------------------------- */
+
+            const total =
+                afterDiscount +
+                deliveryPrice;
+
+            console.log(
+                "[CHECKOUT] TOTAL:",
+                total
+            );
+
+            if (
+                !Number.isFinite(
+                    total
+                ) ||
+                total <= 0
+            ) {
+
+                return res
+                    .status(400)
+                    .json({
+                        success: false,
+                        error:
+                            "Nieprawidłowa kwota."
+                    });
+            }
+
+            /* -----------------------------------------
+               ORDER
+            ----------------------------------------- */
+
+            const orderId =
+                generateOrderId();
+
+            const order = {
+
+                id:
+                    orderId,
+
+                name:
+                    String(
+                        customer.name ||
+                        ""
+                    ).trim(),
+
+                email,
+
+                phone:
+                    String(
+                        customer.phone ||
+                        ""
+                    ).trim(),
+
+                address:
+                    String(
+                        customer.address ||
+                        ""
+                    ).trim(),
+
+                postcode:
+                    String(
+                        customer.postcode ||
+                        ""
+                    ).trim(),
+
+                city:
+                    String(
+                        customer.city ||
+                        ""
+                    ).trim(),
+
+                paczkomat:
+                    String(
+                        customer.paczkomat ||
+                        ""
+                    ).trim(),
+
+                delivery:
+                    String(
+                        delivery.method ||
+                        ""
+                    ).trim(),
+
+                items,
+
+                subtotal:
+                    Number(
+                        subtotal.toFixed(2)
+                    ),
+
+                discount:
+                    Number(
+                        discount.toFixed(2)
+                    ),
+
+                deliveryPrice:
+                    Number(
+                        deliveryPrice.toFixed(2)
+                    ),
+
+                total:
+                    Number(
+                        total.toFixed(2)
+                    ),
+
+                paymentStatus:
+                    "PENDING",
+
+                status:
+                    "AWAITING_PAYMENT",
+
+                createdAt:
+                    new Date()
+                        .toISOString()
+            };
+
+            const orders =
+                readOrders();
+
+            orders.unshift(
+                order
+            );
+
+            saveOrders(
+                orders
+            );
+
+            console.log(
+                "[ORDER] Utworzono:",
+                orderId
+            );
+
+            /* -----------------------------------------
+               STRIPE DEBUG
+            ----------------------------------------- */
+
+            console.log(
+                "[STRIPE DEBUG]",
+                JSON.stringify(
+                    {
+                        mode: "payment",
+                        lineItemsCount:
+                            lineItems.length,
+                        email: email,
+                        total: total,
+                        currency: "pln",
+                        baseUrl: BASE_URL,
+                        secretKeyPresent:
+                            Boolean(
+                                STRIPE_SECRET_KEY
+                            )
+                    },
+                    null,
+                    2
                 )
             );
 
-
-        const data =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            !data.success
-        ) {
-
-            throw new Error(
-                data.error ||
-                "Nie udało się sprawdzić płatności."
+            console.log(
+                "[STRIPE] Przed sessions.create"
             );
 
+            /* -----------------------------------------
+               STRIPE SESSION
+            ----------------------------------------- */
+
+            const session =
+                await stripe.checkout.sessions.create({
+
+                    mode:
+                        "payment",
+
+                    line_items:
+                        lineItems,
+
+                    customer_email:
+                        email,
+
+                    phone_number_collection: {
+                        enabled: true
+                    },
+
+                    billing_address_collection:
+                        "auto",
+
+                    metadata: {
+
+                        orderId,
+
+                        discountCode,
+
+                        delivery:
+                            String(
+                                delivery.method ||
+                                ""
+                            ).slice(
+                                0,
+                                100
+                            )
+                    },
+
+                    success_url:
+                        `${BASE_URL}/checkout.html?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+
+                    cancel_url:
+                        `${BASE_URL}/checkout.html?payment=cancelled`
+                });
+
+            console.log(
+                "[STRIPE] Po sessions.create:",
+                session.id
+            );
+
+            order.stripeSessionId =
+                session.id;
+
+            saveOrders(
+                orders
+            );
+
+            console.log(
+                "[CHECKOUT] Sukces!"
+            );
+
+            console.log(
+                "======================================"
+            );
+
+            return res.json({
+
+                success: true,
+
+                url:
+                    session.url,
+
+                sessionId:
+                    session.id,
+
+                orderId
+            });
+
+        } catch (error) {
+
+            console.error("");
+            console.error(
+                "========== STRIPE ERROR =========="
+            );
+            console.error(
+                "name:",
+                error?.name
+            );
+            console.error(
+                "message:",
+                error?.message
+            );
+            console.error(
+                "type:",
+                error?.type
+            );
+            console.error(
+                "code:",
+                error?.code
+            );
+            console.error(
+                "statusCode:",
+                error?.statusCode
+            );
+            console.error(
+                "raw:",
+                error?.raw?.message
+            );
+            console.error(
+                "=================================="
+            );
+            console.error("");
+
+            return res
+                .status(500)
+                .json({
+                    success: false,
+                    error:
+                        error?.message ||
+                        "Stripe error"
+                });
         }
-
-
-        if (
-            data.paid !== true
-        ) {
-
-            throw new Error(
-                "Stripe nie potwierdził płatności."
-            );
-
-        }
-
-
-        document.getElementById(
-            "checkoutContent"
-        ).style.display =
-            "none";
-
-
-        document.getElementById(
-            "success"
-        ).classList.add(
-            "show"
-        );
-
-
-        document.getElementById(
-            "orderNumber"
-        ).textContent =
-            "Zamówienie: " +
-            (
-                data.orderId ||
-                "opłacone"
-            );
-
-
-        localStorage.removeItem(
-            CART_KEY
-        );
-
-
-        showToast(
-            "✅ Płatność została potwierdzona!"
-        );
-
-
-        window.history.replaceState(
-            {},
-            document.title,
-            "checkout.html"
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "[VERIFY ERROR]",
-            error
-        );
-
-
-        showToast(
-            "❌ " +
-            error.message,
-            "error"
-        );
-
     }
-
-}
-
-
-/* =====================================================
-   BUTTON
-===================================================== */
-
-payButton.addEventListener(
-    "click",
-    createCheckout
 );
 
+/* =========================================================
+   VERIFY SESSION
+========================================================= */
 
-/* =====================================================
+app.get(
+    "/api/checkout-session/:id",
+    async (req, res) => {
+
+        try {
+
+            if (!stripe) {
+                return res
+                    .status(500)
+                    .json({
+                        success: false,
+                        error:
+                            "Stripe nie jest skonfigurowany."
+                    });
+            }
+
+            const session =
+                await stripe.checkout.sessions.retrieve(
+                    req.params.id
+                );
+
+            const orders =
+                readOrders();
+
+            const orderId =
+                session.metadata?.orderId;
+
+            const order =
+                orderId
+                    ? orders.find(
+                        item =>
+                            item.id ===
+                            orderId
+                    )
+                    : null;
+
+            res.json({
+
+                success: true,
+
+                paid:
+                    session.payment_status ===
+                    "paid",
+
+                paymentStatus:
+                    session.payment_status,
+
+                sessionStatus:
+                    session.status,
+
+                sessionId:
+                    session.id,
+
+                orderId:
+                    orderId || null,
+
+                amount:
+                    session.amount_total
+                        ? session.amount_total / 100
+                        : 0,
+
+                currency:
+                    session.currency ||
+                    "pln",
+
+                email:
+                    session.customer_details?.email ||
+                    session.customer_email ||
+                    null,
+
+                order:
+                    order
+                        ? {
+                            id:
+                                order.id,
+
+                            status:
+                                order.status,
+
+                            paymentStatus:
+                                order.paymentStatus,
+
+                            total:
+                                order.total
+                        }
+                        : null
+            });
+
+        } catch (error) {
+
+            console.error(
+                "[VERIFY ERROR]",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                error:
+                    error?.message ||
+                    "Verify error"
+            });
+        }
+    }
+);
+
+/* =========================================================
+   API 404
+========================================================= */
+
+app.use(
+    "/api",
+    (req, res) => {
+
+        res.status(404).json({
+            success: false,
+            error:
+                "Nie znaleziono API."
+        });
+    }
+);
+
+/* =========================================================
+   FRONTEND
+========================================================= */
+
+app.get(
+    "/",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "index.html"
+            )
+        );
+    }
+);
+
+/* =========================================================
    START
-===================================================== */
+========================================================= */
 
-renderCart();
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
 
-updateSummary();
+        console.log("");
+        console.log(
+            "======================================"
+        );
+        console.log(
+            "       PRINTERLASE3D ONLINE"
+        );
+        console.log(
+            "======================================"
+        );
+        console.log(
+            "PORT:",
+            PORT
+        );
+        console.log(
+            "STRIPE:",
+            stripe
+                ? "OK"
+                : "BRAK KLUCZA"
+        );
+        console.log(
+            "BASE URL:",
+            BASE_URL
+        );
+        console.log(
+            "======================================"
+        );
+        console.log("");
 
-verifyPayment();
-
-</script>
-
-</body>
-</html>
+    }
+);
