@@ -5,705 +5,315 @@ const path = require("path");
 const app = express();
 
 const PORT = process.env.PORT || 10000;
+const BASE_URL =
+    process.env.BASE_URL ||
+    "https://printerlase3d32.onrender.com";
 
 const STRIPE_SECRET_KEY =
     process.env.STRIPE_SECRET_KEY;
+
+if (!STRIPE_SECRET_KEY) {
+    console.error("[STRIPE] BRAK STRIPE_SECRET_KEY");
+}
 
 const stripe = STRIPE_SECRET_KEY
     ? new Stripe(STRIPE_SECRET_KEY)
     : null;
 
-
-/* ==================================================
-   START
-================================================== */
-
-console.log("");
-console.log("======================================");
-console.log("       PRINTERLASE3D ONLINE");
-console.log("======================================");
-console.log("PORT:", PORT);
-console.log(
-    "STRIPE:",
-    stripe ? "OK" : "BRAK KLUCZA"
-);
-console.log(
-    "WEBHOOK:",
-    process.env.STRIPE_WEBHOOK_SECRET
-        ? "OK"
-        : "BRAK SEKRETU"
-);
-console.log("======================================");
-console.log("");
-
-
-/* ==================================================
-   MIDDLEWARE
-================================================== */
-
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(
-    express.urlencoded({
-        extended: true
-    })
-);
+app.use(express.static(__dirname));
 
 
-/*
- * Pliki strony:
- *
- * index.html
- * checkout.html
- * produkt.html
- * koszyk.html
- * style.css
- * script.js
- * images/
- */
+// ==========================================
+// TEST API
+// ==========================================
 
-app.use(
-    express.static(
-        path.join(__dirname)
-    )
-);
+app.get("/api/test", (req, res) => {
+
+    res.json({
+        success: true,
+        api: true,
+        stripe: !!stripe
+    });
+
+});
 
 
-/* ==================================================
-   HEALTH CHECK
-================================================== */
+// ==========================================
+// CREATE STRIPE CHECKOUT
+// ==========================================
 
-app.get(
-    "/api/health",
-    (req, res) => {
+app.post("/api/create-checkout-session", async (req, res) => {
 
-        res.json({
+    try {
 
-            success: true,
+        if (!stripe) {
 
-            api: true,
+            return res.status(500).json({
+                success: false,
+                error: "Brak STRIPE_SECRET_KEY na Renderze."
+            });
 
-            stripe:
-                !!stripe,
-
-            time:
-                new Date().toISOString()
-
-        });
-
-    }
-);
+        }
 
 
-/* ==================================================
-   CREATE STRIPE CHECKOUT
-================================================== */
-
-app.post(
-    "/api/create-checkout-session",
-    async (req, res) => {
-
-        try {
-
-            console.log("");
-            console.log(
-                "[STRIPE] Tworzenie sesji..."
-            );
+        const {
+            items,
+            customer,
+            delivery
+        } = req.body;
 
 
-            if (!stripe) {
+        if (!Array.isArray(items) || items.length === 0) {
 
-                console.error(
-                    "[STRIPE] Brak STRIPE_SECRET_KEY"
-                );
+            return res.status(400).json({
+                success: false,
+                error: "Koszyk jest pusty."
+            });
 
-                return res.status(500).json({
-
-                    success: false,
-
-                    error:
-                        "Stripe nie jest skonfigurowany na serwerze."
-
-                });
-
-            }
+        }
 
 
-            const {
+        // ==========================================
+        // PRODUKTY
+        // ==========================================
 
-                cart,
+        const lineItems = [];
 
-                customer,
-
-                delivery,
-
-                coupon
-
-            } = req.body;
-
-
-            /* ==========================================
-               KOSZYK
-            ========================================== */
-
-            if (
-                !Array.isArray(cart) ||
-                cart.length === 0
-            ) {
-
-                return res.status(400).json({
-
-                    success: false,
-
-                    error:
-                        "Koszyk jest pusty."
-
-                });
-
-            }
-
-
-            /* ==========================================
-               CUSTOMER
-            ========================================== */
-
-            if (
-                !customer ||
-                !customer.email
-            ) {
-
-                return res.status(400).json({
-
-                    success: false,
-
-                    error:
-                        "Brak adresu e-mail."
-
-                });
-
-            }
-
-
-            const email =
-                String(
-                    customer.email
-                ).trim();
-
+        for (const item of items) {
 
             const name =
                 String(
-                    customer.name || ""
-                ).trim();
+                    item.name ||
+                    "Produkt Printerlase3D"
+                );
 
 
-            const phone =
-                String(
-                    customer.phone || ""
-                ).trim();
+            const price =
+                Number(item.price);
 
 
-            const address =
-                String(
-                    customer.address || ""
-                ).trim();
-
-
-            const postcode =
-                String(
-                    customer.postcode || ""
-                ).trim();
-
-
-            const city =
-                String(
-                    customer.city || ""
-                ).trim();
-
-
-            const paczkomat =
-                String(
-                    customer.paczkomat || ""
-                ).trim();
-
-
-            /* ==========================================
-               LINE ITEMS
-            ========================================== */
-
-            const lineItems = [];
-
-
-            for (
-                const item of cart
-            ) {
-
-                const name =
-                    String(
-                        item.name ||
-                        "Produkt Printerlase3D"
-                    ).trim();
-
-
-                const quantity =
-                    Number(
-                        item.quantity ??
-                        item.qty ??
-                        1
-                    );
-
-
-                const price =
-                    Number(
-                        item.price ??
-                        0
-                    );
-
-
-                if (
-                    !Number.isFinite(quantity) ||
-                    quantity < 1
-                ) {
-                    continue;
-                }
-
-
-                if (
-                    !Number.isFinite(price) ||
-                    price < 0
-                ) {
-                    continue;
-                }
-
-
-                const amount =
-                    Math.round(
-                        price * 100
-                    );
-
-
-                if (amount <= 0) {
-                    continue;
-                }
-
-
-                lineItems.push({
-
-                    price_data: {
-
-                        currency: "pln",
-
-                        product_data: {
-
-                            name:
-                                name.slice(
-                                    0,
-                                    500
-                                )
-
-                        },
-
-                        unit_amount:
-                            amount
-
-                    },
-
-                    quantity:
-                        Math.floor(
-                            quantity
-                        )
-
-                });
-
-            }
+            const quantity =
+                Number(
+                    item.quantity ??
+                    item.qty ??
+                    1
+                );
 
 
             if (
-                lineItems.length === 0
+                !Number.isFinite(price) ||
+                price < 0
             ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     error:
-                        "Nie znaleziono poprawnych produktów."
-
+                        "Nieprawidłowa cena produktu."
                 });
 
             }
 
 
-            /* ==========================================
-               DELIVERY
-            ========================================== */
-
-            let deliveryPrice =
-                Number(
-                    delivery?.price || 0
-                );
-
-
             if (
-                !Number.isFinite(
-                    deliveryPrice
-                ) ||
-                deliveryPrice < 0
+                !Number.isInteger(quantity) ||
+                quantity < 1
             ) {
 
-                deliveryPrice = 0;
-
-            }
-
-
-            /*
-             * Darmowa dostawa od 50 zł.
-             */
-
-            const productsTotal =
-                cart.reduce(
-                    (
-                        sum,
-                        item
-                    ) => {
-
-                        const price =
-                            Number(
-                                item.price || 0
-                            );
-
-                        const quantity =
-                            Number(
-                                item.quantity ??
-                                item.qty ??
-                                1
-                            );
-
-                        if (
-                            !Number.isFinite(price) ||
-                            !Number.isFinite(quantity)
-                        ) {
-                            return sum;
-                        }
-
-                        return (
-                            sum +
-                            price *
-                            quantity
-                        );
-
-                    },
-                    0
-                );
-
-
-            if (
-                productsTotal >= 50
-            ) {
-
-                deliveryPrice = 0;
-
-            }
-
-
-            if (
-                deliveryPrice > 0
-            ) {
-
-                lineItems.push({
-
-                    price_data: {
-
-                        currency: "pln",
-
-                        product_data: {
-
-                            name:
-                                `Dostawa — ${
-                                    delivery?.method ||
-                                    "Dostawa"
-                                }`
-
-                        },
-
-                        unit_amount:
-                            Math.round(
-                                deliveryPrice *
-                                100
-                            )
-
-                    },
-
-                    quantity: 1
-
+                return res.status(400).json({
+                    success: false,
+                    error:
+                        "Nieprawidłowa ilość produktu."
                 });
 
             }
 
 
-            /* ==========================================
-               DISCOUNT
-            ========================================== */
+            lineItems.push({
 
-            /*
-             * START10 = 10%
-             *
-             * Stripe nie dostaje ceny z frontu.
-             * Tworzymy kupon Stripe.
-             */
+                price_data: {
 
-            let discounts = [];
+                    currency: "pln",
 
-
-            if (
-                String(coupon || "")
-                    .toUpperCase()
-                === "START10"
-            ) {
-
-                const stripeCoupon =
-                    await stripe.coupons.create({
-
-                        percent_off: 10,
-
-                        duration: "once",
-
-                        name:
-                            "START10 — 10% rabatu"
-
-                    });
-
-
-                discounts = [
-
-                    {
-                        coupon:
-                            stripeCoupon.id
-                    }
-
-                ];
-
-            }
-
-
-            /* ==========================================
-               BASE URL
-            ========================================== */
-
-            let baseUrl =
-                process.env.RENDER_EXTERNAL_URL;
-
-
-            if (!baseUrl) {
-
-                if (
-                    process.env.RENDER_EXTERNAL_HOSTNAME
-                ) {
-
-                    baseUrl =
-                        `https://${process.env.RENDER_EXTERNAL_HOSTNAME}`;
-
-                }
-
-            }
-
-
-            if (!baseUrl) {
-
-                baseUrl =
-                    "http://localhost:" +
-                    PORT;
-
-            }
-
-
-            baseUrl =
-                baseUrl.replace(
-                    /\/$/,
-                    ""
-                );
-
-
-            /* ==========================================
-               ORDER ID
-            ========================================== */
-
-            const orderNumber =
-                "PL3D-" +
-                Date.now()
-                    .toString()
-                    .slice(-8) +
-                "-" +
-                Math.floor(
-                    100 +
-                    Math.random() *
-                    900
-                );
-
-
-            /* ==========================================
-               STRIPE SESSION
-            ========================================== */
-
-            const session =
-                await stripe.checkout.sessions.create({
-
-                    mode: "payment",
-
-                    line_items:
-                        lineItems,
-
-                    discounts:
-                        discounts.length
-                            ? discounts
-                            : undefined,
-
-                    customer_email:
-                        email,
-
-                    billing_address_collection:
-                        "required",
-
-                    phone_number_collection: {
-
-                        enabled: true
-
+                    product_data: {
+                        name
                     },
 
-                    metadata: {
+                    unit_amount:
+                        Math.round(
+                            price * 100
+                        )
 
-                        orderNumber:
-                            orderNumber,
+                },
 
-                        customerName:
-                            name.slice(
-                                0,
-                                500
-                            ),
-
-                        phone:
-                            phone.slice(
-                                0,
-                                100
-                            ),
-
-                        address:
-                            address.slice(
-                                0,
-                                500
-                            ),
-
-                        postcode:
-                            postcode.slice(
-                                0,
-                                50
-                            ),
-
-                        city:
-                            city.slice(
-                                0,
-                                200
-                            ),
-
-                        delivery:
-                            String(
-                                delivery?.method ||
-                                ""
-                            ).slice(
-                                0,
-                                100
-                            ),
-
-                        paczkomat:
-                            paczkomat.slice(
-                                0,
-                                100
-                            ),
-
-                        coupon:
-                            coupon
-                                ? String(
-                                    coupon
-                                ).slice(
-                                    0,
-                                    50
-                                )
-                                : ""
-
-                    },
-
-                    success_url:
-                        `${baseUrl}/checkout.html?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-
-                    cancel_url:
-                        `${baseUrl}/checkout.html?payment=cancelled`
-
-                });
-
-
-            console.log(
-                "[STRIPE] SESJA UTWORZONA:",
-                session.id
-            );
-
-            console.log(
-                "[STRIPE] ORDER:",
-                orderNumber
-            );
-
-
-            return res.json({
-
-                success: true,
-
-                url:
-                    session.url,
-
-                sessionId:
-                    session.id,
-
-                orderNumber:
-                    orderNumber
-
-            });
-
-
-        } catch(error) {
-
-            console.error("");
-            console.error(
-                "========== STRIPE ERROR =========="
-            );
-            console.error(
-                error
-            );
-            console.error(
-                "=================================="
-            );
-            console.error("");
-
-
-            return res.status(500).json({
-
-                success: false,
-
-                error:
-                    error?.message ||
-                    "Nie udało się utworzyć płatności."
+                quantity
 
             });
 
         }
 
+
+        // ==========================================
+        // DOSTAWA
+        // ==========================================
+
+        const deliveryPrice =
+            Number(
+                delivery?.price || 0
+            );
+
+
+        if (
+            Number.isFinite(deliveryPrice) &&
+            deliveryPrice > 0
+        ) {
+
+            lineItems.push({
+
+                price_data: {
+
+                    currency: "pln",
+
+                    product_data: {
+                        name:
+                            delivery?.method ||
+                            "Dostawa"
+                    },
+
+                    unit_amount:
+                        Math.round(
+                            deliveryPrice * 100
+                        )
+
+                },
+
+                quantity: 1
+
+            });
+
+        }
+
+
+        // ==========================================
+        // STRIPE CHECKOUT
+        // ==========================================
+
+        const session =
+            await stripe.checkout.sessions.create({
+
+                mode: "payment",
+
+                line_items: lineItems,
+
+                customer_email:
+                    customer?.email ||
+                    undefined,
+
+                phone_number_collection: {
+                    enabled: true
+                },
+
+                billing_address_collection:
+                    "required",
+
+                success_url:
+                    `${BASE_URL}/checkout.html?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+
+                cancel_url:
+                    `${BASE_URL}/checkout.html?payment=cancelled`,
+
+                metadata: {
+
+                    customer_name:
+                        String(
+                            customer?.name || ""
+                        ),
+
+                    phone:
+                        String(
+                            customer?.phone || ""
+                        ),
+
+                    address:
+                        String(
+                            customer?.address || ""
+                        ),
+
+                    postcode:
+                        String(
+                            customer?.postcode || ""
+                        ),
+
+                    city:
+                        String(
+                            customer?.city || ""
+                        ),
+
+                    delivery:
+                        String(
+                            delivery?.method || ""
+                        ),
+
+                    paczkomat:
+                        String(
+                            delivery?.paczkomat || ""
+                        )
+
+                }
+
+            });
+
+
+        console.log(
+            "[STRIPE] Utworzono sesję:",
+            session.id
+        );
+
+
+        return res.json({
+
+            success: true,
+
+            url:
+                session.url,
+
+            sessionId:
+                session.id
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "[STRIPE ERROR]",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            error:
+                error.message ||
+                "Błąd Stripe."
+
+        });
+
     }
-);
+
+});
 
 
-/* ==================================================
-   VERIFY PAYMENT
-================================================== */
+// ==========================================
+// STRIPE SESSION CHECK
+// ==========================================
 
 app.get(
-    "/api/verify-session",
+    "/api/checkout-session/:id",
     async (req, res) => {
 
         try {
@@ -711,33 +321,9 @@ app.get(
             if (!stripe) {
 
                 return res.status(500).json({
-
                     success: false,
-
                     error:
                         "Stripe nie jest skonfigurowany."
-
-                });
-
-            }
-
-
-            const sessionId =
-                String(
-                    req.query.session_id ||
-                    ""
-                ).trim();
-
-
-            if (!sessionId) {
-
-                return res.status(400).json({
-
-                    success: false,
-
-                    error:
-                        "Brak session_id."
-
                 });
 
             }
@@ -745,64 +331,44 @@ app.get(
 
             const session =
                 await stripe.checkout.sessions.retrieve(
-                    sessionId
+                    req.params.id
                 );
 
 
-            const paid =
-                session.payment_status ===
-                "paid";
-
-
-            return res.json({
+            res.json({
 
                 success: true,
 
-                paid:
-
-                    paid,
-
-                paymentStatus:
+                payment_status:
                     session.payment_status,
 
-                sessionId:
-                    session.id,
+                status:
+                    session.status,
 
-                orderNumber:
-                    session.metadata?.orderNumber ||
-                    null,
-
-                customerEmail:
-                    session.customer_details?.email ||
-                    session.customer_email ||
-                    null,
-
-                amountTotal:
-                    session.amount_total
-                        ? session.amount_total / 100
-                        : 0,
+                amount_total:
+                    session.amount_total,
 
                 currency:
-                    session.currency
+                    session.currency,
+
+                customer_email:
+                    session.customer_details?.email ||
+                    null
 
             });
 
 
-        } catch(error) {
+        } catch (error) {
 
-            console.error(
-                "[VERIFY ERROR]",
-                error
-            );
+            console.error(error);
 
 
-            return res.status(500).json({
+            res.status(500).json({
 
                 success: false,
 
                 error:
-                    error?.message ||
-                    "Nie udało się sprawdzić płatności."
+                    error.message
 
             });
 
@@ -812,249 +378,28 @@ app.get(
 );
 
 
-/* ==================================================
-   ADMIN
-================================================== */
+// ==========================================
+// START
+// ==========================================
 
-app.get(
-    "/admin",
-    (req, res) => {
+app.listen(PORT, () => {
 
-        res.send(`
+    console.log(`
+======================================
 
-<!DOCTYPE html>
+       PRINTERLASE3D ONLINE
 
-<html lang="pl">
+======================================
 
-<head>
+PORT: ${PORT}
 
-<meta charset="UTF-8">
+STRIPE:
+${stripe ? "OK" : "BRAK KLUCZA"}
 
-<title>Printerlase3D Admin</title>
+BASE URL:
+${BASE_URL}
 
-<style>
+======================================
+`);
 
-body{
-
-    margin:0;
-
-    min-height:100vh;
-
-    background:#02050c;
-
-    color:white;
-
-    font-family:Arial;
-
-    padding:30px;
-
-}
-
-.card{
-
-    max-width:900px;
-
-    margin:auto;
-
-    padding:30px;
-
-    border-radius:20px;
-
-    background:#081221;
-
-    border:1px solid #18304d;
-
-}
-
-h1{
-
-    color:#19dcff;
-
-}
-
-.info{
-
-    padding:15px;
-
-    margin-top:15px;
-
-    border-radius:12px;
-
-    background:#050d1a;
-
-}
-
-.ok{
-
-    color:#00df91;
-
-}
-
-.bad{
-
-    color:#ff4b6e;
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="card">
-
-<h1>Printerlase3D Admin</h1>
-
-<div class="info">
-
-<strong>Serwer:</strong>
-
-<span class="ok">
-ONLINE
-</span>
-
-</div>
-
-<div class="info">
-
-<strong>Stripe:</strong>
-
-<span class="${
-    stripe
-        ? "ok"
-        : "bad"
-}">
-
-${
-    stripe
-        ? "OK"
-        : "BRAK KLUCZA"
-}
-
-</span>
-
-</div>
-
-<div class="info">
-
-<strong>API:</strong>
-
-<span class="ok">
-
-/api/create-checkout-session
-
-</span>
-
-</div>
-
-<div class="info">
-
-<strong>Verify:</strong>
-
-<span class="ok">
-
-/api/verify-session
-
-</span>
-
-</div>
-
-</div>
-
-</body>
-
-</html>
-
-        `);
-
-    }
-);
-
-
-/* ==================================================
-   404 API
-================================================== */
-
-app.use(
-    "/api",
-    (req, res) => {
-
-        res.status(404).json({
-
-            success: false,
-
-            error:
-                "Nie znaleziono API."
-
-        });
-
-    }
-);
-
-
-/* ==================================================
-   FRONTEND FALLBACK
-================================================== */
-
-app.get(
-    "*",
-    (req, res) => {
-
-        res.sendFile(
-            path.join(
-                __dirname,
-                "index.html"
-            )
-        );
-
-    }
-);
-
-
-/* ==================================================
-   ERROR
-================================================== */
-
-app.use(
-    (
-        error,
-        req,
-        res,
-        next
-    ) => {
-
-        console.error(
-            "[SERVER ERROR]",
-            error
-        );
-
-
-        res.status(500).json({
-
-            success: false,
-
-            error:
-                "Błąd serwera."
-
-        });
-
-    }
-);
-
-
-/* ==================================================
-   LISTEN
-================================================== */
-
-app.listen(
-    PORT,
-    "0.0.0.0",
-    () => {
-
-        console.log(
-            `Printerlase3D działa na porcie ${PORT}`
-        );
-
-    }
-);
+});
