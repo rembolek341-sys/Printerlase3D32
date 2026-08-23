@@ -19,23 +19,11 @@ html {
 }
 
 body {
-    font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
 
     background:
-        radial-gradient(
-            circle at 10% 0%,
-            rgba(0, 180, 255, .18),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 90% 100%,
-            rgba(100, 50, 255, .20),
-            transparent 35%
-        ),
+        radial-gradient(circle at 10% 0%, rgba(0,180,255,.18), transparent 30%),
+        radial-gradient(circle at 90% 100%, rgba(100,50,255,.20), transparent 35%),
         #050914;
 
     color: #fff;
@@ -56,9 +44,9 @@ button {
     display: none !important;
 }
 
-/* =========================
+/* =====================================================
    LOGIN
-========================= */
+===================================================== */
 
 .login-screen {
     min-height: 100vh;
@@ -81,20 +69,15 @@ button {
     background:
         linear-gradient(
             145deg,
-            rgba(13, 27, 53, .97),
-            rgba(7, 14, 30, .97)
+            rgba(13,27,53,.97),
+            rgba(7,14,30,.97)
         );
 
-    border:
-        1px solid
-        rgba(0, 210, 255, .35);
+    border: 1px solid rgba(0,210,255,.35);
 
     box-shadow:
-        0 0 80px
-        rgba(0, 190, 255, .14),
-
-        inset 0 0 40px
-        rgba(0, 150, 255, .03);
+        0 0 80px rgba(0,190,255,.14),
+        inset 0 0 40px rgba(0,150,255,.03);
 }
 
 .logo {
@@ -106,8 +89,7 @@ button {
     color: #26ddff;
 
     text-shadow:
-        0 0 25px
-        rgba(38, 221, 255, .65);
+        0 0 25px rgba(38,221,255,.65);
 
     margin-bottom: 8px;
 }
@@ -142,9 +124,7 @@ button {
 
     border-radius: 13px;
 
-    border:
-        1px solid
-        #263957;
+    border: 1px solid #263957;
 
     outline: none;
 
@@ -159,17 +139,16 @@ button {
     border-color: #22d9ff;
 
     box-shadow:
-        0 0 18px
-        rgba(34, 217, 255, .16);
+        0 0 18px rgba(34,217,255,.16);
 }
 
 .login-button {
     width: 100%;
 }
 
-/* =========================
+/* =====================================================
    BUTTONS
-========================= */
+===================================================== */
 
 .btn {
     border: none;
@@ -207,8 +186,7 @@ button {
         );
 
     box-shadow:
-        0 8px 28px
-        rgba(0, 191, 255, .22);
+        0 8px 28px rgba(0,191,255,.22);
 }
 
 .btn-green {
@@ -251,9 +229,9 @@ button {
         );
 }
 
-/* =========================
+/* =====================================================
    ERROR
-========================= */
+===================================================== */
 
 .error {
     color: #ff657c;
@@ -267,9 +245,9 @@ button {
     font-size: 14px;
 }
 
-/* =========================
+/* =====================================================
    DASHBOARD
-========================= */
+===================================================== */
 
 .dashboard {
     display: none;
@@ -285,14 +263,12 @@ header {
     padding: 15px 25px;
 
     background:
-        rgba(5, 9, 20, .88);
+        rgba(5,9,20,.88);
 
-    backdrop-filter:
-        blur(18px);
+    backdrop-filter: blur(18px);
 
     border-bottom:
-        1px solid
-        rgba(255,255,255,.07);
+        1px solid rgba(255,255,255,.07);
 
     display: flex;
 
@@ -311,8 +287,7 @@ header {
     color: #29ddff;
 
     text-shadow:
-        0 0 15px
-        rgba(41,221,255,.35);
+        0 0 15px rgba(41,221,255,.35);
 }
 
 .header-right {
@@ -329,22 +304,21 @@ header {
     border-radius: 30px;
 
     background:
-        rgba(0, 210, 120, .12);
+        rgba(0,210,120,.12);
 
     color: #4be6a6;
 
     border:
-        1px solid
-        rgba(0,210,120,.25);
+        1px solid rgba(0,210,120,.25);
 
     font-size: 12px;
 
     font-weight: 800;
 }
 
-/* =========================
+/* =====================================================
    MAIN
-========================= */
+===================================================== */
 
 main {
     max-width: 1500px;
@@ -369,15 +343,15 @@ main {
     color: #8292ad;
 }
 
-/* =========================
+/* =====================================================
    STATS
-========================= */
+===================================================== */
 
 .stats {
     display: grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        repeat(4,1fr);
 
     gap: 18px;
 
@@ -388,21 +362,19 @@ main {
     background:
         linear-gradient(
             145deg,
-            rgba(13, 26, 49, .86),
-            rgba(7, 14, 29, .86)
+            rgba(13,26,49,.86),
+            rgba(7,14,29,.86)
         );
 
     border:
-        1px solid
-        rgba(255,255,255,.07);
+        1px solid rgba(255,255,255,.07);
 
     border-radius: 21px;
 
     padding: 22px;
 
     box-shadow:
-        0 15px 45px
-        rgba(0,0,0,.22);
+        0 15px 45px rgba(0,0,0,.22);
 }
 
 .stat-title {
@@ -421,13 +393,13 @@ main {
 
 .balance-card {
     border-color:
-        rgba(0, 205, 255, .32);
+        rgba(0,205,255,.32);
 
     background:
         linear-gradient(
             135deg,
-            rgba(0, 174, 255, .14),
-            rgba(101, 65, 255, .13)
+            rgba(0,174,255,.14),
+            rgba(101,65,255,.13)
         );
 }
 
@@ -435,34 +407,92 @@ main {
     color: #39deff;
 
     text-shadow:
-        0 0 22px
-        rgba(57,222,255,.35);
+        0 0 22px rgba(57,222,255,.35);
 }
 
-/* =========================
+/* =====================================================
    WITHDRAW
-========================= */
+===================================================== */
 
-.withdraw-area {
-    display: flex;
+.withdraw-box {
+    margin-top: 18px;
 
-    gap: 7px;
+    padding: 15px;
 
-    margin-top: 15px;
+    border-radius: 15px;
+
+    background:
+        rgba(0,0,0,.18);
+
+    border:
+        1px solid rgba(255,255,255,.06);
 }
 
-.withdraw-area input {
-    flex: 1;
+.withdraw-title {
+    font-size: 14px;
 
-    min-width: 0;
+    font-weight: 900;
+
+    margin-bottom: 12px;
+}
+
+.withdraw-methods {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+}
+
+.method-button {
+    border: 1px solid #293c5a;
+
+    background: #0b172a;
+
+    color: #aab9d1;
 
     padding: 11px;
 
     border-radius: 10px;
 
-    border:
-        1px solid
-        #2a3b58;
+    cursor: pointer;
+
+    font-weight: 800;
+
+    transition: .2s;
+}
+
+.method-button:hover {
+    border-color: #2bdcff;
+}
+
+.method-button.active {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,191,255,.25),
+            rgba(103,85,255,.25)
+        );
+
+    border-color: #25d9ff;
+
+    color: #fff;
+}
+
+.withdraw-field {
+    margin-top: 9px;
+}
+
+.withdraw-field input {
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid #2a3b58;
 
     background: #071021;
 
@@ -471,8 +501,14 @@ main {
     outline: none;
 }
 
-.withdraw-area input:focus {
+.withdraw-field input:focus {
     border-color: #23d9ff;
+}
+
+.withdraw-submit {
+    width: 100%;
+
+    margin-top: 10px;
 }
 
 .withdraw-buttons {
@@ -515,9 +551,9 @@ main {
     font-size: 11px;
 }
 
-/* =========================
+/* =====================================================
    GRID
-========================= */
+===================================================== */
 
 .grid {
     display: grid;
@@ -546,9 +582,9 @@ main {
     font-size: 20px;
 }
 
-/* =========================
+/* =====================================================
    TABLE
-========================= */
+===================================================== */
 
 .table-wrap {
     overflow-x: auto;
@@ -567,23 +603,19 @@ th {
 
     font-size: 11px;
 
-    padding:
-        11px 9px;
+    padding: 11px 9px;
 
     border-bottom:
-        1px solid
-        #1c2a42;
+        1px solid #1c2a42;
 
     white-space: nowrap;
 }
 
 td {
-    padding:
-        13px 9px;
+    padding: 13px 9px;
 
     border-bottom:
-        1px solid
-        rgba(255,255,255,.05);
+        1px solid rgba(255,255,255,.05);
 
     font-size: 13px;
 
@@ -599,9 +631,9 @@ td small {
     color: #687995;
 }
 
-/* =========================
+/* =====================================================
    STATUS
-========================= */
+===================================================== */
 
 .status {
     display: inline-block;
@@ -652,9 +684,9 @@ td small {
     color: #ff687c;
 }
 
-/* =========================
+/* =====================================================
    ACTIONS
-========================= */
+===================================================== */
 
 .actions {
     display: flex;
@@ -667,8 +699,7 @@ td small {
 .small-btn {
     border: none;
 
-    padding:
-        7px 9px;
+    padding: 7px 9px;
 
     border-radius: 8px;
 
@@ -705,9 +736,9 @@ td small {
     color: #ff667b;
 }
 
-/* =========================
+/* =====================================================
    EMPTY
-========================= */
+===================================================== */
 
 .empty {
     color: #6f7f9a;
@@ -717,12 +748,12 @@ td small {
     text-align: center;
 }
 
-/* =========================
+/* =====================================================
    WITHDRAW HISTORY
-========================= */
+===================================================== */
 
 .withdraw-history {
-    max-height: 300px;
+    max-height: 350px;
 
     overflow-y: auto;
 }
@@ -736,12 +767,10 @@ td small {
 
     gap: 10px;
 
-    padding:
-        13px 0;
+    padding: 13px 0;
 
     border-bottom:
-        1px solid
-        rgba(255,255,255,.06);
+        1px solid rgba(255,255,255,.06);
 }
 
 .withdraw-item strong {
@@ -752,9 +781,43 @@ td small {
     color: #667792;
 }
 
-/* =========================
+.withdraw-status {
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    font-size: 9px;
+
+    font-weight: 900;
+}
+
+.withdraw-status.PENDING {
+    background: rgba(255,180,0,.12);
+
+    color: #ffc94d;
+}
+
+.withdraw-status.PROCESSING {
+    background: rgba(0,170,255,.12);
+
+    color: #4bd7ff;
+}
+
+.withdraw-status.COMPLETED {
+    background: rgba(0,210,120,.12);
+
+    color: #42e5a1;
+}
+
+.withdraw-status.FAILED {
+    background: rgba(255,50,70,.12);
+
+    color: #ff657c;
+}
+
+/* =====================================================
    TOAST
-========================= */
+===================================================== */
 
 .toast {
     position: fixed;
@@ -764,23 +827,19 @@ td small {
 
     z-index: 9999;
 
-    padding:
-        14px 18px;
+    padding: 14px 18px;
 
     border-radius: 13px;
 
     background: #111e33;
 
     border:
-        1px solid
-        #2c4265;
+        1px solid #2c4265;
 
     box-shadow:
-        0 10px 40px
-        rgba(0,0,0,.35);
+        0 10px 40px rgba(0,0,0,.35);
 
-    transform:
-        translateY(100px);
+    transform: translateY(100px);
 
     opacity: 0;
 
@@ -792,21 +851,20 @@ td small {
 }
 
 .toast.show {
-    transform:
-        translateY(0);
+    transform: translateY(0);
 
     opacity: 1;
 }
 
-/* =========================
+/* =====================================================
    RESPONSIVE
-========================= */
+===================================================== */
 
 @media(max-width:1100px) {
 
     .stats {
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(2,1fr);
     }
 
     .grid {
@@ -837,16 +895,8 @@ td small {
         display: none;
     }
 
-    .withdraw-area {
-        flex-direction: column;
-    }
-
-    .withdraw-buttons {
-        flex-wrap: wrap;
-    }
-
-    .withdraw-buttons button {
-        min-width: 45%;
+    .withdraw-methods {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -964,7 +1014,7 @@ td small {
 
         <p>
             Zarządzaj zamówieniami, modelami 3D,
-            saldem i wydrukiem etykiet.
+            saldem, wypłatami i etykietami.
         </p>
 
     </div>
@@ -975,8 +1025,6 @@ td small {
     ================================================= -->
 
     <div class="stats">
-
-        <!-- SALDO -->
 
         <div class="card balance-card">
 
@@ -991,50 +1039,134 @@ td small {
                 0,00 zł
             </div>
 
-            <div class="withdraw-area">
 
-                <input
-                    id="withdrawAmount"
-                    type="number"
-                    min="0.01"
-                    step="0.01"
-                    placeholder="Kwota wypłaty"
+            <!-- WYPŁATA -->
+
+            <div class="withdraw-box">
+
+                <div class="withdraw-title">
+                    💸 Wypłać środki
+                </div>
+
+
+                <div class="withdraw-methods">
+
+                    <button
+                        id="blikMethod"
+                        class="method-button active"
+                        onclick="selectWithdrawMethod('blik')"
+                    >
+                        📱 BLIK
+                    </button>
+
+                    <button
+                        id="bankMethod"
+                        class="method-button"
+                        onclick="selectWithdrawMethod('bank')"
+                    >
+                        🏦 Konto
+                    </button>
+
+                </div>
+
+
+                <div class="withdraw-field">
+
+                    <input
+                        id="withdrawAmount"
+                        type="number"
+                        min="1"
+                        max="100"
+                        step="0.01"
+                        placeholder="Kwota wypłaty"
+                    >
+
+                </div>
+
+
+                <!-- BLIK -->
+
+                <div
+                    id="blikFields"
                 >
 
+                    <div class="withdraw-field">
+
+                        <input
+                            id="blikPhone"
+                            type="tel"
+                            inputmode="numeric"
+                            maxlength="9"
+                            placeholder="Numer telefonu BLIK"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- BANK -->
+
+                <div
+                    id="bankFields"
+                    class="hidden"
+                >
+
+                    <div class="withdraw-field">
+
+                        <input
+                            id="bankAccount"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="Numer konta IBAN"
+                        >
+
+                    </div>
+
+                    <div class="withdraw-field">
+
+                        <input
+                            id="bankName"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="Nazwa odbiorcy"
+                        >
+
+                    </div>
+
+                </div>
+
+
                 <button
-                    class="btn btn-green"
+                    class="btn btn-green withdraw-submit"
                     onclick="withdraw()"
                 >
-                    Wypłać
+                    💸 Zleć wypłatę
                 </button>
 
-            </div>
 
-            <div class="withdraw-buttons">
+                <div class="withdraw-buttons">
 
-                <button
-                    onclick="setWithdrawAmount(20)"
-                >
-                    20 zł
-                </button>
+                    <button onclick="setWithdrawAmount(20)">
+                        20 zł
+                    </button>
 
-                <button
-                    onclick="setWithdrawAmount(50)"
-                >
-                    50 zł
-                </button>
+                    <button onclick="setWithdrawAmount(50)">
+                        50 zł
+                    </button>
 
-                <button
-                    onclick="setWithdrawAmount(100)"
-                >
-                    100 zł
-                </button>
+                    <button onclick="setWithdrawAmount(100)">
+                        100 zł
+                    </button>
 
-            </div>
+                </div>
 
-            <div class="withdraw-info">
-                Maksymalna pojedyncza wypłata:
-                <b>100 zł</b>
+
+                <div class="withdraw-info">
+                    Maksymalna pojedyncza wypłata:
+                    <b>100 zł</b>
+                </div>
+
             </div>
 
         </div>
@@ -1130,25 +1262,15 @@ td small {
 
                         <tr>
 
-                            <th>
-                                ID
-                            </th>
+                            <th>ID</th>
 
-                            <th>
-                                Klient
-                            </th>
+                            <th>Klient</th>
 
-                            <th>
-                                Suma
-                            </th>
+                            <th>Suma</th>
 
-                            <th>
-                                Status
-                            </th>
+                            <th>Status</th>
 
-                            <th>
-                                Akcje
-                            </th>
+                            <th>Akcje</th>
 
                         </tr>
 
@@ -1174,6 +1296,13 @@ td small {
                 <h2>
                     💸 Historia wypłat
                 </h2>
+
+                <button
+                    class="btn btn-dark"
+                    onclick="loadBalance()"
+                >
+                    ↻
+                </button>
 
             </div>
 
@@ -1216,33 +1345,19 @@ td small {
 
                     <tr>
 
-                        <th>
-                            ID
-                        </th>
+                        <th>ID</th>
 
-                        <th>
-                            Klient
-                        </th>
+                        <th>Klient</th>
 
-                        <th>
-                            Materiał
-                        </th>
+                        <th>Materiał</th>
 
-                        <th>
-                            Ilość
-                        </th>
+                        <th>Ilość</th>
 
-                        <th>
-                            Cena
-                        </th>
+                        <th>Cena</th>
 
-                        <th>
-                            Status
-                        </th>
+                        <th>Status</th>
 
-                        <th>
-                            Akcje
-                        </th>
+                        <th>Akcje</th>
 
                     </tr>
 
@@ -1263,10 +1378,6 @@ td small {
 </section>
 
 
-<!-- =====================================================
-     TOAST
-===================================================== -->
-
 <div
     class="toast"
     id="toast"
@@ -1286,9 +1397,11 @@ let token =
 
 let adminData = null;
 
+let withdrawMethod = "blik";
+
 
 /* =====================================================
-   FORMATOWANIE PIENIĘDZY
+   MONEY
 ===================================================== */
 
 function money(value) {
@@ -1314,18 +1427,13 @@ function showToast(message) {
     const toast =
         document.getElementById("toast");
 
-    toast.textContent =
-        message;
+    toast.textContent = message;
 
     toast.classList.add("show");
 
     setTimeout(
-        function() {
-
-            toast.classList.remove(
-                "show"
-            );
-
+        () => {
+            toast.classList.remove("show");
         },
         3000
     );
@@ -1340,31 +1448,25 @@ function showToast(message) {
 async function loginAdmin() {
 
     const login =
-        document
-            .getElementById("login")
+        document.getElementById("login")
             .value
             .trim();
 
     const password =
-        document
-            .getElementById("password")
+        document.getElementById("password")
             .value;
 
     const error =
-        document.getElementById(
-            "loginError"
-        );
+        document.getElementById("loginError");
 
-    error.style.display =
-        "none";
+    error.style.display = "none";
 
     if (!login || !password) {
 
         error.textContent =
             "Wpisz login i hasło.";
 
-        error.style.display =
-            "block";
+        error.style.display = "block";
 
         return;
     }
@@ -1399,14 +1501,12 @@ async function loginAdmin() {
                 data.error ||
                 "Nieprawidłowy login lub hasło.";
 
-            error.style.display =
-                "block";
+            error.style.display = "block";
 
             return;
         }
 
-        token =
-            data.token;
+        token = data.token;
 
         localStorage.setItem(
             "printerlase3d_admin_token",
@@ -1415,31 +1515,16 @@ async function loginAdmin() {
 
         showDashboard();
 
-    } catch(error) {
+    } catch (err) {
 
-        console.error(error);
+        error.textContent =
+            "Nie można połączyć się z serwerem.";
 
-        errorElement(
-            "Nie można połączyć się z serwerem."
-        );
+        error.style.display = "block";
+
+        console.error(err);
 
     }
-
-}
-
-
-function errorElement(message) {
-
-    const error =
-        document.getElementById(
-            "loginError"
-        );
-
-    error.textContent =
-        message;
-
-    error.style.display =
-        "block";
 
 }
 
@@ -1452,13 +1537,11 @@ function showDashboard() {
 
     document.getElementById(
         "loginScreen"
-    ).style.display =
-        "none";
+    ).style.display = "none";
 
     document.getElementById(
         "dashboard"
-    ).style.display =
-        "block";
+    ).style.display = "block";
 
     loadData();
 
@@ -1492,9 +1575,7 @@ async function apiFetch(
             options
         );
 
-    if (
-        response.status === 401
-    ) {
+    if (response.status === 401) {
 
         localStorage.removeItem(
             "printerlase3d_admin_token"
@@ -1504,21 +1585,26 @@ async function apiFetch(
 
         document.getElementById(
             "dashboard"
-        ).style.display =
-            "none";
+        ).style.display = "none";
 
         document.getElementById(
             "loginScreen"
-        ).style.display =
-            "flex";
+        ).style.display = "flex";
 
         throw new Error(
-            "Sesja wygasła. Zaloguj się ponownie."
+            "Sesja wygasła."
         );
     }
 
-    const data =
-        await response.json();
+    let data;
+
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error(
+            "Serwer zwrócił nieprawidłową odpowiedź."
+        );
+    }
 
     return data;
 
@@ -1526,7 +1612,7 @@ async function apiFetch(
 
 
 /* =====================================================
-   ŁADOWANIE DANYCH
+   LOAD DATA
 ===================================================== */
 
 async function loadData() {
@@ -1550,8 +1636,7 @@ async function loadData() {
             );
         }
 
-        adminData =
-            data;
+        adminData = data;
 
         document.getElementById(
             "ordersCount"
@@ -1580,7 +1665,7 @@ async function loadData() {
 
         await loadBalance();
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(error);
 
@@ -1594,7 +1679,7 @@ async function loadData() {
 
 
 /* =====================================================
-   SALDO
+   BALANCE
 ===================================================== */
 
 async function loadBalance() {
@@ -1623,7 +1708,7 @@ async function loadBalance() {
             data.withdrawals || []
         );
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(
             "Balance error:",
@@ -1636,32 +1721,81 @@ async function loadBalance() {
 
 
 /* =====================================================
-   SZYBKA KWOTA WYPŁATY
+   WITHDRAW METHOD
+===================================================== */
+
+function selectWithdrawMethod(method) {
+
+    withdrawMethod = method;
+
+    const blik =
+        document.getElementById(
+            "blikMethod"
+        );
+
+    const bank =
+        document.getElementById(
+            "bankMethod"
+        );
+
+    const blikFields =
+        document.getElementById(
+            "blikFields"
+        );
+
+    const bankFields =
+        document.getElementById(
+            "bankFields"
+        );
+
+    blik.classList.toggle(
+        "active",
+        method === "blik"
+    );
+
+    bank.classList.toggle(
+        "active",
+        method === "bank"
+    );
+
+    blikFields.classList.toggle(
+        "hidden",
+        method !== "blik"
+    );
+
+    bankFields.classList.toggle(
+        "hidden",
+        method !== "bank"
+    );
+
+}
+
+
+/* =====================================================
+   QUICK AMOUNT
 ===================================================== */
 
 function setWithdrawAmount(amount) {
 
     document.getElementById(
         "withdrawAmount"
-    ).value =
-        amount;
+    ).value = amount;
 
 }
 
 
 /* =====================================================
-   WYPŁATA
+   REAL WITHDRAW REQUEST
 ===================================================== */
 
 async function withdraw() {
 
-    const input =
-        document.getElementById(
-            "withdrawAmount"
-        );
-
     const amount =
-        Number(input.value);
+        Number(
+            document.getElementById(
+                "withdrawAmount"
+            ).value
+        );
 
     if (
         !Number.isFinite(amount) ||
@@ -1678,21 +1812,108 @@ async function withdraw() {
     if (amount > 100) {
 
         showToast(
-            "Jedna wypłata może wynosić maksymalnie 100 zł."
+            "Maksymalna pojedyncza wypłata to 100 zł."
         );
 
         return;
     }
 
+
+    const payload = {
+        amount,
+        method: withdrawMethod
+    };
+
+
+    /* ===============================
+       BLIK
+    =============================== */
+
+    if (withdrawMethod === "blik") {
+
+        const phone =
+            document.getElementById(
+                "blikPhone"
+            ).value
+            .replace(/\D/g, "");
+
+        if (!/^[0-9]{9}$/.test(phone)) {
+
+            showToast(
+                "Podaj prawidłowy numer telefonu."
+            );
+
+            return;
+        }
+
+        payload.phone = phone;
+
+    }
+
+
+    /* ===============================
+       BANK
+    =============================== */
+
+    if (withdrawMethod === "bank") {
+
+        let account =
+            document.getElementById(
+                "bankAccount"
+            ).value
+            .replace(/\s/g, "")
+            .toUpperCase();
+
+        const name =
+            document.getElementById(
+                "bankName"
+            ).value
+            .trim();
+
+        if (
+            !/^[A-Z]{2}[0-9]{26}$/.test(
+                account
+            )
+        ) {
+
+            showToast(
+                "Podaj prawidłowy numer IBAN."
+            );
+
+            return;
+        }
+
+        if (!name) {
+
+            showToast(
+                "Podaj nazwę odbiorcy."
+            );
+
+            return;
+        }
+
+        payload.account = account;
+
+        payload.name = name;
+
+    }
+
+
+    const methodName =
+        withdrawMethod === "blik"
+            ? "BLIK"
+            : "konto bankowe";
+
+
     if (
         !confirm(
-            "Wypłacić " +
-            money(amount) +
-            "?"
+            `Zlecić wypłatę ${money(amount)} przez ${methodName}?`
         )
     ) {
+
         return;
     }
+
 
     try {
 
@@ -1703,34 +1924,52 @@ async function withdraw() {
                     method: "POST",
 
                     body:
-                        JSON.stringify({
-                            amount
-                        })
+                        JSON.stringify(
+                            payload
+                        )
                 }
             );
+
 
         if (!data.success) {
 
             showToast(
                 data.error ||
-                "Nie udało się wykonać wypłaty."
+                "Nie udało się zlecić wypłaty."
             );
 
             return;
         }
 
-        input.value =
-            "";
+
+        document.getElementById(
+            "withdrawAmount"
+        ).value = "";
+
+        document.getElementById(
+            "blikPhone"
+        ).value = "";
+
+        document.getElementById(
+            "bankAccount"
+        ).value = "";
+
+        document.getElementById(
+            "bankName"
+        ).value = "";
+
 
         showToast(
-            "Wypłacono " +
-            money(amount) +
-            " 💸"
+            "Wypłata została zlecona 💸"
         );
+
 
         await loadBalance();
 
-    } catch(error) {
+
+    } catch (error) {
+
+        console.error(error);
 
         showToast(
             error.message
@@ -1742,7 +1981,7 @@ async function withdraw() {
 
 
 /* =====================================================
-   ZAMÓWIENIA
+   ORDERS
 ===================================================== */
 
 function renderOrders(orders) {
@@ -1756,10 +1995,7 @@ function renderOrders(orders) {
 
         table.innerHTML = `
             <tr>
-                <td
-                    colspan="5"
-                    class="empty"
-                >
+                <td colspan="5" class="empty">
                     📦 Brak zamówień.
                 </td>
             </tr>
@@ -1768,18 +2004,15 @@ function renderOrders(orders) {
         return;
     }
 
+
     table.innerHTML =
         orders.map(
-            function(order) {
-
-                return `
+            order => `
 
 <tr>
 
 <td>
-    <b>
-        ${escapeHTML(order.id)}
-    </b>
+    <b>${escapeHTML(order.id)}</b>
 </td>
 
 <td>
@@ -1797,11 +2030,11 @@ function renderOrders(orders) {
     ${
         order.phone
             ? `
-            <br>
-            <small>
-                📞 ${escapeHTML(order.phone)}
-            </small>
-            `
+                <br>
+                <small>
+                    📞 ${escapeHTML(order.phone)}
+                </small>
+              `
             : ""
     }
 
@@ -1815,11 +2048,9 @@ function renderOrders(orders) {
 
 <td>
 
-    <span
-        class="status ${escapeHTML(order.status)}"
-    >
-        ${escapeHTML(order.status)}
-    </span>
+<span class="status ${escapeHTML(order.status)}">
+    ${escapeHTML(order.status)}
+</span>
 
 </td>
 
@@ -1829,58 +2060,35 @@ function renderOrders(orders) {
 
 <button
     class="small-btn print"
-    onclick="
-        printOrderLabel(
-            '${escapeJS(order.id)}'
-        )
-    "
+    onclick="printOrderLabel('${escapeJS(order.id)}')"
 >
     🖨️ Etykieta
 </button>
 
 <button
     class="small-btn"
-    onclick="
-        changeOrderStatus(
-            '${escapeJS(order.id)}',
-            'IN_PROGRESS'
-        )
-    "
+    onclick="changeOrderStatus('${escapeJS(order.id)}','IN_PROGRESS')"
 >
     🔧 Realizacja
 </button>
 
 <button
     class="small-btn"
-    onclick="
-        changeOrderStatus(
-            '${escapeJS(order.id)}',
-            'READY'
-        )
-    "
+    onclick="changeOrderStatus('${escapeJS(order.id)}','READY')"
 >
     ✅ Gotowe
 </button>
 
 <button
     class="small-btn"
-    onclick="
-        changeOrderStatus(
-            '${escapeJS(order.id)}',
-            'COMPLETED'
-        )
-    "
+    onclick="changeOrderStatus('${escapeJS(order.id)}','COMPLETED')"
 >
     ✓
 </button>
 
 <button
     class="small-btn delete"
-    onclick="
-        deleteOrder(
-            '${escapeJS(order.id)}'
-        )
-    "
+    onclick="deleteOrder('${escapeJS(order.id)}')"
 >
     🗑️
 </button>
@@ -1891,16 +2099,14 @@ function renderOrders(orders) {
 
 </tr>
 
-`;
-
-            }
+`
         ).join("");
 
 }
 
 
 /* =====================================================
-   MODELE
+   MODELS
 ===================================================== */
 
 function renderModels(models) {
@@ -1914,10 +2120,7 @@ function renderModels(models) {
 
         table.innerHTML = `
             <tr>
-                <td
-                    colspan="7"
-                    class="empty"
-                >
+                <td colspan="7" class="empty">
                     🖨️ Brak zamówień modeli.
                 </td>
             </tr>
@@ -1926,18 +2129,15 @@ function renderModels(models) {
         return;
     }
 
+
     table.innerHTML =
         models.map(
-            function(model) {
-
-                return `
+            model => `
 
 <tr>
 
 <td>
-    <b>
-        ${escapeHTML(model.id)}
-    </b>
+    <b>${escapeHTML(model.id)}</b>
 </td>
 
 <td>
@@ -1968,9 +2168,7 @@ function renderModels(models) {
 
 <td>
 
-<span
-    class="status ${escapeHTML(model.status)}"
->
+<span class="status ${escapeHTML(model.status)}">
     ${escapeHTML(model.status)}
 </span>
 
@@ -1982,35 +2180,21 @@ function renderModels(models) {
 
 <button
     class="small-btn"
-    onclick="
-        changeModelStatus(
-            '${escapeJS(model.id)}',
-            'IN_PROGRESS'
-        )
-    "
+    onclick="changeModelStatus('${escapeJS(model.id)}','IN_PROGRESS')"
 >
     🔧 Realizacja
 </button>
 
 <button
     class="small-btn"
-    onclick="
-        changeModelStatus(
-            '${escapeJS(model.id)}',
-            'READY'
-        )
-    "
+    onclick="changeModelStatus('${escapeJS(model.id)}','READY')"
 >
     ✅ Gotowe
 </button>
 
 <button
     class="small-btn delete"
-    onclick="
-        deleteModel(
-            '${escapeJS(model.id)}'
-        )
-    "
+    onclick="deleteModel('${escapeJS(model.id)}')"
 >
     🗑️
 </button>
@@ -2021,21 +2205,17 @@ function renderModels(models) {
 
 </tr>
 
-`;
-
-            }
+`
         ).join("");
 
 }
 
 
 /* =====================================================
-   HISTORIA WYPŁAT
+   WITHDRAW HISTORY
 ===================================================== */
 
-function renderWithdrawals(
-    withdrawals
-) {
+function renderWithdrawals(withdrawals) {
 
     const box =
         document.getElementById(
@@ -2053,9 +2233,21 @@ function renderWithdrawals(
         return;
     }
 
+
     box.innerHTML =
         withdrawals.map(
-            function(item) {
+            item => {
+
+                const method =
+                    item.method === "blik"
+                        ? "📱 BLIK"
+                        : "🏦 Konto";
+
+                const status =
+                    escapeHTML(
+                        item.status ||
+                        "PENDING"
+                    );
 
                 return `
 
@@ -2070,13 +2262,23 @@ function renderWithdrawals(
 <br>
 
 <small>
+    ${method}
+</small>
+
+<br>
+
+<small>
     ${formatDate(item.createdAt)}
 </small>
 
 </div>
 
 <div>
-    💸 Wypłata
+
+<span class="withdraw-status ${status}">
+    ${status}
+</span>
+
 </div>
 
 </div>
@@ -2090,7 +2292,7 @@ function renderWithdrawals(
 
 
 /* =====================================================
-   ZMIANA STATUSU ZAMÓWIENIA
+   ORDER STATUS
 ===================================================== */
 
 async function changeOrderStatus(
@@ -2131,7 +2333,7 @@ async function changeOrderStatus(
 
         await loadData();
 
-    } catch(error) {
+    } catch (error) {
 
         showToast(
             error.message
@@ -2143,7 +2345,7 @@ async function changeOrderStatus(
 
 
 /* =====================================================
-   ZMIANA STATUSU MODELU
+   MODEL STATUS
 ===================================================== */
 
 async function changeModelStatus(
@@ -2184,7 +2386,7 @@ async function changeModelStatus(
 
         await loadData();
 
-    } catch(error) {
+    } catch (error) {
 
         showToast(
             error.message
@@ -2196,7 +2398,7 @@ async function changeModelStatus(
 
 
 /* =====================================================
-   USUWANIE ZAMÓWIENIA
+   DELETE ORDER
 ===================================================== */
 
 async function deleteOrder(id) {
@@ -2206,6 +2408,7 @@ async function deleteOrder(id) {
             "Na pewno usunąć to zamówienie?"
         )
     ) {
+
         return;
     }
 
@@ -2236,7 +2439,7 @@ async function deleteOrder(id) {
 
         await loadData();
 
-    } catch(error) {
+    } catch (error) {
 
         showToast(
             error.message
@@ -2248,7 +2451,7 @@ async function deleteOrder(id) {
 
 
 /* =====================================================
-   USUWANIE MODELU
+   DELETE MODEL
 ===================================================== */
 
 async function deleteModel(id) {
@@ -2258,6 +2461,7 @@ async function deleteModel(id) {
             "Na pewno usunąć ten model?"
         )
     ) {
+
         return;
     }
 
@@ -2288,7 +2492,7 @@ async function deleteModel(id) {
 
         await loadData();
 
-    } catch(error) {
+    } catch (error) {
 
         showToast(
             error.message
@@ -2300,18 +2504,14 @@ async function deleteModel(id) {
 
 
 /* =====================================================
-   🖨️ WYDRUK ETYKIETY
+   PRINT LABEL
 ===================================================== */
 
-function printOrderLabel(
-    orderId
-) {
+function printOrderLabel(orderId) {
 
     if (
         !adminData ||
-        !Array.isArray(
-            adminData.orders
-        )
+        !Array.isArray(adminData.orders)
     ) {
 
         showToast(
@@ -2321,17 +2521,14 @@ function printOrderLabel(
         return;
     }
 
+
     const order =
         adminData.orders.find(
-            function(item) {
-
-                return (
-                    String(item.id) ===
-                    String(orderId)
-                );
-
-            }
+            item =>
+                String(item.id) ===
+                String(orderId)
         );
+
 
     if (!order) {
 
@@ -2342,18 +2539,17 @@ function printOrderLabel(
         return;
     }
 
+
     const items =
         Array.isArray(order.items)
             ? order.items
             : [];
 
+
     const productsHTML =
         items.length
-
             ? items.map(
-                function(item) {
-
-                    return `
+                item => `
 
 <div class="product">
 
@@ -2375,11 +2571,8 @@ function printOrderLabel(
 
 </div>
 
-`;
-
-                }
+`
             ).join("")
-
             : `
                 <div class="product">
                     Brak produktów
@@ -2393,6 +2586,7 @@ function printOrderLabel(
             "_blank",
             "width=900,height=1100"
         );
+
 
     if (!labelWindow) {
 
@@ -2421,28 +2615,21 @@ Printerlase3D — ${escapeHTML(order.id)}
 <style>
 
 @page {
-
     size: 100mm 150mm;
-
     margin: 0;
-
 }
 
 * {
-
     box-sizing: border-box;
-
 }
 
 html,
 body {
 
     width: 100mm;
-
     height: 150mm;
 
     margin: 0;
-
     padding: 0;
 
     font-family:
@@ -2453,13 +2640,11 @@ body {
     color: #000;
 
     background: #fff;
-
 }
 
 .label {
 
     width: 100mm;
-
     height: 150mm;
 
     padding: 7mm;
@@ -2467,7 +2652,6 @@ body {
     display: flex;
 
     flex-direction: column;
-
 }
 
 .logo {
@@ -2482,7 +2666,6 @@ body {
 
     border-bottom:
         2px solid #000;
-
 }
 
 .shop {
@@ -2492,7 +2675,6 @@ body {
     font-size: 10px;
 
     margin-top: 2mm;
-
 }
 
 .order {
@@ -2505,7 +2687,6 @@ body {
         2px solid #000;
 
     border-radius: 3mm;
-
 }
 
 .order-title {
@@ -2515,7 +2696,6 @@ body {
     font-weight: 800;
 
     text-transform: uppercase;
-
 }
 
 .order-id {
@@ -2527,7 +2707,6 @@ body {
     margin-top: 1mm;
 
     word-break: break-all;
-
 }
 
 .info {
@@ -2537,19 +2716,14 @@ body {
     font-size: 11px;
 
     line-height: 1.45;
-
 }
 
 .info strong {
-
     font-size: 13px;
-
 }
 
 .section {
-
     margin-top: 4mm;
-
 }
 
 .section-title {
@@ -2566,7 +2740,6 @@ body {
     padding-bottom: 1mm;
 
     margin-bottom: 2mm;
-
 }
 
 .product {
@@ -2585,7 +2758,6 @@ body {
 
     border-bottom:
         1px dashed #999;
-
 }
 
 .product div {
@@ -2593,7 +2765,6 @@ body {
     display: flex;
 
     gap: 2mm;
-
 }
 
 .total {
@@ -2613,7 +2784,6 @@ body {
     font-size: 15px;
 
     font-weight: 950;
-
 }
 
 .status {
@@ -2630,7 +2800,6 @@ body {
         1px solid #000;
 
     padding: 2mm;
-
 }
 
 .note {
@@ -2643,7 +2812,6 @@ body {
         1px solid #aaa;
 
     font-size: 9px;
-
 }
 
 .footer {
@@ -2658,27 +2826,6 @@ body {
         1px solid #000;
 
     padding-top: 3mm;
-
-}
-
-@media print {
-
-    html,
-    body {
-
-        width: 100mm;
-
-        height: 150mm;
-
-    }
-
-    .label {
-
-        page-break-after:
-            avoid;
-
-    }
-
 }
 
 </style>
@@ -2689,144 +2836,126 @@ body {
 
 <div class="label">
 
-    <div class="logo">
-        PRINTERLASE3D
+<div class="logo">
+    PRINTERLASE3D
+</div>
+
+<div class="shop">
+    Druk 3D • Zamówienie online
+</div>
+
+<div class="order">
+
+    <div class="order-title">
+        Numer zamówienia
     </div>
 
-    <div class="shop">
-        Druk 3D • Zamówienie online
-    </div>
-
-
-    <div class="order">
-
-        <div class="order-title">
-            Numer zamówienia
-        </div>
-
-        <div class="order-id">
-            ${escapeHTML(order.id)}
-        </div>
-
-    </div>
-
-
-    <div class="info">
-
-        <strong>
-            ${escapeHTML(order.name)}
-        </strong>
-
-        <br>
-
-        📧
-        ${escapeHTML(order.email)}
-
-        ${
-            order.phone
-                ? `
-                    <br>
-                    📞
-                    ${escapeHTML(order.phone)}
-                  `
-                : ""
-        }
-
-        ${
-            order.address
-                ? `
-                    <br>
-                    📍
-                    ${escapeHTML(order.address)}
-                  `
-                : ""
-        }
-
-        <br>
-
-        🚚
-        ${escapeHTML(
-            order.delivery ||
-            "Dostawa"
-        )}
-
-    </div>
-
-
-    <div class="section">
-
-        <div class="section-title">
-            Produkty
-        </div>
-
-        ${productsHTML}
-
-    </div>
-
-
-    <div class="total">
-
-        <span>
-            RAZEM
-        </span>
-
-        <span>
-            ${money(order.total)}
-        </span>
-
-    </div>
-
-
-    <div class="status">
-
-        STATUS:
-        ${escapeHTML(
-            order.status
-        )}
-
-    </div>
-
-
-    ${
-        order.note
-            ? `
-                <div class="note">
-
-                    <strong>
-                        Uwagi:
-                    </strong>
-
-                    <br>
-
-                    ${escapeHTML(
-                        order.note
-                    )}
-
-                </div>
-              `
-            : ""
-    }
-
-
-    <div class="footer">
-
-        Printerlase3D
-
-        <br>
-
-        Zamówienie:
+    <div class="order-id">
         ${escapeHTML(order.id)}
-
-        <br>
-
-        ${formatDate(
-            order.createdAt
-        )}
-
     </div>
 
 </div>
 
+<div class="info">
+
+    <strong>
+        ${escapeHTML(order.name)}
+    </strong>
+
+    <br>
+
+    📧 ${escapeHTML(order.email)}
+
+    ${
+        order.phone
+            ? `
+                <br>
+                📞 ${escapeHTML(order.phone)}
+              `
+            : ""
+    }
+
+    ${
+        order.address
+            ? `
+                <br>
+                📍 ${escapeHTML(order.address)}
+              `
+            : ""
+    }
+
+    <br>
+
+    🚚 ${escapeHTML(
+        order.delivery ||
+        "Dostawa"
+    )}
+
+</div>
+
+<div class="section">
+
+    <div class="section-title">
+        Produkty
+    </div>
+
+    ${productsHTML}
+
+</div>
+
+<div class="total">
+
+    <span>
+        RAZEM
+    </span>
+
+    <span>
+        ${money(order.total)}
+    </span>
+
+</div>
+
+<div class="status">
+
+    STATUS:
+    ${escapeHTML(order.status)}
+
+</div>
+
+${
+    order.note
+        ? `
+            <div class="note">
+
+                <strong>
+                    Uwagi:
+                </strong>
+
+                <br>
+
+                ${escapeHTML(order.note)}
+
+            </div>
+          `
+        : ""
+}
+
+<div class="footer">
+
+    Printerlase3D
+
+    <br>
+
+    Zamówienie:
+    ${escapeHTML(order.id)}
+
+    <br>
+
+    ${formatDate(order.createdAt)}
+
+</div>
+
+</div>
 
 <script>
 
@@ -2834,9 +2963,7 @@ window.onload = function() {
 
     setTimeout(
         function() {
-
             window.print();
-
         },
         400
     );
@@ -2847,9 +2974,7 @@ window.onafterprint = function() {
 
     setTimeout(
         function() {
-
             window.close();
-
         },
         300
     );
@@ -2870,7 +2995,7 @@ window.onafterprint = function() {
 
 
 /* =====================================================
-   DATA
+   DATE
 ===================================================== */
 
 function formatDate(date) {
@@ -2887,6 +3012,7 @@ function formatDate(date) {
             parsed.getTime()
         )
     ) {
+
         return "-";
     }
 
@@ -2906,26 +3032,11 @@ function escapeHTML(value) {
     return String(
         value ?? ""
     )
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 
 }
 
@@ -2935,20 +3046,14 @@ function escapeJS(value) {
     return String(
         value ?? ""
     )
-        .replaceAll(
-            "\\",
-            "\\\\"
-        )
-        .replaceAll(
-            "'",
-            "\\'"
-        );
+    .replaceAll("\\", "\\\\")
+    .replaceAll("'", "\\'");
 
 }
 
 
 /* =====================================================
-   ENTER = LOGIN
+   ENTER LOGIN
 ===================================================== */
 
 document.addEventListener(
@@ -3010,8 +3115,7 @@ setInterval(
 
 async function logout() {
 
-    const oldToken =
-        token;
+    const oldToken = token;
 
     token = null;
 
@@ -3038,7 +3142,7 @@ async function logout() {
 
         }
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(error);
 
