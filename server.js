@@ -10,24 +10,32 @@ const app = express();
    KONFIGURACJA
 ========================================================= */
 
-const PORT = process.env.PORT || 10000;
+const PORT = Number(process.env.PORT) || 10000;
 
 const BASE_URL = (
     process.env.BASE_URL ||
     "https://printerlase3d32.onrender.com"
-).replace(/\/+$/, "");
+).trim().replace(/\/+$/, "");
 
 const STRIPE_SECRET_KEY =
-    process.env.STRIPE_SECRET_KEY || "";
+    String(
+        process.env.STRIPE_SECRET_KEY || ""
+    ).trim();
 
 const STRIPE_WEBHOOK_SECRET =
-    process.env.STRIPE_WEBHOOK_SECRET || "";
+    String(
+        process.env.STRIPE_WEBHOOK_SECRET || ""
+    ).trim();
 
 const ADMIN_LOGIN =
-    process.env.ADMIN_LOGIN || "admin";
+    String(
+        process.env.ADMIN_LOGIN || "admin"
+    );
 
 const ADMIN_PASSWORD =
-    process.env.ADMIN_PASSWORD || "Admin2137!";
+    String(
+        process.env.ADMIN_PASSWORD || "Admin2137!"
+    );
 
 
 /* =========================================================
@@ -37,13 +45,25 @@ const ADMIN_PASSWORD =
 let stripe = null;
 
 if (STRIPE_SECRET_KEY) {
-    stripe = new Stripe(STRIPE_SECRET_KEY);
-    console.log("[STRIPE] API KEY: OK");
+    stripe = new Stripe(
+        STRIPE_SECRET_KEY
+    );
+
+    console.log(
+        "[STRIPE] API KEY: OK"
+    );
 } else {
     console.error(
         "[STRIPE] BRAK STRIPE_SECRET_KEY"
     );
 }
+
+console.log(
+    "[WEBHOOK SECRET]:",
+    STRIPE_WEBHOOK_SECRET
+        ? "JEST"
+        : "BRAK"
+);
 
 
 /* =========================================================
@@ -51,28 +71,49 @@ if (STRIPE_SECRET_KEY) {
 ========================================================= */
 
 const DATA_DIR =
-    path.join(__dirname, "data");
+    path.join(
+        __dirname,
+        "data"
+    );
 
 const ORDERS_FILE =
-    path.join(DATA_DIR, "orders.json");
+    path.join(
+        DATA_DIR,
+        "orders.json"
+    );
 
 const TOKENS_FILE =
-    path.join(DATA_DIR, "tokens.json");
+    path.join(
+        DATA_DIR,
+        "tokens.json"
+    );
 
 const MODELS_FILE =
-    path.join(DATA_DIR, "custom-models.json");
+    path.join(
+        DATA_DIR,
+        "custom-models.json"
+    );
 
 const BALANCE_FILE =
-    path.join(DATA_DIR, "balance.json");
+    path.join(
+        DATA_DIR,
+        "balance.json"
+    );
 
 const WITHDRAWALS_FILE =
-    path.join(DATA_DIR, "withdrawals.json");
+    path.join(
+        DATA_DIR,
+        "withdrawals.json"
+    );
 
 
 if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, {
-        recursive: true
-    });
+    fs.mkdirSync(
+        DATA_DIR,
+        {
+            recursive: true
+        }
+    );
 }
 
 
@@ -80,19 +121,37 @@ if (!fs.existsSync(DATA_DIR)) {
    TWORZENIE PLIKÓW
 ========================================================= */
 
-function createFile(file, data) {
+function createFile(
+    file,
+    data
+) {
     if (!fs.existsSync(file)) {
         fs.writeFileSync(
             file,
-            JSON.stringify(data, null, 2),
+            JSON.stringify(
+                data,
+                null,
+                2
+            ),
             "utf8"
         );
     }
 }
 
-createFile(ORDERS_FILE, []);
-createFile(TOKENS_FILE, []);
-createFile(MODELS_FILE, []);
+createFile(
+    ORDERS_FILE,
+    []
+);
+
+createFile(
+    TOKENS_FILE,
+    []
+);
+
+createFile(
+    MODELS_FILE,
+    []
+);
 
 createFile(
     BALANCE_FILE,
@@ -112,7 +171,10 @@ createFile(
    JSON
 ========================================================= */
 
-function readJSON(file, fallback) {
+function readJSON(
+    file,
+    fallback
+) {
     try {
         if (!fs.existsSync(file)) {
             return fallback;
@@ -128,7 +190,10 @@ function readJSON(file, fallback) {
             return fallback;
         }
 
-        return JSON.parse(text);
+        const data =
+            JSON.parse(text);
+
+        return data;
 
     } catch (error) {
 
@@ -143,8 +208,10 @@ function readJSON(file, fallback) {
 }
 
 
-function writeJSON(file, data) {
-
+function writeJSON(
+    file,
+    data
+) {
     fs.writeFileSync(
         file,
         JSON.stringify(
@@ -154,18 +221,18 @@ function writeJSON(file, data) {
         ),
         "utf8"
     );
-
 }
 
 
 /* =========================================================
-   HELPER: ID
+   ID
 ========================================================= */
 
-function generateId(prefix) {
-
+function generateId(
+    prefix
+) {
     return (
-        prefix +
+        String(prefix) +
         "-" +
         Date.now()
             .toString(36)
@@ -176,22 +243,18 @@ function generateId(prefix) {
             .toString("hex")
             .toUpperCase()
     );
-
 }
 
 
 /* =========================================================
-   HELPER: TOKEN
+   TOKEN
 ========================================================= */
 
 function generateToken() {
-
     return crypto
         .randomBytes(32)
         .toString("hex");
-
 }
-
 
 function getToken(req) {
 
@@ -207,32 +270,67 @@ function getToken(req) {
     }
 
     return auth.substring(7);
+}
 
+function requireAdmin(
+    req,
+    res,
+    next
+) {
+
+    const token =
+        getToken(req);
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            error: "Brak autoryzacji."
+        });
+    }
+
+    const tokens =
+        readJSON(
+            TOKENS_FILE,
+            []
+        );
+
+    const session =
+        tokens.find(
+            item =>
+                item.token === token
+        );
+
+    if (!session) {
+        return res.status(401).json({
+            success: false,
+            error: "Sesja wygasła."
+        });
+    }
+
+    next();
 }
 
 
 /* =========================================================
-   HELPER: MONEY
+   MONEY
 ========================================================= */
 
 function parseMoney(value) {
 
     if (
-        typeof value === "number"
+        typeof value ===
+        "number"
     ) {
-
         return Number.isFinite(value)
             ? value
             : NaN;
-
     }
 
     if (
-        typeof value !== "string"
+        typeof value !==
+        "string"
     ) {
-
         return NaN;
-
     }
 
     let text =
@@ -246,20 +344,16 @@ function parseMoney(value) {
         text.includes(",") &&
         text.includes(".")
     ) {
-
         text =
             text
                 .replace(/\./g, "")
                 .replace(",", ".");
-
     } else {
-
         text =
             text.replace(
                 ",",
                 "."
             );
-
     }
 
     const number =
@@ -268,12 +362,11 @@ function parseMoney(value) {
     return Number.isFinite(number)
         ? number
         : NaN;
-
 }
 
 
 /* =========================================================
-   BALANCE
+   SALDO
 ========================================================= */
 
 function getBalanceData() {
@@ -288,7 +381,6 @@ function getBalanceData() {
         );
 
     return {
-
         balance:
             Math.max(
                 0,
@@ -304,13 +396,13 @@ function getBalanceData() {
                     data.totalRevenue || 0
                 )
             )
-
     };
-
 }
 
 
-function saveBalanceData(data) {
+function saveBalanceData(
+    data
+) {
 
     let balance =
         Number(
@@ -329,44 +421,39 @@ function saveBalanceData(data) {
     }
 
     if (
-        !Number.isFinite(totalRevenue)
+        !Number.isFinite(
+            totalRevenue
+        )
     ) {
         totalRevenue = 0;
     }
 
-    balance =
-        Math.max(
-            0,
-            balance
-        );
-
-    totalRevenue =
-        Math.max(
-            0,
-            totalRevenue
-        );
-
     writeJSON(
         BALANCE_FILE,
         {
-
             balance:
                 Number(
-                    balance.toFixed(2)
+                    Math.max(
+                        0,
+                        balance
+                    ).toFixed(2)
                 ),
 
             totalRevenue:
                 Number(
-                    totalRevenue.toFixed(2)
+                    Math.max(
+                        0,
+                        totalRevenue
+                    ).toFixed(2)
                 )
-
         }
     );
-
 }
 
 
-function addMoney(amount) {
+function addMoney(
+    amount
+) {
 
     const value =
         Number(amount);
@@ -375,9 +462,7 @@ function addMoney(amount) {
         !Number.isFinite(value) ||
         value <= 0
     ) {
-
         return getBalanceData();
-
     }
 
     const data =
@@ -386,16 +471,18 @@ function addMoney(amount) {
     data.balance += value;
     data.totalRevenue += value;
 
-    saveBalanceData(data);
+    saveBalanceData(
+        data
+    );
 
     return getBalanceData();
-
 }
 
 
 /* =========================================================
-   STRIPE WEBHOOK
-   MUSI BYĆ PRZED express.json()
+   WEBHOOK
+   WAŻNE:
+   webhook przed express.json()
 ========================================================= */
 
 app.post(
@@ -406,25 +493,30 @@ app.post(
     (req, res) => {
 
         console.log(
-            "[WEBHOOK] Otrzymano żądanie"
+            "[WEBHOOK] Otrzymano request"
         );
 
+
         if (!stripe) {
+
+            console.error(
+                "[WEBHOOK] Stripe nie skonfigurowany"
+            );
 
             return res
                 .status(500)
                 .send(
                     "Stripe not configured"
                 );
-
         }
+
 
         if (
             !STRIPE_WEBHOOK_SECRET
         ) {
 
             console.error(
-                "[WEBHOOK] Brak STRIPE_WEBHOOK_SECRET"
+                "[WEBHOOK] BRAK STRIPE_WEBHOOK_SECRET"
             );
 
             return res
@@ -432,25 +524,31 @@ app.post(
                 .send(
                     "Webhook secret missing"
                 );
-
         }
+
 
         const signature =
             req.headers[
                 "stripe-signature"
             ];
 
+
         if (!signature) {
+
+            console.error(
+                "[WEBHOOK] Brak stripe-signature"
+            );
 
             return res
                 .status(400)
                 .send(
                     "Missing stripe-signature"
                 );
-
         }
 
+
         let event;
+
 
         try {
 
@@ -473,21 +571,20 @@ app.post(
                 .send(
                     "Invalid webhook signature"
                 );
-
         }
 
 
         console.log(
-            "[WEBHOOK] Event:",
+            "[WEBHOOK EVENT]",
             event.type
         );
 
 
         try {
 
-            /* ==========================================
-               CHECKOUT COMPLETED
-            ========================================== */
+            /* -----------------------------------------
+               checkout.session.completed
+            ----------------------------------------- */
 
             if (
                 event.type ===
@@ -506,17 +603,17 @@ app.post(
                     session.id
                 );
 
+                console.log(
+                    "[WEBHOOK] Order:",
+                    orderId || "BRAK"
+                );
+
 
                 if (!orderId) {
-
-                    console.log(
-                        "[WEBHOOK] Brak orderId"
-                    );
 
                     return res.json({
                         received: true
                     });
-
                 }
 
 
@@ -549,13 +646,12 @@ app.post(
                     return res.json({
                         received: true
                     });
-
                 }
 
 
                 /*
                  * Zabezpieczenie przed
-                 * podwójnym naliczeniem.
+                 * podwójnym zaksięgowaniem.
                  */
 
                 if (
@@ -587,16 +683,9 @@ app.post(
                     );
 
 
-                    /*
-                     * Dodajemy pieniądze
-                     * dopiero po potwierdzeniu
-                     * płatności.
-                     */
-
-                    const balance =
-                        addMoney(
-                            order.total
-                        );
+                    addMoney(
+                        order.total
+                    );
 
 
                     console.log(
@@ -604,26 +693,14 @@ app.post(
                         order.id
                     );
 
-                    console.log(
-                        "[WEBHOOK] KWOTA:",
-                        order.total,
-                        "PLN"
-                    );
-
-                    console.log(
-                        "[WEBHOOK] SALDO:",
-                        balance.balance,
-                        "PLN"
-                    );
-
                 }
 
             }
 
 
-            /* ==========================================
-               CHECKOUT EXPIRED
-            ========================================== */
+            /* -----------------------------------------
+               checkout.session.expired
+            ----------------------------------------- */
 
             if (
                 event.type ===
@@ -679,12 +756,10 @@ app.post(
                             ORDERS_FILE,
                             orders
                         );
-
                     }
-
                 }
-
             }
+
 
         } catch (error) {
 
@@ -698,20 +773,18 @@ app.post(
                 .send(
                     "Webhook processing error"
                 );
-
         }
 
 
         return res.json({
             received: true
         });
-
     }
 );
 
 
 /* =========================================================
-   NORMAL EXPRESS BODY
+   EXPRESS JSON
 ========================================================= */
 
 app.use(
@@ -729,7 +802,7 @@ app.use(
 
 
 /* =========================================================
-   STATIC
+   STATIC FILES
 ========================================================= */
 
 app.use(
@@ -774,7 +847,38 @@ app.get(
 
 
 /* =========================================================
-   TEST STRIPE
+   WEBHOOK DIAGNOSTIC
+========================================================= */
+
+app.get(
+    "/api/webhook-status",
+    (req, res) => {
+
+        res.json({
+
+            success: true,
+
+            stripeConfigured:
+                Boolean(
+                    STRIPE_SECRET_KEY
+                ),
+
+            webhookSecretConfigured:
+                Boolean(
+                    STRIPE_WEBHOOK_SECRET
+                ),
+
+            endpoint:
+                `${BASE_URL}/api/stripe/webhook`
+
+        });
+
+    }
+);
+
+
+/* =========================================================
+   STRIPE ACCOUNT TEST
 ========================================================= */
 
 app.get(
@@ -793,7 +897,6 @@ app.get(
                         "Brak STRIPE_SECRET_KEY"
 
                 });
-
             }
 
 
@@ -801,7 +904,7 @@ app.get(
                 await stripe.accounts.retrieve();
 
 
-            res.json({
+            return res.json({
 
                 success: true,
 
@@ -811,24 +914,30 @@ app.get(
                     account.id,
 
                 chargesEnabled:
-                    account.charges_enabled,
+                    Boolean(
+                        account.charges_enabled
+                    ),
 
                 payoutsEnabled:
-                    account.payouts_enabled,
+                    Boolean(
+                        account.payouts_enabled
+                    ),
 
                 detailsSubmitted:
-                    account.details_submitted
+                    Boolean(
+                        account.details_submitted
+                    )
 
             });
 
         } catch (error) {
 
             console.error(
-                "[STRIPE TEST ERROR]",
+                "[STRIPE TEST]",
                 error
             );
 
-            res.status(500).json({
+            return res.status(500).json({
 
                 success: false,
 
@@ -836,7 +945,6 @@ app.get(
                     error.message
 
             });
-
         }
 
     }
@@ -844,7 +952,7 @@ app.get(
 
 
 /* =========================================================
-   CREATE CHECKOUT SESSION
+   CREATE CHECKOUT
 ========================================================= */
 
 app.post(
@@ -862,17 +970,10 @@ app.post(
             "======================================"
         );
 
+
         try {
 
-            /* ==========================================
-               STRIPE
-            ========================================== */
-
             if (!stripe) {
-
-                console.error(
-                    "[CHECKOUT] Brak obiektu Stripe"
-                );
 
                 return res.status(500).json({
 
@@ -882,28 +983,15 @@ app.post(
                         "Brak STRIPE_SECRET_KEY."
 
                 });
-
             }
 
-
-            /* ==========================================
-               BODY
-            ========================================== */
 
             const body =
                 req.body || {};
 
 
-            console.log(
-                "[CHECKOUT] Body keys:",
-                Object.keys(body)
-            );
-
-
             const items =
-                Array.isArray(
-                    body.items
-                )
+                Array.isArray(body.items)
                     ? body.items
                     : [];
 
@@ -924,9 +1012,11 @@ app.post(
                     .toUpperCase();
 
 
-            /* ==========================================
-               KOSZYK
-            ========================================== */
+            console.log(
+                "[CHECKOUT] Produkty:",
+                items.length
+            );
+
 
             if (
                 items.length === 0
@@ -940,13 +1030,12 @@ app.post(
                         "Koszyk jest pusty."
 
                 });
-
             }
 
 
-            /* ==========================================
-               CUSTOMER
-            ========================================== */
+            /* -----------------------------------------
+               EMAIL
+            ----------------------------------------- */
 
             const email =
                 String(
@@ -968,17 +1057,16 @@ app.post(
                         "Nieprawidłowy e-mail."
 
                 });
-
             }
 
 
-            /* ==========================================
-               PRODUKTY
-            ========================================== */
-
-            const cleanItems = [];
+            /* -----------------------------------------
+               PRODUCTS
+            ----------------------------------------- */
 
             let subtotal = 0;
+
+            const cleanItems = [];
 
 
             for (
@@ -993,7 +1081,10 @@ app.post(
                         "Produkt Printerlase3D"
                     )
                         .trim()
-                        .slice(0, 250);
+                        .slice(
+                            0,
+                            250
+                        );
 
 
                 const price =
@@ -1039,7 +1130,6 @@ app.post(
                             `Nieprawidłowa cena produktu: ${name}`
 
                     });
-
                 }
 
 
@@ -1059,7 +1149,6 @@ app.post(
                             `Nieprawidłowa ilość produktu: ${name}`
 
                     });
-
                 }
 
 
@@ -1081,9 +1170,9 @@ app.post(
             }
 
 
-            /* ==========================================
-               RABAT
-            ========================================== */
+            /* -----------------------------------------
+               DISCOUNT
+            ----------------------------------------- */
 
             let discount = 0;
 
@@ -1102,17 +1191,19 @@ app.post(
             const afterDiscount =
                 Math.max(
                     0,
-                    subtotal - discount
+                    subtotal -
+                    discount
                 );
 
 
-            /* ==========================================
+            /* -----------------------------------------
                DELIVERY
-            ========================================== */
+            ----------------------------------------- */
 
             let deliveryPrice =
                 parseMoney(
-                    delivery.price || 0
+                    delivery.price ||
+                    0
                 );
 
 
@@ -1128,13 +1219,9 @@ app.post(
             }
 
 
-            /*
-             * Darmowa dostawa od 50 zł
-             * po rabacie.
-             */
-
             if (
-                afterDiscount >= 50
+                afterDiscount >=
+                50
             ) {
 
                 deliveryPrice = 0;
@@ -1142,9 +1229,9 @@ app.post(
             }
 
 
-            /* ==========================================
+            /* -----------------------------------------
                STRIPE LINE ITEMS
-            ========================================== */
+            ----------------------------------------- */
 
             const lineItems = [];
 
@@ -1162,7 +1249,8 @@ app.post(
 
                 const unitAmount =
                     Math.round(
-                        finalPrice * 100
+                        finalPrice *
+                        100
                     );
 
 
@@ -1243,10 +1331,6 @@ app.post(
             }
 
 
-            /* ==========================================
-               TOTAL
-            ========================================== */
-
             const total =
                 afterDiscount +
                 deliveryPrice;
@@ -1258,25 +1342,23 @@ app.post(
             );
 
             console.log(
-                "[CHECKOUT] Discount:",
+                "[CHECKOUT] Rabat:",
                 discount
             );
 
             console.log(
-                "[CHECKOUT] Delivery:",
+                "[CHECKOUT] Dostawa:",
                 deliveryPrice
             );
 
             console.log(
-                "[CHECKOUT] Total:",
+                "[CHECKOUT] Razem:",
                 total
             );
 
 
             if (
-                !Number.isFinite(
-                    total
-                ) ||
+                !Number.isFinite(total) ||
                 total <= 0
             ) {
 
@@ -1288,7 +1370,6 @@ app.post(
                         "Nieprawidłowa kwota."
 
                 });
-
             }
 
 
@@ -1301,19 +1382,20 @@ app.post(
                     success: false,
 
                     error:
-                        "Brak pozycji do zapłaty."
+                        "Brak produktów do zapłaty."
 
                 });
-
             }
 
 
-            /* ==========================================
+            /* -----------------------------------------
                ORDER
-            ========================================== */
+            ----------------------------------------- */
 
             const orderId =
-                generateId("ORD");
+                generateId(
+                    "ORD"
+                );
 
 
             const order = {
@@ -1323,39 +1405,46 @@ app.post(
 
                 name:
                     String(
-                        customer.name || ""
+                        customer.name ||
+                        ""
                     ).trim(),
 
                 email,
 
                 phone:
                     String(
-                        customer.phone || ""
+                        customer.phone ||
+                        ""
                     ).trim(),
 
                 address:
                     String(
-                        customer.address || ""
+                        customer.address ||
+                        ""
                     ).trim(),
 
                 postcode:
                     String(
-                        customer.postcode || ""
+                        customer.postcode ||
+                        ""
                     ).trim(),
 
                 city:
                     String(
-                        customer.city || ""
+                        customer.city ||
+                        ""
                     ).trim(),
 
                 paczkomat:
                     String(
-                        customer.paczkomat || ""
+                        customer.paczkomat ||
+                        ""
                     ).trim(),
 
                 delivery:
                     String(
-                        delivery.method || ""
+                        delivery.method ||
+                        ""
                     ).trim(),
 
                 items:
@@ -1363,22 +1452,30 @@ app.post(
 
                 subtotal:
                     Number(
-                        subtotal.toFixed(2)
+                        subtotal.toFixed(
+                            2
+                        )
                     ),
 
                 discount:
                     Number(
-                        discount.toFixed(2)
+                        discount.toFixed(
+                            2
+                        )
                     ),
 
                 deliveryPrice:
                     Number(
-                        deliveryPrice.toFixed(2)
+                        deliveryPrice.toFixed(
+                            2
+                        )
                     ),
 
                 total:
                     Number(
-                        total.toFixed(2)
+                        total.toFixed(
+                            2
+                        )
                     ),
 
                 discountCode,
@@ -1420,9 +1517,9 @@ app.post(
             );
 
 
-            /* ==========================================
+            /* -----------------------------------------
                STRIPE SESSION
-            ========================================== */
+            ----------------------------------------- */
 
             console.log(
                 "[STRIPE] Przed sessions.create"
@@ -1442,7 +1539,10 @@ app.post(
                         email,
 
                     phone_number_collection: {
-                        enabled: true
+
+                        enabled:
+                            true
+
                     },
 
                     billing_address_collection:
@@ -1473,10 +1573,6 @@ app.post(
 
                 });
 
-
-            /* ==========================================
-               SAVE SESSION
-            ========================================== */
 
             order.stripeSessionId =
                 session.id;
@@ -1515,37 +1611,30 @@ app.post(
             console.error(
                 "========== STRIPE ERROR =========="
             );
-
             console.error(
                 "message:",
                 error?.message
             );
-
             console.error(
                 "type:",
                 error?.type
             );
-
             console.error(
                 "code:",
                 error?.code
             );
-
             console.error(
                 "statusCode:",
                 error?.statusCode
             );
-
             console.error(
                 "param:",
                 error?.param
             );
-
             console.error(
                 "=================================="
             );
             console.error("");
-
 
             return res.status(500).json({
 
@@ -1556,7 +1645,6 @@ app.post(
                     "Stripe error"
 
             });
-
         }
 
     }
@@ -1564,7 +1652,7 @@ app.post(
 
 
 /* =========================================================
-   VERIFY SESSION
+   VERIFY CHECKOUT
 ========================================================= */
 
 app.get(
@@ -1583,7 +1671,6 @@ app.get(
                         "Brak STRIPE_SECRET_KEY."
 
                 });
-
             }
 
 
@@ -1618,7 +1705,7 @@ app.get(
                     : null;
 
 
-            return res.json({
+            res.json({
 
                 success: true,
 
@@ -1640,7 +1727,8 @@ app.get(
 
                 amount:
                     session.amount_total
-                        ? session.amount_total / 100
+                        ? session.amount_total /
+                          100
                         : 0,
 
                 currency:
@@ -1648,7 +1736,8 @@ app.get(
                     "pln",
 
                 email:
-                    session.customer_details?.email ||
+                    session.customer_details
+                        ?.email ||
                     session.customer_email ||
                     null,
 
@@ -1657,7 +1746,6 @@ app.get(
 
             });
 
-
         } catch (error) {
 
             console.error(
@@ -1665,14 +1753,13 @@ app.get(
                 error
             );
 
-
-            return res.status(500).json({
+            res.status(500).json({
 
                 success: false,
 
                 error:
                     error?.message ||
-                    "Nie udało się zweryfikować płatności."
+                    "Verify error"
 
             });
 
@@ -1854,7 +1941,9 @@ app.post(
         const model = {
 
             id:
-                generateId("MODEL"),
+                generateId(
+                    "MODEL"
+                ),
 
             name:
                 String(
@@ -1868,7 +1957,8 @@ app.post(
 
             phone:
                 String(
-                    body.phone || ""
+                    body.phone ||
+                    ""
                 ).trim(),
 
             fileName:
@@ -1968,169 +2058,6 @@ app.post(
 
 
 /* =========================================================
-   ADMIN ORDER STATUS
-========================================================= */
-
-app.patch(
-    "/api/admin/orders/:id/status",
-    requireAdmin,
-    (req, res) => {
-
-        const status =
-            String(
-                req.body.status || ""
-            )
-                .trim()
-                .toUpperCase();
-
-
-        const allowed = [
-
-            "AWAITING_PAYMENT",
-            "NEW",
-            "IN_PROGRESS",
-            "READY",
-            "COMPLETED",
-            "CANCELLED"
-
-        ];
-
-
-        if (
-            !allowed.includes(status)
-        ) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                error:
-                    "Nieprawidłowy status."
-
-            });
-
-        }
-
-
-        const orders =
-            readJSON(
-                ORDERS_FILE,
-                []
-            );
-
-
-        const order =
-            orders.find(
-                item =>
-                    String(
-                        item.id
-                    ) ===
-                    String(
-                        req.params.id
-                    )
-            );
-
-
-        if (!order) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                error:
-                    "Nie znaleziono zamówienia."
-
-            });
-
-        }
-
-
-        order.status =
-            status;
-
-        order.updatedAt =
-            new Date()
-                .toISOString();
-
-
-        writeJSON(
-            ORDERS_FILE,
-            orders
-        );
-
-
-        res.json({
-
-            success: true,
-
-            order
-
-        });
-
-    }
-);
-
-
-/* =========================================================
-   DELETE ORDER
-========================================================= */
-
-app.delete(
-    "/api/admin/orders/:id",
-    requireAdmin,
-    (req, res) => {
-
-        const orders =
-            readJSON(
-                ORDERS_FILE,
-                []
-            );
-
-
-        const filtered =
-            orders.filter(
-                item =>
-                    String(
-                        item.id
-                    ) !==
-                    String(
-                        req.params.id
-                    )
-            );
-
-
-        if (
-            filtered.length ===
-            orders.length
-        ) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                error:
-                    "Nie znaleziono zamówienia."
-
-            });
-
-        }
-
-
-        writeJSON(
-            ORDERS_FILE,
-            filtered
-        );
-
-
-        res.json({
-            success: true
-        });
-
-    }
-);
-
-
-/* =========================================================
    API 404
 ========================================================= */
 
@@ -2152,7 +2079,7 @@ app.use(
 
 
 /* =========================================================
-   ADMIN PAGE
+   ADMIN
 ========================================================= */
 
 app.get(
@@ -2167,7 +2094,9 @@ app.get(
 
 
         if (
-            fs.existsSync(adminPath)
+            fs.existsSync(
+                adminPath
+            )
         ) {
 
             return res.sendFile(
@@ -2177,9 +2106,11 @@ app.get(
         }
 
 
-        return res.status(404).send(
-            "Brak admin.html"
-        );
+        return res
+            .status(404)
+            .send(
+                "Brak admin.html"
+            );
 
     }
 );
@@ -2199,6 +2130,37 @@ app.get(
                 "index.html"
             )
         );
+
+    }
+);
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+app.use(
+    (
+        error,
+        req,
+        res,
+        next
+    ) => {
+
+        console.error(
+            "[SERVER ERROR]",
+            error
+        );
+
+
+        res.status(500).json({
+
+            success: false,
+
+            error:
+                "Wewnętrzny błąd serwera."
+
+        });
 
     }
 );
