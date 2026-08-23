@@ -55,9 +55,15 @@ body{
     height:70px;
     display:flex;
     align-items:center;
-    border-bottom:1px solid var(--border);
-    background:rgba(2,5,12,.82);
-    backdrop-filter:blur(20px);
+
+    border-bottom:
+        1px solid var(--border);
+
+    background:
+        rgba(2,5,12,.82);
+
+    backdrop-filter:
+        blur(20px);
 }
 
 .topbar-inner{
@@ -86,14 +92,18 @@ body{
 
     padding:10px 14px;
 
-    border:1px solid var(--border);
+    border:
+        1px solid var(--border);
+
     border-radius:10px;
 }
 
 .page{
     width:min(1200px,94%);
     margin:auto;
-    padding:50px 0 80px;
+
+    padding:
+        50px 0 80px;
 }
 
 .header{
@@ -117,6 +127,7 @@ body{
 
     -webkit-background-clip:text;
     background-clip:text;
+
     color:transparent;
 }
 
@@ -139,7 +150,9 @@ body{
 .card{
     padding:28px;
 
-    border:1px solid var(--border);
+    border:
+        1px solid var(--border);
+
     border-radius:22px;
 
     background:
@@ -160,16 +173,21 @@ body{
 
 .form-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:14px;
 }
 
 .full{
-    grid-column:1/-1;
+    grid-column:
+        1/-1;
 }
 
 label{
     display:block;
+
     margin-bottom:7px;
 
     color:#9aa8bb;
@@ -180,12 +198,17 @@ label{
 
 input{
     width:100%;
+
     padding:14px;
 
     color:white;
+
     background:#050d1a;
 
-    border:1px solid rgba(255,255,255,.09);
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
     border-radius:11px;
 
     outline:none;
@@ -223,20 +246,25 @@ input:focus{
 
 .delivery-option input{
     position:absolute;
+
     opacity:0;
     pointer-events:none;
 }
 
 .delivery-option label{
-
     display:flex;
+
     align-items:center;
     justify-content:space-between;
+
     gap:15px;
 
     padding:16px;
 
-    border:1px solid var(--border);
+    border:
+        1px solid
+        var(--border);
+
     border-radius:13px;
 
     background:#050d1a;
@@ -246,7 +274,6 @@ input:focus{
 
 .delivery-option
 input:checked + label{
-
     border-color:var(--cyan);
 
     background:
@@ -268,6 +295,7 @@ input:checked + label{
 
 .price{
     white-space:nowrap;
+
     font-weight:900;
 }
 
@@ -277,6 +305,7 @@ input:checked + label{
 
 .paczkomat{
     display:none;
+
     margin-top:10px;
 }
 
@@ -285,10 +314,12 @@ input:checked + label{
 }
 
 .payment-info{
-
     padding:16px;
 
-    border:1px solid rgba(25,220,255,.13);
+    border:
+        1px solid
+        rgba(25,220,255,.13);
+
     border-radius:13px;
 
     background:
@@ -303,15 +334,19 @@ input:checked + label{
 
 .items{
     max-height:320px;
+
     overflow:auto;
 }
 
 .item{
     display:flex;
+
     align-items:center;
+
     gap:12px;
 
-    padding:13px 0;
+    padding:
+        13px 0;
 
     border-bottom:
         1px solid
@@ -323,6 +358,7 @@ input:checked + label{
     height:48px;
 
     display:grid;
+
     place-items:center;
 
     flex-shrink:0;
@@ -341,6 +377,7 @@ input:checked + label{
 
 .item-name{
     overflow:hidden;
+
     text-overflow:ellipsis;
     white-space:nowrap;
 
@@ -379,6 +416,7 @@ input:checked + label{
 
 .coupon{
     display:flex;
+
     gap:8px;
 
     margin-top:20px;
@@ -389,10 +427,11 @@ input:checked + label{
 }
 
 .coupon button{
-
-    padding:0 16px;
+    padding:
+        0 16px;
 
     border:0;
+
     border-radius:10px;
 
     color:white;
@@ -409,9 +448,15 @@ input:checked + label{
     cursor:pointer;
 }
 
+.coupon button:disabled{
+    opacity:.5;
+}
+
 .message{
     min-height:18px;
+
     margin-top:7px;
+
     font-size:10px;
 }
 
@@ -421,7 +466,7 @@ input:checked + label{
 
 .row{
     display:flex;
-    align-items:center;
+
     justify-content:space-between;
 
     gap:10px;
@@ -444,10 +489,12 @@ input:checked + label{
 
 .total{
     display:flex;
+
     align-items:center;
     justify-content:space-between;
 
     margin-top:18px;
+
     padding-top:18px;
 
     border-top:
@@ -455,16 +502,17 @@ input:checked + label{
         var(--border);
 
     font-size:20px;
+
     font-weight:1000;
 }
 
 .total strong{
     color:var(--cyan);
+
     font-size:27px;
 }
 
 .pay{
-
     width:100%;
 
     margin-top:22px;
@@ -472,6 +520,7 @@ input:checked + label{
     padding:17px;
 
     border:0;
+
     border-radius:13px;
 
     color:white;
@@ -484,6 +533,7 @@ input:checked + label{
         );
 
     font-size:15px;
+
     font-weight:1000;
 
     cursor:pointer;
@@ -491,11 +541,13 @@ input:checked + label{
 
 .pay:disabled{
     opacity:.55;
+
     cursor:not-allowed;
 }
 
 .secure{
     margin-top:12px;
+
     text-align:center;
 
     color:#52637b;
@@ -504,7 +556,6 @@ input:checked + label{
 }
 
 .toast{
-
     position:fixed;
 
     right:20px;
@@ -540,6 +591,7 @@ input:checked + label{
 
 .toast.show{
     opacity:1;
+
     transform:none;
 }
 
@@ -568,14 +620,11 @@ input:checked + label{
 }
 
 .success-icon{
-
     width:100px;
     height:100px;
 
     margin:
-        0
-        auto
-        25px;
+        0 auto 25px;
 
     display:grid;
     place-items:center;
@@ -605,14 +654,11 @@ input:checked + label{
 }
 
 .order-number{
-
     display:inline-block;
 
     margin-top:20px;
 
-    padding:
-        14px
-        20px;
+    padding:14px 20px;
 
     border:
         1px solid
@@ -690,21 +736,17 @@ input:checked + label{
 
 <main class="page">
 
-
 <header class="header">
 
 <h1>
-
-Finalizacja
-
-<span class="gradient">
-zamówienia
-</span>
-
+    Finalizacja
+    <span class="gradient">
+        zamówienia
+    </span>
 </h1>
 
 <p>
-Uzupełnij dane i przejdź do bezpiecznej płatności.
+    Uzupełnij dane i przejdź do bezpiecznej płatności.
 </p>
 
 </header>
@@ -718,7 +760,7 @@ Uzupełnij dane i przejdź do bezpiecznej płatności.
 <section class="card">
 
 <h2>
-👤 Dane zamawiającego
+    👤 Dane zamawiającego
 </h2>
 
 
@@ -728,14 +770,13 @@ Uzupełnij dane i przejdź do bezpiecznej płatności.
 <div>
 
 <label for="name">
-IMIĘ I NAZWISKO *
+    IMIĘ I NAZWISKO *
 </label>
 
 <input
     id="name"
     placeholder="Jan Kowalski"
-    autocomplete="name"
-/>
+>
 
 </div>
 
@@ -743,15 +784,14 @@ IMIĘ I NAZWISKO *
 <div>
 
 <label for="email">
-E-MAIL *
+    E-MAIL *
 </label>
 
 <input
     id="email"
     type="email"
     placeholder="jan@example.com"
-    autocomplete="email"
-/>
+>
 
 </div>
 
@@ -759,15 +799,14 @@ E-MAIL *
 <div>
 
 <label for="phone">
-TELEFON *
+    TELEFON *
 </label>
 
 <input
     id="phone"
     type="tel"
     placeholder="123456789"
-    autocomplete="tel"
-/>
+>
 
 </div>
 
@@ -775,14 +814,13 @@ TELEFON *
 <div>
 
 <label for="postcode">
-KOD POCZTOWY *
+    KOD POCZTOWY *
 </label>
 
 <input
     id="postcode"
     placeholder="41-000"
-    autocomplete="postal-code"
-/>
+>
 
 </div>
 
@@ -790,14 +828,13 @@ KOD POCZTOWY *
 <div class="full">
 
 <label for="address">
-ADRES *
+    ADRES *
 </label>
 
 <input
     id="address"
     placeholder="ul. Przykładowa 10"
-    autocomplete="street-address"
-/>
+>
 
 </div>
 
@@ -805,14 +842,13 @@ ADRES *
 <div>
 
 <label for="city">
-MIASTO *
+    MIASTO *
 </label>
 
 <input
     id="city"
     placeholder="Mikołów"
-    autocomplete="address-level2"
-/>
+>
 
 </div>
 
@@ -823,7 +859,7 @@ MIASTO *
 <div class="section">
 
 <div class="section-title">
-📦 Sposób dostawy
+    📦 Sposób dostawy
 </div>
 
 
@@ -845,17 +881,17 @@ MIASTO *
 <div>
 
 <div class="delivery-name">
-📦 InPost Paczkomat
+    📦 InPost Paczkomat
 </div>
 
 <div class="delivery-desc">
-Odbiór w paczkomacie
+    Odbiór w paczkomacie
 </div>
 
 </div>
 
 <div class="price">
-12,00 zł
+    12,00 zł
 </div>
 
 </label>
@@ -878,17 +914,17 @@ Odbiór w paczkomacie
 <div>
 
 <div class="delivery-name">
-🚚 InPost Kurier
+    🚚 InPost Kurier
 </div>
 
 <div class="delivery-desc">
-Dostawa pod adres
+    Dostawa pod adres
 </div>
 
 </div>
 
 <div class="price">
-15,00 zł
+    15,00 zł
 </div>
 
 </label>
@@ -911,17 +947,17 @@ Dostawa pod adres
 <div>
 
 <div class="delivery-name">
-📮 ORLEN Paczka
+    📮 ORLEN Paczka
 </div>
 
 <div class="delivery-desc">
-Odbiór w punkcie
+    Odbiór w punkcie
 </div>
 
 </div>
 
 <div class="price">
-10,00 zł
+    10,00 zł
 </div>
 
 </label>
@@ -944,17 +980,17 @@ Odbiór w punkcie
 <div>
 
 <div class="delivery-name">
-🚛 DPD Kurier
+    🚛 DPD Kurier
 </div>
 
 <div class="delivery-desc">
-Dostawa kurierem
+    Dostawa kurierem
 </div>
 
 </div>
 
 <div class="price">
-16,00 zł
+    16,00 zł
 </div>
 
 </label>
@@ -971,13 +1007,13 @@ Dostawa kurierem
 >
 
 <label for="paczkomat">
-KOD PACZKOMATU *
+    KOD PACZKOMATU *
 </label>
 
 <input
     id="paczkomat"
     placeholder="np. KAT01M"
-/>
+>
 
 </div>
 
@@ -987,17 +1023,17 @@ KOD PACZKOMATU *
 <div class="section">
 
 <div class="section-title">
-💳 Płatność
+    💳 Płatność
 </div>
 
 <div class="payment-info">
 
 🔒 Po kliknięciu przycisku zostaniesz
-przekierowany do <strong>Stripe Checkout</strong>.
+przekierowany do Stripe Checkout.
 
 <br><br>
 
-Dane płatnicze obsługuje Stripe.
+Dane płatnicze są obsługiwane przez Stripe.
 
 </div>
 
@@ -1009,7 +1045,7 @@ Dane płatnicze obsługuje Stripe.
 <aside class="card">
 
 <h2>
-🛒 Twoje zamówienie
+    🛒 Twoje zamówienie
 </h2>
 
 
@@ -1023,14 +1059,14 @@ Dane płatnicze obsługuje Stripe.
 
 <input
     id="coupon"
-    placeholder="Kod START10"
-/>
+    placeholder="START10"
+>
 
 <button
     id="couponBtn"
     type="button"
 >
-Zastosuj
+    Zastosuj
 </button>
 
 </div>
@@ -1048,11 +1084,11 @@ Zastosuj
 <div class="row">
 
 <span>
-Produkty
+    Produkty
 </span>
 
 <strong id="productsTotal">
-0,00 zł
+    0,00 zł
 </strong>
 
 </div>
@@ -1061,11 +1097,11 @@ Produkty
 <div class="row">
 
 <span>
-Dostawa
+    Dostawa
 </span>
 
 <strong id="deliveryTotal">
-0,00 zł
+    0,00 zł
 </strong>
 
 </div>
@@ -1078,11 +1114,11 @@ Dostawa
 >
 
 <span>
-Rabat
+    Rabat START10
 </span>
 
 <strong id="discount">
--0,00 zł
+    -0,00 zł
 </strong>
 
 </div>
@@ -1091,11 +1127,11 @@ Rabat
 <div class="total">
 
 <span>
-RAZEM
+    RAZEM
 </span>
 
 <strong id="total">
-0,00 zł
+    0,00 zł
 </strong>
 
 </div>
@@ -1109,12 +1145,12 @@ RAZEM
     class="pay"
     type="button"
 >
-💳 Przejdź do płatności
+    💳 Przejdź do płatności
 </button>
 
 
 <div class="secure">
-🔒 Bezpieczna płatność przez Stripe
+    🔒 Bezpieczna płatność przez Stripe
 </div>
 
 </aside>
@@ -1133,15 +1169,15 @@ RAZEM
 <div class="card">
 
 <div class="success-icon">
-✓
+    ✓
 </div>
 
 <h2>
-Płatność potwierdzona! 🎉
+    Płatność potwierdzona! 🎉
 </h2>
 
 <p>
-Stripe potwierdził Twoją płatność.
+    Stripe potwierdził Twoją płatność.
 </p>
 
 <div
@@ -1155,7 +1191,7 @@ Stripe potwierdził Twoją płatność.
     href="index.html"
     class="back"
 >
-← Wróć do sklepu
+    ← Wróć do sklepu
 </a>
 
 </div>
@@ -1176,18 +1212,8 @@ Stripe potwierdził Twoją płatność.
 
 "use strict";
 
-
-/* =========================================================
-   STORAGE
-========================================================= */
-
 const CART_KEY =
     "printerlase_cart";
-
-
-/* =========================================================
-   STATE
-========================================================= */
 
 let cart = [];
 
@@ -1198,9 +1224,9 @@ let discount = 0;
 let couponApplied = false;
 
 
-/* =========================================================
+/* ==================================================
    LOAD CART
-========================================================= */
+================================================== */
 
 try {
 
@@ -1217,21 +1243,194 @@ try {
         cart = [];
     }
 
-} catch (error) {
-
-    console.error(
-        "[CART ERROR]",
-        error
-    );
+} catch {
 
     cart = [];
 
 }
 
 
-/* =========================================================
+/* ==================================================
+   HELPERS
+================================================== */
+
+function parseMoney(value) {
+
+    if (
+        typeof value === "number"
+    ) {
+
+        return Number.isFinite(value)
+            ? value
+            : NaN;
+
+    }
+
+
+    if (
+        typeof value !== "string"
+    ) {
+
+        return NaN;
+
+    }
+
+
+    let text =
+        value
+            .trim()
+            .replace(/\s/g, "")
+            .replace(/zł/gi, "")
+            .replace(/PLN/gi, "");
+
+
+    if (
+        text.includes(",") &&
+        text.includes(".")
+    ) {
+
+        text =
+            text
+                .replace(/\./g, "")
+                .replace(",", ".");
+
+    } else {
+
+        text =
+            text.replace(",", ".");
+
+    }
+
+
+    const number =
+        Number(text);
+
+
+    return Number.isFinite(number)
+        ? number
+        : NaN;
+
+}
+
+
+function getItemPrice(item) {
+
+    const raw =
+        item.price ??
+        item.pricePLN ??
+        item.cena ??
+        item.cost ??
+        item.unitPrice ??
+        0;
+
+
+    return parseMoney(raw);
+
+}
+
+
+function getQuantity(item) {
+
+    const number =
+        Number(
+            item.quantity ??
+            item.qty ??
+            1
+        );
+
+
+    if (
+        !Number.isFinite(number) ||
+        number < 1
+    ) {
+
+        return 1;
+
+    }
+
+
+    return Math.floor(number);
+
+}
+
+
+function money(value) {
+
+    return (
+        Number(value || 0)
+            .toFixed(2)
+            .replace(".", ",")
+        + " zł"
+    );
+
+}
+
+
+function escapeHTML(value) {
+
+    return String(
+        value ?? ""
+    )
+
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* ==================================================
+   TOAST
+================================================== */
+
+let toastTimer;
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    const el =
+        document.getElementById(
+            "toast"
+        );
+
+
+    el.textContent =
+        message;
+
+
+    el.className =
+        "toast " +
+        type +
+        " show";
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                el.classList.remove(
+                    "show"
+                );
+
+            },
+            3500
+        );
+
+}
+
+
+/* ==================================================
    ELEMENTS
-========================================================= */
+================================================== */
 
 const itemsEl =
     document.getElementById(
@@ -1269,110 +1468,9 @@ const payButton =
     );
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function money(value) {
-
-    return (
-        Number(value || 0)
-            .toFixed(2)
-            .replace(".", ",") +
-        " zł"
-    );
-
-}
-
-function escapeHTML(value) {
-
-    return String(
-        value ?? ""
-    )
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-function getPrice(item) {
-
-    const value =
-        Number(
-            item.price
-        );
-
-    return Number.isFinite(value)
-        ? Math.max(0, value)
-        : 0;
-
-}
-
-function getQuantity(item) {
-
-    const value =
-        Number(
-            item.quantity ??
-            item.qty ??
-            1
-        );
-
-    if (
-        !Number.isFinite(value) ||
-        value < 1
-    ) {
-        return 1;
-    }
-
-    return Math.floor(value);
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer;
-
-function showToast(
-    message,
-    type = "success"
-) {
-
-    const element =
-        document.getElementById(
-            "toast"
-        );
-
-    element.textContent =
-        message;
-
-    element.className =
-        "toast " +
-        type +
-        " show";
-
-    clearTimeout(
-        toastTimer
-    );
-
-    toastTimer =
-        setTimeout(
-            () => {
-                element.classList.remove(
-                    "show"
-                );
-            },
-            3500
-        );
-}
-
-
-/* =========================================================
+/* ==================================================
    CART
-========================================================= */
+================================================== */
 
 function renderCart() {
 
@@ -1407,35 +1505,62 @@ function renderCart() {
 
         `;
 
+
         payButton.disabled =
             true;
+
 
         updateSummary();
 
         return;
+
     }
 
 
-    payButton.disabled =
-        false;
+    let badPrice = false;
 
 
     cart.forEach(
-        item => {
+        (item, index) => {
 
             const price =
-                getPrice(item);
+                getItemPrice(item);
+
 
             const quantity =
                 getQuantity(item);
 
-            const itemTotal =
-                price *
-                quantity;
+
+            console.log(
+                "[CART PRODUCT]",
+                index,
+                {
+                    name:
+                        item.name,
+                    rawPrice:
+                        item.price,
+                    parsedPrice:
+                        price,
+                    quantity
+                }
+            );
+
+
+            if (
+                !Number.isFinite(price) ||
+                price <= 0
+            ) {
+
+                badPrice =
+                    true;
+
+                return;
+
+            }
 
 
             productsTotal +=
-                itemTotal;
+                price * quantity;
 
 
             itemsEl.insertAdjacentHTML(
@@ -1445,55 +1570,105 @@ function renderCart() {
                     <div class="item">
 
                         <div class="item-icon">
+
                             ${escapeHTML(
                                 item.emoji ||
                                 item.icon ||
                                 "🖨️"
                             )}
+
                         </div>
 
                         <div class="item-main">
 
                             <div class="item-name">
+
                                 ${escapeHTML(
                                     item.name ||
                                     "Produkt"
                                 )}
+
                             </div>
 
                             <div class="item-meta">
+
                                 ${quantity}
                                 ×
                                 ${money(price)}
+
                             </div>
 
                         </div>
 
                         <div class="item-price">
-                            ${money(itemTotal)}
+
+                            ${money(
+                                price * quantity
+                            )}
+
                         </div>
 
                     </div>
 
                 `
             );
+
         }
     );
 
 
+    if (
+        badPrice
+    ) {
+
+        payButton.disabled =
+            true;
+
+
+        itemsEl.insertAdjacentHTML(
+            "beforeend",
+            `
+
+                <div
+                    style="
+                        margin-top:15px;
+                        color:#ff4b6e;
+                        font-size:12px;
+                    "
+                >
+
+                    ❌ Jeden z produktów
+                    ma nieprawidłową cenę.
+
+                </div>
+
+            `
+        );
+
+        return;
+
+    }
+
+
+    payButton.disabled =
+        false;
+
+
     updateSummary();
+
 }
 
 
-/* =========================================================
+/* ==================================================
    DELIVERY
-========================================================= */
+================================================== */
 
 function getDelivery() {
 
     return document.querySelector(
         'input[name="delivery"]:checked'
     );
+
 }
 
 
@@ -1502,42 +1677,42 @@ function getDeliveryPrice() {
     const delivery =
         getDelivery();
 
-    if (!delivery) {
+
+    if (
+        !delivery
+    ) {
+
         return 0;
+
     }
+
 
     if (
         productsTotal >= 50
     ) {
+
         return 0;
+
     }
 
-    const price =
-        Number(
-            delivery.dataset.price ||
-            0
-        );
 
-    return Number.isFinite(price)
-        ? Math.max(0, price)
-        : 0;
+    return parseMoney(
+        delivery.dataset.price || 0
+    );
+
 }
 
 
-/* =========================================================
+/* ==================================================
    SUMMARY
-========================================================= */
+================================================== */
 
 function updateSummary() {
 
-    if (
+    discount =
         couponApplied
-    ) {
-        discount =
-            productsTotal * 0.10;
-    } else {
-        discount = 0;
-    }
+            ? productsTotal * 0.10
+            : 0;
 
 
     const delivery =
@@ -1576,6 +1751,7 @@ function updateSummary() {
             money(
                 delivery
             );
+
     }
 
 
@@ -1596,12 +1772,13 @@ function updateSummary() {
         money(
             total
         );
+
 }
 
 
-/* =========================================================
-   DELIVERY EVENTS
-========================================================= */
+/* ==================================================
+   DELIVERY CHANGE
+================================================== */
 
 document
     .querySelectorAll(
@@ -1619,6 +1796,7 @@ document
                             "paczkomatBox"
                         );
 
+
                     if (
                         radio.value ===
                         "InPost Paczkomat"
@@ -1634,22 +1812,21 @@ document
                             "show"
                         );
 
-                        document.getElementById(
-                            "paczkomat"
-                        ).value =
-                            "";
                     }
 
+
                     updateSummary();
+
                 }
             );
+
         }
     );
 
 
-/* =========================================================
+/* ==================================================
    COUPON
-========================================================= */
+================================================== */
 
 document
     .getElementById(
@@ -1664,10 +1841,12 @@ document
                     "coupon"
                 );
 
+
             const message =
                 document.getElementById(
                     "couponMessage"
                 );
+
 
             const code =
                 input.value
@@ -1676,23 +1855,8 @@ document
 
 
             if (
-                code ===
-                "START10"
+                code === "START10"
             ) {
-
-                if (
-                    cart.length === 0
-                ) {
-
-                    message.textContent =
-                        "Koszyk jest pusty.";
-
-                    message.style.color =
-                        "var(--red)";
-
-                    return;
-                }
-
 
                 couponApplied =
                     true;
@@ -1711,29 +1875,30 @@ document
                 message.textContent =
                     "✓ START10 aktywny — 10% rabatu";
 
+
                 message.style.color =
                     "var(--green)";
 
 
                 updateSummary();
 
+            } else {
 
-                return;
+                message.textContent =
+                    "❌ Nieprawidłowy kod.";
+
+                message.style.color =
+                    "var(--red)";
+
             }
 
-
-            message.textContent =
-                "❌ Nieprawidłowy kod.";
-
-            message.style.color =
-                "var(--red)";
         }
     );
 
 
-/* =========================================================
+/* ==================================================
    VALIDATION
-========================================================= */
+================================================== */
 
 function validate() {
 
@@ -1742,30 +1907,36 @@ function validate() {
             "name"
         ).value.trim();
 
+
     const email =
         document.getElementById(
             "email"
         ).value.trim();
+
 
     const phone =
         document.getElementById(
             "phone"
         ).value.trim();
 
+
     const postcode =
         document.getElementById(
             "postcode"
         ).value.trim();
+
 
     const address =
         document.getElementById(
             "address"
         ).value.trim();
 
+
     const city =
         document.getElementById(
             "city"
         ).value.trim();
+
 
     const delivery =
         getDelivery();
@@ -1781,6 +1952,7 @@ function validate() {
         );
 
         return false;
+
     }
 
 
@@ -1795,6 +1967,7 @@ function validate() {
         );
 
         return false;
+
     }
 
 
@@ -1811,6 +1984,7 @@ function validate() {
         );
 
         return false;
+
     }
 
 
@@ -1825,6 +1999,7 @@ function validate() {
         );
 
         return false;
+
     }
 
 
@@ -1838,6 +2013,7 @@ function validate() {
         );
 
         return false;
+
     }
 
 
@@ -1851,6 +2027,7 @@ function validate() {
         );
 
         return false;
+
     }
 
 
@@ -1862,6 +2039,7 @@ function validate() {
         );
 
         return false;
+
     }
 
 
@@ -1886,7 +2064,9 @@ function validate() {
             );
 
             return false;
+
         }
+
     }
 
 
@@ -1900,33 +2080,118 @@ function validate() {
         );
 
         return false;
+
     }
 
 
     return true;
+
 }
 
 
-/* =========================================================
+/* ==================================================
    CREATE CHECKOUT
-========================================================= */
+================================================== */
 
 async function createCheckout() {
 
-    if (!validate()) {
+    if (
+        !validate()
+    ) {
+
         return;
+
     }
 
 
-    payButton.disabled =
-        true;
+    /*
+     * NORMALIZUJEMY CENY
+     * JESZCZE RAZ PRZED WYSŁANIEM.
+     */
 
-    payButton.textContent =
-        "⏳ Przygotowywanie płatności...";
+    const normalizedItems =
+        cart.map(
+            item => {
+
+                const price =
+                    getItemPrice(item);
+
+
+                const quantity =
+                    getQuantity(item);
+
+
+                return {
+
+                    name:
+                        String(
+                            item.name ||
+                            item.title ||
+                            "Produkt"
+                        ),
+
+                    price:
+
+                        Number.isFinite(
+                            price
+                        )
+                            ? Number(
+                                price.toFixed(
+                                    2
+                                )
+                            )
+                            : 0,
+
+                    quantity
+
+                };
+
+            }
+        );
+
+
+    console.log(
+        "[CHECKOUT ITEMS]",
+        normalizedItems
+    );
+
+
+    const invalid =
+        normalizedItems.find(
+            item =>
+                !Number.isFinite(
+                    item.price
+                ) ||
+                item.price <= 0
+        );
+
+
+    if (
+        invalid
+    ) {
+
+        showToast(
+            "Nieprawidłowa cena produktu: " +
+            invalid.name,
+            "error"
+        );
+
+        console.error(
+            "[BAD PRICE]",
+            invalid
+        );
+
+        return;
+
+    }
 
 
     const delivery =
         getDelivery();
+
+
+    const deliveryPrice =
+        getDeliveryPrice();
 
 
     const customer = {
@@ -1969,37 +2234,10 @@ async function createCheckout() {
     };
 
 
-    /*
-     * BARDZO WAŻNE:
-     * To dokładnie pasuje do server.js.
-     */
-
     const payload = {
 
         items:
-            cart.map(
-                item => ({
-
-                    name:
-                        String(
-                            item.name ||
-                            "Produkt"
-                        ),
-
-                    price:
-                        Number(
-                            item.price
-                        ),
-
-                    quantity:
-                        Number(
-                            item.quantity ??
-                            item.qty ??
-                            1
-                        )
-
-                })
-            ),
+            normalizedItems,
 
         customer,
 
@@ -2009,7 +2247,11 @@ async function createCheckout() {
                 delivery.value,
 
             price:
-                getDeliveryPrice()
+                Number(
+                    deliveryPrice.toFixed(
+                        2
+                    )
+                )
 
         },
 
@@ -2025,6 +2267,14 @@ async function createCheckout() {
         "[CHECKOUT] Wysyłam:",
         payload
     );
+
+
+    payButton.disabled =
+        true;
+
+
+    payButton.textContent =
+        "⏳ Przygotowywanie płatności...";
 
 
     try {
@@ -2064,7 +2314,7 @@ async function createCheckout() {
 
 
         console.log(
-            "[CHECKOUT] Raw response:",
+            "[CHECKOUT] Raw:",
             text
         );
 
@@ -2084,6 +2334,7 @@ async function createCheckout() {
             throw new Error(
                 "Serwer zwrócił nieprawidłową odpowiedź."
             );
+
         }
 
 
@@ -2102,6 +2353,7 @@ async function createCheckout() {
                 data.error ||
                 `Błąd HTTP ${response.status}`
             );
+
         }
 
 
@@ -2110,8 +2362,9 @@ async function createCheckout() {
         ) {
 
             throw new Error(
-                "Brak adresu Stripe Checkout."
+                "Stripe nie zwrócił adresu płatności."
             );
+
         }
 
 
@@ -2133,10 +2386,7 @@ async function createCheckout() {
 
         showToast(
             "❌ " +
-            (
-                error.message ||
-                "Błąd płatności."
-            ),
+            error.message,
             "error"
         );
 
@@ -2149,12 +2399,13 @@ async function createCheckout() {
             "💳 Przejdź do płatności";
 
     }
+
 }
 
 
-/* =========================================================
-   VERIFY RETURN FROM STRIPE
-========================================================= */
+/* ==================================================
+   VERIFY PAYMENT
+================================================== */
 
 async function verifyPayment() {
 
@@ -2195,15 +2446,17 @@ async function verifyPayment() {
 
 
         return;
+
     }
 
 
     if (
-        payment !==
-        "success" ||
+        payment !== "success" ||
         !sessionId
     ) {
+
         return;
+
     }
 
 
@@ -2237,6 +2490,7 @@ async function verifyPayment() {
                 data.error ||
                 "Nie udało się zweryfikować płatności."
             );
+
         }
 
 
@@ -2247,6 +2501,7 @@ async function verifyPayment() {
             throw new Error(
                 "Stripe nie potwierdził płatności."
             );
+
         }
 
 
@@ -2303,13 +2558,15 @@ async function verifyPayment() {
             error.message,
             "error"
         );
+
     }
+
 }
 
 
-/* =========================================================
+/* ==================================================
    BUTTON
-========================================================= */
+================================================== */
 
 payButton.addEventListener(
     "click",
@@ -2317,9 +2574,9 @@ payButton.addEventListener(
 );
 
 
-/* =========================================================
+/* ==================================================
    START
-========================================================= */
+================================================== */
 
 renderCart();
 
