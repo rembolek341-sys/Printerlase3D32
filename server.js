@@ -28,58 +28,38 @@ if (STRIPE_SECRET_KEY) {
     console.error("[STRIPE] BRAK STRIPE_SECRET_KEY");
 }
 
-/* =========================================================
+/* ==================================================
    DATA
-========================================================= */
+================================================== */
 
-const DATA_DIR =
-    path.join(__dirname, "data");
-
-const ORDERS_FILE =
-    path.join(DATA_DIR, "orders.json");
+const DATA_DIR = path.join(__dirname, "data");
+const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
 
 if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, {
-        recursive: true
-    });
+    fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
 if (!fs.existsSync(ORDERS_FILE)) {
-    fs.writeFileSync(
-        ORDERS_FILE,
-        "[]",
-        "utf8"
-    );
+    fs.writeFileSync(ORDERS_FILE, "[]", "utf8");
 }
 
-/* =========================================================
+/* ==================================================
    HELPERS
-========================================================= */
+================================================== */
 
 function readOrders() {
     try {
-        const text =
-            fs.readFileSync(
-                ORDERS_FILE,
-                "utf8"
-            );
+        const text = fs.readFileSync(ORDERS_FILE, "utf8");
 
         if (!text.trim()) {
             return [];
         }
 
-        const data =
-            JSON.parse(text);
+        const data = JSON.parse(text);
 
-        return Array.isArray(data)
-            ? data
-            : [];
+        return Array.isArray(data) ? data : [];
     } catch (error) {
-        console.error(
-            "[ORDERS READ ERROR]",
-            error.message
-        );
-
+        console.error("[ORDERS READ ERROR]", error.message);
         return [];
     }
 }
@@ -87,11 +67,7 @@ function readOrders() {
 function saveOrders(orders) {
     fs.writeFileSync(
         ORDERS_FILE,
-        JSON.stringify(
-            orders,
-            null,
-            2
-        ),
+        JSON.stringify(orders, null, 2),
         "utf8"
     );
 }
@@ -101,17 +77,60 @@ function generateOrderId() {
         "ORD-" +
         Date.now().toString(36).toUpperCase() +
         "-" +
-        crypto
-            .randomBytes(4)
-            .toString("hex")
-            .toUpperCase()
+        crypto.randomBytes(4).toString("hex").toUpperCase()
     );
 }
 
-/* =========================================================
+/*
+ * Zamienia:
+ * 15
+ * "15"
+ * "15,50"
+ * "15.50 zł"
+ * "15 zł"
+ * na poprawną liczbę.
+ */
+function parseMoney(value) {
+    if (typeof value === "number") {
+        return Number.isFinite(value) ? value : NaN;
+    }
+
+    if (typeof value !== "string") {
+        return NaN;
+    }
+
+    let text = value
+        .trim()
+        .replace(/\s/g, "")
+        .replace(/zł/gi, "")
+        .replace(/PLN/gi, "");
+
+    if (text.includes(",") && text.includes(".")) {
+        text = text.replace(/\./g, "").replace(",", ".");
+    } else {
+        text = text.replace(",", ".");
+    }
+
+    const number = Number(text);
+
+    return Number.isFinite(number)
+        ? number
+        : NaN;
+}
+
+function parseQuantity(value) {
+    const number = Number(value);
+
+    if (!Number.isFinite(number)) {
+        return NaN;
+    }
+
+    return Math.floor(number);
+}
+
+/* ==================================================
    WEBHOOK
-   MUSI BYĆ PRZED express.json()
-========================================================= */
+================================================== */
 
 app.post(
     "/api/stripe/webhook",
@@ -121,15 +140,11 @@ app.post(
     (req, res) => {
 
         if (!stripe) {
-            return res
-                .status(500)
-                .send("Stripe not configured");
+            return res.status(500).send("Stripe not configured");
         }
 
         if (!STRIPE_WEBHOOK_SECRET) {
-            return res
-                .status(500)
-                .send("Webhook secret missing");
+            return res.status(500).send("Webhook secret missing");
         }
 
         const signature =
@@ -145,19 +160,11 @@ app.post(
                     STRIPE_WEBHOOK_SECRET
                 );
         } catch (error) {
-
-            console.error(
-                "[WEBHOOK ERROR]",
-                error.message
-            );
-
-            return res
-                .status(400)
-                .send("Invalid signature");
+            console.error("[WEBHOOK ERROR]", error.message);
+            return res.status(400).send("Invalid signature");
         }
 
         try {
-
             if (
                 event.type ===
                 "checkout.session.completed"
@@ -170,50 +177,75 @@ app.post(
                     session.metadata?.orderId;
 
                 console.log(
-                    "[WEBHOOK] checkout.session.completed:",
+                    "[WEBHOOK] Płatność:",
                     session.id
                 );
 
                 if (orderId) {
 
-                    const orders =
-                        readOrders();
+                    const orders = readOrders();
 
                     const order =
                         orders.find(
                             item =>
-                                item.id ===
-                                orderId
+                                item.id === orderId
                         );
 
-                    if (order) {
+                    if (
+                        order &&
+                        order.paymentStatus !== "PAID"
+                    ) {
 
-                        if (
-                            order.paymentStatus !==
-                            "PAID"
-                        ) {
+                        order.paymentStatus = "PAID";
+                        order.status = "NEW";
+                        order.stripeSessionId = session.id;
+                        order.paymentIntentId =
+                            session.payment_intent || null;
+                        order.paidAt =
+                            new Date().toISOString();
 
-                            order.paymentStatus =
-                                "PAID";
+                        saveOrders(orders);
 
-                            order.status =
-                                "NEW";
+                        console.log(
+                            "[WEBHOOK] Zamówienie opłacone:",
+                            orderId
+                        );
+                    }
+                }
+            }
 
-                            order.stripeSessionId =
-                                session.id;
+            if (
+                event.type ===
+                "checkout.session.expired"
+            ) {
 
-                            order.paymentIntentId =
-                                session.payment_intent ||
-                                null;
+                const session =
+                    event.data.object;
 
-                            order.paidAt =
-                                new Date()
-                                    .toISOString();
+                const orderId =
+                    session.metadata?.orderId;
 
-                            saveOrders(
-                                orders
-                            );
-                        }
+                if (orderId) {
+
+                    const orders = readOrders();
+
+                    const order =
+                        orders.find(
+                            item =>
+                                item.id === orderId
+                        );
+
+                    if (
+                        order &&
+                        order.paymentStatus === "PENDING"
+                    ) {
+
+                        order.paymentStatus = "EXPIRED";
+                        order.status = "CANCELLED";
+                        order.updatedAt =
+                            new Date().toISOString();
+
+                        saveOrders(orders);
                     }
                 }
             }
@@ -236,9 +268,9 @@ app.post(
     }
 );
 
-/* =========================================================
-   MIDDLEWARE
-========================================================= */
+/* ==================================================
+   EXPRESS
+================================================== */
 
 app.use(
     express.json({
@@ -257,9 +289,9 @@ app.use(
     express.static(__dirname)
 );
 
-/* =========================================================
+/* ==================================================
    HEALTH
-========================================================= */
+================================================== */
 
 app.get(
     "/api/health",
@@ -268,68 +300,38 @@ app.get(
         res.json({
             success: true,
             stripe: Boolean(stripe),
-            webhook:
-                Boolean(
-                    STRIPE_WEBHOOK_SECRET
-                ),
+            webhook: Boolean(STRIPE_WEBHOOK_SECRET),
             baseUrl: BASE_URL,
             node: process.version
         });
+
     }
 );
 
-/* =========================================================
-   CREATE CHECKOUT
-========================================================= */
+/* ==================================================
+   CREATE CHECKOUT SESSION
+================================================== */
 
 app.post(
     "/api/create-checkout-session",
     async (req, res) => {
 
         console.log("");
-        console.log(
-            "========== CHECKOUT REQUEST =========="
-        );
-        console.log(
-            "[CHECKOUT] Nowe żądanie"
-        );
+        console.log("========== CHECKOUT ==========");
+        console.log("[CHECKOUT] Nowe żądanie");
 
         try {
 
-            /* -----------------------------------------
-               STRIPE
-            ----------------------------------------- */
-
             if (!stripe) {
-
-                console.error(
-                    "[STRIPE] stripe == null"
-                );
-
-                return res
-                    .status(500)
-                    .json({
-                        success: false,
-                        error:
-                            "Brak STRIPE_SECRET_KEY."
-                    });
+                return res.status(500).json({
+                    success: false,
+                    error:
+                        "Brak STRIPE_SECRET_KEY."
+                });
             }
-
-            console.log(
-                "[STRIPE] Obiekt Stripe: OK"
-            );
-
-            /* -----------------------------------------
-               BODY
-            ----------------------------------------- */
 
             const body =
                 req.body || {};
-
-            console.log(
-                "[CHECKOUT] Body keys:",
-                Object.keys(body)
-            );
 
             const items =
                 Array.isArray(body.items)
@@ -350,25 +352,18 @@ app.post(
                     .toUpperCase();
 
             console.log(
-                "[CHECKOUT] Liczba produktów:",
+                "[CHECKOUT] products:",
                 items.length
             );
 
-            /* -----------------------------------------
-               BASIC VALIDATION
-            ----------------------------------------- */
+            if (items.length === 0) {
 
-            if (
-                items.length === 0
-            ) {
+                return res.status(400).json({
+                    success: false,
+                    error:
+                        "Koszyk jest pusty."
+                });
 
-                return res
-                    .status(400)
-                    .json({
-                        success: false,
-                        error:
-                            "Koszyk jest pusty."
-                    });
             }
 
             const email =
@@ -376,54 +371,49 @@ app.post(
                     customer.email || ""
                 ).trim();
 
-            console.log(
-                "[CHECKOUT] Email:",
-                email
-            );
-
             if (
                 !email ||
-                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                    .test(email)
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
             ) {
 
-                return res
-                    .status(400)
-                    .json({
-                        success: false,
-                        error:
-                            "Nieprawidłowy e-mail."
-                    });
+                return res.status(400).json({
+                    success: false,
+                    error:
+                        "Nieprawidłowy e-mail."
+                });
+
             }
 
-            /* -----------------------------------------
+            /* ==========================================
                PRODUCTS
-            ----------------------------------------- */
+            ========================================== */
 
             const lineItems = [];
 
             let subtotal = 0;
 
-            for (
-                const item
-                of items
-            ) {
+            const cleanItems = [];
+
+            for (const item of items) {
 
                 const name =
                     String(
                         item.name ||
+                        item.title ||
                         "Produkt Printerlase3D"
                     )
                         .trim()
                         .slice(0, 250);
 
                 const price =
-                    Number(
-                        item.price
+                    parseMoney(
+                        item.price ??
+                        item.pricePLN ??
+                        item.cena
                     );
 
                 const quantity =
-                    Number(
+                    parseQuantity(
                         item.quantity ??
                         item.qty ??
                         1
@@ -433,82 +423,58 @@ app.post(
                     "[PRODUCT]",
                     {
                         name,
-                        price,
+                        rawPrice: item.price,
+                        parsedPrice: price,
                         quantity
                     }
                 );
 
                 if (
-                    !Number.isFinite(
-                        price
-                    ) ||
+                    !Number.isFinite(price) ||
                     price <= 0
                 ) {
 
-                    return res
-                        .status(400)
-                        .json({
-                            success: false,
-                            error:
-                                `Nieprawidłowa cena: ${name}`
-                        });
+                    return res.status(400).json({
+                        success: false,
+                        error:
+                            `Nieprawidłowa cena produktu: ${name}`
+                    });
+
                 }
 
                 if (
-                    !Number.isInteger(
-                        quantity
-                    ) ||
+                    !Number.isInteger(quantity) ||
                     quantity < 1 ||
                     quantity > 100
                 ) {
 
-                    return res
-                        .status(400)
-                        .json({
-                            success: false,
-                            error:
-                                `Nieprawidłowa ilość: ${name}`
-                        });
+                    return res.status(400).json({
+                        success: false,
+                        error:
+                            `Nieprawidłowa ilość produktu: ${name}`
+                    });
+
                 }
 
                 subtotal +=
-                    price *
-                    quantity;
+                    price * quantity;
 
-                lineItems.push({
-                    price_data: {
-                        currency: "pln",
-
-                        product_data: {
-                            name
-                        },
-
-                        unit_amount:
-                            Math.round(
-                                price * 100
-                            )
-                    },
-
+                cleanItems.push({
+                    name,
+                    price,
                     quantity
                 });
             }
 
-            console.log(
-                "[CHECKOUT] Subtotal:",
-                subtotal
-            );
-
-            /* -----------------------------------------
+            /* ==========================================
                DISCOUNT
-            ----------------------------------------- */
+            ========================================== */
 
             let discount = 0;
 
             if (
-                discountCode ===
-                "START10"
+                discountCode === "START10"
             ) {
-
                 discount =
                     subtotal * 0.10;
             }
@@ -516,22 +482,16 @@ app.post(
             const afterDiscount =
                 Math.max(
                     0,
-                    subtotal -
-                    discount
+                    subtotal - discount
                 );
 
-            console.log(
-                "[CHECKOUT] Rabat:",
-                discount
-            );
-
-            /* -----------------------------------------
+            /* ==========================================
                DELIVERY
-            ----------------------------------------- */
+            ========================================== */
 
             let deliveryPrice =
-                Number(
-                    delivery.price || 0
+                parseMoney(
+                    delivery.price
                 );
 
             if (
@@ -549,14 +509,44 @@ app.post(
                 deliveryPrice = 0;
             }
 
-            console.log(
-                "[CHECKOUT] Dostawa:",
-                deliveryPrice
-            );
+            /* ==========================================
+               STRIPE ITEMS
+            ========================================== */
 
-            /*
-             * Dodajemy dostawę jako osobny item.
-             */
+            for (const item of cleanItems) {
+
+                const finalPrice =
+                    discount > 0
+                        ? item.price * 0.90
+                        : item.price;
+
+                const unitAmount =
+                    Math.round(
+                        finalPrice * 100
+                    );
+
+                if (unitAmount <= 0) {
+                    continue;
+                }
+
+                lineItems.push({
+
+                    price_data: {
+
+                        currency: "pln",
+
+                        product_data: {
+                            name: item.name
+                        },
+
+                        unit_amount:
+                            unitAmount
+                    },
+
+                    quantity:
+                        item.quantity
+                });
+            }
 
             if (
                 deliveryPrice > 0
@@ -574,17 +564,13 @@ app.post(
                                     String(
                                         delivery.method ||
                                         "Dostawa"
-                                    ).slice(
-                                        0,
-                                        100
-                                    )
+                                    ).slice(0, 100)
                                 }`
                         },
 
                         unit_amount:
                             Math.round(
-                                deliveryPrice *
-                                100
+                                deliveryPrice * 100
                             )
                     },
 
@@ -592,38 +578,33 @@ app.post(
                 });
             }
 
-            /* -----------------------------------------
-               TOTAL
-            ----------------------------------------- */
-
             const total =
                 afterDiscount +
                 deliveryPrice;
 
             console.log(
-                "[CHECKOUT] TOTAL:",
+                "[CHECKOUT] subtotal:",
+                subtotal
+            );
+
+            console.log(
+                "[CHECKOUT] discount:",
+                discount
+            );
+
+            console.log(
+                "[CHECKOUT] delivery:",
+                deliveryPrice
+            );
+
+            console.log(
+                "[CHECKOUT] total:",
                 total
             );
 
-            if (
-                !Number.isFinite(
-                    total
-                ) ||
-                total <= 0
-            ) {
-
-                return res
-                    .status(400)
-                    .json({
-                        success: false,
-                        error:
-                            "Nieprawidłowa kwota."
-                    });
-            }
-
-            /* -----------------------------------------
+            /* ==========================================
                ORDER
-            ----------------------------------------- */
+            ========================================== */
 
             const orderId =
                 generateOrderId();
@@ -635,49 +616,43 @@ app.post(
 
                 name:
                     String(
-                        customer.name ||
-                        ""
+                        customer.name || ""
                     ).trim(),
 
                 email,
 
                 phone:
                     String(
-                        customer.phone ||
-                        ""
+                        customer.phone || ""
                     ).trim(),
 
                 address:
                     String(
-                        customer.address ||
-                        ""
+                        customer.address || ""
                     ).trim(),
 
                 postcode:
                     String(
-                        customer.postcode ||
-                        ""
+                        customer.postcode || ""
                     ).trim(),
 
                 city:
                     String(
-                        customer.city ||
-                        ""
+                        customer.city || ""
                     ).trim(),
 
                 paczkomat:
                     String(
-                        customer.paczkomat ||
-                        ""
+                        customer.paczkomat || ""
                     ).trim(),
 
                 delivery:
                     String(
-                        delivery.method ||
-                        ""
+                        delivery.method || ""
                     ).trim(),
 
-                items,
+                items:
+                    cleanItems,
 
                 subtotal:
                     Number(
@@ -706,64 +681,33 @@ app.post(
                     "AWAITING_PAYMENT",
 
                 createdAt:
-                    new Date()
-                        .toISOString()
+                    new Date().toISOString()
             };
 
             const orders =
                 readOrders();
 
-            orders.unshift(
-                order
-            );
+            orders.unshift(order);
 
-            saveOrders(
-                orders
-            );
+            saveOrders(orders);
 
             console.log(
                 "[ORDER] Utworzono:",
                 orderId
             );
 
-            /* -----------------------------------------
-               STRIPE DEBUG
-            ----------------------------------------- */
-
-            console.log(
-                "[STRIPE DEBUG]",
-                JSON.stringify(
-                    {
-                        mode: "payment",
-                        lineItemsCount:
-                            lineItems.length,
-                        email: email,
-                        total: total,
-                        currency: "pln",
-                        baseUrl: BASE_URL,
-                        secretKeyPresent:
-                            Boolean(
-                                STRIPE_SECRET_KEY
-                            )
-                    },
-                    null,
-                    2
-                )
-            );
+            /* ==========================================
+               STRIPE
+            ========================================== */
 
             console.log(
                 "[STRIPE] Przed sessions.create"
             );
 
-            /* -----------------------------------------
-               STRIPE SESSION
-            ----------------------------------------- */
-
             const session =
                 await stripe.checkout.sessions.create({
 
-                    mode:
-                        "payment",
+                    mode: "payment",
 
                     line_items:
                         lineItems,
@@ -782,16 +726,12 @@ app.post(
 
                         orderId,
 
-                        discountCode,
-
                         delivery:
                             String(
-                                delivery.method ||
-                                ""
-                            ).slice(
-                                0,
-                                100
-                            )
+                                delivery.method || ""
+                            ).slice(0, 100),
+
+                        discountCode
                     },
 
                     success_url:
@@ -801,24 +741,18 @@ app.post(
                         `${BASE_URL}/checkout.html?payment=cancelled`
                 });
 
-            console.log(
-                "[STRIPE] Po sessions.create:",
-                session.id
-            );
-
             order.stripeSessionId =
                 session.id;
 
-            saveOrders(
-                orders
+            saveOrders(orders);
+
+            console.log(
+                "[STRIPE] Checkout utworzony:",
+                session.id
             );
 
             console.log(
-                "[CHECKOUT] Sukces!"
-            );
-
-            console.log(
-                "======================================"
+                "================================"
             );
 
             return res.json({
@@ -841,10 +775,6 @@ app.post(
                 "========== STRIPE ERROR =========="
             );
             console.error(
-                "name:",
-                error?.name
-            );
-            console.error(
                 "message:",
                 error?.message
             );
@@ -861,29 +791,24 @@ app.post(
                 error?.statusCode
             );
             console.error(
-                "raw:",
-                error?.raw?.message
-            );
-            console.error(
                 "=================================="
             );
-            console.error("");
 
-            return res
-                .status(500)
-                .json({
-                    success: false,
-                    error:
-                        error?.message ||
-                        "Stripe error"
-                });
+            return res.status(500).json({
+
+                success: false,
+
+                error:
+                    error?.message ||
+                    "Stripe error"
+            });
         }
     }
 );
 
-/* =========================================================
+/* ==================================================
    VERIFY SESSION
-========================================================= */
+================================================== */
 
 app.get(
     "/api/checkout-session/:id",
@@ -892,13 +817,13 @@ app.get(
         try {
 
             if (!stripe) {
-                return res
-                    .status(500)
-                    .json({
-                        success: false,
-                        error:
-                            "Stripe nie jest skonfigurowany."
-                    });
+
+                return res.status(500).json({
+                    success: false,
+                    error:
+                        "Stripe nie jest skonfigurowany."
+                });
+
             }
 
             const session =
@@ -916,8 +841,7 @@ app.get(
                 orderId
                     ? orders.find(
                         item =>
-                            item.id ===
-                            orderId
+                            item.id === orderId
                     )
                     : null;
 
@@ -947,8 +871,7 @@ app.get(
                         : 0,
 
                 currency:
-                    session.currency ||
-                    "pln",
+                    session.currency || "pln",
 
                 email:
                     session.customer_details?.email ||
@@ -956,21 +879,7 @@ app.get(
                     null,
 
                 order:
-                    order
-                        ? {
-                            id:
-                                order.id,
-
-                            status:
-                                order.status,
-
-                            paymentStatus:
-                                order.paymentStatus,
-
-                            total:
-                                order.total
-                        }
-                        : null
+                    order || null
             });
 
         } catch (error) {
@@ -984,15 +893,15 @@ app.get(
                 success: false,
                 error:
                     error?.message ||
-                    "Verify error"
+                    "Błąd weryfikacji."
             });
         }
     }
 );
 
-/* =========================================================
+/* ==================================================
    API 404
-========================================================= */
+================================================== */
 
 app.use(
     "/api",
@@ -1003,12 +912,13 @@ app.use(
             error:
                 "Nie znaleziono API."
         });
+
     }
 );
 
-/* =========================================================
-   FRONTEND
-========================================================= */
+/* ==================================================
+   ROOT
+================================================== */
 
 app.get(
     "/",
@@ -1020,12 +930,13 @@ app.get(
                 "index.html"
             )
         );
+
     }
 );
 
-/* =========================================================
+/* ==================================================
    START
-========================================================= */
+================================================== */
 
 app.listen(
     PORT,
