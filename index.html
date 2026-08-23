@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#030712">
-<meta name="description" content="Printerlase3D — nowoczesne wydruki 3D, breloki, dodatki i projekty na zamówienie.">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#030712"
+>
+
+<meta
+    name="description"
+    content="Printerlase3D — nowoczesne wydruki 3D, breloki, dodatki i projekty na zamówienie."
+>
+
 <title>Printerlase3D — Wydruki 3D</title>
 
 <style>
+
 /* =========================================================
    PRINTERLASE3D
    PREMIUM NEON SHOP
@@ -57,12 +72,27 @@ html{
 body{
     min-height:100vh;
     overflow-x:hidden;
+
     color:var(--text);
+
     background:
-        radial-gradient(circle at 10% 5%,rgba(0,210,255,.10),transparent 25%),
-        radial-gradient(circle at 90% 10%,rgba(118,85,255,.14),transparent 25%),
-        radial-gradient(circle at 50% 100%,rgba(0,120,255,.08),transparent 35%),
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(0,210,255,.10),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(118,85,255,.14),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0,120,255,.08),
+            transparent 35%
+        ),
         var(--bg);
+
     font-family:
         Inter,
         ui-sans-serif,
@@ -113,11 +143,13 @@ img{
 
 ::-webkit-scrollbar-thumb{
     border-radius:20px;
-    background:linear-gradient(
-        180deg,
-        var(--cyan),
-        var(--purple)
-    );
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--cyan),
+            var(--purple)
+        );
 }
 
 .container{
@@ -132,7 +164,9 @@ img{
 .background{
     position:fixed;
     inset:0;
+
     z-index:-10;
+
     pointer-events:none;
     overflow:hidden;
 }
@@ -140,7 +174,9 @@ img{
 .grid-bg{
     position:absolute;
     inset:0;
+
     opacity:.22;
+
     background-image:
         linear-gradient(
             rgba(18,223,255,.035) 1px,
@@ -151,90 +187,133 @@ img{
             rgba(18,223,255,.035) 1px,
             transparent 1px
         );
+
     background-size:55px 55px;
-    mask-image:linear-gradient(
-        to bottom,
-        black,
-        transparent 80%
-    );
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 80%
+        );
 }
 
 .glow{
     position:absolute;
+
     width:500px;
     height:500px;
+
     border-radius:50%;
+
     filter:blur(120px);
+
     opacity:.12;
 }
 
 .glow.one{
     top:-180px;
     left:-180px;
+
     background:var(--cyan);
-    animation:floatGlow 10s ease-in-out infinite;
+
+    animation:
+        floatGlow 10s
+        ease-in-out
+        infinite;
 }
 
 .glow.two{
     top:20%;
     right:-220px;
+
     background:var(--purple);
-    animation:floatGlow 13s ease-in-out infinite reverse;
+
+    animation:
+        floatGlow 13s
+        ease-in-out
+        infinite
+        reverse;
 }
 
 .glow.three{
     bottom:-250px;
     left:35%;
+
     background:var(--blue);
-    animation:floatGlow 15s ease-in-out infinite;
+
+    animation:
+        floatGlow 15s
+        ease-in-out
+        infinite;
 }
 
 @keyframes floatGlow{
+
     0%,100%{
-        transform:translate3d(0,0,0) scale(1);
+        transform:
+            translate3d(0,0,0)
+            scale(1);
     }
 
     50%{
-        transform:translate3d(40px,-30px,0) scale(1.15);
+        transform:
+            translate3d(40px,-30px,0)
+            scale(1.15);
     }
+
 }
 
 #particles{
     position:fixed;
     inset:0;
+
     z-index:-2;
+
     pointer-events:none;
 }
 
 .particle{
     position:absolute;
+
     width:2px;
     height:2px;
+
     border-radius:50%;
+
     background:var(--cyan);
+
     box-shadow:
         0 0 10px var(--cyan),
         0 0 20px rgba(18,223,255,.5);
+
     opacity:.35;
+
     animation:
         particleMove linear infinite,
         particlePulse 2s ease-in-out infinite;
 }
 
 @keyframes particleMove{
+
     from{
-        transform:translate3d(0,110vh,0);
+        transform:
+            translate3d(0,110vh,0);
     }
 
     to{
-        transform:translate3d(30px,-20vh,0);
+        transform:
+            translate3d(30px,-20vh,0);
     }
+
 }
 
 @keyframes particlePulse{
+
     50%{
         opacity:.8;
     }
+
 }
 
 /* =========================================================
@@ -243,13 +322,20 @@ img{
 
 .topbar{
     position:relative;
+
     z-index:10000;
+
     min-height:38px;
+
     display:flex;
+
     align-items:center;
     justify-content:center;
+
     padding:8px 15px;
+
     color:#dffaff;
+
     background:
         linear-gradient(
             90deg,
@@ -257,7 +343,11 @@ img{
             #10143b,
             #071d31
         );
-    border-bottom:1px solid rgba(18,223,255,.12);
+
+    border-bottom:
+        1px solid
+        rgba(18,223,255,.12);
+
     font-size:13px;
     font-weight:800;
     letter-spacing:.2px;
@@ -265,8 +355,10 @@ img{
 
 .topbar::before{
     content:"";
+
     position:absolute;
     inset:0;
+
     background:
         linear-gradient(
             90deg,
@@ -274,27 +366,42 @@ img{
             rgba(18,223,255,.10),
             transparent
         );
-    transform:translateX(-100%);
-    animation:topShine 5s linear infinite;
+
+    transform:
+        translateX(-100%);
+
+    animation:
+        topShine 5s
+        linear infinite;
 }
 
 @keyframes topShine{
+
     to{
-        transform:translateX(100%);
+        transform:
+            translateX(100%);
     }
+
 }
 
 .topbar-inner{
+
     display:flex;
+
     align-items:center;
     justify-content:center;
+
     gap:15px;
+
     flex-wrap:wrap;
 }
 
 .topbar-item{
+
     display:flex;
+
     align-items:center;
+
     gap:7px;
 }
 
@@ -303,9 +410,12 @@ img{
 }
 
 .topbar-separator{
+
     width:4px;
     height:4px;
+
     border-radius:50%;
+
     background:#45617e;
 }
 
@@ -314,43 +424,68 @@ img{
 ========================================================= */
 
 #loader{
+
     position:fixed;
     inset:0;
+
     z-index:999999;
+
     display:grid;
+
     place-items:center;
+
     background:
         radial-gradient(
             circle,
             #0a1930,
             #02050d 70%
         );
+
     transition:
         opacity .7s ease,
         visibility .7s ease;
 }
 
 #loader.hide{
+
     opacity:0;
+
     visibility:hidden;
+
     pointer-events:none;
 }
 
 .loader-box{
+
     width:min(500px,90%);
+
     text-align:center;
 }
 
 .loader-logo{
-    font-size:clamp(34px,7vw,58px);
+
+    font-size:
+        clamp(
+            34px,
+            7vw,
+            58px
+        );
+
     font-weight:1000;
+
     letter-spacing:-3px;
+
     color:#fff;
+
     text-shadow:
         0 0 20px rgba(18,223,255,.7),
         0 0 60px rgba(18,223,255,.25);
+
     animation:
-        loaderPulse 1.2s ease-in-out infinite;
+        loaderPulse
+        1.2s
+        ease-in-out
+        infinite;
 }
 
 .loader-logo span{
@@ -358,26 +493,43 @@ img{
 }
 
 .loader-sub{
+
     margin-top:10px;
+
     color:var(--muted);
+
     font-size:12px;
+
     letter-spacing:1px;
 }
 
 .loader-track{
+
     position:relative;
+
     width:100%;
+
     height:5px;
-    margin:28px auto 12px;
+
+    margin:
+        28px
+        auto
+        12px;
+
     overflow:hidden;
+
     border-radius:99px;
+
     background:#122238;
 }
 
 .loader-progress{
+
     width:0;
     height:100%;
+
     border-radius:99px;
+
     background:
         linear-gradient(
             90deg,
@@ -385,17 +537,27 @@ img{
             var(--blue),
             var(--purple)
         );
+
     box-shadow:
-        0 0 20px rgba(18,223,255,.6);
-    animation:loading 1.8s cubic-bezier(.2,.8,.2,1) forwards;
+        0 0 20px
+        rgba(18,223,255,.6);
+
+    animation:
+        loading
+        1.8s
+        cubic-bezier(.2,.8,.2,1)
+        forwards;
 }
 
 .loader-status{
+
     color:#50657f;
+
     font-size:11px;
 }
 
 @keyframes loading{
+
     0%{
         width:0;
     }
@@ -407,12 +569,15 @@ img{
     100%{
         width:100%;
     }
+
 }
 
 @keyframes loaderPulse{
+
     50%{
         transform:scale(1.035);
     }
+
 }
 
 /* =========================================================
@@ -420,13 +585,24 @@ img{
 ========================================================= */
 
 header{
+
     position:sticky;
+
     top:0;
+
     z-index:9000;
+
     height:78px;
-    border-bottom:1px solid rgba(255,255,255,.055);
-    background:rgba(2,5,13,.62);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.055);
+
+    background:
+        rgba(2,5,13,.62);
+
     backdrop-filter:blur(22px);
+
     transition:
         background .3s,
         box-shadow .3s,
@@ -434,37 +610,63 @@ header{
 }
 
 header.scrolled{
-    background:rgba(2,5,13,.94);
-    border-color:rgba(18,223,255,.10);
+
+    background:
+        rgba(2,5,13,.94);
+
+    border-color:
+        rgba(18,223,255,.10);
+
     box-shadow:
-        0 15px 50px rgba(0,0,0,.28);
+        0 15px 50px
+        rgba(0,0,0,.28);
 }
 
 .nav{
+
     height:100%;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:20px;
 }
 
 .logo{
+
     display:flex;
+
     align-items:center;
+
     gap:11px;
+
     min-width:max-content;
+
     font-weight:1000;
 }
 
 .logo-box{
+
     position:relative;
+
     width:43px;
     height:43px;
+
     display:grid;
+
     place-items:center;
+
     overflow:hidden;
-    border:1px solid rgba(255,255,255,.16);
+
+    border:
+        1px solid
+        rgba(255,255,255,.16);
+
     border-radius:14px;
+
     background:
         linear-gradient(
             135deg,
@@ -472,31 +674,55 @@ header.scrolled{
             var(--blue),
             var(--purple)
         );
+
     box-shadow:
-        0 0 25px rgba(18,223,255,.20),
-        inset 0 0 18px rgba(255,255,255,.12);
+        0 0 25px
+        rgba(18,223,255,.20),
+
+        inset 0 0 18px
+        rgba(255,255,255,.12);
+
     font-size:10px;
     letter-spacing:-.4px;
 }
 
 .logo-box::after{
+
     content:"";
+
     position:absolute;
+
     width:130%;
     height:30%;
-    background:rgba(255,255,255,.28);
-    transform:rotate(-45deg) translateX(-150%);
-    animation:logoShine 4s ease-in-out infinite;
+
+    background:
+        rgba(255,255,255,.28);
+
+    transform:
+        rotate(-45deg)
+        translateX(-150%);
+
+    animation:
+        logoShine
+        4s
+        ease-in-out
+        infinite;
 }
 
 @keyframes logoShine{
+
     45%,100%{
-        transform:rotate(-45deg) translateX(170%);
+        transform:
+            rotate(-45deg)
+            translateX(170%);
     }
+
 }
 
 .logo-name{
+
     font-size:20px;
+
     letter-spacing:-.7px;
 }
 
@@ -505,88 +731,140 @@ header.scrolled{
 }
 
 .nav-links{
+
     display:flex;
+
     align-items:center;
+
     gap:3px;
 }
 
 .nav-links a{
+
     position:relative;
+
     padding:10px 12px;
+
     border-radius:11px;
+
     color:#8292aa;
+
     font-size:13px;
+
     font-weight:800;
+
     transition:.25s;
 }
 
 .nav-links a::after{
+
     content:"";
+
     position:absolute;
+
     left:50%;
     bottom:5px;
+
     width:0;
     height:2px;
+
     border-radius:5px;
+
     background:var(--cyan);
-    transform:translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     transition:.25s;
 }
 
 .nav-links a:hover{
+
     color:#fff;
-    background:rgba(255,255,255,.045);
+
+    background:
+        rgba(255,255,255,.045);
 }
 
 .nav-links a:hover::after{
+
     width:18px;
 }
 
 .nav-actions{
+
     display:flex;
+
     align-items:center;
+
     gap:7px;
 }
 
 .icon-btn{
+
     position:relative;
+
     width:43px;
     height:43px;
+
     display:grid;
+
     place-items:center;
-    border:1px solid #1d324c;
+
+    border:
+        1px solid
+        #1d324c;
+
     border-radius:12px;
+
     color:#fff;
+
     background:#081426;
+
     transition:.25s;
 }
 
 .icon-btn:hover{
+
     border-color:var(--cyan);
+
     background:#0b1c32;
-    box-shadow:0 0 25px rgba(18,223,255,.12);
+
+    box-shadow:
+        0 0 25px
+        rgba(18,223,255,.12);
+
     transform:translateY(-2px);
 }
 
-.icon-btn svg{
-    width:19px;
-    height:19px;
-}
-
 .count{
+
     position:absolute;
+
     top:-6px;
     right:-6px;
+
     min-width:20px;
     height:20px;
+
     padding:0 5px;
+
     display:grid;
+
     place-items:center;
-    border:2px solid var(--bg);
+
+    border:
+        2px solid
+        var(--bg);
+
     border-radius:99px;
+
     color:#001018;
+
     background:var(--cyan);
+
     font-size:9px;
+
     font-weight:1000;
 }
 
@@ -599,19 +877,37 @@ header.scrolled{
 ========================================================= */
 
 .btn{
+
     position:relative;
+
     display:inline-flex;
+
     align-items:center;
+
     justify-content:center;
+
     gap:8px;
+
     min-height:45px;
-    padding:12px 18px;
+
+    padding:
+        12px
+        18px;
+
     overflow:hidden;
-    border:1px solid transparent;
+
+    border:
+        1px solid
+        transparent;
+
     border-radius:13px;
+
     color:#fff;
+
     font-size:13px;
+
     font-weight:900;
+
     transition:
         transform .25s,
         box-shadow .25s,
@@ -620,19 +916,29 @@ header.scrolled{
 }
 
 .btn::before{
+
     content:"";
+
     position:absolute;
+
     top:0;
     bottom:0;
+
     width:40%;
+
     left:-60%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.25),
-        transparent
-    );
-    transform:skewX(-20deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.25),
+            transparent
+        );
+
+    transform:
+        skewX(-20deg);
+
     transition:.6s;
 }
 
@@ -645,10 +951,13 @@ header.scrolled{
 }
 
 .btn:active{
-    transform:translateY(0) scale(.97);
+    transform:
+        translateY(0)
+        scale(.97);
 }
 
 .primary{
+
     background:
         linear-gradient(
             135deg,
@@ -656,35 +965,35 @@ header.scrolled{
             var(--blue) 45%,
             var(--purple)
         );
+
     box-shadow:
-        0 12px 35px rgba(0,170,255,.17);
+        0 12px 35px
+        rgba(0,170,255,.17);
 }
 
 .primary:hover{
+
     box-shadow:
-        0 15px 45px rgba(0,190,255,.28);
+        0 15px 45px
+        rgba(0,190,255,.28);
 }
 
 .secondary{
+
     border-color:#243a56;
+
     background:#081426;
 }
 
 .secondary:hover{
+
     border-color:var(--cyan);
+
     background:#0b1a30;
 }
 
-.green{
-    background:
-        linear-gradient(
-            135deg,
-            #00e59a,
-            #00a96e
-        );
-}
-
 .danger{
+
     background:
         linear-gradient(
             135deg,
@@ -702,17 +1011,34 @@ header.scrolled{
 ========================================================= */
 
 .hero{
+
     position:relative;
-    min-height:calc(100vh - 116px);
-    padding:90px 0 75px;
+
+    min-height:
+        calc(
+            100vh - 116px
+        );
+
+    padding:
+        90px
+        0
+        75px;
+
     display:flex;
+
     align-items:center;
 }
 
 .hero-grid{
+
     display:grid;
-    grid-template-columns:1.08fr .92fr;
+
+    grid-template-columns:
+        1.08fr
+        .92fr;
+
     gap:55px;
+
     align-items:center;
 }
 
@@ -722,51 +1048,69 @@ header.scrolled{
 }
 
 .badge{
+
     display:inline-flex;
+
     align-items:center;
+
     gap:8px;
-    padding:8px 13px;
+
+    padding:
+        8px
+        13px;
+
     margin-bottom:20px;
-    border:1px solid rgba(18,223,255,.24);
+
+    border:
+        1px solid
+        rgba(18,223,255,.24);
+
     border-radius:99px;
+
     color:#67eaff;
-    background:rgba(18,223,255,.055);
+
+    background:
+        rgba(18,223,255,.055);
+
     font-size:11px;
+
     font-weight:1000;
+
     box-shadow:
-        inset 0 0 20px rgba(18,223,255,.025);
-    animation:badgeGlow 2.5s ease-in-out infinite;
+        inset 0 0 20px
+        rgba(18,223,255,.025);
+
 }
 
 .badge-dot{
+
     width:7px;
     height:7px;
+
     border-radius:50%;
+
     background:var(--green);
+
     box-shadow:
-        0 0 10px var(--green);
-    animation:statusPulse 1.3s infinite;
-}
-
-@keyframes statusPulse{
-    50%{
-        transform:scale(1.4);
-        opacity:.5;
-    }
-}
-
-@keyframes badgeGlow{
-    50%{
-        box-shadow:
-            0 0 28px rgba(18,223,255,.13);
-    }
+        0 0 10px
+        var(--green);
 }
 
 .hero h1{
+
     max-width:850px;
+
     margin-bottom:25px;
-    font-size:clamp(50px,6.3vw,88px);
+
+    font-size:
+        clamp(
+            50px,
+            6.3vw,
+            88px
+        );
+
     line-height:.94;
+
     letter-spacing:-5px;
 }
 
@@ -775,7 +1119,9 @@ header.scrolled{
 }
 
 .gradient-text{
+
     color:transparent;
+
     background:
         linear-gradient(
             90deg,
@@ -784,35 +1130,55 @@ header.scrolled{
             #c25cff,
             var(--cyan)
         );
+
     background-size:300%;
+
     -webkit-background-clip:text;
     background-clip:text;
-    animation:gradientMove 7s linear infinite;
+
+    animation:
+        gradientMove
+        7s
+        linear
+        infinite;
 }
 
 @keyframes gradientMove{
+
     to{
         background-position:300%;
     }
+
 }
 
 .hero p{
+
     max-width:680px;
+
     margin-bottom:30px;
+
     color:#8191aa;
+
     font-size:17px;
+
     line-height:1.75;
 }
 
 .hero-actions{
+
     display:flex;
+
     flex-wrap:wrap;
+
     gap:11px;
 }
 
 .hero-note{
+
     margin-top:17px;
+
     color:#556982;
+
     font-size:11px;
 }
 
@@ -821,93 +1187,109 @@ header.scrolled{
 }
 
 .stats{
+
     display:flex;
+
     flex-wrap:wrap;
+
     gap:35px;
+
     margin-top:43px;
 }
 
-.stat{
-    position:relative;
-}
-
 .stat strong{
+
     display:block;
+
     font-size:26px;
+
     letter-spacing:-1px;
 }
 
 .stat span{
+
     display:block;
+
     margin-top:3px;
+
     color:#60738d;
+
     font-size:11px;
 }
 
 .hero-visual{
+
     position:relative;
+
     min-height:530px;
+
     display:grid;
+
     place-items:center;
 }
 
 .orb{
+
     position:absolute;
+
     width:340px;
     height:340px;
+
     border-radius:50%;
+
     background:
         linear-gradient(
             135deg,
             var(--cyan),
             var(--purple)
         );
-    filter:blur(105px);
-    opacity:.13;
-    animation:orbPulse 5s ease-in-out infinite;
-}
 
-@keyframes orbPulse{
-    50%{
-        transform:scale(1.18);
-        opacity:.23;
-    }
+    filter:blur(105px);
+
+    opacity:.13;
 }
 
 .printer-card{
+
     position:relative;
+
     width:min(470px,94%);
+
     aspect-ratio:1;
+
     overflow:hidden;
-    border:1px solid rgba(18,223,255,.20);
+
+    border:
+        1px solid
+        rgba(18,223,255,.20);
+
     border-radius:35px;
+
     background:
         linear-gradient(
             145deg,
             rgba(13,34,58,.92),
             rgba(4,10,22,.94)
         );
+
     box-shadow:
-        0 0 100px rgba(0,180,255,.10),
-        inset 0 0 90px rgba(100,70,255,.06);
+        0 0 100px
+        rgba(0,180,255,.10),
+
+        inset 0 0 90px
+        rgba(100,70,255,.06);
+
     transform:rotate(-3deg);
-    animation:printerFloat 5s ease-in-out infinite;
-}
-
-@keyframes printerFloat{
-    0%,100%{
-        transform:translateY(0) rotate(-3deg);
-    }
-
-    50%{
-        transform:translateY(-15px) rotate(2deg);
-    }
 }
 
 .printer-grid{
+
     position:absolute;
+
     inset:0;
+
     opacity:.18;
+
     background-image:
         linear-gradient(
             rgba(18,223,255,.12) 1px,
@@ -918,133 +1300,160 @@ header.scrolled{
             rgba(18,223,255,.12) 1px,
             transparent 1px
         );
+
     background-size:35px 35px;
 }
 
 .printer-frame{
+
     position:absolute;
+
     left:18%;
     right:18%;
     top:17%;
     bottom:16%;
-    border:5px solid #60738c;
+
+    border:
+        5px solid
+        #60738c;
+
     border-radius:18px;
-    box-shadow:
-        inset 0 0 20px rgba(18,223,255,.04);
-}
-
-.printer-frame::before,
-.printer-frame::after{
-    content:"";
-    position:absolute;
-    background:#73879f;
-}
-
-.printer-frame::before{
-    top:14%;
-    left:12%;
-    right:12%;
-    height:5px;
-}
-
-.printer-frame::after{
-    left:18%;
-    top:18%;
-    bottom:0;
-    width:5px;
-    opacity:.5;
 }
 
 .nozzle{
+
     position:absolute;
+
     top:19%;
     left:50%;
+
     width:18px;
     height:65px;
-    transform:translateX(-50%);
+
+    transform:
+        translateX(-50%);
 }
 
 .nozzle-top{
+
     height:16px;
-    border-radius:5px 5px 2px 2px;
+
+    border-radius:
+        5px
+        5px
+        2px
+        2px;
+
     background:#93a4b9;
 }
 
 .nozzle-tip{
+
     width:7px;
     height:30px;
+
     margin:auto;
+
     background:#52657d;
-    clip-path:polygon(
-        15% 0,
-        85% 0,
-        65% 70%,
-        50% 100%,
-        35% 70%
-    );
+
+    clip-path:
+        polygon(
+            15% 0,
+            85% 0,
+            65% 70%,
+            50% 100%,
+            35% 70%
+        );
 }
 
 .print-line{
+
     position:absolute;
+
     left:50%;
     top:34%;
+
     width:4px;
     height:80px;
-    transform:translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     background:
         linear-gradient(
             var(--cyan),
             transparent
         );
-    box-shadow:
-        0 0 15px var(--cyan);
-    animation:printLine 2.4s ease-in-out infinite;
-}
 
-@keyframes printLine{
-    50%{
-        height:105px;
-        opacity:.5;
-    }
+    box-shadow:
+        0 0 15px
+        var(--cyan);
 }
 
 .printer-bed{
+
     position:absolute;
+
     left:24%;
     right:24%;
     bottom:20%;
+
     height:62px;
-    border:4px solid var(--cyan);
+
+    border:
+        4px solid
+        var(--cyan);
+
     border-radius:8px;
+
     box-shadow:
-        0 0 30px rgba(18,223,255,.38),
-        inset 0 0 20px rgba(18,223,255,.08);
-    transform:skewX(-7deg);
+        0 0 30px
+        rgba(18,223,255,.38);
 }
 
 .printer-logo{
+
     position:absolute;
+
     left:0;
     right:0;
+
     bottom:31px;
+
     text-align:center;
+
     color:var(--cyan);
+
     font-size:14px;
+
     font-weight:1000;
+
     letter-spacing:3px;
-    text-shadow:
-        0 0 18px rgba(18,223,255,.5);
 }
 
 .floating-card{
+
     position:absolute;
-    padding:13px 15px;
-    border:1px solid rgba(18,223,255,.18);
+
+    padding:
+        13px
+        15px;
+
+    border:
+        1px solid
+        rgba(18,223,255,.18);
+
     border-radius:15px;
-    background:rgba(5,15,29,.78);
-    backdrop-filter:blur(15px);
-    box-shadow:0 15px 45px rgba(0,0,0,.3);
-    animation:floatCard 4s ease-in-out infinite;
+
+    background:
+        rgba(5,15,29,.78);
+
+    backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.3);
 }
 
 .floating-card.one{
@@ -1055,31 +1464,32 @@ header.scrolled{
 .floating-card.two{
     left:0;
     bottom:15%;
-    animation-delay:-2s;
 }
 
 .float-label{
+
     color:#60748e;
+
     font-size:9px;
+
     text-transform:uppercase;
+
     letter-spacing:1px;
 }
 
 .float-value{
+
     margin-top:4px;
+
     color:#fff;
+
     font-size:13px;
+
     font-weight:1000;
 }
 
 .float-value.green-text{
     color:var(--green);
-}
-
-@keyframes floatCard{
-    50%{
-        transform:translateY(-10px);
-    }
 }
 
 /* =========================================================
@@ -1095,29 +1505,49 @@ section{
 }
 
 .section-head{
+
     margin-bottom:45px;
+
     text-align:center;
 }
 
 .label{
+
     margin-bottom:10px;
+
     color:var(--cyan);
+
     font-size:10px;
+
     font-weight:1000;
+
     letter-spacing:2.5px;
+
     text-transform:uppercase;
 }
 
 .section-head h2{
+
     margin-bottom:13px;
-    font-size:clamp(32px,4vw,47px);
+
+    font-size:
+        clamp(
+            32px,
+            4vw,
+            47px
+        );
+
     letter-spacing:-2px;
 }
 
 .section-head p{
+
     max-width:670px;
+
     margin:auto;
+
     color:#70829c;
+
     line-height:1.7;
 }
 
@@ -1126,78 +1556,103 @@ section{
 ========================================================= */
 
 .card{
+
     position:relative;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    background:var(--card);
-    backdrop-filter:blur(15px);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius);
+
+    background:
+        var(--card);
+
+    backdrop-filter:
+        blur(15px);
+
     transition:
         transform .35s,
         border .35s,
         box-shadow .35s;
 }
 
-.card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-radius:inherit;
-    pointer-events:none;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.035),
-            transparent 35%
-        );
-}
-
 .card:hover{
-    transform:translateY(-8px);
-    border-color:var(--border2);
+
+    transform:
+        translateY(-8px);
+
+    border-color:
+        var(--border2);
+
     box-shadow:
-        0 25px 70px rgba(0,0,0,.35),
-        0 0 40px rgba(18,223,255,.06);
+        0 25px 70px
+        rgba(0,0,0,.35);
 }
 
 /* =========================================================
-   PROMO STRIP
+   PROMO
 ========================================================= */
 
 .promo-grid{
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap:14px;
 }
 
 .promo{
+
     min-height:125px;
+
     padding:24px;
+
     display:flex;
+
     align-items:center;
+
     gap:17px;
 }
 
 .promo-icon{
+
     width:52px;
     height:52px;
+
     flex:0 0 auto;
+
     display:grid;
+
     place-items:center;
-    border:1px solid rgba(18,223,255,.18);
+
+    border:
+        1px solid
+        rgba(18,223,255,.18);
+
     border-radius:16px;
+
     color:var(--cyan);
-    background:rgba(18,223,255,.06);
+
+    background:
+        rgba(18,223,255,.06);
+
     font-size:23px;
 }
 
 .promo h3{
     margin-bottom:5px;
-    font-size:15px;
 }
 
 .promo p{
+
     color:#6e819b;
+
     font-size:12px;
+
     line-height:1.5;
 }
 
@@ -1210,25 +1665,38 @@ section{
 ========================================================= */
 
 .categories{
+
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+
+    grid-template-columns:
+        repeat(4,1fr);
+
     gap:16px;
 }
 
 .category{
+
     min-height:190px;
+
     padding:26px;
+
     overflow:hidden;
 }
 
 .category-icon{
+
     margin-bottom:18px;
+
     font-size:39px;
+
     transition:.35s;
 }
 
 .category:hover .category-icon{
-    transform:scale(1.17) rotate(5deg);
+
+    transform:
+        scale(1.17)
+        rotate(5deg);
 }
 
 .category h3{
@@ -1236,89 +1704,116 @@ section{
 }
 
 .category p{
+
     color:#6e8099;
+
     font-size:12px;
+
     line-height:1.6;
 }
 
 .category-link{
+
     display:inline-flex;
+
     margin-top:16px;
+
     color:var(--cyan);
+
     font-size:11px;
+
     font-weight:900;
 }
 
 /* =========================================================
-   SHOP TOOLS
+   SHOP
 ========================================================= */
 
 .shop-tools{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:14px;
+
     margin-bottom:25px;
+
     flex-wrap:wrap;
 }
 
 .search-box{
+
     position:relative;
+
     flex:1;
+
     min-width:250px;
 }
 
-.search-box svg{
-    position:absolute;
-    top:50%;
-    left:15px;
-    width:18px;
-    height:18px;
-    color:#536983;
-    transform:translateY(-50%);
-}
-
 .search-box input{
-    width:100%;
-    height:48px;
-    padding:0 15px 0 44px;
-    border:1px solid #1f3550;
-    border-radius:13px;
-    outline:none;
-    color:#fff;
-    background:#071426;
-    transition:.25s;
-}
 
-.search-box input:focus{
-    border-color:var(--cyan);
-    box-shadow:
-        0 0 30px rgba(18,223,255,.08);
+    width:100%;
+
+    height:48px;
+
+    padding:
+        0
+        15px;
+
+    border:
+        1px solid
+        #1f3550;
+
+    border-radius:13px;
+
+    outline:none;
+
+    color:#fff;
+
+    background:#071426;
 }
 
 .filters{
+
     display:flex;
+
     gap:7px;
+
     flex-wrap:wrap;
 }
 
 .filter{
+
     height:44px;
-    padding:0 14px;
-    border:1px solid #203650;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px solid
+        #203650;
+
     border-radius:11px;
+
     color:#7f91a9;
+
     background:#071426;
-    transition:.25s;
 }
 
 .filter:hover,
 .filter.active{
+
     color:#fff;
-    border-color:var(--cyan);
-    background:rgba(18,223,255,.07);
-    box-shadow:
-        0 0 20px rgba(18,223,255,.06);
+
+    border-color:
+        var(--cyan);
+
+    background:
+        rgba(18,223,255,.07);
 }
 
 /* =========================================================
@@ -1326,8 +1821,12 @@ section{
 ========================================================= */
 
 .products{
+
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+
+    grid-template-columns:
+        repeat(4,1fr);
+
     gap:18px;
 }
 
@@ -1336,11 +1835,17 @@ section{
 }
 
 .product-image{
+
     position:relative;
+
     height:245px;
+
     display:grid;
+
     place-items:center;
+
     overflow:hidden;
+
     background:
         radial-gradient(
             circle at 50% 45%,
@@ -1349,28 +1854,25 @@ section{
         );
 }
 
-.product-image::before{
-    content:"";
-    position:absolute;
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    background:var(--cyan);
-    filter:blur(90px);
-    opacity:.10;
-}
-
 .product-art{
+
     position:relative;
+
     z-index:1;
+
     font-size:90px;
+
     filter:
-        drop-shadow(0 18px 25px rgba(0,0,0,.55))
-        drop-shadow(0 0 15px rgba(18,223,255,.10));
+        drop-shadow(
+            0 18px 25px
+            rgba(0,0,0,.55)
+        );
+
     transition:.4s;
 }
 
 .product:hover .product-art{
+
     transform:
         scale(1.13)
         rotate(4deg)
@@ -1378,21 +1880,33 @@ section{
 }
 
 .product-badge{
+
     position:absolute;
+
     top:12px;
     left:12px;
+
     z-index:2;
-    padding:6px 9px;
+
+    padding:
+        6px
+        9px;
+
     border-radius:8px;
+
     color:#001018;
+
     background:var(--cyan);
+
     font-size:9px;
+
     font-weight:1000;
-    text-transform:uppercase;
 }
 
 .product-badge.hot{
+
     color:#fff;
+
     background:
         linear-gradient(
             135deg,
@@ -1402,30 +1916,44 @@ section{
 }
 
 .product-badge.new{
-    color:#001018;
     background:var(--green);
 }
 
 .favorite{
+
     position:absolute;
+
     top:12px;
     right:12px;
+
     z-index:3;
+
     width:37px;
     height:37px;
+
     display:grid;
+
     place-items:center;
-    border:1px solid #263c58;
+
+    border:
+        1px solid
+        #263c58;
+
     border-radius:10px;
+
     color:#a2b0c2;
-    background:rgba(4,11,22,.65);
-    backdrop-filter:blur(8px);
+
+    background:
+        rgba(4,11,22,.65);
+
     transition:.25s;
 }
 
 .favorite:hover,
 .favorite.active{
+
     color:#ff5273;
+
     border-color:#ff5273;
 }
 
@@ -1434,32 +1962,48 @@ section{
 }
 
 .product-category{
+
     color:#5d728e;
+
     font-size:9px;
+
     font-weight:1000;
+
     letter-spacing:1.2px;
+
     text-transform:uppercase;
 }
 
 .product h3{
+
     margin:7px 0;
+
     font-size:17px;
-    letter-spacing:-.3px;
 }
 
 .product-desc{
+
     min-height:40px;
+
     color:#70839d;
+
     font-size:12px;
+
     line-height:1.55;
 }
 
 .rating{
+
     display:flex;
+
     align-items:center;
+
     gap:6px;
+
     margin-top:10px;
+
     color:#ffd84d;
+
     font-size:11px;
 }
 
@@ -1468,62 +2012,92 @@ section{
 }
 
 .product-bottom{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:10px;
+
     margin-top:18px;
 }
 
 .price{
+
     font-size:21px;
+
     font-weight:1000;
-    letter-spacing:-.7px;
 }
 
 .old-price{
+
     margin-left:5px;
+
     color:#53657d;
+
     font-size:10px;
+
     text-decoration:line-through;
 }
 
 .add-cart{
+
     width:43px;
     height:43px;
+
     display:grid;
+
     place-items:center;
+
     border:none;
+
     border-radius:12px;
+
     color:#fff;
+
     background:
         linear-gradient(
             135deg,
             var(--cyan),
             var(--purple)
         );
+
     font-size:20px;
+
     transition:.25s;
 }
 
 .add-cart:hover{
+
     transform:
         scale(1.10)
         rotate(4deg);
+
     box-shadow:
-        0 0 28px rgba(18,223,255,.23);
+        0 0 28px
+        rgba(18,223,255,.23);
 }
 
 /* =========================================================
-   CUSTOM PRINT
+   CUSTOM
 ========================================================= */
 
 .custom-box{
+
     position:relative;
+
     overflow:hidden;
+
     padding:46px;
-    border:1px solid rgba(18,223,255,.18);
+
+    border:
+        1px solid
+        rgba(18,223,255,.18);
+
     border-radius:30px;
+
     background:
         linear-gradient(
             135deg,
@@ -1532,37 +2106,38 @@ section{
         );
 }
 
-.custom-box::before{
-    content:"";
-    position:absolute;
-    width:400px;
-    height:400px;
-    right:-200px;
-    top:-200px;
-    border-radius:50%;
-    background:var(--purple);
-    filter:blur(130px);
-    opacity:.10;
-}
-
 .custom-grid{
+
     position:relative;
+
     z-index:1;
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
     gap:45px;
+
     align-items:center;
 }
 
 .custom-info h2{
+
     margin-bottom:15px;
+
     font-size:40px;
+
     letter-spacing:-1.7px;
 }
 
 .custom-info p{
+
     margin-bottom:22px;
+
     color:#7b8da6;
+
     line-height:1.75;
 }
 
@@ -1571,31 +2146,47 @@ section{
 }
 
 .custom-list li{
+
     margin:13px 0;
+
     color:#aebbc9;
+
     font-size:13px;
 }
 
 .custom-list li::before{
+
     content:"✓";
+
     margin-right:10px;
+
     color:var(--cyan);
+
     font-weight:1000;
 }
 
 .form-card{
+
     padding:25px;
-    border:1px solid #203751;
+
+    border:
+        1px solid
+        #203751;
+
     border-radius:22px;
+
     background:
         rgba(5,14,27,.82);
-    box-shadow:
-        0 25px 70px rgba(0,0,0,.25);
 }
 
-.row{
+.form-row{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
     gap:12px;
 }
 
@@ -1604,56 +2195,73 @@ section{
 }
 
 .group label{
+
     display:block;
+
     margin-bottom:7px;
+
     color:#8193ab;
+
     font-size:11px;
+
     font-weight:800;
 }
 
 .group input,
 .group select,
 .group textarea{
-    width:100%;
-    padding:12px 13px;
-    border:1px solid #233a56;
-    border-radius:11px;
-    outline:none;
-    color:#fff;
-    background:#081629;
-    transition:.2s;
-}
 
-.group input:focus,
-.group select:focus,
-.group textarea:focus{
-    border-color:var(--cyan);
-    box-shadow:
-        0 0 20px rgba(18,223,255,.05);
+    width:100%;
+
+    padding:
+        12px
+        13px;
+
+    border:
+        1px solid
+        #233a56;
+
+    border-radius:11px;
+
+    outline:none;
+
+    color:#fff;
+
+    background:#081629;
 }
 
 .group textarea{
+
     min-height:105px;
+
     resize:vertical;
 }
 
 .price-preview{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     margin:17px 0;
+
     padding:15px;
+
     border-radius:12px;
+
     background:#0a1a2d;
 }
 
 .price-preview span{
     color:#71849d;
-    font-size:12px;
 }
 
 .price-preview strong{
+
     color:var(--cyan);
+
     font-size:24px;
 }
 
@@ -1662,8 +2270,12 @@ section{
 ========================================================= */
 
 .features{
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap:18px;
 }
 
@@ -1672,25 +2284,36 @@ section{
 }
 
 .feature-icon{
+
     width:55px;
     height:55px;
+
     display:grid;
+
     place-items:center;
+
     margin-bottom:18px;
-    border:1px solid rgba(18,223,255,.14);
+
+    border:
+        1px solid
+        rgba(18,223,255,.14);
+
     border-radius:16px;
-    background:rgba(18,223,255,.055);
+
+    background:
+        rgba(18,223,255,.055);
+
     font-size:25px;
 }
 
-.feature h3{
-    font-size:17px;
-}
-
 .feature p{
+
     margin-top:9px;
+
     color:#70829c;
+
     line-height:1.65;
+
     font-size:13px;
 }
 
@@ -1699,8 +2322,12 @@ section{
 ========================================================= */
 
 .steps{
+
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+
+    grid-template-columns:
+        repeat(4,1fr);
+
     gap:18px;
 }
 
@@ -1709,28 +2336,38 @@ section{
 }
 
 .step-number{
+
     width:44px;
     height:44px;
+
     display:grid;
+
     place-items:center;
+
     margin-bottom:17px;
+
     border-radius:13px;
+
     color:#001018;
+
     background:
         linear-gradient(
             135deg,
             var(--cyan),
             var(--purple)
         );
+
     font-weight:1000;
-    box-shadow:
-        0 10px 30px rgba(18,223,255,.13);
 }
 
 .step p{
+
     margin-top:8px;
+
     color:#70829c;
+
     line-height:1.6;
+
     font-size:13px;
 }
 
@@ -1739,8 +2376,12 @@ section{
 ========================================================= */
 
 .reviews{
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap:18px;
 }
 
@@ -1749,43 +2390,63 @@ section{
 }
 
 .stars{
+
     margin-bottom:14px;
+
     color:#ffd84d;
+
     letter-spacing:2px;
 }
 
 .review p{
+
     color:#8292a9;
+
     line-height:1.7;
+
     font-size:13px;
 }
 
 .reviewer{
+
     display:flex;
+
     align-items:center;
+
     gap:10px;
+
     margin-top:20px;
 }
 
 .avatar{
+
     width:40px;
     height:40px;
+
     display:grid;
+
     place-items:center;
+
     border-radius:12px;
+
     color:#001018;
+
     background:
         linear-gradient(
             135deg,
             var(--cyan),
             var(--purple)
         );
+
     font-weight:1000;
 }
 
 .reviewer small{
+
     display:block;
+
     margin-top:2px;
+
     color:#5d7089;
 }
 
@@ -1794,7 +2455,9 @@ section{
 ========================================================= */
 
 .faq{
+
     max-width:850px;
+
     margin:auto;
 }
 
@@ -1804,40 +2467,68 @@ section{
 }
 
 .faq-question{
+
     width:100%;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:15px;
+
     padding:19px;
+
     border:none;
+
     color:#fff;
+
     background:transparent;
+
     text-align:left;
+
     font-size:13px;
+
     font-weight:900;
 }
 
 .faq-plus{
+
     color:var(--cyan);
+
     font-size:20px;
+
     transition:.3s;
 }
 
 .faq-item.open .faq-plus{
-    transform:rotate(45deg);
+
+    transform:
+        rotate(45deg);
 }
 
 .faq-answer{
+
     max-height:0;
+
     overflow:hidden;
-    transition:max-height .4s ease;
+
+    transition:
+        max-height .4s ease;
 }
 
 .faq-answer p{
-    padding:0 19px 19px;
+
+    padding:
+        0
+        19px
+        19px;
+
     color:#71839d;
+
     line-height:1.7;
+
     font-size:13px;
 }
 
@@ -1846,12 +2537,21 @@ section{
 ========================================================= */
 
 .newsletter{
+
     position:relative;
+
     overflow:hidden;
+
     padding:57px;
-    border:1px solid rgba(18,223,255,.17);
+
+    border:
+        1px solid
+        rgba(18,223,255,.17);
+
     border-radius:30px;
+
     text-align:center;
+
     background:
         radial-gradient(
             circle at 20% 30%,
@@ -1867,31 +2567,50 @@ section{
 }
 
 .newsletter h2{
+
     margin-bottom:10px;
+
     font-size:37px;
+
     letter-spacing:-1.5px;
 }
 
 .newsletter p{
+
     margin-bottom:25px;
+
     color:#71839c;
 }
 
 .news-form{
+
     max-width:620px;
+
     margin:auto;
+
     display:flex;
+
     gap:9px;
 }
 
 .news-form input{
+
     flex:1;
+
     min-width:0;
+
     padding:14px;
-    border:1px solid #263b58;
+
+    border:
+        1px solid
+        #263b58;
+
     border-radius:12px;
+
     outline:none;
+
     color:#fff;
+
     background:#050f1f;
 }
 
@@ -1900,19 +2619,36 @@ section{
 ========================================================= */
 
 footer{
-    padding:55px 0 30px;
-    border-top:1px solid #14243a;
+
+    padding:
+        55px
+        0
+        30px;
+
+    border-top:
+        1px solid
+        #14243a;
+
     background:#01040a;
 }
 
 .footer{
+
     display:grid;
-    grid-template-columns:2fr 1fr 1fr 1fr;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr
+        1fr;
+
     gap:35px;
 }
 
 .footer-brand{
+
     font-size:20px;
+
     font-weight:1000;
 }
 
@@ -1926,35 +2662,47 @@ footer{
 }
 
 .footer p{
+
     max-width:420px;
+
     margin-top:12px;
+
     line-height:1.7;
+
     font-size:12px;
 }
 
 .footer h3{
     margin-bottom:12px;
-    font-size:13px;
 }
 
 .footer a{
+
     display:block;
+
     padding:5px 0;
+
     font-size:12px;
-    transition:.2s;
 }
 
 .footer a:hover{
     color:var(--cyan);
-    transform:translateX(3px);
 }
 
 .copyright{
+
     margin-top:40px;
+
     padding-top:20px;
-    border-top:1px solid #111f32;
+
+    border-top:
+        1px solid
+        #111f32;
+
     color:#43546b;
+
     font-size:10px;
+
     text-align:center;
 }
 
@@ -1963,126 +2711,194 @@ footer{
 ========================================================= */
 
 .overlay{
+
     position:fixed;
+
     inset:0;
+
     z-index:9500;
-    background:rgba(0,0,0,.68);
-    backdrop-filter:blur(6px);
+
+    background:
+        rgba(0,0,0,.68);
+
+    backdrop-filter:
+        blur(6px);
+
     opacity:0;
+
     pointer-events:none;
+
     transition:.3s;
 }
 
 .overlay.show{
+
     opacity:1;
+
     pointer-events:auto;
 }
 
 .cart{
+
     position:fixed;
+
     top:0;
     right:0;
     bottom:0;
+
     z-index:9600;
+
     width:min(470px,100%);
+
     display:flex;
+
     flex-direction:column;
-    border-left:1px solid #1e3550;
+
+    border-left:
+        1px solid
+        #1e3550;
+
     background:#061020;
-    box-shadow:-30px 0 100px rgba(0,0,0,.4);
-    transform:translateX(100%);
+
+    box-shadow:
+        -30px 0 100px
+        rgba(0,0,0,.4);
+
+    transform:
+        translateX(100%);
+
     transition:
-        transform .45s cubic-bezier(.2,.8,.2,1);
+        transform .45s
+        cubic-bezier(.2,.8,.2,1);
 }
 
 .cart.open{
-    transform:translateX(0);
+
+    transform:
+        translateX(0);
 }
 
 .cart-head{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     padding:20px;
-    border-bottom:1px solid #172b44;
+
+    border-bottom:
+        1px solid
+        #172b44;
 }
 
 .cart-title{
+
     font-size:18px;
+
     font-weight:1000;
 }
 
 .cart-subtitle{
+
     margin-top:3px;
+
     color:#62748c;
+
     font-size:10px;
 }
 
 .close{
+
     width:38px;
     height:38px;
-    display:grid;
-    place-items:center;
-    border:none;
-    border-radius:10px;
-    color:#fff;
-    background:#14263d;
-    transition:.2s;
-}
 
-.close:hover{
-    background:#203650;
-    transform:rotate(5deg);
+    display:grid;
+
+    place-items:center;
+
+    border:none;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    background:#14263d;
 }
 
 .cart-items{
+
     flex:1;
+
     overflow:auto;
-    padding:15px 20px;
+
+    padding:
+        15px
+        20px;
 }
 
 .cart-empty{
+
     height:100%;
+
     display:grid;
+
     place-items:center;
+
     text-align:center;
+
     color:#62758e;
 }
 
 .cart-empty-icon{
+
     margin-bottom:10px;
+
     font-size:45px;
 }
 
 .cart-item{
-    display:flex;
-    gap:12px;
-    padding:15px 0;
-    border-bottom:1px solid #15263c;
-    animation:cartItemIn .25s ease;
-}
 
-@keyframes cartItemIn{
-    from{
-        opacity:0;
-        transform:translateX(15px);
-    }
+    display:flex;
+
+    gap:12px;
+
+    padding:
+        15px
+        0;
+
+    border-bottom:
+        1px solid
+        #15263c;
 }
 
 .cart-img{
+
     width:65px;
     height:65px;
+
     flex:0 0 auto;
+
     display:grid;
+
     place-items:center;
-    border:1px solid #1e3550;
+
+    border:
+        1px solid
+        #1e3550;
+
     border-radius:13px;
+
     background:#0a1b2f;
+
     font-size:30px;
 }
 
 .cart-info{
+
     min-width:0;
+
     flex:1;
 }
 
@@ -2091,44 +2907,60 @@ footer{
 }
 
 .cart-price{
+
     margin-top:4px;
+
     color:var(--cyan);
+
     font-size:12px;
+
     font-weight:900;
 }
 
 .qty{
+
     display:flex;
+
     align-items:center;
+
     gap:7px;
+
     margin-top:8px;
 }
 
 .qty button{
+
     width:26px;
     height:26px;
-    border:none;
-    border-radius:7px;
-    color:#fff;
-    background:#172a43;
-    transition:.2s;
-}
 
-.qty button:hover{
-    background:#203a5b;
+    border:none;
+
+    border-radius:7px;
+
+    color:#fff;
+
+    background:#172a43;
 }
 
 .qty span{
+
     min-width:20px;
+
     text-align:center;
+
     font-size:11px;
 }
 
 .remove-item{
+
     align-self:flex-start;
+
     border:none;
+
     color:#6e819b;
+
     background:transparent;
+
     font-size:12px;
 }
 
@@ -2137,20 +2969,31 @@ footer{
 }
 
 .cart-footer{
+
     padding:20px;
-    border-top:1px solid #172b44;
+
+    border-top:
+        1px solid
+        #172b44;
+
     background:#061020;
 }
 
 .cart-progress{
+
     margin-bottom:15px;
 }
 
 .progress-text{
+
     display:flex;
+
     justify-content:space-between;
+
     margin-bottom:7px;
+
     color:#71839b;
+
     font-size:10px;
 }
 
@@ -2159,55 +3002,92 @@ footer{
 }
 
 .progress{
+
     height:5px;
+
     overflow:hidden;
+
     border-radius:99px;
+
     background:#14263c;
 }
 
 .progress span{
+
     display:block;
+
     width:0;
+
     height:100%;
+
     border-radius:99px;
+
     background:
         linear-gradient(
             90deg,
             var(--cyan),
             var(--green)
         );
+
     transition:.35s;
 }
 
-.coupon{
+.cart-coupon{
+
     display:flex;
+
     gap:7px;
-    margin-bottom:14px;
+
+    margin-bottom:8px;
 }
 
-.coupon input{
+.cart-coupon input{
+
     flex:1;
+
     min-width:0;
+
     padding:11px;
-    border:1px solid #233952;
+
+    border:
+        1px solid
+        #233952;
+
     border-radius:10px;
+
     outline:none;
+
     color:#fff;
+
     background:#081629;
 }
 
-.coupon button{
-    padding:0 13px;
-    border:1px solid #24405e;
+.cart-coupon button{
+
+    padding:
+        0
+        13px;
+
+    border:
+        1px solid
+        #24405e;
+
     border-radius:10px;
+
     color:#fff;
+
     background:#10233b;
 }
 
 .coupon-status{
+
     min-height:15px;
-    margin-top:-8px;
-    margin-bottom:10px;
+
+    margin:
+        0
+        0
+        10px;
+
     font-size:10px;
 }
 
@@ -2220,142 +3100,162 @@ footer{
 }
 
 .total-row{
+
     display:flex;
+
     justify-content:space-between;
+
     margin:7px 0;
+
     color:#73859e;
+
     font-size:12px;
 }
 
 .total-row.discount{
+
     color:var(--green);
 }
 
 .total-row.final{
+
     margin-top:13px;
+
     padding-top:13px;
-    border-top:1px solid #1b2f48;
+
+    border-top:
+        1px solid
+        #1b2f48;
+
     color:#fff;
 }
 
 .total-row.final strong{
+
     color:var(--cyan);
+
     font-size:24px;
 }
 
 /* =========================================================
-   MODALS
+   MODAL
 ========================================================= */
 
 .modal{
+
     position:fixed;
+
     inset:0;
+
     z-index:9800;
+
     display:none;
+
     place-items:center;
+
     padding:20px;
-    background:rgba(0,0,0,.78);
-    backdrop-filter:blur(9px);
+
+    background:
+        rgba(0,0,0,.78);
+
+    backdrop-filter:
+        blur(9px);
 }
 
 .modal.show{
+
     display:grid;
-    animation:modalFade .25s ease;
-}
-
-@keyframes modalFade{
-    from{
-        opacity:0;
-    }
-
-    to{
-        opacity:1;
-    }
 }
 
 .modal-box{
-    position:relative;
+
     width:min(650px,100%);
+
     max-height:90vh;
+
     overflow:auto;
+
     padding:27px;
-    border:1px solid #28415f;
+
+    border:
+        1px solid
+        #28415f;
+
     border-radius:24px;
+
     background:
         linear-gradient(
             145deg,
             #09182b,
             #050d1b
         );
+
     box-shadow:
-        0 35px 120px rgba(0,0,0,.65);
-    animation:modalBox .35s cubic-bezier(.2,.8,.2,1);
-}
-
-@keyframes modalBox{
-    from{
-        opacity:0;
-        transform:
-            translateY(25px)
-            scale(.95);
-    }
-
-    to{
-        opacity:1;
-        transform:none;
-    }
+        0 35px 120px
+        rgba(0,0,0,.65);
 }
 
 .modal-head{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:15px;
+
     margin-bottom:20px;
 }
 
-.modal-head h2{
-    font-size:22px;
-}
-
 .modal-description{
+
     margin-top:4px;
+
     color:#63758d;
+
     font-size:11px;
 }
-
-/* =========================================================
-   ACCOUNT
-========================================================= */
 
 .account-box{
     width:min(460px,100%);
 }
 
 .tabs{
+
     display:flex;
+
     gap:7px;
+
     margin-bottom:20px;
 }
 
 .tab{
+
     flex:1;
+
     padding:11px;
-    border:1px solid #233952;
+
+    border:
+        1px solid
+        #233952;
+
     border-radius:10px;
+
     color:#71839b;
+
     background:#081629;
-    transition:.2s;
 }
 
 .tab.active{
-    color:#fff;
-    border-color:var(--cyan);
-    background:rgba(18,223,255,.07);
-}
 
-.account-form .group{
-    margin-bottom:13px;
+    color:#fff;
+
+    border-color:
+        var(--cyan);
+
+    background:
+        rgba(18,223,255,.07);
 }
 
 .user-panel{
@@ -2366,44 +3266,61 @@ footer{
     display:block;
 }
 
+.user-card{
+
+    padding:20px;
+
+    border:
+        1px solid
+        #1f3651;
+
+    border-radius:17px;
+
+    background:#08172a;
+}
+
 .account-avatar{
+
     width:65px;
     height:65px;
+
     display:grid;
+
     place-items:center;
+
     margin-bottom:15px;
+
     border-radius:19px;
+
     color:#001018;
+
     background:
         linear-gradient(
             135deg,
             var(--cyan),
             var(--purple)
         );
+
     font-size:23px;
+
     font-weight:1000;
 }
 
-.user-card{
-    padding:20px;
-    border:1px solid #1f3651;
-    border-radius:17px;
-    background:#08172a;
-}
-
-.user-card h3{
-    font-size:18px;
-}
-
 .user-card p{
+
     margin-top:5px;
+
     color:#63768f;
+
     font-size:11px;
 }
 
 .user-actions{
+
     display:grid;
+
     gap:8px;
+
     margin-top:18px;
 }
 
@@ -2412,11 +3329,14 @@ footer{
 ========================================================= */
 
 .admin-box{
+
     width:min(1200px,100%);
 }
 
 .admin-login{
+
     max-width:440px;
+
     margin:auto;
 }
 
@@ -2429,16 +3349,27 @@ footer{
 }
 
 .admin-grid{
+
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+
+    grid-template-columns:
+        repeat(4,1fr);
+
     gap:12px;
+
     margin-bottom:20px;
 }
 
 .admin-stat{
+
     padding:20px;
-    border:1px solid #203650;
+
+    border:
+        1px solid
+        #203650;
+
     border-radius:16px;
+
     background:#081629;
 }
 
@@ -2447,59 +3378,96 @@ footer{
 }
 
 .admin-stat strong{
+
     display:block;
+
     margin-top:8px;
+
     color:var(--cyan);
+
     font-size:27px;
 }
 
 .admin-table{
+
     overflow:auto;
-    border:1px solid #203650;
+
+    border:
+        1px solid
+        #203650;
+
     border-radius:15px;
 }
 
 table{
+
     width:100%;
+
     min-width:700px;
+
     border-collapse:collapse;
 }
 
 th,
 td{
+
     padding:13px;
-    border-bottom:1px solid #162a42;
+
+    border-bottom:
+        1px solid
+        #162a42;
+
     text-align:left;
+
     font-size:11px;
 }
 
 th{
+
     color:var(--cyan);
+
     background:#0a192c;
 }
 
 td{
+
     color:#9daabd;
 }
 
 .admin-tabs{
+
     display:flex;
+
     gap:7px;
+
     margin-bottom:18px;
+
     flex-wrap:wrap;
 }
 
 .admin-tab{
-    padding:10px 13px;
-    border:1px solid #233a56;
+
+    padding:
+        10px
+        13px;
+
+    border:
+        1px solid
+        #233a56;
+
     border-radius:10px;
+
     color:#72849d;
+
     background:#081629;
 }
 
 .admin-tab.active{
+
     color:#fff;
-    border-color:var(--cyan);
+
+    border-color:
+        var(--cyan);
 }
 
 /* =========================================================
@@ -2507,36 +3475,66 @@ td{
 ========================================================= */
 
 .toast{
+
     position:fixed;
+
     right:20px;
     bottom:20px;
+
     z-index:99999;
-    width:min(370px,calc(100% - 40px));
-    padding:15px 17px;
-    border:1px solid #29425f;
+
+    width:min(
+        370px,
+        calc(100% - 40px)
+    );
+
+    padding:
+        15px
+        17px;
+
+    border:
+        1px solid
+        #29425f;
+
     border-radius:14px;
+
     background:#0c1c31;
+
     box-shadow:
-        0 20px 70px rgba(0,0,0,.45);
-    transform:translateY(110px);
+        0 20px 70px
+        rgba(0,0,0,.45);
+
+    transform:
+        translateY(110px);
+
     opacity:0;
+
     pointer-events:none;
+
     transition:.35s;
 }
 
 .toast.show{
+
     opacity:1;
-    transform:translateY(0);
+
+    transform:
+        translateY(0);
 }
 
 .toast-title{
+
     font-weight:1000;
+
     font-size:12px;
 }
 
 .toast-text{
+
     margin-top:3px;
+
     color:#73859e;
+
     font-size:11px;
 }
 
@@ -2545,33 +3543,49 @@ td{
 ========================================================= */
 
 .to-top{
+
     position:fixed;
+
     right:20px;
+
     bottom:85px;
+
     z-index:5000;
+
     width:44px;
     height:44px;
+
     display:grid;
+
     place-items:center;
-    border:1px solid #233a56;
+
+    border:
+        1px solid
+        #233a56;
+
     border-radius:12px;
+
     color:#fff;
+
     background:#0c1d32;
+
     opacity:0;
+
     pointer-events:none;
-    transform:translateY(10px);
+
+    transform:
+        translateY(10px);
+
     transition:.25s;
 }
 
 .to-top.show{
-    opacity:1;
-    pointer-events:auto;
-    transform:none;
-}
 
-.to-top:hover{
-    border-color:var(--cyan);
-    color:var(--cyan);
+    opacity:1;
+
+    pointer-events:auto;
+
+    transform:none;
 }
 
 /* =========================================================
@@ -2579,15 +3593,22 @@ td{
 ========================================================= */
 
 .reveal{
+
     opacity:0;
-    transform:translateY(30px);
+
+    transform:
+        translateY(30px);
+
     transition:
         opacity .8s ease,
-        transform .8s cubic-bezier(.2,.8,.2,1);
+        transform .8s
+        cubic-bezier(.2,.8,.2,1);
 }
 
 .reveal.visible{
+
     opacity:1;
+
     transform:none;
 }
 
@@ -2598,11 +3619,13 @@ td{
 @media(max-width:1150px){
 
     .products{
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns:
+            repeat(3,1fr);
     }
 
     .categories{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:
+            repeat(2,1fr);
     }
 
     .hero-grid{
@@ -2628,27 +3651,40 @@ td{
     }
 
     .footer{
-        grid-template-columns:1fr 1fr;
+        grid-template-columns:
+            1fr
+            1fr;
     }
 
     .admin-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:
+            repeat(2,1fr);
     }
+
 }
 
 @media(max-width:850px){
 
     .nav-links{
+
         position:absolute;
+
         top:78px;
+
         left:0;
         right:0;
+
         display:none;
+
         flex-direction:column;
+
         padding:13px;
-        border-bottom:1px solid #1a2e47;
+
+        border-bottom:
+            1px solid
+            #1a2e47;
+
         background:#061020;
-        box-shadow:0 20px 50px rgba(0,0,0,.3);
     }
 
     .nav-links.open{
@@ -2678,8 +3714,10 @@ td{
     }
 
     .steps{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:
+            repeat(2,1fr);
     }
+
 }
 
 @media(max-width:600px){
@@ -2690,10 +3728,6 @@ td{
 
     .topbar-separator{
         display:none;
-    }
-
-    .topbar-inner{
-        gap:5px 12px;
     }
 
     header{
@@ -2742,18 +3776,6 @@ td{
         width:90%;
     }
 
-    .floating-card{
-        transform:scale(.85);
-    }
-
-    .floating-card.one{
-        right:-8%;
-    }
-
-    .floating-card.two{
-        left:-8%;
-    }
-
     .products,
     .categories,
     .steps{
@@ -2764,7 +3786,7 @@ td{
         padding:22px;
     }
 
-    .row{
+    .form-row{
         grid-template-columns:1fr;
     }
 
@@ -2799,6 +3821,7 @@ td{
     .section{
         padding:75px 0;
     }
+
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -2806,20 +3829,25 @@ td{
     *,
     *::before,
     *::after{
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
         scroll-behavior:auto !important;
-        transition-duration:.01ms !important;
+
+        transition-duration:
+            .01ms !important;
     }
+
 }
+
 </style>
 </head>
 
 <body>
-
-<!-- ========================================================
-     BACKGROUND
-========================================================= -->
 
 <div class="background">
     <div class="grid-bg"></div>
@@ -2829,6 +3857,7 @@ td{
 </div>
 
 <div id="particles"></div>
+
 
 <!-- ========================================================
      LOADER
@@ -2858,8 +3887,9 @@ td{
 
 </div>
 
+
 <!-- ========================================================
-     TOP BAR
+     TOPBAR
 ========================================================= -->
 
 <div class="topbar">
@@ -2867,35 +3897,45 @@ td{
     <div class="topbar-inner">
 
         <div class="topbar-item">
+
             🚚
+
             <span>
                 <strong>Darmowa dostawa</strong>
                 od 50 zł
             </span>
+
         </div>
 
         <div class="topbar-separator"></div>
 
         <div class="topbar-item">
+
             🎟️
+
             <span>
                 Kod:
-                <strong>START120</strong>
+                <strong>START10</strong>
             </span>
+
         </div>
 
         <div class="topbar-separator"></div>
 
         <div class="topbar-item">
+
             ⚡
+
             <span>
                 Wydruki wykonywane na zamówienie
             </span>
+
         </div>
 
     </div>
 
 </div>
+
 
 <!-- ========================================================
      HEADER
@@ -2905,7 +3945,10 @@ td{
 
     <div class="container nav">
 
-        <a href="#home" class="logo">
+        <a
+            href="#home"
+            class="logo"
+        >
 
             <div class="logo-box">
                 PL3D
@@ -2917,7 +3960,11 @@ td{
 
         </a>
 
-        <nav class="nav-links" id="navLinks">
+
+        <nav
+            class="nav-links"
+            id="navLinks"
+        >
 
             <a href="#home">
                 Start
@@ -2945,6 +3992,7 @@ td{
 
         </nav>
 
+
         <div class="nav-actions">
 
             <button
@@ -2954,6 +4002,7 @@ td{
             >
                 👤
             </button>
+
 
             <button
                 class="icon-btn"
@@ -2972,10 +4021,10 @@ td{
 
             </button>
 
+
             <button
                 class="icon-btn mobile-menu"
                 onclick="toggleMobileMenu()"
-                aria-label="Menu"
             >
                 ☰
             </button>
@@ -2986,11 +4035,12 @@ td{
 
 </header>
 
+
+<main>
+
 <!-- ========================================================
      HERO
 ========================================================= -->
-
-<main>
 
 <section
     class="hero"
@@ -3009,6 +4059,7 @@ td{
 
             </div>
 
+
             <h1>
 
                 <span class="line">
@@ -3025,11 +4076,17 @@ td{
 
             </h1>
 
+
             <p>
-                Witaj w Printerlase3D — miejscu, gdzie cyfrowe
-                projekty zamieniają się w prawdziwe przedmioty.
-                Breloki, dodatki, gadżety i własne projekty 3D.
+
+                Witaj w Printerlase3D — miejscu,
+                gdzie cyfrowe projekty zamieniają
+                się w prawdziwe przedmioty.
+                Breloki, dodatki, gadżety i własne
+                projekty 3D.
+
             </p>
+
 
             <div class="hero-actions">
 
@@ -3049,10 +4106,19 @@ td{
 
             </div>
 
+
             <div class="hero-note">
-                🚚 Darmowa dostawa od <strong>50 zł</strong>
-                • kod <strong>START120</strong>
+
+                🚚 Darmowa dostawa od
+                <strong>50 zł</strong>
+
+                •
+
+                kod
+                <strong>START10</strong>
+
             </div>
+
 
             <div class="stats">
 
@@ -3068,6 +4134,7 @@ td{
 
                 </div>
 
+
                 <div class="stat">
 
                     <strong>
@@ -3080,6 +4147,7 @@ td{
 
                 </div>
 
+
                 <div class="stat">
 
                     <strong>
@@ -3091,6 +4159,7 @@ td{
                     </span>
 
                 </div>
+
 
                 <div class="stat">
 
@@ -3107,6 +4176,7 @@ td{
             </div>
 
         </div>
+
 
         <div class="hero-visual">
 
@@ -3138,6 +4208,7 @@ td{
 
             </div>
 
+
             <div class="floating-card one">
 
                 <div class="float-label">
@@ -3149,6 +4220,7 @@ td{
                 </div>
 
             </div>
+
 
             <div class="floating-card two">
 
@@ -3168,8 +4240,9 @@ td{
 
 </section>
 
+
 <!-- ========================================================
-     PROMOS
+     PROMO
 ========================================================= -->
 
 <section class="section">
@@ -3199,6 +4272,7 @@ td{
 
             </div>
 
+
             <div class="promo card reveal">
 
                 <div class="promo-icon">
@@ -3208,17 +4282,17 @@ td{
                 <div>
 
                     <h3>
-                        Kod START120
+                        Kod START10
                     </h3>
 
                     <p>
-                        Wpisz kod w koszyku,
-                        aby otrzymać rabat.
+                        10% rabatu na zamówienie.
                     </p>
 
                 </div>
 
             </div>
+
 
             <div class="promo card reveal">
 
@@ -3246,6 +4320,7 @@ td{
     </div>
 
 </section>
+
 
 <!-- ========================================================
      CATEGORIES
@@ -3276,6 +4351,7 @@ td{
 
         </div>
 
+
         <div class="categories">
 
             <a
@@ -3303,6 +4379,7 @@ td{
 
             </a>
 
+
             <a
                 href="#products"
                 class="category card reveal"
@@ -3327,6 +4404,7 @@ td{
                 </span>
 
             </a>
+
 
             <a
                 href="#products"
@@ -3353,10 +4431,10 @@ td{
 
             </a>
 
+
             <a
-                href="#products"
+                href="#custom"
                 class="category card reveal"
-                onclick="setFilter('custom')"
             >
 
                 <div class="category-icon">
@@ -3384,6 +4462,7 @@ td{
 
 </section>
 
+
 <!-- ========================================================
      PRODUCTS
 ========================================================= -->
@@ -3407,33 +4486,15 @@ td{
 
             <p>
                 Wybierz produkt, dodaj go do koszyka
-                i przejdź dalej, gdy będziemy rozbudowywać
-                system płatności.
+                i przejdź do płatności.
             </p>
 
         </div>
 
+
         <div class="shop-tools">
 
             <div class="search-box">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <circle
-                        cx="11"
-                        cy="11"
-                        r="7"
-                    ></circle>
-
-                    <path
-                        d="m20 20-4-4"
-                    ></path>
-
-                </svg>
 
                 <input
                     id="searchInput"
@@ -3443,6 +4504,7 @@ td{
                 >
 
             </div>
+
 
             <div class="filters">
 
@@ -3482,6 +4544,7 @@ td{
 
         </div>
 
+
         <div
             class="products"
             id="productsGrid"
@@ -3490,6 +4553,7 @@ td{
     </div>
 
 </section>
+
 
 <!-- ========================================================
      CUSTOM
@@ -3521,11 +4585,9 @@ td{
 
                     <p>
                         Podeślij informacje o projekcie,
-                        a przygotujemy wycenę. Możesz
-                        opisać model, kolor, rozmiar
-                        albo po prostu powiedzieć,
-                        co chcesz stworzyć.
+                        a przygotujemy wycenę.
                     </p>
+
 
                     <ul class="custom-list">
 
@@ -3549,6 +4611,7 @@ td{
 
                 </div>
 
+
                 <div class="form-card reveal">
 
                     <form
@@ -3556,7 +4619,7 @@ td{
                         onsubmit="submitCustom(event)"
                     >
 
-                        <div class="row">
+                        <div class="form-row">
 
                             <div class="group">
 
@@ -3572,6 +4635,7 @@ td{
                                 >
 
                             </div>
+
 
                             <div class="group">
 
@@ -3589,6 +4653,7 @@ td{
                             </div>
 
                         </div>
+
 
                         <div class="group">
 
@@ -3622,6 +4687,7 @@ td{
 
                         </div>
 
+
                         <div class="group">
 
                             <label>
@@ -3635,6 +4701,7 @@ td{
                             ></textarea>
 
                         </div>
+
 
                         <div class="group">
 
@@ -3668,6 +4735,7 @@ td{
 
                         </div>
 
+
                         <div class="price-preview">
 
                             <span>
@@ -3679,6 +4747,7 @@ td{
                             </strong>
 
                         </div>
+
 
                         <button
                             class="btn primary full"
@@ -3698,6 +4767,7 @@ td{
     </div>
 
 </section>
+
 
 <!-- ========================================================
      FEATURES
@@ -3719,6 +4789,7 @@ td{
 
         </div>
 
+
         <div class="features">
 
             <div class="feature card reveal">
@@ -3732,12 +4803,12 @@ td{
                 </h3>
 
                 <p>
-                    Dbamy o jakość powierzchni,
-                    wymiary oraz odpowiednie
+                    Dbamy o jakość i odpowiednie
                     ustawienia druku.
                 </p>
 
             </div>
+
 
             <div class="feature card reveal">
 
@@ -3751,11 +4822,11 @@ td{
 
                 <p>
                     Zamówienie trafia do kolejki
-                    i jest przygotowywane
-                    bez zbędnego czekania.
+                    i jest przygotowywane.
                 </p>
 
             </div>
+
 
             <div class="feature card reveal">
 
@@ -3769,8 +4840,7 @@ td{
 
                 <p>
                     Kolor, rozmiar, napis
-                    i własny projekt — możesz
-                    stworzyć coś swojego.
+                    i własny projekt.
                 </p>
 
             </div>
@@ -3781,8 +4851,9 @@ td{
 
 </section>
 
+
 <!-- ========================================================
-     HOW IT WORKS
+     STEPS
 ========================================================= -->
 
 <section class="section">
@@ -3801,6 +4872,7 @@ td{
 
         </div>
 
+
         <div class="steps">
 
             <div class="step card reveal">
@@ -3814,11 +4886,11 @@ td{
                 </h3>
 
                 <p>
-                    Znajdź interesujący Cię
-                    model w sklepie.
+                    Znajdź interesujący Cię model.
                 </p>
 
             </div>
+
 
             <div class="step card reveal">
 
@@ -3831,11 +4903,11 @@ td{
                 </h3>
 
                 <p>
-                    Ustaw ilość i dodaj produkt
-                    do swojego zamówienia.
+                    Ustaw ilość i dodaj produkt.
                 </p>
 
             </div>
+
 
             <div class="step card reveal">
 
@@ -3844,15 +4916,15 @@ td{
                 </div>
 
                 <h3>
-                    Złóż zamówienie
+                    Zapłać
                 </h3>
 
                 <p>
-                    Podaj dane dostawy
-                    i wybierz metodę płatności.
+                    Podaj dane i przejdź do Stripe Checkout.
                 </p>
 
             </div>
+
 
             <div class="step card reveal">
 
@@ -3865,8 +4937,7 @@ td{
                 </h3>
 
                 <p>
-                    Gotowy wydruk trafia
-                    do Ciebie.
+                    Gotowy wydruk trafia do Ciebie.
                 </p>
 
             </div>
@@ -3876,6 +4947,7 @@ td{
     </div>
 
 </section>
+
 
 <!-- ========================================================
      REVIEWS
@@ -3900,6 +4972,7 @@ td{
 
         </div>
 
+
         <div class="reviews">
 
             <div class="review card reveal">
@@ -3920,6 +4993,7 @@ td{
                     </div>
 
                     <div>
+
                         <strong>
                             Kacper
                         </strong>
@@ -3927,11 +5001,13 @@ td{
                         <small>
                             Zweryfikowany zakup
                         </small>
+
                     </div>
 
                 </div>
 
             </div>
+
 
             <div class="review card reveal">
 
@@ -3952,6 +5028,7 @@ td{
                     </div>
 
                     <div>
+
                         <strong>
                             Michał
                         </strong>
@@ -3959,11 +5036,13 @@ td{
                         <small>
                             Zweryfikowany zakup
                         </small>
+
                     </div>
 
                 </div>
 
             </div>
+
 
             <div class="review card reveal">
 
@@ -3972,9 +5051,8 @@ td{
                 </div>
 
                 <p>
-                    „Mega fajny sklep i szybki
-                    kontakt. Na pewno jeszcze
-                    coś zamówię.”
+                    „Mega fajny sklep i szybki kontakt.
+                    Na pewno jeszcze coś zamówię.”
                 </p>
 
                 <div class="reviewer">
@@ -3984,6 +5062,7 @@ td{
                     </div>
 
                     <div>
+
                         <strong>
                             Oskar
                         </strong>
@@ -3991,6 +5070,7 @@ td{
                         <small>
                             Zweryfikowany zakup
                         </small>
+
                     </div>
 
                 </div>
@@ -4002,6 +5082,7 @@ td{
     </div>
 
 </section>
+
 
 <!-- ========================================================
      FAQ
@@ -4026,6 +5107,7 @@ td{
 
         </div>
 
+
         <div class="faq">
 
             <div class="faq-item card reveal">
@@ -4045,6 +5127,7 @@ td{
 
                 </button>
 
+
                 <div class="faq-answer">
 
                     <p>
@@ -4056,6 +5139,7 @@ td{
 
             </div>
 
+
             <div class="faq-item card reveal">
 
                 <button
@@ -4064,7 +5148,7 @@ td{
                 >
 
                     <span>
-                        Jak użyć kodu START120?
+                        Jak użyć kodu START10?
                     </span>
 
                     <span class="faq-plus">
@@ -4073,17 +5157,18 @@ td{
 
                 </button>
 
+
                 <div class="faq-answer">
 
                     <p>
                         Dodaj produkty do koszyka,
-                        następnie wpisz START120
-                        w polu kodu rabatowego.
+                        a następnie wpisz START10.
                     </p>
 
                 </div>
 
             </div>
+
 
             <div class="faq-item card reveal">
 
@@ -4102,42 +5187,12 @@ td{
 
                 </button>
 
-                <div class="faq-answer">
-
-                    <p>
-                        Tak. Możesz wysłać opis
-                        projektu, a później rozbudujemy
-                        formularz o możliwość przesyłania
-                        plików STL.
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="faq-item card reveal">
-
-                <button
-                    class="faq-question"
-                    onclick="toggleFaq(this)"
-                >
-
-                    <span>
-                        Czy mogę założyć konto?
-                    </span>
-
-                    <span class="faq-plus">
-                        +
-                    </span>
-
-                </button>
 
                 <div class="faq-answer">
 
                     <p>
-                        Tak. Konto jest już przygotowane
-                        w tym pliku. W kolejnej części
-                        możemy podłączyć prawdziwy backend.
+                        Tak. Możesz wysłać opis projektu,
+                        a formularz zapisze go na serwerze.
                     </p>
 
                 </div>
@@ -4149,6 +5204,7 @@ td{
     </div>
 
 </section>
+
 
 <!-- ========================================================
      NEWSLETTER
@@ -4170,8 +5226,9 @@ td{
 
             <p>
                 Zapisz się i otrzymuj informacje
-                o nowych produktach i promocjach.
+                o nowych produktach.
             </p>
+
 
             <form
                 class="news-form"
@@ -4184,6 +5241,7 @@ td{
                     placeholder="Twój e-mail..."
                     required
                 >
+
 
                 <button
                     class="btn primary"
@@ -4201,6 +5259,7 @@ td{
 </section>
 
 </main>
+
 
 <!-- ========================================================
      FOOTER
@@ -4224,6 +5283,7 @@ td{
 
         </div>
 
+
         <div>
 
             <h3>
@@ -4244,6 +5304,7 @@ td{
 
         </div>
 
+
         <div>
 
             <h3>
@@ -4263,6 +5324,7 @@ td{
             </a>
 
         </div>
+
 
         <div>
 
@@ -4289,11 +5351,13 @@ td{
 
     </div>
 
+
     <div class="container copyright">
         © 2026 Printerlase3D. Wszystkie prawa zastrzeżone.
     </div>
 
 </footer>
+
 
 <!-- ========================================================
      OVERLAY
@@ -4304,6 +5368,7 @@ td{
     id="overlay"
     onclick="closeAllPanels()"
 ></div>
+
 
 <!-- ========================================================
      CART
@@ -4328,6 +5393,7 @@ td{
 
         </div>
 
+
         <button
             class="close"
             onclick="closeCart()"
@@ -4337,10 +5403,12 @@ td{
 
     </div>
 
+
     <div
         class="cart-items"
         id="cartItems"
     ></div>
+
 
     <div class="cart-footer">
 
@@ -4358,13 +5426,19 @@ td{
 
             </div>
 
+
             <div class="progress">
-                <span id="deliveryProgress"></span>
+
+                <span
+                    id="deliveryProgress"
+                ></span>
+
             </div>
 
         </div>
 
-        <div class="coupon">
+
+        <div class="cart-coupon">
 
             <input
                 id="couponInput"
@@ -4373,16 +5447,21 @@ td{
                 autocomplete="off"
             >
 
-            <button onclick="applyCoupon()">
+
+            <button
+                onclick="applyCoupon()"
+            >
                 Zastosuj
             </button>
 
         </div>
 
+
         <div
             class="coupon-status"
             id="couponStatus"
         ></div>
+
 
         <div class="total-row">
 
@@ -4396,6 +5475,7 @@ td{
 
         </div>
 
+
         <div class="total-row">
 
             <span>
@@ -4403,10 +5483,11 @@ td{
             </span>
 
             <strong id="shipping">
-                9,99 zł
+                0,00 zł
             </strong>
 
         </div>
+
 
         <div
             class="total-row discount"
@@ -4424,6 +5505,7 @@ td{
 
         </div>
 
+
         <div class="total-row final">
 
             <span>
@@ -4436,6 +5518,7 @@ td{
 
         </div>
 
+
         <button
             class="btn primary full"
             onclick="goToCheckout()"
@@ -4447,8 +5530,9 @@ td{
 
 </aside>
 
+
 <!-- ========================================================
-     ACCOUNT MODAL
+     ACCOUNT
 ========================================================= -->
 
 <div
@@ -4481,6 +5565,7 @@ td{
 
         </div>
 
+
         <div
             id="loginPanel"
             class="user-panel show"
@@ -4506,8 +5591,8 @@ td{
 
             </div>
 
+
             <form
-                class="account-form"
                 id="loginForm"
                 onsubmit="login(event)"
             >
@@ -4522,10 +5607,10 @@ td{
                         id="loginEmail"
                         type="email"
                         required
-                        placeholder="twoj@email.pl"
                     >
 
                 </div>
+
 
                 <div class="group">
 
@@ -4537,10 +5622,10 @@ td{
                         id="loginPassword"
                         type="password"
                         required
-                        placeholder="••••••••"
                     >
 
                 </div>
+
 
                 <button
                     class="btn primary full"
@@ -4551,8 +5636,8 @@ td{
 
             </form>
 
+
             <form
-                class="account-form"
                 id="registerForm"
                 style="display:none"
                 onsubmit="register(event)"
@@ -4568,10 +5653,10 @@ td{
                         id="registerName"
                         type="text"
                         required
-                        placeholder="Twoje imię"
                     >
 
                 </div>
+
 
                 <div class="group">
 
@@ -4583,10 +5668,10 @@ td{
                         id="registerEmail"
                         type="email"
                         required
-                        placeholder="twoj@email.pl"
                     >
 
                 </div>
+
 
                 <div class="group">
 
@@ -4599,10 +5684,10 @@ td{
                         type="password"
                         minlength="6"
                         required
-                        placeholder="Minimum 6 znaków"
                     >
 
                 </div>
+
 
                 <button
                     class="btn primary full"
@@ -4614,6 +5699,7 @@ td{
             </form>
 
         </div>
+
 
         <div
             id="loggedPanel"
@@ -4636,6 +5722,7 @@ td{
                 <p id="accountEmail">
                     user@example.com
                 </p>
+
 
                 <div class="user-actions">
 
@@ -4663,8 +5750,9 @@ td{
 
 </div>
 
+
 <!-- ========================================================
-     ADMIN MODAL
+     ADMIN
 ========================================================= -->
 
 <div
@@ -4697,6 +5785,7 @@ td{
 
         </div>
 
+
         <div
             id="adminLogin"
             class="admin-login"
@@ -4716,6 +5805,7 @@ td{
 
             </div>
 
+
             <div class="group">
 
                 <label>
@@ -4725,10 +5815,10 @@ td{
                 <input
                     id="adminPassword"
                     type="password"
-                    placeholder="••••••••"
                 >
 
             </div>
+
 
             <button
                 class="btn primary full"
@@ -4737,20 +5827,8 @@ td{
                 🔐 Zaloguj administratora
             </button>
 
-            <p
-                style="
-                    margin-top:12px;
-                    color:#52657d;
-                    font-size:10px;
-                    line-height:1.5;
-                "
-            >
-                Demo front-end. Prawdziwe zabezpieczenie
-                panelu administratora musi znajdować się
-                na backendzie.
-            </p>
-
         </div>
+
 
         <div
             id="adminDashboard"
@@ -4771,6 +5849,7 @@ td{
 
                 </div>
 
+
                 <div class="admin-stat">
 
                     <small>
@@ -4783,6 +5862,7 @@ td{
 
                 </div>
 
+
                 <div class="admin-stat">
 
                     <small>
@@ -4794,6 +5874,7 @@ td{
                     </strong>
 
                 </div>
+
 
                 <div class="admin-stat">
 
@@ -4808,6 +5889,7 @@ td{
                 </div>
 
             </div>
+
 
             <div class="admin-tabs">
 
@@ -4834,13 +5916,17 @@ td{
 
             </div>
 
-            <div id="adminContent"></div>
+
+            <div
+                id="adminContent"
+            ></div>
 
         </div>
 
     </div>
 
 </div>
+
 
 <!-- ========================================================
      TOAST
@@ -4867,17 +5953,20 @@ td{
 
 </div>
 
+
 <button
     class="to-top"
     id="toTop"
-    onclick="window.scrollTo({top:0,behavior:'smooth'})"
+    onclick="
+        window.scrollTo({
+            top:0,
+            behavior:'smooth'
+        })
+    "
 >
     ↑
 </button>
 
-<!-- ========================================================
-     JAVASCRIPT
-========================================================= -->
 
 <script>
 
@@ -4896,7 +5985,8 @@ const products = [
         emoji:"🔑",
         badge:"Bestseller",
         badgeType:"",
-        description:"Personalizowany brelok z napisem FRIENDZ.",
+        description:
+            "Personalizowany brelok z napisem FRIENDZ.",
         rating:5
     },
 
@@ -4905,11 +5995,11 @@ const products = [
         name:"Brelok Gamer",
         category:"breloki",
         price:12,
-        oldPrice:null,
         emoji:"🎮",
         badge:"Nowość",
         badgeType:"new",
-        description:"Mały gadżet dla fana gamingu.",
+        description:
+            "Mały gadżet dla fana gamingu.",
         rating:5
     },
 
@@ -4922,7 +6012,8 @@ const products = [
         emoji:"📱",
         badge:"Popularne",
         badgeType:"",
-        description:"Stabilna podstawka na telefon na biurko.",
+        description:
+            "Stabilna podstawka na telefon na biurko.",
         rating:5
     },
 
@@ -4931,11 +6022,9 @@ const products = [
         name:"Organizer na biurko",
         category:"dodatki",
         price:35,
-        oldPrice:null,
         emoji:"🗂️",
-        badge:null,
-        badgeType:"",
-        description:"Praktyczny organizer na drobiazgi.",
+        description:
+            "Praktyczny organizer na drobiazgi.",
         rating:4
     },
 
@@ -4948,7 +6037,8 @@ const products = [
         emoji:"🎧",
         badge:"Hot",
         badgeType:"hot",
-        description:"Uchwyt na słuchawki do stanowiska gamingowego.",
+        description:
+            "Uchwyt na słuchawki do stanowiska gamingowego.",
         rating:5
     },
 
@@ -4957,11 +6047,9 @@ const products = [
         name:"Stojak na pada",
         category:"gaming",
         price:29,
-        oldPrice:null,
         emoji:"🕹️",
-        badge:null,
-        badgeType:"",
-        description:"Minimalistyczny stojak na kontroler.",
+        description:
+            "Minimalistyczny stojak na kontroler.",
         rating:5
     },
 
@@ -4970,11 +6058,10 @@ const products = [
         name:"Creeper Pixel Art",
         category:"dodatki",
         price:15,
-        oldPrice:null,
         emoji:"🟩",
         badge:"Minecraft",
-        badgeType:"",
-        description:"Dekoracyjny model inspirowany pixel artem.",
+        description:
+            "Dekoracyjny model inspirowany pixel artem.",
         rating:5
     },
 
@@ -4986,52 +6073,270 @@ const products = [
         oldPrice:55,
         emoji:"🖨️",
         badge:"Bestseller",
-        badgeType:"",
-        description:"Miniaturowa dekoracja drukarki 3D.",
+        description:
+            "Miniaturowa dekoracja drukarki 3D.",
         rating:5
     }
 
 ];
 
+
 /* =========================================================
    STATE
 ========================================================= */
 
-let cart = JSON.parse(
-    localStorage.getItem("printerlase_cart") || "[]"
-);
+let cart = [];
+let users = [];
+let orders = [];
 
-let users = JSON.parse(
-    localStorage.getItem("printerlase_users") || "[]"
-);
+let currentUser = null;
 
-let orders = JSON.parse(
-    localStorage.getItem("printerlase_orders") || "[]"
-);
+let currentFilter =
+    "all";
 
-let currentUser = JSON.parse(
-    localStorage.getItem("printerlase_currentUser") || "null"
-);
+let appliedCoupon =
+    null;
 
-let currentFilter = "all";
 
-let appliedCoupon = null;
+/* =========================================================
+   COUPONS
+========================================================= */
 
 const coupons = {
 
-    START120:{
-        type:"percent",
-        value:12,
-        min:0
-    },
-
     START10:{
-        type:"fixed",
+        type:"percent",
         value:10,
-        min:50
+        min:0
     }
 
 };
+
+
+/* =========================================================
+   LOAD CART
+========================================================= */
+
+function loadCart(){
+
+    try{
+
+        const raw =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_cart"
+                ) || "[]"
+            );
+
+
+        if(
+            !Array.isArray(raw)
+        ){
+
+            cart = [];
+
+            return;
+
+        }
+
+
+        /*
+         * Obsługujemy zarówno stary:
+         *
+         * { id:1, qty:2 }
+         *
+         * jak i nowy:
+         *
+         * {
+         *   id:1,
+         *   name:"...",
+         *   price:15,
+         *   quantity:2
+         * }
+         */
+
+        cart =
+            raw
+                .map(
+                    item => {
+
+                        const product =
+                            products.find(
+                                p =>
+                                    String(
+                                        p.id
+                                    ) ===
+                                    String(
+                                        item.id
+                                    )
+                            );
+
+
+                        if(
+                            !product
+                        ){
+
+                            return null;
+
+                        }
+
+
+                        let quantity =
+                            Number(
+                                item.quantity ??
+                                item.qty ??
+                                1
+                            );
+
+
+                        if(
+                            !Number.isFinite(
+                                quantity
+                            ) ||
+                            quantity < 1
+                        ){
+
+                            quantity = 1;
+
+                        }
+
+
+                        quantity =
+                            Math.floor(
+                                quantity
+                            );
+
+
+                        return {
+
+                            id:
+                                product.id,
+
+                            name:
+                                product.name,
+
+                            price:
+                                Number(
+                                    product.price
+                                ),
+
+                            quantity,
+
+                            qty:
+                                quantity,
+
+                            emoji:
+                                product.emoji,
+
+                            category:
+                                product.category
+
+                        };
+
+                    }
+                )
+                .filter(Boolean);
+
+
+        saveCart();
+
+    }
+    catch(error){
+
+        console.error(
+            "[CART LOAD]",
+            error
+        );
+
+        cart = [];
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD OTHER DATA
+========================================================= */
+
+function loadUsers(){
+
+    try{
+
+        users =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_users"
+                ) || "[]"
+            );
+
+        if(
+            !Array.isArray(users)
+        ){
+
+            users = [];
+
+        }
+
+    }
+    catch{
+
+        users = [];
+
+    }
+
+}
+
+
+function loadOrders(){
+
+    try{
+
+        orders =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_orders"
+                ) || "[]"
+            );
+
+        if(
+            !Array.isArray(orders)
+        ){
+
+            orders = [];
+
+        }
+
+    }
+    catch{
+
+        orders = [];
+
+    }
+
+}
+
+
+function loadCurrentUser(){
+
+    try{
+
+        currentUser =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_currentUser"
+                ) || "null"
+            );
+
+    }
+    catch{
+
+        currentUser = null;
+
+    }
+
+}
+
 
 /* =========================================================
    INIT
@@ -5040,6 +6345,14 @@ const coupons = {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
+        loadCart();
+
+        loadUsers();
+
+        loadOrders();
+
+        loadCurrentUser();
 
         createParticles();
 
@@ -5053,18 +6366,32 @@ document.addEventListener(
 
         setupReveal();
 
+
         setTimeout(
             () => {
-                document
-                    .getElementById("loader")
-                    .classList
-                    .add("hide");
+
+                const loader =
+                    document.getElementById(
+                        "loader"
+                    );
+
+                if(
+                    loader
+                ){
+
+                    loader.classList.add(
+                        "hide"
+                    );
+
+                }
+
             },
             1900
         );
 
     }
 );
+
 
 /* =========================================================
    PARTICLES
@@ -5073,45 +6400,86 @@ document.addEventListener(
 function createParticles(){
 
     const container =
-        document.getElementById("particles");
+        document.getElementById(
+            "particles"
+        );
+
+
+    if(
+        !container
+    ){
+
+        return;
+
+    }
+
 
     const amount =
         window.innerWidth < 700
-        ? 35
-        : 75;
+            ? 35
+            : 75;
+
 
     for(
-        let i = 0;
-        i < amount;
+        let i=0;
+        i<amount;
         i++
     ){
 
         const particle =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         particle.className =
             "particle";
 
+
         particle.style.left =
-            Math.random() * 100 + "%";
+            Math.random() *
+            100 +
+            "%";
+
 
         particle.style.animationDuration =
-            (8 + Math.random() * 18) + "s";
+            (
+                8 +
+                Math.random() *
+                18
+            ) +
+            "s";
+
 
         particle.style.animationDelay =
-            (-Math.random() * 20) + "s";
+            (
+                -Math.random() *
+                20
+            ) +
+            "s";
+
 
         particle.style.opacity =
-            .15 + Math.random() * .5;
+            .15 +
+            Math.random() *
+            .5;
+
 
         const size =
-            1 + Math.random() * 3;
+            1 +
+            Math.random() *
+            3;
+
 
         particle.style.width =
-            size + "px";
+            size +
+            "px";
+
 
         particle.style.height =
-            size + "px";
+            size +
+            "px";
+
 
         container.appendChild(
             particle
@@ -5121,21 +6489,41 @@ function createParticles(){
 
 }
 
+
 /* =========================================================
-   PRODUCTS RENDER
+   PRODUCTS
 ========================================================= */
 
 function renderProducts(){
 
     const grid =
-        document.getElementById("productsGrid");
+        document.getElementById(
+            "productsGrid"
+        );
+
+
+    if(
+        !grid
+    ){
+
+        return;
+
+    }
+
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
 
     const search =
-        document
-            .getElementById("searchInput")
-            .value
-            .trim()
-            .toLowerCase();
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
 
     const filtered =
         products.filter(
@@ -5143,15 +6531,19 @@ function renderProducts(){
 
                 const categoryMatch =
                     currentFilter === "all" ||
-                    product.category === currentFilter;
+                    product.category ===
+                    currentFilter;
+
 
                 const searchMatch =
                     product.name
                         .toLowerCase()
                         .includes(search) ||
+
                     product.description
                         .toLowerCase()
                         .includes(search);
+
 
                 return (
                     categoryMatch &&
@@ -5161,9 +6553,13 @@ function renderProducts(){
             }
         );
 
-    if(!filtered.length){
+
+    if(
+        filtered.length === 0
+    ){
 
         grid.innerHTML = `
+
             <div
                 class="card"
                 style="
@@ -5175,11 +6571,33 @@ function renderProducts(){
             >
                 Nie znaleziono produktów.
             </div>
+
         `;
 
         return;
 
     }
+
+
+    let favorites = [];
+
+
+    try{
+
+        favorites =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_favorites"
+                ) || "[]"
+            );
+
+    }
+    catch{
+
+        favorites = [];
+
+    }
+
 
     grid.innerHTML =
         filtered
@@ -5187,14 +6605,10 @@ function renderProducts(){
                 product => {
 
                     const favorite =
-                        JSON.parse(
-                            localStorage.getItem(
-                                "printerlase_favorites"
-                            ) || "[]"
+                        favorites.includes(
+                            product.id
                         );
 
-                    const isFavorite =
-                        favorite.includes(product.id);
 
                     return `
 
@@ -5206,61 +6620,73 @@ function renderProducts(){
 
                                 ${
                                     product.badge
-                                    ? `
-                                        <div
-                                            class="
-                                                product-badge
-                                                ${product.badgeType}
-                                            "
-                                        >
-                                            ${product.badge}
-                                        </div>
-                                    `
-                                    : ""
+                                        ? `
+                                            <div
+                                                class="
+                                                    product-badge
+                                                    ${product.badgeType || ""}
+                                                "
+                                            >
+                                                ${product.badge}
+                                            </div>
+                                        `
+                                        : ""
                                 }
+
 
                                 <button
                                     class="
                                         favorite
-                                        ${isFavorite ? "active" : ""}
+                                        ${favorite ? "active" : ""}
                                     "
                                     onclick="
-                                        toggleFavorite(${product.id})
+                                        toggleFavorite(
+                                            ${product.id}
+                                        )
                                     "
                                 >
                                     ♥
                                 </button>
 
-                                <div
-                                    class="product-art"
-                                >
+
+                                <div class="product-art">
                                     ${product.emoji}
                                 </div>
 
                             </div>
 
+
                             <div class="product-info">
 
-                                <div
-                                    class="product-category"
-                                >
+                                <div class="product-category">
                                     ${product.category}
                                 </div>
+
 
                                 <h3>
                                     ${product.name}
                                 </h3>
 
-                                <div
-                                    class="product-desc"
-                                >
+
+                                <div class="product-desc">
                                     ${product.description}
                                 </div>
 
+
                                 <div class="rating">
 
-                                    ${"★".repeat(product.rating)}
-                                    ${"☆".repeat(5-product.rating)}
+                                    ${
+                                        "★".repeat(
+                                            product.rating
+                                        )
+                                    }
+
+                                    ${
+                                        "☆".repeat(
+                                            5 -
+                                            product.rating
+                                        )
+                                    }
 
                                     <span>
                                         (${product.rating}.0)
@@ -5268,32 +6694,40 @@ function renderProducts(){
 
                                 </div>
 
+
                                 <div class="product-bottom">
 
                                     <div>
 
                                         <span class="price">
-                                            ${formatPrice(product.price)}
+                                            ${formatPrice(
+                                                product.price
+                                            )}
                                         </span>
+
 
                                         ${
                                             product.oldPrice
-                                            ? `
-                                                <span class="old-price">
-                                                    ${formatPrice(product.oldPrice)}
-                                                </span>
-                                            `
-                                            : ""
+                                                ? `
+                                                    <span class="old-price">
+                                                        ${formatPrice(
+                                                            product.oldPrice
+                                                        )}
+                                                    </span>
+                                                `
+                                                : ""
                                         }
 
                                     </div>
 
+
                                     <button
                                         class="add-cart"
                                         onclick="
-                                            addToCart(${product.id})
+                                            addToCart(
+                                                ${product.id}
+                                            )
                                         "
-                                        aria-label="Dodaj do koszyka"
                                     >
                                         +
                                     </button>
@@ -5312,59 +6746,92 @@ function renderProducts(){
 
 }
 
+
 /* =========================================================
    FILTER
 ========================================================= */
 
-function setFilter(filter){
+function setFilter(
+    filter
+){
 
-    currentFilter = filter;
+    currentFilter =
+        filter;
+
 
     document
-        .querySelectorAll(".filter")
+        .querySelectorAll(
+            ".filter"
+        )
         .forEach(
             button => {
 
                 button.classList.toggle(
                     "active",
-                    button.dataset.filter === filter
+                    button.dataset.filter ===
+                    filter
                 );
 
             }
         );
 
+
     renderProducts();
 
 }
+
 
 /* =========================================================
    FAVORITES
 ========================================================= */
 
-function toggleFavorite(id){
+function toggleFavorite(
+    id
+){
 
-    let favorites =
-        JSON.parse(
-            localStorage.getItem(
-                "printerlase_favorites"
-            ) || "[]"
-        );
+    let favorites = [];
 
-    if(favorites.includes(id)){
+
+    try{
+
+        favorites =
+            JSON.parse(
+                localStorage.getItem(
+                    "printerlase_favorites"
+                ) || "[]"
+            );
+
+    }
+    catch{
+
+        favorites = [];
+
+    }
+
+
+    if(
+        favorites.includes(id)
+    ){
 
         favorites =
             favorites.filter(
-                item => item !== id
+                item =>
+                    item !== id
             );
+
 
         showToast(
             "Usunięto z ulubionych",
             "Produkt został usunięty."
         );
 
-    }else{
+    }
+    else{
 
-        favorites.push(id);
+        favorites.push(
+            id
+        );
+
 
         showToast(
             "Dodano do ulubionych ❤️",
@@ -5373,107 +6840,236 @@ function toggleFavorite(id){
 
     }
 
+
     localStorage.setItem(
         "printerlase_favorites",
-        JSON.stringify(favorites)
+        JSON.stringify(
+            favorites
+        )
     );
+
 
     renderProducts();
 
 }
 
+
 /* =========================================================
-   CART ADD
+   ADD TO CART
 ========================================================= */
 
-function addToCart(id){
+function addToCart(
+    id
+){
 
     const product =
         products.find(
-            item => item.id === id
+            item =>
+                String(
+                    item.id
+                ) ===
+                String(
+                    id
+                )
         );
 
-    if(!product){
+
+    if(
+        !product
+    ){
+
         return;
+
     }
+
 
     const existing =
         cart.find(
-            item => item.id === id
+            item =>
+                String(
+                    item.id
+                ) ===
+                String(
+                    product.id
+                )
         );
 
-    if(existing){
 
-        existing.qty++;
+    if(
+        existing
+    ){
 
-    }else{
+        const quantity =
+            Number(
+                existing.quantity ??
+                existing.qty ??
+                1
+            ) + 1;
+
+
+        existing.quantity =
+            quantity;
+
+        existing.qty =
+            quantity;
+
+        existing.name =
+            product.name;
+
+        existing.price =
+            Number(
+                product.price
+            );
+
+        existing.emoji =
+            product.emoji;
+
+    }
+    else{
+
+        /*
+         * TO JEST NAJWAŻNIEJSZE.
+         *
+         * Checkout dostaje od razu
+         * nazwę + cenę + ilość.
+         */
 
         cart.push({
-            id:product.id,
-            qty:1
+
+            id:
+                product.id,
+
+            name:
+                product.name,
+
+            price:
+                Number(
+                    product.price
+                ),
+
+            quantity:
+                1,
+
+            qty:
+                1,
+
+            emoji:
+                product.emoji,
+
+            category:
+                product.category
+
         });
 
     }
 
+
     saveCart();
 
     renderCart();
 
+    openCart();
+
+
     showToast(
         "Dodano do koszyka 🛒",
-        product.name + " został dodany."
+        product.name +
+        " został dodany."
     );
 
 }
 
-/* =========================================================
-   CART QUANTITY
-========================================================= */
-
-function changeQty(id, amount){
-
-    const item =
-        cart.find(
-            product => product.id === id
-        );
-
-    if(!item){
-        return;
-    }
-
-    item.qty += amount;
-
-    if(item.qty <= 0){
-
-        cart =
-            cart.filter(
-                product => product.id !== id
-            );
-
-    }
-
-    saveCart();
-
-    renderCart();
-
-}
 
 /* =========================================================
-   REMOVE
+   NORMALIZE CART
 ========================================================= */
 
-function removeFromCart(id){
+function normalizeCart(){
 
     cart =
-        cart.filter(
-            item => item.id !== id
-        );
+        cart
+            .map(
+                item => {
 
-    saveCart();
+                    const product =
+                        products.find(
+                            p =>
+                                String(
+                                    p.id
+                                ) ===
+                                String(
+                                    item.id
+                                )
+                        );
 
-    renderCart();
+
+                    if(
+                        !product
+                    ){
+
+                        return null;
+
+                    }
+
+
+                    let quantity =
+                        Number(
+                            item.quantity ??
+                            item.qty ??
+                            1
+                        );
+
+
+                    if(
+                        !Number.isFinite(
+                            quantity
+                        ) ||
+                        quantity < 1
+                    ){
+
+                        quantity = 1;
+
+                    }
+
+
+                    quantity =
+                        Math.floor(
+                            quantity
+                        );
+
+
+                    return {
+
+                        id:
+                            product.id,
+
+                        name:
+                            product.name,
+
+                        price:
+                            Number(
+                                product.price
+                            ),
+
+                        quantity,
+
+                        qty:
+                            quantity,
+
+                        emoji:
+                            product.emoji,
+
+                        category:
+                            product.category
+
+                    };
+
+                }
+            )
+            .filter(Boolean);
 
 }
+
 
 /* =========================================================
    SAVE CART
@@ -5481,35 +7077,169 @@ function removeFromCart(id){
 
 function saveCart(){
 
+    normalizeCart();
+
+
     localStorage.setItem(
         "printerlase_cart",
-        JSON.stringify(cart)
+        JSON.stringify(
+            cart
+        )
     );
+
 
     updateAdminStats();
 
 }
 
+
 /* =========================================================
-   CART TOTAL
+   QUANTITY
+========================================================= */
+
+function changeQty(
+    id,
+    amount
+){
+
+    const item =
+        cart.find(
+            product =>
+                String(
+                    product.id
+                ) ===
+                String(
+                    id
+                )
+        );
+
+
+    if(
+        !item
+    ){
+
+        return;
+
+    }
+
+
+    let quantity =
+        Number(
+            item.quantity ??
+            item.qty ??
+            1
+        );
+
+
+    quantity +=
+        Number(
+            amount
+        );
+
+
+    if(
+        quantity <= 0
+    ){
+
+        cart =
+            cart.filter(
+                product =>
+                    String(
+                        product.id
+                    ) !==
+                    String(
+                        id
+                    )
+            );
+
+    }
+    else{
+
+        item.quantity =
+            quantity;
+
+        item.qty =
+            quantity;
+
+    }
+
+
+    saveCart();
+
+    renderCart();
+
+}
+
+
+/* =========================================================
+   REMOVE
+========================================================= */
+
+function removeFromCart(
+    id
+){
+
+    cart =
+        cart.filter(
+            item =>
+                String(
+                    item.id
+                ) !==
+                String(
+                    id
+                )
+        );
+
+
+    saveCart();
+
+    renderCart();
+
+}
+
+
+/* =========================================================
+   SUBTOTAL
 ========================================================= */
 
 function getSubtotal(){
 
     return cart.reduce(
-        (sum,item) => {
+        (
+            total,
+            item
+        ) => {
 
-            const product =
-                products.find(
-                    p => p.id === item.id
+            const price =
+                Number(
+                    item.price
                 );
 
-            return sum +
-                (
-                    product
-                    ? product.price * item.qty
-                    : 0
+
+            const quantity =
+                Number(
+                    item.quantity ??
+                    item.qty ??
+                    1
                 );
+
+
+            if(
+                !Number.isFinite(
+                    price
+                )
+            ){
+
+                return total;
+
+            }
+
+
+            return (
+                total +
+                price *
+                quantity
+            );
 
         },
         0
@@ -5517,71 +7247,91 @@ function getSubtotal(){
 
 }
 
+
 /* =========================================================
    DISCOUNT
 ========================================================= */
 
-function getDiscount(subtotal){
-
-    if(!appliedCoupon){
-        return 0;
-    }
-
-    const coupon =
-        coupons[appliedCoupon];
-
-    if(!coupon){
-        return 0;
-    }
+function getDiscount(
+    subtotal
+){
 
     if(
-        coupon.min &&
-        subtotal < coupon.min
+        !appliedCoupon
     ){
+
         return 0;
+
     }
 
-    if(coupon.type === "percent"){
 
-        return subtotal *
+    const coupon =
+        coupons[
+            appliedCoupon
+        ];
+
+
+    if(
+        !coupon
+    ){
+
+        return 0;
+
+    }
+
+
+    if(
+        coupon.type ===
+        "percent"
+    ){
+
+        return (
+            subtotal *
             coupon.value /
-            100;
-
-    }
-
-    if(coupon.type === "fixed"){
-
-        return Math.min(
-            coupon.value,
-            subtotal
+            100
         );
 
     }
+
 
     return 0;
 
 }
 
+
 /* =========================================================
    SHIPPING
 ========================================================= */
 
-function getShipping(subtotal){
+function getShipping(
+    subtotal
+){
 
-    if(subtotal <= 0){
-        return 9.99;
-    }
+    if(
+        subtotal <= 0
+    ){
 
-    if(subtotal >= 50){
         return 0;
+
     }
+
+
+    if(
+        subtotal >= 50
+    ){
+
+        return 0;
+
+    }
+
 
     return 9.99;
 
 }
 
+
 /* =========================================================
-   CART RENDER
+   RENDER CART
 ========================================================= */
 
 function renderCart(){
@@ -5591,18 +7341,59 @@ function renderCart(){
             "cartItems"
         );
 
+
+    if(
+        !container
+    ){
+
+        return;
+
+    }
+
+
+    normalizeCart();
+
+
     const count =
         cart.reduce(
-            (sum,item) =>
-                sum + item.qty,
+            (
+                total,
+                item
+            ) => {
+
+                return (
+                    total +
+                    Number(
+                        item.quantity ??
+                        item.qty ??
+                        1
+                    )
+                );
+
+            },
             0
         );
 
-    document
-        .getElementById("cartCount")
-        .textContent = count;
 
-    if(!cart.length){
+    const countElement =
+        document.getElementById(
+            "cartCount"
+        );
+
+
+    if(
+        countElement
+    ){
+
+        countElement.textContent =
+            count;
+
+    }
+
+
+    if(
+        cart.length === 0
+    ){
 
         container.innerHTML = `
 
@@ -5633,100 +7424,138 @@ function renderCart(){
 
         `;
 
-    }else{
+    }
+    else{
 
         container.innerHTML =
-            cart.map(
-                item => {
+            cart
+                .map(
+                    item => {
 
-                    const product =
-                        products.find(
-                            p => p.id === item.id
-                        );
+                        const product =
+                            products.find(
+                                p =>
+                                    String(
+                                        p.id
+                                    ) ===
+                                    String(
+                                        item.id
+                                    )
+                            );
 
-                    if(!product){
-                        return "";
+
+                        if(
+                            !product
+                        ){
+
+                            return "";
+
+                        }
+
+
+                        const quantity =
+                            Number(
+                                item.quantity ??
+                                item.qty ??
+                                1
+                            );
+
+
+                        return `
+
+                            <div class="cart-item">
+
+                                <div class="cart-img">
+                                    ${product.emoji}
+                                </div>
+
+
+                                <div class="cart-info">
+
+                                    <h4>
+                                        ${product.name}
+                                    </h4>
+
+
+                                    <div class="cart-price">
+                                        ${formatPrice(
+                                            product.price
+                                        )}
+                                    </div>
+
+
+                                    <div class="qty">
+
+                                        <button
+                                            onclick="
+                                                changeQty(
+                                                    ${product.id},
+                                                    -1
+                                                )
+                                            "
+                                        >
+                                            −
+                                        </button>
+
+
+                                        <span>
+                                            ${quantity}
+                                        </span>
+
+
+                                        <button
+                                            onclick="
+                                                changeQty(
+                                                    ${product.id},
+                                                    1
+                                                )
+                                            "
+                                        >
+                                            +
+                                        </button>
+
+
+                                        <button
+                                            class="remove-item"
+                                            onclick="
+                                                removeFromCart(
+                                                    ${product.id}
+                                                )
+                                            "
+                                        >
+                                            Usuń
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
                     }
-
-                    return `
-
-                        <div class="cart-item">
-
-                            <div class="cart-img">
-                                ${product.emoji}
-                            </div>
-
-                            <div class="cart-info">
-
-                                <h4>
-                                    ${product.name}
-                                </h4>
-
-                                <div class="cart-price">
-                                    ${formatPrice(product.price)}
-                                </div>
-
-                                <div class="qty">
-
-                                    <button
-                                        onclick="
-                                            changeQty(
-                                                ${product.id},
-                                                -1
-                                            )
-                                        "
-                                    >
-                                        −
-                                    </button>
-
-                                    <span>
-                                        ${item.qty}
-                                    </span>
-
-                                    <button
-                                        onclick="
-                                            changeQty(
-                                                ${product.id},
-                                                1
-                                            )
-                                        "
-                                    >
-                                        +
-                                    </button>
-
-                                    <button
-                                        class="remove-item"
-                                        onclick="
-                                            removeFromCart(
-                                                ${product.id}
-                                            )
-                                        "
-                                    >
-                                        Usuń
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                }
-            )
-            .join("");
+                )
+                .join("");
 
     }
+
 
     const subtotal =
         getSubtotal();
 
+
     const discount =
-        getDiscount(subtotal);
+        getDiscount(
+            subtotal
+        );
+
 
     const shipping =
-        getShipping(subtotal);
+        getShipping(
+            subtotal
+        );
+
 
     const total =
         Math.max(
@@ -5736,88 +7565,203 @@ function renderCart(){
             discount
         );
 
-    document
-        .getElementById("subtotal")
-        .textContent =
-        formatPrice(subtotal);
 
-    document
-        .getElementById("shipping")
-        .textContent =
-        shipping === 0
-        ? "GRATIS"
-        : formatPrice(shipping);
+    const subtotalElement =
+        document.getElementById(
+            "subtotal"
+        );
 
-    document
-        .getElementById("total")
-        .textContent =
-        formatPrice(total);
+
+    if(
+        subtotalElement
+    ){
+
+        subtotalElement.textContent =
+            formatPrice(
+                subtotal
+            );
+
+    }
+
+
+    const shippingElement =
+        document.getElementById(
+            "shipping"
+        );
+
+
+    if(
+        shippingElement
+    ){
+
+        shippingElement.textContent =
+            shipping === 0
+                ? "GRATIS"
+                : formatPrice(
+                    shipping
+                );
+
+    }
+
+
+    const totalElement =
+        document.getElementById(
+            "total"
+        );
+
+
+    if(
+        totalElement
+    ){
+
+        totalElement.textContent =
+            formatPrice(
+                total
+            );
+
+    }
+
 
     const discountRow =
         document.getElementById(
             "discountRow"
         );
 
-    if(discount > 0){
 
-        discountRow.style.display =
-            "flex";
+    const discountElement =
+        document.getElementById(
+            "discount"
+        );
 
-        document
-            .getElementById("discount")
-            .textContent =
-            "-" + formatPrice(discount);
 
-    }else{
+    if(
+        discountRow
+    ){
 
-        discountRow.style.display =
-            "none";
+        if(
+            discount > 0
+        ){
+
+            discountRow.style.display =
+                "flex";
+
+
+            if(
+                discountElement
+            ){
+
+                discountElement.textContent =
+                    "-" +
+                    formatPrice(
+                        discount
+                    );
+
+            }
+
+        }
+        else{
+
+            discountRow.style.display =
+                "none";
+
+        }
 
     }
+
 
     const progress =
         Math.min(
             100,
-            subtotal / 50 * 100
+            subtotal /
+            50 *
+            100
         );
 
-    document
-        .getElementById("deliveryProgress")
-        .style.width =
-        progress + "%";
+
+    const progressElement =
+        document.getElementById(
+            "deliveryProgress"
+        );
+
+
+    if(
+        progressElement
+    ){
+
+        progressElement.style.width =
+            progress +
+            "%";
+
+    }
+
 
     const deliveryText =
         document.getElementById(
             "deliveryText"
         );
 
+
     const deliveryStatus =
         document.getElementById(
             "deliveryStatus"
         );
 
-    if(subtotal >= 50){
 
-        deliveryText.textContent =
-            "Darmowa dostawa odblokowana!";
+    if(
+        subtotal >= 50
+    ){
 
-        deliveryStatus.textContent =
-            "✓ GRATIS";
+        if(
+            deliveryText
+        ){
 
-    }else{
+            deliveryText.textContent =
+                "Darmowa dostawa odblokowana!";
 
-        deliveryText.textContent =
-            subtotal <= 0
-            ? "Dodaj produkty za 50 zł"
-            : "Brakuje " +
-              formatPrice(50 - subtotal);
+        }
 
-        deliveryStatus.textContent =
-            "🚚";
+
+        if(
+            deliveryStatus
+        ){
+
+            deliveryStatus.textContent =
+                "✓ GRATIS";
+
+        }
+
+    }
+    else{
+
+        if(
+            deliveryText
+        ){
+
+            deliveryText.textContent =
+                subtotal <= 0
+                    ? "Dodaj produkty za 50 zł"
+                    : "Brakuje " +
+                      formatPrice(
+                          50 -
+                          subtotal
+                      );
+
+        }
+
+
+        if(
+            deliveryStatus
+        ){
+
+            deliveryStatus.textContent =
+                "🚚";
+
+        }
 
     }
 
 }
+
 
 /* =========================================================
    COUPON
@@ -5826,142 +7770,142 @@ function renderCart(){
 function applyCoupon(){
 
     const input =
-        document
-            .getElementById("couponInput");
+        document.getElementById(
+            "couponInput"
+        );
+
 
     const status =
-        document
-            .getElementById("couponStatus");
+        document.getElementById(
+            "couponStatus"
+        );
+
 
     const code =
         input.value
             .trim()
             .toUpperCase();
 
+
     const subtotal =
         getSubtotal();
 
-    if(!code){
+
+    if(
+        code !== "START10"
+    ){
+
+        appliedCoupon =
+            null;
+
 
         status.textContent =
-            "Wpisz kod rabatowy.";
+            "❌ Nieprawidłowy kod.";
+
 
         status.className =
             "coupon-status error-text";
 
-        return;
-
-    }
-
-    const coupon =
-        coupons[code];
-
-    if(!coupon){
-
-        appliedCoupon = null;
-
-        status.textContent =
-            "Nieprawidłowy kod rabatowy.";
-
-        status.className =
-            "coupon-status error-text";
 
         renderCart();
 
-        return;
-
-    }
-
-    if(
-        coupon.min &&
-        subtotal < coupon.min
-    ){
-
-        status.textContent =
-            "Ten kod wymaga koszyka za minimum " +
-            formatPrice(coupon.min) +
-            ".";
-
-        status.className =
-            "coupon-status error-text";
 
         return;
 
     }
+
 
     appliedCoupon =
-        code;
+        "START10";
+
 
     const discount =
-        getDiscount(subtotal);
+        getDiscount(
+            subtotal
+        );
+
 
     status.textContent =
-        "Kod " +
-        code +
-        " aktywny! Rabat: " +
-        formatPrice(discount);
+        "✓ START10 aktywny — 10% rabatu";
+
 
     status.className =
         "coupon-status success-text";
 
+
     renderCart();
+
 
     showToast(
         "Kod rabatowy aktywny 🎟️",
-        "Rabat został naliczony."
+        "Naliczono 10% rabatu."
     );
 
 }
 
+
 /* =========================================================
-   CART OPEN/CLOSE
+   CART OPEN
 ========================================================= */
 
 function openCart(){
 
     document
-        .getElementById("cart")
+        .getElementById(
+            "cart"
+        )
         .classList
         .add("open");
 
+
     document
-        .getElementById("overlay")
+        .getElementById(
+            "overlay"
+        )
         .classList
         .add("show");
 
 }
 
+
+/* =========================================================
+   CART CLOSE
+========================================================= */
+
 function closeCart(){
 
     document
-        .getElementById("cart")
+        .getElementById(
+            "cart"
+        )
         .classList
         .remove("open");
 
+
     document
-        .getElementById("overlay")
+        .getElementById(
+            "overlay"
+        )
         .classList
         .remove("show");
 
 }
 
-function closeAllPanels(){
-
-    closeCart();
-
-    closeAccount();
-
-    closeAdmin();
-
-}
 
 /* =========================================================
-   CHECKOUT PLACEHOLDER
+   REAL CHECKOUT
 ========================================================= */
 
 function goToCheckout(){
 
-    if(!cart.length){
+    normalizeCart();
+
+    saveCart();
+
+
+    if(
+        cart.length === 0
+    ){
 
         showToast(
             "Koszyk jest pusty",
@@ -5972,12 +7916,42 @@ function goToCheckout(){
 
     }
 
-    showToast(
-        "Checkout przygotowany 💳",
-        "Następnym krokiem będzie podłączenie prawdziwych płatności."
-    );
+
+    /*
+     * Zapamiętujemy kod rabatowy,
+     * żeby checkout mógł go odczytać.
+     */
+
+    if(
+        appliedCoupon ===
+        "START10"
+    ){
+
+        localStorage.setItem(
+            "printerlase_coupon",
+            "START10"
+        );
+
+    }
+    else{
+
+        localStorage.removeItem(
+            "printerlase_coupon"
+        );
+
+    }
+
+
+    /*
+     * PRAWDZIWE PRZEJŚCIE
+     * DO checkout.html
+     */
+
+    window.location.href =
+        "checkout.html";
 
 }
+
 
 /* =========================================================
    ACCOUNT
@@ -5987,73 +7961,96 @@ function openAccount(){
 
     closeAdmin();
 
+
     document
-        .getElementById("accountModal")
+        .getElementById(
+            "accountModal"
+        )
         .classList
         .add("show");
+
 
     updateAccountUI();
 
 }
 
+
 function closeAccount(){
 
     document
-        .getElementById("accountModal")
+        .getElementById(
+            "accountModal"
+        )
         .classList
         .remove("show");
 
 }
 
-function switchAccountTab(tab){
+
+function switchAccountTab(
+    tab
+){
 
     const loginForm =
         document.getElementById(
             "loginForm"
         );
 
+
     const registerForm =
         document.getElementById(
             "registerForm"
         );
+
 
     const loginTab =
         document.getElementById(
             "loginTab"
         );
 
+
     const registerTab =
         document.getElementById(
             "registerTab"
         );
 
-    if(tab === "login"){
+
+    if(
+        tab === "login"
+    ){
 
         loginForm.style.display =
             "block";
 
+
         registerForm.style.display =
             "none";
+
 
         loginTab.classList.add(
             "active"
         );
 
+
         registerTab.classList.remove(
             "active"
         );
 
-    }else{
+    }
+    else{
 
         loginForm.style.display =
             "none";
 
+
         registerForm.style.display =
             "block";
+
 
         loginTab.classList.remove(
             "active"
         );
+
 
         registerTab.classList.add(
             "active"
@@ -6063,70 +8060,107 @@ function switchAccountTab(tab){
 
 }
 
-function register(event){
+
+function register(
+    event
+){
 
     event.preventDefault();
 
+
     const name =
-        document
-            .getElementById("registerName")
-            .value
-            .trim();
+        document.getElementById(
+            "registerName"
+        ).value.trim();
+
 
     const email =
-        document
-            .getElementById("registerEmail")
-            .value
+        document.getElementById(
+            "registerEmail"
+        ).value
             .trim()
             .toLowerCase();
 
+
     const password =
-        document
-            .getElementById("registerPassword")
-            .value;
+        document.getElementById(
+            "registerPassword"
+        ).value;
+
 
     if(
         users.some(
-            user => user.email === email
+            user =>
+                user.email ===
+                email
         )
     ){
 
         showToast(
             "Konto już istnieje",
-            "Użyj innego adresu e-mail."
+            "Użyj innego e-maila."
         );
 
         return;
 
     }
 
+
     const user = {
-        id:Date.now(),
+
+        id:
+            Date.now(),
+
         name,
+
         email,
+
         password,
-        createdAt:new Date().toISOString()
+
+        createdAt:
+            new Date()
+                .toISOString()
+
     };
 
-    users.push(user);
+
+    users.push(
+        user
+    );
+
 
     localStorage.setItem(
         "printerlase_users",
-        JSON.stringify(users)
+        JSON.stringify(
+            users
+        )
     );
 
+
     currentUser = {
-        id:user.id,
-        name:user.name,
-        email:user.email
+
+        id:
+            user.id,
+
+        name:
+            user.name,
+
+        email:
+            user.email
+
     };
+
 
     localStorage.setItem(
         "printerlase_currentUser",
-        JSON.stringify(currentUser)
+        JSON.stringify(
+            currentUser
+        )
     );
 
+
     updateAccountUI();
+
 
     showToast(
         "Konto utworzone 👤",
@@ -6135,30 +8169,41 @@ function register(event){
 
 }
 
-function login(event){
+
+function login(
+    event
+){
 
     event.preventDefault();
 
+
     const email =
-        document
-            .getElementById("loginEmail")
-            .value
+        document.getElementById(
+            "loginEmail"
+        ).value
             .trim()
             .toLowerCase();
 
+
     const password =
-        document
-            .getElementById("loginPassword")
-            .value;
+        document.getElementById(
+            "loginPassword"
+        ).value;
+
 
     const user =
         users.find(
             item =>
-                item.email === email &&
-                item.password === password
+                item.email ===
+                email &&
+                item.password ===
+                password
         );
 
-    if(!user){
+
+    if(
+        !user
+    ){
 
         showToast(
             "Błędne dane",
@@ -6169,18 +8214,31 @@ function login(event){
 
     }
 
+
     currentUser = {
-        id:user.id,
-        name:user.name,
-        email:user.email
+
+        id:
+            user.id,
+
+        name:
+            user.name,
+
+        email:
+            user.email
+
     };
+
 
     localStorage.setItem(
         "printerlase_currentUser",
-        JSON.stringify(currentUser)
+        JSON.stringify(
+            currentUser
+        )
     );
 
+
     updateAccountUI();
+
 
     showToast(
         "Zalogowano 👋",
@@ -6189,15 +8247,20 @@ function login(event){
 
 }
 
+
 function logout(){
 
-    currentUser = null;
+    currentUser =
+        null;
+
 
     localStorage.removeItem(
         "printerlase_currentUser"
     );
 
+
     updateAccountUI();
+
 
     showToast(
         "Wylogowano",
@@ -6206,6 +8269,7 @@ function logout(){
 
 }
 
+
 function updateAccountUI(){
 
     const loginPanel =
@@ -6213,43 +8277,63 @@ function updateAccountUI(){
             "loginPanel"
         );
 
+
     const loggedPanel =
         document.getElementById(
             "loggedPanel"
         );
 
-    if(currentUser){
+
+    if(
+        !loginPanel ||
+        !loggedPanel
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        currentUser
+    ){
 
         loginPanel.classList.remove(
             "show"
         );
 
+
         loggedPanel.classList.add(
             "show"
         );
 
-        document
-            .getElementById("accountName")
-            .textContent =
+
+        document.getElementById(
+            "accountName"
+        ).textContent =
             currentUser.name;
 
-        document
-            .getElementById("accountEmail")
-            .textContent =
+
+        document.getElementById(
+            "accountEmail"
+        ).textContent =
             currentUser.email;
 
-        document
-            .getElementById("accountAvatar")
-            .textContent =
+
+        document.getElementById(
+            "accountAvatar"
+        ).textContent =
             currentUser.name
                 .charAt(0)
                 .toUpperCase();
 
-    }else{
+    }
+    else{
 
         loginPanel.classList.add(
             "show"
         );
+
 
         loggedPanel.classList.remove(
             "show"
@@ -6259,15 +8343,21 @@ function updateAccountUI(){
 
 }
 
+
 /* =========================================================
    ORDERS
 ========================================================= */
 
 function showOrders(){
 
-    if(!currentUser){
+    if(
+        !currentUser
+    ){
+
         return;
+
     }
+
 
     const mine =
         orders.filter(
@@ -6276,7 +8366,10 @@ function showOrders(){
                 currentUser.id
         );
 
-    if(!mine.length){
+
+    if(
+        mine.length === 0
+    ){
 
         showToast(
             "Brak zamówień",
@@ -6287,12 +8380,15 @@ function showOrders(){
 
     }
 
+
     showToast(
         "Twoje zamówienia",
-        "Liczba zamówień: " + mine.length
+        "Liczba: " +
+        mine.length
     );
 
 }
+
 
 /* =========================================================
    ADMIN
@@ -6302,29 +8398,40 @@ function openAdmin(){
 
     closeAccount();
 
+
     document
-        .getElementById("adminModal")
+        .getElementById(
+            "adminModal"
+        )
         .classList
         .add("show");
+
 
     const logged =
         sessionStorage.getItem(
             "printerlase_admin"
         );
 
-    if(logged === "true"){
+
+    if(
+        logged === "true"
+    ){
 
         showAdminDashboard();
 
-    }else{
+    }
+    else{
 
-        document
-            .getElementById("adminLogin")
-            .style.display =
+        document.getElementById(
+            "adminLogin"
+        ).style.display =
             "block";
 
+
         document
-            .getElementById("adminDashboard")
+            .getElementById(
+                "adminDashboard"
+            )
             .classList
             .remove("show");
 
@@ -6332,37 +8439,40 @@ function openAdmin(){
 
 }
 
+
 function closeAdmin(){
 
     document
-        .getElementById("adminModal")
+        .getElementById(
+            "adminModal"
+        )
         .classList
         .remove("show");
 
 }
 
+
 function adminLogin(){
 
     const username =
         document
-            .getElementById("adminUsername")
-            .value;
+            .getElementById(
+                "adminUsername"
+            ).value;
+
 
     const password =
         document
-            .getElementById("adminPassword")
-            .value;
+            .getElementById(
+                "adminPassword"
+            ).value;
 
-    /*
-       DEMO ONLY.
-
-       Prawdziwy panel administratora
-       musi mieć autoryzację po stronie serwera.
-    */
 
     if(
-        username === "admin" &&
-        password === "admin123"
+        username ===
+            "admin" &&
+        password ===
+            "admin123"
     ){
 
         sessionStorage.setItem(
@@ -6370,14 +8480,17 @@ function adminLogin(){
             "true"
         );
 
+
         showAdminDashboard();
+
 
         showToast(
             "Panel admina 🔐",
             "Zalogowano."
         );
 
-    }else{
+    }
+    else{
 
         showToast(
             "Błędne dane",
@@ -6388,87 +8501,111 @@ function adminLogin(){
 
 }
 
+
 function showAdminDashboard(){
 
     document
-        .getElementById("adminLogin")
+        .getElementById(
+            "adminLogin"
+        )
         .style.display =
         "none";
 
+
     document
-        .getElementById("adminDashboard")
+        .getElementById(
+            "adminDashboard"
+        )
         .classList
         .add("show");
 
+
     updateAdminStats();
 
-    adminSection("orders");
+    adminSection(
+        "orders"
+    );
 
 }
 
+
 function updateAdminStats(){
 
-    const productElement =
+    const productsElement =
         document.getElementById(
             "adminProducts"
         );
 
-    const cartElement =
-        document.getElementById(
-            "adminCart"
-        );
 
-    const usersElement =
-        document.getElementById(
-            "adminUsers"
-        );
+    if(
+        !productsElement
+    ){
 
-    const ordersElement =
-        document.getElementById(
-            "adminOrders"
-        );
-
-    if(!productElement){
         return;
+
     }
 
-    productElement.textContent =
+
+    productsElement.textContent =
         products.length;
 
-    cartElement.textContent =
+
+    document.getElementById(
+        "adminCart"
+    ).textContent =
         cart.reduce(
-            (sum,item) =>
-                sum + item.qty,
+            (
+                total,
+                item
+            ) =>
+                total +
+                Number(
+                    item.quantity ??
+                    item.qty ??
+                    1
+                ),
             0
         );
 
-    usersElement.textContent =
+
+    document.getElementById(
+        "adminUsers"
+    ).textContent =
         users.length;
 
-    ordersElement.textContent =
+
+    document.getElementById(
+        "adminOrders"
+    ).textContent =
         orders.length;
 
 }
 
-function adminSection(section){
 
-    document
-        .querySelectorAll(".admin-tab")
-        .forEach(
-            button =>
-                button.classList.remove(
-                    "active"
-                )
-        );
+function adminSection(
+    section
+){
 
-    const buttons =
+    const tabs =
         document.querySelectorAll(
             ".admin-tab"
         );
 
-    if(section === "orders"){
 
-        buttons[0].classList.add(
+    tabs.forEach(
+        button =>
+            button.classList.remove(
+                "active"
+            )
+    );
+
+
+    if(
+        section ===
+        "orders"
+    ){
+
+        tabs[0]?.classList.add(
             "active"
         );
 
@@ -6476,9 +8613,13 @@ function adminSection(section){
 
     }
 
-    if(section === "products"){
 
-        buttons[1].classList.add(
+    if(
+        section ===
+        "products"
+    ){
+
+        tabs[1]?.classList.add(
             "active"
         );
 
@@ -6486,9 +8627,13 @@ function adminSection(section){
 
     }
 
-    if(section === "users"){
 
-        buttons[2].classList.add(
+    if(
+        section ===
+        "users"
+    ){
+
+        tabs[2]?.classList.add(
             "active"
         );
 
@@ -6498,6 +8643,7 @@ function adminSection(section){
 
 }
 
+
 function renderAdminOrders(){
 
     const content =
@@ -6505,7 +8651,19 @@ function renderAdminOrders(){
             "adminContent"
         );
 
-    if(!orders.length){
+
+    if(
+        !content
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        orders.length === 0
+    ){
 
         content.innerHTML = `
 
@@ -6513,8 +8671,8 @@ function renderAdminOrders(){
                 class="admin-table"
                 style="
                     padding:30px;
-                    color:#667a93;
                     text-align:center;
+                    color:#667a93;
                 "
             >
                 Brak zamówień.
@@ -6525,6 +8683,7 @@ function renderAdminOrders(){
         return;
 
     }
+
 
     content.innerHTML = `
 
@@ -6556,6 +8715,7 @@ function renderAdminOrders(){
 
                 </thead>
 
+
                 <tbody>
 
                     ${
@@ -6579,7 +8739,10 @@ function renderAdminOrders(){
                                         <td>
                                             ${
                                                 formatPrice(
-                                                    order.total
+                                                    Number(
+                                                        order.total ||
+                                                        0
+                                                    )
                                                 )
                                             }
                                         </td>
@@ -6608,12 +8771,23 @@ function renderAdminOrders(){
 
 }
 
+
 function renderAdminProducts(){
 
     const content =
         document.getElementById(
             "adminContent"
         );
+
+
+    if(
+        !content
+    ){
+
+        return;
+
+    }
+
 
     content.innerHTML = `
 
@@ -6640,6 +8814,7 @@ function renderAdminProducts(){
                     </tr>
 
                 </thead>
+
 
                 <tbody>
 
@@ -6682,6 +8857,7 @@ function renderAdminProducts(){
 
 }
 
+
 function renderAdminUsers(){
 
     const content =
@@ -6689,7 +8865,19 @@ function renderAdminUsers(){
             "adminContent"
         );
 
-    if(!users.length){
+
+    if(
+        !content
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        users.length === 0
+    ){
 
         content.innerHTML = `
 
@@ -6701,7 +8889,7 @@ function renderAdminUsers(){
                     color:#687b94;
                 "
             >
-                Brak zarejestrowanych użytkowników.
+                Brak użytkowników.
             </div>
 
         `;
@@ -6709,6 +8897,7 @@ function renderAdminUsers(){
         return;
 
     }
+
 
     content.innerHTML = `
 
@@ -6735,6 +8924,7 @@ function renderAdminUsers(){
                     </tr>
 
                 </thead>
+
 
                 <tbody>
 
@@ -6774,80 +8964,180 @@ function renderAdminUsers(){
 
 }
 
+
 /* =========================================================
-   CUSTOM FORM
+   CUSTOM
 ========================================================= */
 
-function submitCustom(event){
+async function submitCustom(
+    event
+){
 
     event.preventDefault();
 
+
     const name =
-        document
-            .getElementById("customName")
-            .value;
+        document.getElementById(
+            "customName"
+        ).value.trim();
 
-    showToast(
-        "Zapytanie przygotowane 📩",
-        "Dzięki " +
-        name +
-        "! Formularz jest gotowy do podłączenia z backendem."
-    );
 
-    event.target.reset();
+    const email =
+        document.getElementById(
+            "customEmail"
+        ).value.trim();
+
+
+    const description =
+        document.getElementById(
+            "customDescription"
+        ).value.trim();
+
+
+    const color =
+        document.getElementById(
+            "customColor"
+        ).value;
+
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/custom-model",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            name,
+
+                            email,
+
+                            description,
+
+                            material:
+                                "PLA",
+
+                            color,
+
+                            quantity:
+                                1
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            !response.ok ||
+            !data.success
+        ){
+
+            throw new Error(
+                data.error ||
+                "Nie udało się wysłać."
+            );
+
+        }
+
+
+        showToast(
+            "Zapytanie wysłane 📩",
+            "Projekt zapisany."
+        );
+
+
+        event.target.reset();
+
+
+    }
+    catch(error){
+
+        showToast(
+            "Błąd",
+            error.message
+        );
+
+    }
 
 }
+
 
 /* =========================================================
    NEWSLETTER
 ========================================================= */
 
-function subscribeNewsletter(event){
+function subscribeNewsletter(
+    event
+){
 
     event.preventDefault();
 
+
     const email =
-        document
-            .getElementById(
-                "newsletterEmail"
-            )
-            .value;
+        document.getElementById(
+            "newsletterEmail"
+        ).value;
+
 
     localStorage.setItem(
         "printerlase_newsletter",
         email
     );
 
+
     event.target.reset();
+
 
     showToast(
         "Zapisano 📧",
-        "Adres został zapisany lokalnie."
+        "Adres został zapisany."
     );
 
 }
+
 
 /* =========================================================
    FAQ
 ========================================================= */
 
-function toggleFaq(button){
+function toggleFaq(
+    button
+){
 
     const item =
         button.parentElement;
+
 
     const answer =
         item.querySelector(
             ".faq-answer"
         );
 
+
     const open =
         item.classList.contains(
             "open"
         );
 
+
     document
-        .querySelectorAll(".faq-item")
+        .querySelectorAll(
+            ".faq-item"
+        )
         .forEach(
             other => {
 
@@ -6855,41 +9145,61 @@ function toggleFaq(button){
                     "open"
                 );
 
-                other
-                    .querySelector(
+
+                const otherAnswer =
+                    other.querySelector(
                         ".faq-answer"
-                    )
-                    .style.maxHeight =
-                    null;
+                    );
+
+
+                if(
+                    otherAnswer
+                ){
+
+                    otherAnswer.style.maxHeight =
+                        null;
+
+                }
 
             }
         );
 
-    if(!open){
+
+    if(
+        !open
+    ){
 
         item.classList.add(
             "open"
         );
 
+
         answer.style.maxHeight =
-            answer.scrollHeight + "px";
+            answer.scrollHeight +
+            "px";
 
     }
 
 }
 
+
 /* =========================================================
-   MOBILE MENU
+   MOBILE
 ========================================================= */
 
 function toggleMobileMenu(){
 
     document
-        .getElementById("navLinks")
+        .getElementById(
+            "navLinks"
+        )
         .classList
-        .toggle("open");
+        .toggle(
+            "open"
+        );
 
 }
+
 
 /* =========================================================
    SCROLL
@@ -6904,42 +9214,42 @@ window.addEventListener(
                 "header"
             );
 
+
         const top =
             document.getElementById(
                 "toTop"
             );
 
-        if(window.scrollY > 30){
 
-            header.classList.add(
-                "scrolled"
-            );
+        if(
+            header
+        ){
 
-        }else{
-
-            header.classList.remove(
-                "scrolled"
+            header.classList.toggle(
+                "scrolled",
+                window.scrollY > 30
             );
 
         }
 
-        if(window.scrollY > 600){
 
-            top.classList.add(
-                "show"
-            );
+        if(
+            top
+        ){
 
-        }else{
-
-            top.classList.remove(
-                "show"
+            top.classList.toggle(
+                "show",
+                window.scrollY > 600
             );
 
         }
 
     },
-    {passive:true}
+    {
+        passive:true
+    }
 );
+
 
 /* =========================================================
    REVEAL
@@ -6951,6 +9261,23 @@ function setupReveal(){
         document.querySelectorAll(
             ".reveal"
         );
+
+
+    if(
+        !("IntersectionObserver" in window)
+    ){
+
+        elements.forEach(
+            element =>
+                element.classList.add(
+                    "visible"
+                )
+        );
+
+        return;
+
+    }
+
 
     const observer =
         new IntersectionObserver(
@@ -6965,7 +9292,10 @@ function setupReveal(){
 
                             entry.target
                                 .classList
-                                .add("visible");
+                                .add(
+                                    "visible"
+                                );
+
 
                             observer.unobserve(
                                 entry.target
@@ -6982,18 +9312,23 @@ function setupReveal(){
             }
         );
 
+
     elements.forEach(
         element =>
-            observer.observe(element)
+            observer.observe(
+                element
+            )
     );
 
 }
+
 
 /* =========================================================
    TOAST
 ========================================================= */
 
 let toastTimer;
+
 
 function showToast(
     title,
@@ -7005,23 +9340,37 @@ function showToast(
             "toast"
         );
 
-    document
-        .getElementById("toastTitle")
-        .textContent =
+
+    if(
+        !toast
+    ){
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "toastTitle"
+    ).textContent =
         title;
 
-    document
-        .getElementById("toastText")
-        .textContent =
+
+    document.getElementById(
+        "toastText"
+    ).textContent =
         text;
+
 
     toast.classList.add(
         "show"
     );
 
+
     clearTimeout(
         toastTimer
     );
+
 
     toastTimer =
         setTimeout(
@@ -7037,28 +9386,66 @@ function showToast(
 
 }
 
+
 /* =========================================================
    FORMAT PRICE
 ========================================================= */
 
-function formatPrice(value){
+function formatPrice(
+    value
+){
 
-    return value
-        .toFixed(2)
-        .replace(".",",") +
-        " zł";
+    const number =
+        Number(
+            value
+        );
+
+
+    if(
+        !Number.isFinite(
+            number
+        )
+    ){
+
+        return "0,00 zł";
+
+    }
+
+
+    return (
+        number
+            .toFixed(2)
+            .replace(".",",")
+        +
+        " zł"
+    );
 
 }
 
+
 /* =========================================================
-   ESCAPE
+   PANELS
 ========================================================= */
+
+function closeAllPanels(){
+
+    closeCart();
+
+    closeAccount();
+
+    closeAdmin();
+
+}
+
 
 document.addEventListener(
     "keydown",
     event => {
 
-        if(event.key === "Escape"){
+        if(
+            event.key ===
+            "Escape"
+        ){
 
             closeAllPanels();
 
