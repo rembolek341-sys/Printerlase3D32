@@ -1,12 +1,13 @@
 {
   "name": "printerlase3d",
   "version": "1.0.0",
+  "description": "Printerlase3D",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^5.1.0",
+    "express": "^4.21.2",
     "stripe": "^18.5.0"
   }
 }
