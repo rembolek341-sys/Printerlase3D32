@@ -1,4 +1,3 @@
-```js
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
@@ -8,45 +7,65 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const ADMIN_LOGIN = "admin";
-const ADMIN_PASSWORD = "Admin2137!";
+// ======================================================
+// ADMIN
+// ======================================================
+
+const ADMIN_LOGIN =
+    process.env.ADMIN_LOGIN || "admin";
+
+const ADMIN_PASSWORD =
+    process.env.ADMIN_PASSWORD || "Admin2137!";
+
+// ======================================================
+// USTAWIENIA
+// ======================================================
 
 const FREE_DELIVERY_FROM = 50;
+const DELIVERY_PRICE = 9.99;
+
 const DISCOUNT_CODE = "START10";
 const DISCOUNT_PERCENT = 10;
 
-/*
-========================================
-PLIKI DANYCH
-========================================
-*/
+// Maksymalne saldo sklepu
+const MAX_BALANCE = 1000000;
 
-const DATA_DIR = path.join(__dirname, "data");
+// Największa pojedyncza wypłata
+const MAX_WITHDRAWAL = 200;
 
-const ORDERS_FILE = path.join(
-    DATA_DIR,
-    "orders.json"
-);
+// Dozwolone szybkie wypłaty
+const WITHDRAWAL_OPTIONS = [
+    200,
+    100,
+    50,
+    20
+];
 
-const MODELS_FILE = path.join(
-    DATA_DIR,
-    "custom-models.json"
-);
+// ======================================================
+// PLIKI
+// ======================================================
 
-const TOKENS_FILE = path.join(
-    DATA_DIR,
-    "tokens.json"
-);
+const DATA_DIR =
+    path.join(__dirname, "data");
 
-const BALANCE_FILE = path.join(
-    DATA_DIR,
-    "balance.json"
-);
+const ORDERS_FILE =
+    path.join(DATA_DIR, "orders.json");
 
-const WITHDRAWALS_FILE = path.join(
-    DATA_DIR,
-    "withdrawals.json"
-);
+const MODELS_FILE =
+    path.join(DATA_DIR, "custom-models.json");
+
+const TOKENS_FILE =
+    path.join(DATA_DIR, "tokens.json");
+
+const BALANCE_FILE =
+    path.join(DATA_DIR, "balance.json");
+
+const WITHDRAWALS_FILE =
+    path.join(DATA_DIR, "withdrawals.json");
+
+// ======================================================
+// TWORZENIE FOLDERU DATA
+// ======================================================
 
 if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, {
@@ -54,58 +73,34 @@ if (!fs.existsSync(DATA_DIR)) {
     });
 }
 
-/*
-========================================
-TWORZENIE PLIKÓW
-========================================
-*/
+// ======================================================
+// TWORZENIE PLIKÓW
+// ======================================================
 
 function createFile(file, data) {
     if (!fs.existsSync(file)) {
         fs.writeFileSync(
             file,
-            JSON.stringify(
-                data,
-                null,
-                2
-            ),
+            JSON.stringify(data, null, 2),
             "utf8"
         );
     }
 }
 
-createFile(
-    ORDERS_FILE,
-    []
-);
+createFile(ORDERS_FILE, []);
+createFile(MODELS_FILE, []);
+createFile(TOKENS_FILE, []);
 
-createFile(
-    MODELS_FILE,
-    []
-);
+createFile(BALANCE_FILE, {
+    balance: 0,
+    totalRevenue: 0
+});
 
-createFile(
-    TOKENS_FILE,
-    []
-);
+createFile(WITHDRAWALS_FILE, []);
 
-createFile(
-    BALANCE_FILE,
-    {
-        balance: 0
-    }
-);
-
-createFile(
-    WITHDRAWALS_FILE,
-    []
-);
-
-/*
-========================================
-JSON
-========================================
-*/
+// ======================================================
+// JSON
+// ======================================================
 
 function readJSON(file, fallback) {
     try {
@@ -113,17 +108,17 @@ function readJSON(file, fallback) {
             return fallback;
         }
 
-        const data =
+        const content =
             fs.readFileSync(
                 file,
                 "utf8"
             );
 
-        if (!data.trim()) {
+        if (!content.trim()) {
             return fallback;
         }
 
-        return JSON.parse(data);
+        return JSON.parse(content);
     } catch (error) {
         console.error(
             "JSON ERROR:",
@@ -147,11 +142,9 @@ function writeJSON(file, data) {
     );
 }
 
-/*
-========================================
-EXPRESS
-========================================
-*/
+// ======================================================
+// EXPRESS
+// ======================================================
 
 app.use(
     express.json({
@@ -170,11 +163,9 @@ app.use(
     express.static(__dirname)
 );
 
-/*
-========================================
-ID / TOKEN
-========================================
-*/
+// ======================================================
+// ID
+// ======================================================
 
 function generateId(prefix) {
     return (
@@ -188,6 +179,10 @@ function generateId(prefix) {
     ).toUpperCase();
 }
 
+// ======================================================
+// TOKEN
+// ======================================================
+
 function generateToken() {
     return crypto
         .randomBytes(32)
@@ -196,8 +191,7 @@ function generateToken() {
 
 function getToken(req) {
     const auth =
-        req.headers.authorization ||
-        "";
+        req.headers.authorization || "";
 
     if (
         !auth.startsWith(
@@ -210,11 +204,9 @@ function getToken(req) {
     return auth.substring(7);
 }
 
-/*
-========================================
-ADMIN AUTH
-========================================
-*/
+// ======================================================
+// ADMIN AUTH
+// ======================================================
 
 function requireAdmin(
     req,
@@ -225,13 +217,11 @@ function requireAdmin(
         getToken(req);
 
     if (!token) {
-        return res
-            .status(401)
-            .json({
-                success: false,
-                error:
-                    "Brak autoryzacji."
-            });
+        return res.status(401).json({
+            success: false,
+            error:
+                "Brak autoryzacji."
+        });
     }
 
     const tokens =
@@ -251,50 +241,82 @@ function requireAdmin(
         );
 
     if (!session) {
-        return res
-            .status(401)
-            .json({
-                success: false,
-                error:
-                    "Sesja wygasła."
-            });
+        return res.status(401).json({
+            success: false,
+            error:
+                "Sesja wygasła."
+        });
     }
 
     next();
 }
 
-/*
-========================================
-SALDO
-========================================
-*/
+// ======================================================
+// SALDO
+// ======================================================
 
-function getBalance() {
+function getBalanceData() {
     const data =
         readJSON(
             BALANCE_FILE,
             {
-                balance: 0
+                balance: 0,
+                totalRevenue: 0
             }
         );
 
-    const balance =
+    return {
+        balance: Math.max(
+            0,
+            Number(
+                data.balance || 0
+            )
+        ),
+
+        totalRevenue: Math.max(
+            0,
+            Number(
+                data.totalRevenue || 0
+            )
+        )
+    };
+}
+
+function saveBalanceData(data) {
+    let balance =
         Number(
             data.balance || 0
         );
 
-    return Number(
-        balance.toFixed(2)
-    );
-}
+    let totalRevenue =
+        Number(
+            data.totalRevenue || 0
+        );
 
-function setBalance(
-    amount
-) {
-    const safeAmount =
+    if (!Number.isFinite(balance)) {
+        balance = 0;
+    }
+
+    if (
+        !Number.isFinite(
+            totalRevenue
+        )
+    ) {
+        totalRevenue = 0;
+    }
+
+    balance = Math.max(
+        0,
+        Math.min(
+            MAX_BALANCE,
+            balance
+        )
+    );
+
+    totalRevenue =
         Math.max(
             0,
-            Number(amount || 0)
+            totalRevenue
         );
 
     writeJSON(
@@ -302,69 +324,94 @@ function setBalance(
         {
             balance:
                 Number(
-                    safeAmount.toFixed(
+                    balance.toFixed(
+                        2
+                    )
+                ),
+
+            totalRevenue:
+                Number(
+                    totalRevenue.toFixed(
                         2
                     )
                 )
         }
     );
-
-    return getBalance();
 }
 
-function addBalance(
+// ======================================================
+// DODAWANIE PIENIĘDZY
+// ======================================================
+
+function addMoney(
     amount
 ) {
-    const current =
-        getBalance();
-
-    const add =
-        Math.max(
-            0,
-            Number(amount || 0)
-        );
-
-    return setBalance(
-        current + add
-    );
-}
-
-function subtractBalance(
-    amount
-) {
-    const current =
-        getBalance();
-
-    const subtract =
-        Math.max(
-            0,
-            Number(amount || 0)
-        );
+    amount =
+        Number(amount);
 
     if (
-        subtract >
-        current
+        !Number.isFinite(
+            amount
+        ) ||
+        amount <= 0
     ) {
-        return null;
+        return getBalanceData();
     }
 
-    return setBalance(
-        current - subtract
+    const data =
+        getBalanceData();
+
+    data.balance =
+        Math.min(
+            MAX_BALANCE,
+            data.balance +
+                amount
+        );
+
+    data.totalRevenue +=
+        amount;
+
+    saveBalanceData(
+        data
     );
+
+    return data;
 }
 
-/*
-========================================
-LOGIN
-========================================
-*/
+// ======================================================
+// ODEJMOWANIE PIENIĘDZY
+// ======================================================
+
+function removeMoney(
+    amount
+) {
+    amount =
+        Number(amount);
+
+    const data =
+        getBalanceData();
+
+    data.balance =
+        Math.max(
+            0,
+            data.balance -
+                amount
+        );
+
+    saveBalanceData(
+        data
+    );
+
+    return data;
+}
+
+// ======================================================
+// LOGIN
+// ======================================================
 
 app.post(
     "/api/admin/login",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const login =
             String(
                 req.body.login ||
@@ -395,18 +442,23 @@ app.post(
         const token =
             generateToken();
 
-        const tokens =
+        let tokens =
             readJSON(
                 TOKENS_FILE,
                 []
             );
 
         tokens.push({
-            token:
-                token,
+            token: token,
+
             createdAt:
-                new Date().toISOString()
+                new Date()
+                    .toISOString()
         });
+
+        // Maksymalnie 20 aktywnych sesji
+        tokens =
+            tokens.slice(-20);
 
         writeJSON(
             TOKENS_FILE,
@@ -419,25 +471,19 @@ app.post(
 
         res.json({
             success: true,
-            token:
-                token
+            token: token
         });
     }
 );
 
-/*
-========================================
-LOGOUT
-========================================
-*/
+// ======================================================
+// LOGOUT
+// ======================================================
 
 app.post(
     "/api/admin/logout",
     requireAdmin,
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const token =
             getToken(req);
 
@@ -449,9 +495,7 @@ app.post(
 
         tokens =
             tokens.filter(
-                function (
-                    item
-                ) {
+                function (item) {
                     return (
                         item.token !==
                         token
@@ -470,18 +514,13 @@ app.post(
     }
 );
 
-/*
-========================================
-HEALTH
-========================================
-*/
+// ======================================================
+// HEALTH
+// ======================================================
 
 app.get(
     "/api/health",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         res.json({
             success: true,
             online: true,
@@ -493,19 +532,14 @@ app.get(
     }
 );
 
-/*
-========================================
-ADMIN DATA
-========================================
-*/
+// ======================================================
+// ADMIN DATA
+// ======================================================
 
 app.get(
     "/api/admin/data",
     requireAdmin,
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const orders =
             readJSON(
                 ORDERS_FILE,
@@ -524,18 +558,35 @@ app.get(
                 []
             );
 
-        let revenue =
-            0;
+        const balance =
+            getBalanceData();
+
+        let ordersRevenue = 0;
 
         orders.forEach(
-            function (
-                order
-            ) {
-                revenue +=
+            function (order) {
+                ordersRevenue +=
                     Number(
                         order.total ||
                             0
                     );
+            }
+        );
+
+        let withdrawn = 0;
+
+        withdrawals.forEach(
+            function (item) {
+                if (
+                    item.status !==
+                    "CANCELLED"
+                ) {
+                    withdrawn +=
+                        Number(
+                            item.amount ||
+                                0
+                        );
+                }
             }
         );
 
@@ -552,7 +603,18 @@ app.get(
                 withdrawals,
 
             balance:
-                getBalance(),
+                Number(
+                    balance.balance.toFixed(
+                        2
+                    )
+                ),
+
+            totalRevenue:
+                Number(
+                    balance.totalRevenue.toFixed(
+                        2
+                    )
+                ),
 
             stats: {
                 orders:
@@ -563,40 +625,89 @@ app.get(
 
                 revenue:
                     Number(
-                        revenue.toFixed(
+                        ordersRevenue.toFixed(
                             2
                         )
                     ),
 
                 balance:
-                    getBalance()
+                    Number(
+                        balance.balance.toFixed(
+                            2
+                        )
+                    ),
+
+                withdrawn:
+                    Number(
+                        withdrawn.toFixed(
+                            2
+                        )
+                    )
+            },
+
+            limits: {
+                maxBalance:
+                    MAX_BALANCE,
+
+                maxWithdrawal:
+                    MAX_WITHDRAWAL,
+
+                withdrawalOptions:
+                    WITHDRAWAL_OPTIONS
             }
         });
     }
 );
 
-/*
-========================================
-WYPŁATA
-========================================
+// ======================================================
+// SALDO ADMINA
+// ======================================================
 
-Możesz wypłacić dowolną kwotę,
-ale nie większą niż aktualne saldo.
+app.get(
+    "/api/admin/balance",
+    requireAdmin,
+    function (req, res) {
+        const data =
+            getBalanceData();
 
-2000 -> 1000 -> 1000
-2000 -> 2000 -> 0
-2000 -> 2500 -> odmowa
-========================================
-*/
+        res.json({
+            success: true,
+
+            balance:
+                Number(
+                    data.balance.toFixed(
+                        2
+                    )
+                ),
+
+            totalRevenue:
+                Number(
+                    data.totalRevenue.toFixed(
+                        2
+                    )
+                ),
+
+            maxBalance:
+                MAX_BALANCE,
+
+            maxWithdrawal:
+                MAX_WITHDRAWAL,
+
+            withdrawalOptions:
+                WITHDRAWAL_OPTIONS
+        });
+    }
+);
+
+// ======================================================
+// WYPŁATA
+// ======================================================
 
 app.post(
     "/api/admin/withdraw",
     requireAdmin,
-    function (
-        req,
-        res
-    ) {
-        const amount =
+    function (req, res) {
+        let amount =
             Number(
                 req.body.amount
             );
@@ -604,7 +715,39 @@ app.post(
         if (
             !Number.isFinite(
                 amount
-            ) ||
+            )
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Nieprawidłowa kwota."
+                });
+        }
+
+        amount =
+            Number(
+                amount.toFixed(
+                    2
+                )
+            );
+
+        // Maksymalnie 200 zł JEDNORAZOWO
+        if (
+            amount >
+            MAX_WITHDRAWAL
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Jedna wypłata może wynosić maksymalnie 200 zł."
+                });
+        }
+
+        if (
             amount <= 0
         ) {
             return res
@@ -612,80 +755,53 @@ app.post(
                 .json({
                     success: false,
                     error:
-                        "Podaj prawidłową kwotę wypłaty."
+                        "Kwota musi być większa od 0 zł."
                 });
         }
 
-        const roundedAmount =
-            Number(
-                amount.toFixed(
-                    2
-                )
-            );
-
-        const currentBalance =
-            getBalance();
+        const balance =
+            getBalanceData();
 
         if (
-            roundedAmount >
-            currentBalance
+            amount >
+            balance.balance
         ) {
             return res
                 .status(400)
                 .json({
                     success: false,
                     error:
-                        "Nie masz wystarczającego salda.",
-                    balance:
-                        currentBalance
+                        "Nie masz wystarczającego salda."
                 });
         }
 
         const newBalance =
-            subtractBalance(
-                roundedAmount
+            removeMoney(
+                amount
             );
-
-        if (
-            newBalance ===
-            null
-        ) {
-            return res
-                .status(400)
-                .json({
-                    success: false,
-                    error:
-                        "Nie można wykonać wypłaty."
-                });
-        }
-
-        const withdrawal = {
-            id:
-                generateId(
-                    "PAY"
-                ),
-
-            amount:
-                roundedAmount,
-
-            balanceBefore:
-                currentBalance,
-
-            balanceAfter:
-                newBalance,
-
-            status:
-                "PAID",
-
-            createdAt:
-                new Date().toISOString()
-        };
 
         const withdrawals =
             readJSON(
                 WITHDRAWALS_FILE,
                 []
             );
+
+        const withdrawal = {
+            id:
+                generateId(
+                    "WDL"
+                ),
+
+            amount:
+                amount,
+
+            status:
+                "REQUESTED",
+
+            createdAt:
+                new Date()
+                    .toISOString()
+        };
 
         withdrawals.unshift(
             withdrawal
@@ -697,10 +813,14 @@ app.post(
         );
 
         console.log(
-            "[WITHDRAWAL] " +
-                roundedAmount +
-                " PLN | SALDO: " +
-                newBalance +
+            "[WYPLATA] " +
+                amount +
+                " PLN"
+        );
+
+        console.log(
+            "[SALDO] " +
+                newBalance.balance +
                 " PLN"
         );
 
@@ -711,16 +831,118 @@ app.post(
                 withdrawal,
 
             balance:
-                newBalance
+                newBalance.balance
         });
     }
 );
 
-/*
-========================================
-CALCULATOR
-========================================
-*/
+// ======================================================
+// SZYBKIE WYPŁATY
+// ======================================================
+
+app.post(
+    "/api/admin/quick-withdraw",
+    requireAdmin,
+    function (req, res) {
+        const amount =
+            Number(
+                req.body.amount
+            );
+
+        if (
+            !WITHDRAWAL_OPTIONS.includes(
+                amount
+            )
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Dozwolone wypłaty: 200 zł, 100 zł, 50 zł lub 20 zł."
+                });
+        }
+
+        const balance =
+            getBalanceData();
+
+        if (
+            amount >
+            balance.balance
+        ) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    error:
+                        "Za mało pieniędzy na saldzie."
+                });
+        }
+
+        const newBalance =
+            removeMoney(
+                amount
+            );
+
+        const withdrawals =
+            readJSON(
+                WITHDRAWALS_FILE,
+                []
+            );
+
+        const withdrawal = {
+            id:
+                generateId(
+                    "WDL"
+                ),
+
+            amount:
+                amount,
+
+            status:
+                "REQUESTED",
+
+            type:
+                "QUICK",
+
+            createdAt:
+                new Date()
+                    .toISOString()
+        };
+
+        withdrawals.unshift(
+            withdrawal
+        );
+
+        writeJSON(
+            WITHDRAWALS_FILE,
+            withdrawals
+        );
+
+        console.log(
+            "[QUICK WITHDRAW] " +
+                amount +
+                " PLN"
+        );
+
+        res.json({
+            success: true,
+
+            amount:
+                amount,
+
+            withdrawal:
+                withdrawal,
+
+            balance:
+                newBalance.balance
+        });
+    }
+);
+
+// ======================================================
+// KALKULATOR ZAMÓWIENIA
+// ======================================================
 
 function calculateOrder(
     items,
@@ -735,14 +957,11 @@ function calculateOrder(
         items = [];
     }
 
-    let subtotal =
-        0;
+    let subtotal = 0;
 
     const normalized =
         items.map(
-            function (
-                item
-            ) {
+            function (item) {
                 const price =
                     Math.max(
                         0,
@@ -804,16 +1023,15 @@ function calculateOrder(
             .trim()
             .toUpperCase();
 
-    let discount =
-        0;
+    let discount = 0;
 
     if (
         code ===
         DISCOUNT_CODE
     ) {
         discount =
-            (subtotal *
-                DISCOUNT_PERCENT) /
+            subtotal *
+            DISCOUNT_PERCENT /
             100;
     }
 
@@ -825,20 +1043,18 @@ function calculateOrder(
         );
 
     let deliveryPrice =
-        9.99;
+        DELIVERY_PRICE;
 
     if (
         delivery ===
         "pickup"
     ) {
-        deliveryPrice =
-            0;
+        deliveryPrice = 0;
     } else if (
         afterDiscount >=
         FREE_DELIVERY_FROM
     ) {
-        deliveryPrice =
-            0;
+        deliveryPrice = 0;
     }
 
     const total =
@@ -879,12 +1095,13 @@ function calculateOrder(
     };
 }
 
+// ======================================================
+// CALCULATE API
+// ======================================================
+
 app.post(
     "/api/calculate",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const result =
             calculateOrder(
                 req.body.items,
@@ -899,18 +1116,13 @@ app.post(
     }
 );
 
-/*
-========================================
-ZAMÓWIENIA
-========================================
-*/
+// ======================================================
+// NOWE ZAMÓWIENIE
+// ======================================================
 
 app.post(
     "/api/orders",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const body =
             req.body || {};
 
@@ -1001,7 +1213,8 @@ app.post(
                 ).trim(),
 
             createdAt:
-                new Date().toISOString()
+                new Date()
+                    .toISOString()
         };
 
         const orders =
@@ -1019,14 +1232,12 @@ app.post(
             orders
         );
 
-        /*
-        ========================================
-        DODANIE PIENIĘDZY DO SALDA
-        ========================================
-        */
+        // ==================================================
+        // PIENIĄDZE Z ZAMÓWIENIA WPADAJĄ DO SALDA
+        // ==================================================
 
-        const newBalance =
-            addBalance(
+        const balance =
+            addMoney(
                 order.total
             );
 
@@ -1039,10 +1250,8 @@ app.post(
         );
 
         console.log(
-            "[BALANCE] +" +
-                order.total +
-                " PLN | SALDO: " +
-                newBalance +
+            "[SALDO] " +
+                balance.balance +
                 " PLN"
         );
 
@@ -1053,23 +1262,18 @@ app.post(
                 order,
 
             balance:
-                newBalance
+                balance.balance
         });
     }
 );
 
-/*
-========================================
-WŁASNY MODEL 3D
-========================================
-*/
+// ======================================================
+// WŁASNY MODEL 3D
+// ======================================================
 
 app.post(
     "/api/custom-model",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const body =
             req.body || {};
 
@@ -1168,7 +1372,8 @@ app.post(
                 "NEW",
 
             createdAt:
-                new Date().toISOString()
+                new Date()
+                    .toISOString()
         };
 
         const models =
@@ -1199,19 +1404,14 @@ app.post(
     }
 );
 
-/*
-========================================
-STATUS ZAMÓWIENIA
-========================================
-*/
+// ======================================================
+// STATUS ZAMÓWIENIA
+// ======================================================
 
 app.patch(
     "/api/admin/orders/:id/status",
     requireAdmin,
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const status =
             String(
                 req.body.status ||
@@ -1250,16 +1450,13 @@ app.patch(
 
         const order =
             orders.find(
-                function (
-                    item
-                ) {
+                function (item) {
                     return (
                         String(
                             item.id
                         ) ===
                         String(
-                            req.params
-                                .id
+                            req.params.id
                         )
                     );
                 }
@@ -1279,7 +1476,8 @@ app.patch(
             status;
 
         order.updatedAt =
-            new Date().toISOString();
+            new Date()
+                .toISOString();
 
         writeJSON(
             ORDERS_FILE,
@@ -1294,19 +1492,14 @@ app.patch(
     }
 );
 
-/*
-========================================
-STATUS MODELU
-========================================
-*/
+// ======================================================
+// STATUS MODELU
+// ======================================================
 
 app.patch(
     "/api/admin/custom/:id/status",
     requireAdmin,
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const status =
             String(
                 req.body.status ||
@@ -1345,16 +1538,13 @@ app.patch(
 
         const model =
             models.find(
-                function (
-                    item
-                ) {
+                function (item) {
                     return (
                         String(
                             item.id
                         ) ===
                         String(
-                            req.params
-                                .id
+                            req.params.id
                         )
                     );
                 }
@@ -1374,7 +1564,8 @@ app.patch(
             status;
 
         model.updatedAt =
-            new Date().toISOString();
+            new Date()
+                .toISOString();
 
         writeJSON(
             MODELS_FILE,
@@ -1389,19 +1580,14 @@ app.patch(
     }
 );
 
-/*
-========================================
-USUWANIE ZAMÓWIENIA
-========================================
-*/
+// ======================================================
+// USUWANIE ZAMÓWIENIA
+// ======================================================
 
 app.delete(
     "/api/admin/orders/:id",
     requireAdmin,
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const orders =
             readJSON(
                 ORDERS_FILE,
@@ -1410,16 +1596,13 @@ app.delete(
 
         const filtered =
             orders.filter(
-                function (
-                    order
-                ) {
+                function (order) {
                     return (
                         String(
                             order.id
                         ) !==
                         String(
-                            req.params
-                                .id
+                            req.params.id
                         )
                     );
                 }
@@ -1449,19 +1632,14 @@ app.delete(
     }
 );
 
-/*
-========================================
-USUWANIE MODELU
-========================================
-*/
+// ======================================================
+// USUWANIE MODELU
+// ======================================================
 
 app.delete(
     "/api/admin/custom/:id",
     requireAdmin,
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         const models =
             readJSON(
                 MODELS_FILE,
@@ -1470,16 +1648,13 @@ app.delete(
 
         const filtered =
             models.filter(
-                function (
-                    model
-                ) {
+                function (model) {
                     return (
                         String(
                             model.id
                         ) !==
                         String(
-                            req.params
-                                .id
+                            req.params.id
                         )
                     );
                 }
@@ -1509,18 +1684,100 @@ app.delete(
     }
 );
 
-/*
-========================================
-STRONA ADMINA
-========================================
-*/
+// ======================================================
+// ANULOWANIE WYPŁATY
+// ======================================================
+
+app.patch(
+    "/api/admin/withdrawals/:id/cancel",
+    requireAdmin,
+    function (req, res) {
+        const withdrawals =
+            readJSON(
+                WITHDRAWALS_FILE,
+                []
+            );
+
+        const withdrawal =
+            withdrawals.find(
+                function (item) {
+                    return (
+                        String(
+                            item.id
+                        ) ===
+                        String(
+                            req.params.id
+                        )
+                    );
+                }
+            );
+
+        if (!withdrawal) {
+            return res
+                .status(404)
+                .json({
+                    success: false,
+                    error:
+                        "Nie znaleziono wypłaty."
+                });
+        }
+
+        if (
+            withdrawal.status ===
+            "CANCELLED"
+        ) {
+            return res.json({
+                success: true,
+                message:
+                    "Wypłata już anulowana."
+            });
+        }
+
+        const data =
+            getBalanceData();
+
+        data.balance =
+            Math.min(
+                MAX_BALANCE,
+                data.balance +
+                    Number(
+                        withdrawal.amount ||
+                            0
+                    )
+            );
+
+        saveBalanceData(
+            data
+        );
+
+        withdrawal.status =
+            "CANCELLED";
+
+        withdrawal.cancelledAt =
+            new Date()
+                .toISOString();
+
+        writeJSON(
+            WITHDRAWALS_FILE,
+            withdrawals
+        );
+
+        res.json({
+            success: true,
+
+            balance:
+                data.balance
+        });
+    }
+);
+
+// ======================================================
+// ADMIN HTML
+// ======================================================
 
 app.get(
     "/admin",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         res.sendFile(
             path.join(
                 __dirname,
@@ -1530,18 +1787,13 @@ app.get(
     }
 );
 
-/*
-========================================
-STRONA GŁÓWNA
-========================================
-*/
+// ======================================================
+// STRONA GŁÓWNA
+// ======================================================
 
 app.get(
     "/",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         res.sendFile(
             path.join(
                 __dirname,
@@ -1551,18 +1803,13 @@ app.get(
     }
 );
 
-/*
-========================================
-API 404
-========================================
-*/
+// ======================================================
+// API 404
+// ======================================================
 
 app.use(
     "/api",
-    function (
-        req,
-        res
-    ) {
+    function (req, res) {
         res
             .status(404)
             .json({
@@ -1573,11 +1820,9 @@ app.use(
     }
 );
 
-/*
-========================================
-ERROR
-========================================
-*/
+// ======================================================
+// ERROR
+// ======================================================
 
 app.use(
     function (
@@ -1601,26 +1846,24 @@ app.use(
     }
 );
 
-/*
-========================================
-START
-========================================
-*/
+// ======================================================
+// START
+// ======================================================
 
 app.listen(
     PORT,
     "0.0.0.0",
     function () {
         console.log(
-            "================================"
+            "======================================"
         );
 
         console.log(
-            "      PRINTERLASE3D ONLINE"
+            "       PRINTERLASE3D ONLINE"
         );
 
         console.log(
-            "================================"
+            "======================================"
         );
 
         console.log(
@@ -1633,11 +1876,19 @@ app.listen(
         );
 
         console.log(
-            "SALDO: BEZ LIMITU"
+            "MAX SALDO: " +
+                MAX_BALANCE +
+                " PLN"
         );
 
         console.log(
-            "WYPŁATA: DO WYSOKOŚCI SALDA"
+            "MAX JEDNORAZOWA WYPLATA: " +
+                MAX_WITHDRAWAL +
+                " PLN"
+        );
+
+        console.log(
+            "WYPLATY: 200 / 100 / 50 / 20 PLN"
         );
 
         console.log(
@@ -1655,8 +1906,7 @@ app.listen(
         );
 
         console.log(
-            "================================"
+            "======================================"
         );
     }
 );
-```
